@@ -22,7 +22,7 @@
 | RMI            |  🟡   |
 | GUI            |  🟡   |
 | CLI            |  🟡   |
-| Multiple games |  🟡   |
+| Multiple games |  🔴   |
 | Persistence    |  🟡   |
 | Resilience     |  🟡   |
 | Chat           |  🟡   |
