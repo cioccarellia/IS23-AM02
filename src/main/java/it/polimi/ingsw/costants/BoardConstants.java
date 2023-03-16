@@ -16,4 +16,12 @@ public class BoardConstants {
             {null, null, null, CellPattern.FOUR_DOTS, CellPattern.NORMAL, CellPattern.NORMAL, null, null, null},
             {null, null, null, null, CellPattern.FOUR_DOTS, CellPattern.THREE_DOTS, null, null, null}
     };
+
+    public CellPattern[][] algorithmicPattern() {
+        CellPattern[][] base = new CellPattern[BOARD_DIMENSION][BOARD_DIMENSION];
+
+
+
+        return base;
+    }
 }

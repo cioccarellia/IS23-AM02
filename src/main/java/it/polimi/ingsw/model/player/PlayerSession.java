@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
-import it.polimi.ingsw.model.cards.PersonalGoalCard;
+import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.Token;
 import it.polimi.ingsw.model.player.action.PlayerCurrentAction;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
@@ -23,9 +23,9 @@ public class PlayerSession {
     private List<Token> acquiredTokens;
     private final int tokenCounter = 0;
 
-    public PlayerSession(String username, PlayerNumber playerId, PersonalGoalCard personalGoalCard) {
+    public PlayerSession(String username, PlayerNumber playerNumber, PersonalGoalCard personalGoalCard) {
         this.username = username;
-        this.playerNumber = playerId;
+        this.playerNumber = playerNumber;
         this.personalGoalCard = personalGoalCard;
     }
 
