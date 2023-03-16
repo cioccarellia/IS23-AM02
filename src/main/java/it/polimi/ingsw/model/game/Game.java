@@ -41,9 +41,14 @@ public class Game {
         return players;
     }
 
-    public PlayerNumber getCurrentPlayer() {
-        return currentPlayer;
+    public PlayerSession getCurrentPlayer() {
+        return players
+                .stream()
+                .filter(session -> session.getPlayerNumber() == currentPlayer)
+                .findFirst()
+                .get();
     }
+
 
     public PlayerNumber getStartingPlayer() {
         return startingPlayer;

@@ -59,4 +59,8 @@ public class Cell {
     public void setContent(Tile content) {
         this.content = content;
     }
+
+    public void clear() {
+        content = null;
+    }
 }

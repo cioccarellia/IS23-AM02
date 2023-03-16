@@ -1,7 +1,20 @@
 package it.polimi.ingsw.model.board.cell;
 
+/**
+ * Defines the pattern of
+ * */
 public enum CellPattern {
-    NORMAL,
-    THREE_DOTS,
-    FOUR_DOTS
+    NORMAL(2),
+    THREE_DOTS(3),
+    FOUR_DOTS(4);
+
+    private int playerCount;
+
+    CellPattern(int playerCount) {
+        this.playerCount = playerCount;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
 }

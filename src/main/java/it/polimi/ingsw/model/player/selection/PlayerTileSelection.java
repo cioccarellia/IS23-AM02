@@ -4,7 +4,13 @@ import it.polimi.ingsw.model.board.Tile;
 
 import java.util.Set;
 
+/**
+ * Represents the current player selection of tiles from the board
+ * */
 public class PlayerTileSelection {
+    /**
+     * The selection is kept in a set
+     * */
     private Set<Tile> selectedTiles;
 
     public PlayerTileSelection() {

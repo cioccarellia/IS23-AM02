@@ -5,19 +5,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static it.polimi.ingsw.costants.BookShelfCostants.*;
+
 /**
  * Implements a 6 row, 5 column bookshelf of {@link it.polimi.ingsw.model.board.Tile}s.
  */
 public class Bookshelf {
 
-    private static final int rows = 6;
-    private static final int columns = 5;
-
-    private final Tile[][] bookshelfMatrix = new Tile[rows][columns];
+    private final Tile[][] bookshelfMatrix = new Tile[ROWS][COLUMNS];
 
     public Bookshelf() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 bookshelfMatrix[i][j] = null;
             }
         }
@@ -56,7 +55,7 @@ public class Bookshelf {
 
         // we check whether we have enough space on our column to insert
         // the selected items
-        int freeSpace = rows - (firstEmptyShelfIndex);
+        int freeSpace = ROWS - (firstEmptyShelfIndex);
 
         if (freeSpace < selection.size()) {
             throw new IllegalStateException("Selected tiles do not fit in designated column");
@@ -69,11 +68,46 @@ public class Bookshelf {
         }
     }
 
-
+    /**
+     * Returns the shelf game matrix
+     */
     public Tile[][] getShelfMatrix() {
-        // fixme deep copy
-        return bookshelfMatrix.clone();
+        Tile[][] copy = new Tile[ROWS][COLUMNS];
+
+        for (int i = 0; i < ROWS; i++) {
+            System.arraycopy(bookshelfMatrix[i], 0, copy[i], 0, ROWS);
+        }
+
+        return copy;
     }
 
+    /**
+     * @param column the one the player chose to put his tiles in
+     * @param amount how many tiles the player wants to insert
+     * @return 1 if they fit, 0 if they don't
+     */
+    public boolean canFit(int column, int amount) {
+        int i = ROWS - 1;
+        while (bookshelfMatrix[i][column] != null) {
+            i--;
+        }
+
+        return i + 1 >= amount;
+    }
+
+    /**
+     *
+     * @return 1 if the bookshelf is full, 0 if not
+     */
+    public boolean isFull() {
+        int countNotEmptyRow = 0;
+        for (int i = 0; i < ROWS; i++) {
+            if (bookshelfMatrix[i][COLUMNS] != null) {
+                countNotEmptyRow++;
+            }
+        }
+        if (countNotEmptyRow == ROWS) return true;
+        else return false;
+    }
 
 }
