@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.game;
 
 /**
- * Beacon of points
+ * General element, assignable to a {@link it.polimi.ingsw.model.player.PlayerSession}
+ * during a game which is worth a certain amount of point(s).
  * */
 public enum Token {
     FULL_SHELF_TOKEN(1),
@@ -10,6 +11,9 @@ public enum Token {
     COMMON_GOAL_TOKEN_6_POINTS(6),
     COMMON_GOAL_TOKEN_8_POINTS(8);
 
+    /**
+     * The positive point value associated with a single token.
+     * */
     private final int points;
 
     Token(int tokenPoints) {

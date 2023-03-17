@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.utils.BoardHelper;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,16 +137,17 @@ public class Board {
      *
      * @param newElements list of tiles to be inserted in the board matrix
      * @param upperBound  highest pattern of cell to be considered
-     * @throws IllegalArgumentException if the list of new tiles has a different size than how many
+     * @throws IllegalArgumentException if the list of new tiles has a greater size than how many
      *                                  empty spaces there are on the board
      * @see Board#countEmptyCells(CellPattern)
      */
     public void fill(List<Tile> newElements, CellPattern upperBound) {
-        if (newElements.size() != countEmptyCells(upperBound)) {
-            throw new IllegalArgumentException("Mismatch between new tile amount and empty spaces on the board");
+        if (newElements.size() >= countEmptyCells(upperBound)) {
+            throw new IllegalArgumentException("Impossible to fit the designated elements inside the board: not enough space");
         }
 
-        int cursor = 0;
+        // we use this to stop when the list is empty
+        Iterator<Tile> iterator = newElements.iterator();
 
         for (int i = 0; i < BOARD_DIMENSION; i++) {
             for (int j = 0; j < BOARD_DIMENSION; j++) {
@@ -158,7 +160,14 @@ public class Board {
                 boolean isAcceptable = c.getPattern().getPlayerCount() <= upperBound.getPlayerCount();
 
                 if (c.isEmpty() && isAcceptable) {
-                    c.setContent(newElements.get(cursor++));
+                    // Cell should be filled
+                    if (iterator.hasNext()) {
+                        // we have a matching element
+                        c.setContent(iterator.next());
+                    } else {
+                        // we are out of elements
+                        return;
+                    }
                 }
             }
         }

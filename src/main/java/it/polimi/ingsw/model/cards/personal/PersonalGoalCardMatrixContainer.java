@@ -2,6 +2,12 @@ package it.polimi.ingsw.model.cards.personal;
 
 import it.polimi.ingsw.model.board.Tile;
 
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Personal goal card archive
+ * */
 public class PersonalGoalCardMatrixContainer {
 
     private static final Tile[][] m1 = {
@@ -112,7 +118,24 @@ public class PersonalGoalCardMatrixContainer {
             {Tile.BOOK, null, null, null, null}
     };
 
-    // private static List<Tile[][]> matrixContainer = Arrays.asList(
-    //         m1
-    // );
+
+
+    private final static PersonalGoalCard p1 = new PersonalGoalCard(m1);
+    private final static PersonalGoalCard p2 = new PersonalGoalCard(m2);
+    private final static PersonalGoalCard p3 = new PersonalGoalCard(m3);
+    private final static PersonalGoalCard p4 = new PersonalGoalCard(m4);
+    private final static PersonalGoalCard p5 = new PersonalGoalCard(m5);
+    private final static PersonalGoalCard p6 = new PersonalGoalCard(m6);
+    private final static PersonalGoalCard p7 = new PersonalGoalCard(m7);
+    private final static PersonalGoalCard p8 = new PersonalGoalCard(m8);
+    private final static PersonalGoalCard p9 = new PersonalGoalCard(m9);
+    private final static PersonalGoalCard p10 = new PersonalGoalCard(m10);
+    private final static PersonalGoalCard p11 = new PersonalGoalCard(m11);
+    private final static PersonalGoalCard p12 = new PersonalGoalCard(m12);
+
+
+
+    public static final List<PersonalGoalCard> personalGoalCardDomain = Arrays.asList(
+            p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12
+    );
 }

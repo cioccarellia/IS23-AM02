@@ -24,9 +24,16 @@ public class TileExtractor {
     }
 
     /**
+     * Returns the number of tiles that can be extracted from the sacchetto
+     * */
+    public int leftoverCapacity() {
+        return status.values().stream().mapToInt(i -> i).sum();
+    }
+
+    /**
      * Extracts a single tile, updating its associated status map entry.
      */
-    private Tile extractTile() {
+    private Tile extract() {
         Random generator = new Random();
 
         Tile extractedTile = Tile.values()[generator.nextInt(6)];
@@ -36,7 +43,7 @@ public class TileExtractor {
             status.put(extractedTile, leftoverTiles - 1);
             return extractedTile;
         } else {
-            return extractTile();
+            return extract();
         }
     }
 
@@ -50,11 +57,11 @@ public class TileExtractor {
      * @param amount number of elements to be extracted
      * @return a list of randomly-extracted and coherent tiles
      */
-    public List<Tile> generateRandomTiles(int amount) {
+    public List<Tile> extract(int amount) {
         List<Tile> extraction = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {
-            extraction.add(extractTile());
+            extraction.add(extract());
         }
 
         return extraction;

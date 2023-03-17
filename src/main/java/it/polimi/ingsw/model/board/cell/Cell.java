@@ -11,7 +11,6 @@ public class Cell {
     private final boolean isAlive;
     private Tile content;
 
-
     /**
      * Builds an empty cell
      *

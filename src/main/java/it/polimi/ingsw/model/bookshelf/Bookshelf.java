@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static it.polimi.ingsw.costants.BookShelfCostants.*;
+import static it.polimi.ingsw.costants.BookShelfConstants.*;
 
 /**
  * Implements a 6 row, 5 column bookshelf of {@link it.polimi.ingsw.model.board.Tile}s.

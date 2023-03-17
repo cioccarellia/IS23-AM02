@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class CommonGoalCard {
     private final Function<Tile[][], Boolean> evaluationFunction;
 
-    public CommonGoalCard(Function<Tile[][], Boolean> f) {
+    public CommonGoalCard(CommonGoalCardIdentifier id, Function<Tile[][], Boolean> f) {
         evaluationFunction = f;
     }
 
