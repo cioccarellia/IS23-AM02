@@ -160,12 +160,12 @@ public class CommonGoalCardTest {
         CommonGoalCard fourGroupFour = CommonGoalCardFunctionContainer.FOUR_GROUP_FOUR;
 
         Tile[][] testPositiveMatrix = {
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
                 {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null}
         };
 
         boolean doesMatrixMatch = fourGroupFour.matches(testPositiveMatrix);
@@ -180,10 +180,10 @@ public class CommonGoalCardTest {
         CommonGoalCard fourGroupFour = CommonGoalCardFunctionContainer.FOUR_GROUP_FOUR;
 
         Tile[][] testPositiveMatrix = {
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {null, null, null, null, null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
                 {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
                 {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
 
@@ -321,7 +321,7 @@ public class CommonGoalCardTest {
 
         boolean doesMatrixMatch = four_max3diffCGC.matches(testPositiveMatrix);
 
-        assertTrue(doesMatrixMatch);
+        assertFalse(doesMatrixMatch);
     }
 
     @Test
@@ -340,7 +340,7 @@ public class CommonGoalCardTest {
 
         boolean doesMatrixMatch = four_max3diffCGC.matches(testPositiveMatrix);
 
-        assertTrue(doesMatrixMatch);
+        assertFalse(doesMatrixMatch);
     }
 
     @Test
@@ -362,4 +362,421 @@ public class CommonGoalCardTest {
         assertTrue(doesMatrixMatch);
     }
 
+    @Test
+    @DisplayName("Verify FOUR_CORNERS negatively #1")
+    public void test_f5_negative_1() {
+        CommonGoalCard fourCorners = CommonGoalCardFunctionContainer.FOUR_CORNERS;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.TROPHY, null, null, null, Tile.CAT},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.CAT, null, null, null, Tile.TROPHY}
+        };
+
+        boolean doesMatrixMatch = fourCorners.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify FOUR_CORNERS negatively #2")
+    public void test_f5_negative_2() {
+        CommonGoalCard fourCorners = CommonGoalCardFunctionContainer.FOUR_CORNERS;
+
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, Tile.CAT},
+                {null, null, null, null, Tile.TROPHY},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.TROPHY, null, null, null, Tile.TROPHY},
+                {Tile.CAT, null, null, null, Tile.TROPHY}
+        };
+
+        boolean doesMatrixMatch = fourCorners.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_COLUMNS positively #1")
+    public void test_f6_positive_1() {
+        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, null, null, null, Tile.CAT},
+                {Tile.TROPHY, null, null, null, Tile.GAME},
+                {Tile.GAME, null, null, null, Tile.PLANT},
+                {Tile.PLANT, null, null, null, Tile.TROPHY},
+                {Tile.FRAME, null, null, null, Tile.BOOK},
+                {Tile.BOOK, null, null, null, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_COLUMNS positively #2")
+    public void test_f6_positive_2() {
+        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {null, Tile.CAT,  Tile.CAT, null, null},
+                {null, Tile.TROPHY, Tile.GAME, null, null},
+                {null, Tile.GAME, Tile.PLANT, null, null},
+                {null, Tile.PLANT, Tile.TROPHY, null, null},
+                {null, Tile.FRAME, Tile.BOOK, null, null},
+                {null, Tile.BOOK, Tile.FRAME, null, null}
+        };
+
+        boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_COLUMNS negatively #1")
+    public void test_f6_negative_1() {
+        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {null, Tile.CAT,  Tile.BOOK, null, null},
+                {null, Tile.CAT, Tile.GAME, null, null},
+                {null, Tile.GAME, Tile.PLANT, null, null},
+                {null, Tile.PLANT, Tile.TROPHY, null, null},
+                {null, Tile.FRAME, Tile.BOOK, null, null},
+                {null, Tile.BOOK, Tile.FRAME, null, null}
+        };
+
+        boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_COLUMNS negatively #2")
+    public void test_f6_negative_2() {
+        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, null, null, null, null},
+                {Tile.CAT, null, Tile.GAME, null, null},
+                {Tile.CAT, null, Tile.PLANT, null, null},
+                {Tile.CAT, null, Tile.TROPHY, null, null},
+                {Tile.FRAME, null, Tile.BOOK, null, null},
+                {Tile.BOOK, null, Tile.FRAME, null, null}
+        };
+
+        boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_SQUARES positively #1")
+    public void test_f7_positive_1() {
+        CommonGoalCard twoSquares = CommonGoalCardFunctionContainer.TWO_SQUARES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.GAME, Tile.CAT, null, null, Tile.PLANT},
+                {Tile.PLANT, Tile.CAT, null, null, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, null, Tile.FRAME, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, null, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_SQUARES positively #2")
+    public void test_f7_positive_2() {
+        CommonGoalCard twoSquares = CommonGoalCardFunctionContainer.TWO_SQUARES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.GAME, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
+                {Tile.PLANT, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, null, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, null, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_SQUARES negatively #1")
+    public void test_f7_negative_1() {
+        CommonGoalCard twoSquares = CommonGoalCardFunctionContainer.TWO_SQUARES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.GAME, null, null, Tile.GAME},
+                {Tile.GAME, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
+                {Tile.PLANT, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_SQUARES negatively #2")
+    public void test_f7_negative_2() {
+        CommonGoalCard twoSquares = CommonGoalCardFunctionContainer.TWO_SQUARES;
+
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
+                {Tile.CAT, Tile.TROPHY, Tile.PLANT, Tile.TROPHY, Tile.GAME},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT},
+                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
+                {Tile.CAT, Tile.TROPHY, Tile.PLANT, Tile.TROPHY, Tile.GAME}
+        };
+
+        boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_LINES positively #1")
+    public void test_f8_positive_1() {
+        CommonGoalCard twoDiffLines = CommonGoalCardFunctionContainer.TWO_DIFF_LINES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.GAME, Tile.CAT, null, null, Tile.PLANT},
+                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.TROPHY, Tile.FRAME, Tile.PLANT}
+        };
+
+        boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_LINES positively #2")
+    public void test_f8_positive_2() {
+        CommonGoalCard twoDiffLines = CommonGoalCardFunctionContainer.TWO_DIFF_LINES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.GAME, Tile.CAT, Tile.TROPHY, Tile.GAME, Tile.PLANT},
+                {Tile.PLANT, Tile.CAT, Tile.FRAME, Tile.GAME, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_LINES negatively #1")
+    public void test_f8_negative_1() {
+        CommonGoalCard twoDiffLines = CommonGoalCardFunctionContainer.TWO_DIFF_LINES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.CAT},
+                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.PLANT, Tile.GAME},
+                {Tile.GAME, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
+                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_LINES negatively #2")
+    public void test_f8_negative_2() {
+        CommonGoalCard twoDiffLines = CommonGoalCardFunctionContainer.TWO_DIFF_LINES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.GAME, null, null, Tile.GAME},
+                {Tile.GAME, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
+                {Tile.PLANT, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, null, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, null, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify THREE_MAX3DIFF_COLUMNS positively #1")
+    public void test_f9_positive_1() {
+        CommonGoalCard threeMax3diffColumns = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.CAT, Tile.CAT, null, null, Tile.PLANT},
+                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.FRAME, Tile.CAT},
+                {Tile.CAT, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.GAME},
+                {Tile.BOOK, Tile.CAT, Tile.TROPHY, Tile.FRAME, Tile.PLANT}
+        };
+
+        boolean doesMatrixMatch = threeMax3diffColumns.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify THREE_MAX3DIFF_COLUMNS positively #2")
+    public void test_f9_positive_2() {
+        CommonGoalCard threeMax3diffColumns = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
+                {Tile.CAT, Tile.CAT, null, null, Tile.GAME}
+        };
+
+        boolean doesMatrixMatch = threeMax3diffColumns.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify THREE_MAX3DIFF_COLUMNS negatively #1")
+    public void test_f9_negative_1() {
+        CommonGoalCard threeMax3diffColumns = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.CAT},
+                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.PLANT, Tile.GAME},
+                {Tile.GAME, Tile.TROPHY, Tile.GAME, Tile.CAT, Tile.TROPHY},
+                {Tile.PLANT, Tile.FRAME, Tile.GAME, Tile.GAME, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = threeMax3diffColumns.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify THREE_MAX3DIFF_COLUMNS negatively #2")
+    public void test_f9_negative_2() {
+        CommonGoalCard threeMax3diffColumns = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {Tile.CAT, Tile.GAME, null, Tile.PLANT, Tile.GAME},
+                {Tile.GAME, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
+                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = threeMax3diffColumns.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify X_TILES positively #1")
+    public void test_f10_positive_1() {
+        CommonGoalCard xTiles = CommonGoalCardFunctionContainer.X_TILES;
+
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {Tile.PLANT, null, Tile.PLANT, null, null},
+                {Tile.GAME, Tile.PLANT, Tile.PLANT, null, null},
+                {Tile.PLANT, Tile.TROPHY, Tile.PLANT, null, null}
+        };
+
+        boolean doesMatrixMatch = xTiles.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify X_TILES positively #2")
+    public void test_f10_positive_2() {
+        CommonGoalCard xTiles= CommonGoalCardFunctionContainer.X_TILES;
+
+        Tile[][] testPositiveMatrix = {
+                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
+                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
+                {Tile.PLANT, null, Tile.PLANT, null, null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, null, Tile.PLANT},
+                {Tile.PLANT, Tile.TROPHY, Tile.PLANT, null, Tile.PLANT},
+                {Tile.PLANT, Tile.TROPHY, Tile.PLANT, null, Tile.PLANT}
+        };
+
+        boolean doesMatrixMatch = xTiles.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify X_TILES negatively #1")
+    public void test_f10_negative_1() {
+        CommonGoalCard xTiles = CommonGoalCardFunctionContainer.X_TILES;
+
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {Tile.CAT, Tile.GAME, null, Tile.PLANT, Tile.GAME},
+                {Tile.GAME, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
+                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
+                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
+                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+        };
+
+        boolean doesMatrixMatch = xTiles.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify X_TILES negatively #2")
+    public void test_f10_negative_2() {
+        CommonGoalCard xTiles = CommonGoalCardFunctionContainer.X_TILES;
+
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, Tile.PLANT, null, null},
+                {null, null, Tile.TROPHY, null, Tile.GAME},
+                {Tile.TROPHY, null, Tile.TROPHY, null, Tile.PLANT},
+                {Tile.TROPHY, null, Tile.TROPHY, null, Tile.PLANT}
+        };
+
+        boolean doesMatrixMatch = xTiles.matches(testPositiveMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
 }
