@@ -128,7 +128,7 @@ public class CommonGoalCardTest {
     public void test_f2_negative_1() {
         CommonGoalCard diagonalCGC = CommonGoalCardFunctionContainer.DIAGONAL;
 
-        Tile[][] testPositiveMatrix = {
+        Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {Tile.CAT, null, null, null, null},
                 {null, Tile.CAT, null, null, null},
@@ -137,7 +137,7 @@ public class CommonGoalCardTest {
                 {null, null, null, null, Tile.CAT}
         };
 
-        boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = diagonalCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }

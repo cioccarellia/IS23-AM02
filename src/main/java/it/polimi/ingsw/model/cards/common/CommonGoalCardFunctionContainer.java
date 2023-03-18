@@ -77,11 +77,11 @@ public class CommonGoalCardFunctionContainer {
         boolean hasAcceptableDiagonal2 = true;
         Tile t1 = matrix[0][0];
         Tile t2 = matrix[1][0];
-        for (int i = 1; i < ROWS; i++) {
-            for (int j = 1; j < COLUMNS; j++) {
-                if (hasAcceptableDiagonal1 && t1 != null && matrix[i][j] != t1) hasAcceptableDiagonal1 = false;
-                if (hasAcceptableDiagonal2 && t2 != null && matrix[i + 1][j] != t2) hasAcceptableDiagonal2 = false;
-            }
+        for (int i = 1; i < ROWS - 1; i++) {
+                if (hasAcceptableDiagonal1 && t1 != null && matrix[i][i] != t1) hasAcceptableDiagonal1 = false;
+                else if(t1 == null) hasAcceptableDiagonal1 = false;
+                if (hasAcceptableDiagonal2 && t2 != null && matrix[i + 1][i] != t2) hasAcceptableDiagonal2 = false;
+                else if(t2 == null) hasAcceptableDiagonal2 = false;
         }
         return (hasAcceptableDiagonal1 || hasAcceptableDiagonal2);
     }
