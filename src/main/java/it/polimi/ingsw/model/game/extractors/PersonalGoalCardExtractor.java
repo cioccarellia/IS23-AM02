@@ -1,12 +1,10 @@
 package it.polimi.ingsw.model.game.extractors;
 
-import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer;
 import it.polimi.ingsw.utils.ListUtils;
 
 import java.util.List;
-import java.util.Random;
 
 public class PersonalGoalCardExtractor {
 
@@ -15,7 +13,7 @@ public class PersonalGoalCardExtractor {
     /**
      * Extracts a random {@link PersonalGoalCard} from the current {@link PersonalGoalCardExtractor#status},
      * removing it in the process.
-     * */
+     */
     public PersonalGoalCard extract() {
         return ListUtils.extractAndRemoveRandomElement(status);
     }

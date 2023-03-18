@@ -31,9 +31,7 @@ public class BoardConstants {
         base[4][4] = CellPattern.NORMAL;
 
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 4; j++) {
-                base[i][j] = DFU_BOARD_MATRIX2[i][j];
-            }
+            System.arraycopy(DFU_BOARD_MATRIX2[i], 0, base[i], 0, 4);
         }
 
         for (int k = 5; k < 9; k++) {

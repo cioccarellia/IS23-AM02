@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-
-import static it.polimi.ingsw.costants.BookShelfConstants.*;
+import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
+import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
 
 /**
  * 1:  SIX_PAIRS
@@ -40,6 +40,7 @@ public class CommonGoalCardFunctionContainer {
     public static final CommonGoalCard EIGHT_TILES = new CommonGoalCard(CommonGoalCardIdentifier.EIGHT_TILES, CommonGoalCardFunctionContainer::f11);
     public static final CommonGoalCard STAIRS = new CommonGoalCard(CommonGoalCardIdentifier.STAIRS, CommonGoalCardFunctionContainer::f12);
 
+    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
 
     /**
      * Return true if there are 6 groups each containing at least 2 tiles of the same type
@@ -206,7 +207,6 @@ public class CommonGoalCardFunctionContainer {
         return groupCounter >= 2;
     }
 
-
     /**
      * Return true if there are 2 lines each formed by at least 5 different tiles
      */
@@ -269,15 +269,14 @@ public class CommonGoalCardFunctionContainer {
         return countDifferentColumn >= 3;
     }
 
-
     /**
      * returns if there are 5 tiles of the same type forming an X
      *
      * @see CommonGoalCardIdentifier#X_TILES
      */
     private static Boolean f10(Tile[][] matrix) {
-        for (int i = 0; i < ROWS - 3; i++) {
-            for (int j = 0; j < COLUMNS - 3; j++) {
+        for (int i = 0; i < ROWS - 2; i++) {
+            for (int j = 0; j < COLUMNS - 2; j++) {
                 if (matrix[i][j] == null)
                     continue;
 
@@ -299,7 +298,6 @@ public class CommonGoalCardFunctionContainer {
 
         return false;
     }
-
 
     /**
      * returns true if there are 8 tiles of the same type
@@ -346,8 +344,6 @@ public class CommonGoalCardFunctionContainer {
 
         return (count1 == 5 || count2 == 5);
     }
-
-    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
 
     // public static final Map<CommonGoalCardIdentifier, CommonGoalCard> commonGoalCardMap() {
     //     Map<CommonGoalCardIdentifier, CommonGoalCard> map = new HashMap<>();

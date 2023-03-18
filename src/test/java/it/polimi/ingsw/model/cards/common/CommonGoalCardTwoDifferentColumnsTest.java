@@ -1,19 +1,20 @@
 package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.cards.BaseShelfMatrixTester;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CommonGoalCard2DifferentColumnsTest extends CommonGoalCardBase {
+public class CommonGoalCardTwoDifferentColumnsTest extends BaseShelfMatrixTester {
+
+    CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
 
     @Test
     @DisplayName("Verify TWO_DIFF_COLUMNS positively #1")
     public void test_f6_positive_1() {
-        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
-
         Tile[][] testPositiveMatrix = {
                 {Tile.CAT, null, null, null, Tile.CAT},
                 {Tile.TROPHY, null, null, null, Tile.GAME},
@@ -31,8 +32,6 @@ public class CommonGoalCard2DifferentColumnsTest extends CommonGoalCardBase {
     @Test
     @DisplayName("Verify TWO_DIFF_COLUMNS positively #2")
     public void test_f6_positive_2() {
-        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
-
         Tile[][] testPositiveMatrix = {
                 {null, Tile.CAT, Tile.CAT, null, null},
                 {null, Tile.TROPHY, Tile.GAME, null, null},
@@ -50,8 +49,6 @@ public class CommonGoalCard2DifferentColumnsTest extends CommonGoalCardBase {
     @Test
     @DisplayName("Verify TWO_DIFF_COLUMNS negatively #1")
     public void test_f6_negative_1() {
-        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
-
         Tile[][] testNegativeMatrix = {
                 {null, Tile.CAT, Tile.BOOK, null, null},
                 {null, Tile.CAT, Tile.GAME, null, null},
@@ -69,8 +66,6 @@ public class CommonGoalCard2DifferentColumnsTest extends CommonGoalCardBase {
     @Test
     @DisplayName("Verify TWO_DIFF_COLUMNS negatively #2")
     public void test_f6_negative_2() {
-        CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
-
         Tile[][] testNegativeMatrix = {
                 {Tile.CAT, null, null, null, null},
                 {Tile.CAT, null, Tile.GAME, null, null},

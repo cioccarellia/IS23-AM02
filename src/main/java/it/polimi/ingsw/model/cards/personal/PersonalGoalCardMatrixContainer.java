@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Personal goal card archive
- * */
+ */
 public class PersonalGoalCardMatrixContainer {
 
     private static final Tile[][] m1 = {
@@ -119,7 +119,6 @@ public class PersonalGoalCardMatrixContainer {
     };
 
 
-
     private final static PersonalGoalCard p1 = new PersonalGoalCard(m1);
     private final static PersonalGoalCard p2 = new PersonalGoalCard(m2);
     private final static PersonalGoalCard p3 = new PersonalGoalCard(m3);
@@ -132,7 +131,6 @@ public class PersonalGoalCardMatrixContainer {
     private final static PersonalGoalCard p10 = new PersonalGoalCard(m10);
     private final static PersonalGoalCard p11 = new PersonalGoalCard(m11);
     private final static PersonalGoalCard p12 = new PersonalGoalCard(m12);
-
 
 
     public static final List<PersonalGoalCard> personalGoalCardDomain = Arrays.asList(

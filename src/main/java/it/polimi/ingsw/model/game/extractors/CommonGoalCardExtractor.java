@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer;
 import it.polimi.ingsw.utils.ListUtils;
 
 import java.util.List;
-import java.util.Random;
 
 public class CommonGoalCardExtractor {
 
@@ -14,7 +13,7 @@ public class CommonGoalCardExtractor {
     /**
      * Extracts a random {@link CommonGoalCard} from the current {@link CommonGoalCardExtractor#status},
      * removing it in the process.
-     * */
+     */
     public CommonGoalCard extract() {
         return ListUtils.extractAndRemoveRandomElement(status);
     }

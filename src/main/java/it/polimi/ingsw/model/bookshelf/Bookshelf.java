@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static it.polimi.ingsw.costants.BookShelfConstants.*;
+import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
+import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
 
 /**
  * Implements a 6 row, 5 column bookshelf of {@link it.polimi.ingsw.model.board.Tile}s.
@@ -75,7 +76,9 @@ public class Bookshelf {
         Tile[][] copy = new Tile[ROWS][COLUMNS];
 
         for (int i = 0; i < ROWS; i++) {
-            System.arraycopy(bookshelfMatrix[i], 0, copy[i], 0, ROWS);
+            for (int j = 0; j < COLUMNS; j++) {
+                bookshelfMatrix[i][j] = copy[i][j];
+            }
         }
 
         return copy;
@@ -96,7 +99,6 @@ public class Bookshelf {
     }
 
     /**
-     *
      * @return 1 if the bookshelf is full, 0 if not
      */
     public boolean isFull() {
@@ -106,8 +108,7 @@ public class Bookshelf {
                 countNotEmptyRow++;
             }
         }
-        if (countNotEmptyRow == ROWS) return true;
-        else return false;
+        return countNotEmptyRow == ROWS;
     }
 
 }

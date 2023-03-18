@@ -19,28 +19,22 @@ import java.util.Map;
 
 /**
  * Model class representing an instance of a game.
- * */
+ */
 public class Game {
 
     private final GameMode mode;
-    private GameStatus status;
-
     private final Board board = new Board();
-
     private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
-
-    private PlayerNumber startingPlayer;
-    private PlayerNumber currentPlayer;
-
-    /**
-     * Holds the current statuses for the common goal cards.
-     *
-     * */
-    private List<CommonGoalCardStatus> commonGoalCardStatuses;
-
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
+    private final GameStatus status;
+    private PlayerNumber startingPlayer;
+    private PlayerNumber currentPlayer;
+    /**
+     * Holds the current statuses for the common goal cards.
+     */
+    private List<CommonGoalCardStatus> commonGoalCardStatuses;
 
     public Game(GameMode _mode) {
         status = GameStatus.INITIALIZATION;
@@ -60,11 +54,9 @@ public class Game {
         commonGoalCardStatuses.add(cardStatus2);
 
 
-
         // Random first-player extraction
         startingPlayer = ListUtils.extractRandomElement(playersMap.values()).getPlayerNumber();
         currentPlayer = startingPlayer;
-
 
 
         // refill board
@@ -78,7 +70,7 @@ public class Game {
 
     /**
      *
-     * */
+     */
     public void addPlayer(String username) {
         PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
         PlayerNumber newPlayerNumber = PlayerNumber.fromInt(playersMap.size() + 1);

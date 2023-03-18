@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.game;
 /**
  * General element, assignable to a {@link it.polimi.ingsw.model.player.PlayerSession}
  * during a game which is worth a certain amount of point(s).
- * */
+ */
 public enum Token {
     FULL_SHELF_TOKEN(1),
     COMMON_GOAL_TOKEN_2_POINTS(2),
@@ -13,7 +13,7 @@ public enum Token {
 
     /**
      * The positive point value associated with a single token.
-     * */
+     */
     private final int points;
 
     Token(int tokenPoints) {

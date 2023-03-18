@@ -7,12 +7,9 @@ import it.polimi.ingsw.model.board.Coordinates;
  * Utility class to check properties about coordinates
  */
 public class BoardHelper {
-    public enum Edge {
-        TOP, LEFT, BOTTOM, RIGHT;
-    }
-
     /**
      * throughout "Strategy" Pattern, return true if side cells is empty
+     *
      * @param board
      * @param coordinates
      * @param edge
@@ -54,6 +51,10 @@ public class BoardHelper {
         }
 
         return board.getTileAt(shiftedCoordinates).isEmpty();
+    }
+
+    public enum Edge {
+        TOP, LEFT, BOTTOM, RIGHT
     }
 
 }

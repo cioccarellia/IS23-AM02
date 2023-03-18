@@ -25,7 +25,7 @@ public class TileExtractor {
 
     /**
      * Returns the number of tiles that can be extracted from the sacchetto
-     * */
+     */
     public int leftoverCapacity() {
         return status.values().stream().mapToInt(i -> i).sum();
     }

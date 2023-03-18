@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class BookshelfUnitTester {
 
 
@@ -28,8 +26,6 @@ public class BookshelfUnitTester {
     }
 
 
-
-
     @Test
     @DisplayName("Serialization with gson #1")
     public void test_serialization_gson_1() {
@@ -42,7 +38,6 @@ public class BookshelfUnitTester {
 
         Bookshelf deserialized = gson.fromJson(jsonSerializedObject, Bookshelf.class);
     }
-
 
 
     @Test

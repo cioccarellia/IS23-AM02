@@ -32,7 +32,7 @@ public class CommonGoalCardStatus {
 
     /**
      * Whether the current status still has possible tokens to be acquired
-     * */
+     */
     public boolean hasTokenLeft() {
         return !tokenStack.isEmpty();
     }
