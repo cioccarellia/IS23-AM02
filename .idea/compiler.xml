@@ -6,8 +6,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for shelfie" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <option name="project" value="it.polimi.ingsw/shelfie" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/info/picocli/picocli-codegen/4.7.1/picocli-codegen-4.7.1.jar" />
+          <entry name="$MAVEN_REPOSITORY$/info/picocli/picocli/4.7.1/picocli-4.7.1.jar" />
+        </processorPath>
         <module name="shelfie" />
       </profile>
     </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="shelfie" options="-Aproject=it.polimi.ingsw/shelfie" />
+    </option>
   </component>
 </project>

@@ -15,10 +15,40 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
+        <maven-compiler-plugin-version>3.7.0</maven-compiler-plugin-version>
+
+
         <!-- Dependency versions -->
         <junit.version>5.9.2</junit.version>
         <gson.version>2.10.1</gson.version>
+        <javafx.version>11</javafx.version>
+        <javalang.version>2.6</javalang.version>
+        <picocli.version>4.7.1</picocli.version>
     </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- annotationProcessorPaths requires maven-compiler-plugin version 3.5 or higher -->
+                <version>${maven-compiler-plugin-version}</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>info.picocli</groupId>
+                            <artifactId>picocli-codegen</artifactId>
+                            <version>4.7.1</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
     <dependencies>
@@ -30,7 +60,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- GSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -38,10 +67,27 @@
             <version>${gson.version}</version>
         </dependency>
 
+
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${javalang.version}</version>
+        </dependency>
+
+
+        <!-- PicoCLI library -->
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>${picocli.version}</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>11</version>
+            <version>${javafx.version}</version>
         </dependency>
 
 

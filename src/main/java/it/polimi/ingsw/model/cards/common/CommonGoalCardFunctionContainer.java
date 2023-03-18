@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.model.board.Tile;
+import org.apache.commons.lang.SerializationUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+
 
 import static it.polimi.ingsw.costants.BookShelfConstants.*;
 
@@ -25,18 +27,18 @@ import static it.polimi.ingsw.costants.BookShelfConstants.*;
 
 public class CommonGoalCardFunctionContainer {
 
-    private static final CommonGoalCard c1 = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::f1);
-    private static final CommonGoalCard c2 = new CommonGoalCard(CommonGoalCardIdentifier.DIAGONAL, CommonGoalCardFunctionContainer::f2);
-    private static final CommonGoalCard c3 = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::f3);
-    private static final CommonGoalCard c4 = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_MAX3DIFF_LINES, CommonGoalCardFunctionContainer::f4);
-    private static final CommonGoalCard c5 = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_CORNERS, CommonGoalCardFunctionContainer::f5);
-    private static final CommonGoalCard c6 = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_COLUMNS, CommonGoalCardFunctionContainer::f6);
-    private static final CommonGoalCard c7 = new CommonGoalCard(CommonGoalCardIdentifier.TWO_SQUARES, CommonGoalCardFunctionContainer::f7);
-    private static final CommonGoalCard c8 = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_LINES, CommonGoalCardFunctionContainer::f8);
-    private static final CommonGoalCard c9 = new CommonGoalCard(CommonGoalCardIdentifier.THREE_MAX3DIFF_COLUMNS, CommonGoalCardFunctionContainer::f9);
-    private static final CommonGoalCard c10 = new CommonGoalCard(CommonGoalCardIdentifier.X_TILES, CommonGoalCardFunctionContainer::f10);
-    private static final CommonGoalCard c11 = new CommonGoalCard(CommonGoalCardIdentifier.EIGHT_TILES, CommonGoalCardFunctionContainer::f11);
-    private static final CommonGoalCard c12 = new CommonGoalCard(CommonGoalCardIdentifier.STAIRS, CommonGoalCardFunctionContainer::f12);
+    public static final CommonGoalCard SIX_PAIRS = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::f1);
+    public static final CommonGoalCard DIAGONAL = new CommonGoalCard(CommonGoalCardIdentifier.DIAGONAL, CommonGoalCardFunctionContainer::f2);
+    public static final CommonGoalCard FOUR_GROUP_FOUR = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::f3);
+    public static final CommonGoalCard FOUR_MAX3DIFF_LINES = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_MAX3DIFF_LINES, CommonGoalCardFunctionContainer::f4);
+    public static final CommonGoalCard FOUR_CORNERS = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_CORNERS, CommonGoalCardFunctionContainer::f5);
+    public static final CommonGoalCard TWO_DIFF_COLUMNS = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_COLUMNS, CommonGoalCardFunctionContainer::f6);
+    public static final CommonGoalCard TWO_SQUARES = new CommonGoalCard(CommonGoalCardIdentifier.TWO_SQUARES, CommonGoalCardFunctionContainer::f7);
+    public static final CommonGoalCard TWO_DIFF_LINES = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_LINES, CommonGoalCardFunctionContainer::f8);
+    public static final CommonGoalCard THREE_MAX3DIFF_COLUMNS = new CommonGoalCard(CommonGoalCardIdentifier.THREE_MAX3DIFF_COLUMNS, CommonGoalCardFunctionContainer::f9);
+    public static final CommonGoalCard X_TILES = new CommonGoalCard(CommonGoalCardIdentifier.X_TILES, CommonGoalCardFunctionContainer::f10);
+    public static final CommonGoalCard EIGHT_TILES = new CommonGoalCard(CommonGoalCardIdentifier.EIGHT_TILES, CommonGoalCardFunctionContainer::f11);
+    public static final CommonGoalCard STAIRS = new CommonGoalCard(CommonGoalCardIdentifier.STAIRS, CommonGoalCardFunctionContainer::f12);
 
 
     /**
@@ -45,20 +47,8 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#SIX_PAIRS
      */
     private static Boolean f1(Tile[][] matrix) {
-        /*
         // FIXME
-        int groupCounter = 0;
-        for (int i = 0; i < ROWS - 1; i = i + 2) {
-            for (int j = 0; j < COLUMNS - 1; j = j + 2) {
-                if (matrix[i][j] == matrix[i][j + 1] && matrix[i][j] != matrix[i][j + 2]) groupCounter++;
-                if (matrix[i][j] == matrix[i + 1][j] && matrix[i][j] != matrix[i + 2][j]) groupCounter++;
-            }
-        }
-
-        return groupCounter >= 6;
-
-         */
-        Tile[][] matrixCopy = matrix;
+        Tile[][] matrixCopy = (Tile[][]) SerializationUtils.clone(matrix);
         int countPairs = 0;
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
@@ -83,18 +73,6 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#DIAGONAL
      */
     private static Boolean f2(Tile[][] matrix) {
-        /*
-        int firstDiagonalCounter = 0;
-        int secondDiagonalCounter = 0;
-
-        for (int i = 0; i < COLUMNS; i++) {
-            // FIXME
-            if (matrix[COLUMNS - i][COLUMNS - i] == matrix[COLUMNS - i - 1][i + 1]) firstDiagonalCounter++;
-            if (matrix[COLUMNS - i - 1][COLUMNS - i - 1] == matrix[COLUMNS - i - 2][i + 1]) secondDiagonalCounter++;
-        }
-
-        return (firstDiagonalCounter == 5 || secondDiagonalCounter == 5);
-        */
         boolean hasAcceptableDiagonal1 = true;
         boolean hasAcceptableDiagonal2 = true;
         Tile t1 = matrix[0][0];
@@ -114,14 +92,31 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#FOUR_GROUP_FOUR
      */
     private static Boolean f3(Tile[][] matrix) {
-        // FIXME & TODO
-        int countColumns = 0;
-        for (int i = 0; i < ROWS; i++) {
-            if (matrix[i][0] == matrix[i][1] && (matrix[i][1] == matrix[i][2]) && (matrix[i][2] == matrix[i][3]) && (matrix[i][3] == matrix[i][4]) && (matrix[i][4] != matrix[i][5]))
-                countColumns++;
-        }
+        int countGroups = 0;
+        int countTilesGroup = 1;
+        Tile[][] matrixCopy = (Tile[][]) SerializationUtils.clone(matrix);        //FIXME (tutta da sistemare e deep copy)
+        for (int i = 0; i < ROWS - 1; i++) {
+            for (int j = 0; j < COLUMNS - 1; j++) {
+                Tile t = matrixCopy[i][j];
+                if (t != null && matrixCopy[i + 1][j] == t) {
+                    countTilesGroup++;
+                    matrixCopy[i + 1][j] = null;
+                    matrixCopy[i][j] = null;
+                }
+                if (t != null && matrix[i][j + 1] == t) {
+                    countTilesGroup++;
+                    matrixCopy[i][j + 1] = null;
+                    matrixCopy[i][j] = null;
+                }
+            }
+            if (countTilesGroup >= 8) {
+                countGroups += 2;
+            } else if (countTilesGroup >= 4) {
+                countGroups++;
+            }
 
-        return countColumns >= 4;
+        }
+        return countGroups >= 4;
     }
 
     /**
@@ -130,21 +125,7 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#FOUR_MAX3DIFF_LINES
      */
     private static Boolean f4(Tile[][] matrix) {
-        /*int matchingRows = 0;
 
-        for (int i = 0; i < ROWS; i++) {
-            int tileTypeInRow = 0;
-
-            for (int j = 0; j < COLUMNS; j++) {
-                if (matrix[i][j] != matrix[i][j + 1]) tileTypeInRow++;
-            }
-
-            if (tileTypeInRow <= 3) matchingRows++;
-        }
-
-        return matchingRows >= 4;
-
-         */
         int countDifferentLines = 0;
         for (int i = 0; i < ROWS; i++) {
             int countBookTile = 0, countCatTile = 0, countGameTile = 0, countTrophyTile = 0, countPlantTile = 0, countFrameTile = 0;
@@ -178,30 +159,8 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#TWO_DIFF_COLUMNS
      */
     private static Boolean f6(Tile[][] matrix) {
-        /*int cont = 0;
-        int j = 0;
-        for (int i = 0; i < ROWS; i++) {
-            if (matrix[i][j] != matrix[i][j + 1] &&
-                    matrix[i][j] != matrix[i][j + 2] &&
-                    matrix[i][j] != matrix[i][j + 3] &&
-                    matrix[i][j] != matrix[i][j + 4] &&
-                    matrix[i][j] != matrix[i][j + 5])
-                if (matrix[i][j + 1] != matrix[i][j + 2] &&
-                        matrix[i][j + 1] != matrix[i][j + 3] &&
-                        matrix[i][j + 1] != matrix[i][j + 4] &&
-                        matrix[i][j + 1] != matrix[i][j + 5])
-                    if (matrix[i][j + 2] != matrix[i][j + 3] &&
-                            matrix[i][j + 2] != matrix[i][j + 4] &&
-                            matrix[i][j + 2] != matrix[i][j + 5])
-                        if (matrix[i][j + 3] != matrix[i][j + 4] &&
-                                matrix[i][j + 3] != matrix[i][j + 5])
-                            if (matrix[i][j + 4] != matrix[i][j + 5]) {
-                                cont++;
-                            }
-        }
-        return cont >= 2;
-        */
         int count = 0;
+
         for (int j = 0; j < COLUMNS; j++) {
             for (int i = 0; i < ROWS; i++) {
                 boolean hasSameTile = false;
@@ -225,26 +184,9 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#TWO_SQUARES
      */
     private static Boolean f7(Tile[][] matrix) {
-        /*
+        Tile[][] matrixCopy = (Tile[][]) SerializationUtils.clone(matrix);
         int groupCounter = 0;
-        for (int i = 0; i < ROWS - 1; i++) {
-            int jFound1 = 0;
-            int jFound2 = 0;
-            for (int j = 1; j < COLUMNS; j++) {
-                Tile t = matrix[i][j];
-                if (j != jFound1 && j != jFound1 - 1 && j != jFound2 && j != jFound2 && t == matrix[i][j - 1] && t == matrix[i + 1][j] && t == matrix[i + 1][j - 1]) {
-                    groupCounter++;
-                    j++;
-                    if (jFound1 == 0) jFound1 = j;
-                    else jFound2 = j;
-                }
-            }
-        }
 
-        return groupCounter >= 2;
-        */
-        Tile[][] matrixCopy = matrix;
-        int groupCounter = 0;
         for (int i = 0; i < ROWS - 1; i++) {
             for (int j = 0; j < COLUMNS - 1; j++) {
                 Tile t = matrixCopy[i][j];
@@ -257,28 +199,17 @@ public class CommonGoalCardFunctionContainer {
                 }
             }
         }
+
         return groupCounter >= 2;
     }
+
 
     /**
      * Return true if there are 2 lines each formed by at least 5 different tiles
      */
     private static Boolean f8(Tile[][] matrix) {
-        /*
-        //FIXME
-        int countDifferentRows = 0, countDifferentCells = 0;
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
-                if (matrix[i + j][i + j] != matrix[i + j][i + j + 1]) countDifferentCells++;
-            }
-            if (countDifferentCells == 5) countDifferentRows++;
-            countDifferentCells = 0;
-        }
-
-        return countDifferentCells >= 2;
-
-         */
         int countLines = 0;
+
         for (int i = 0; i < ROWS; i++) {
             int countBookTile = 0, countCatTile = 0, countGameTile = 0, countTrophyTile = 0, countPlantTile = 0, countFrameTile = 0;
 
@@ -310,6 +241,7 @@ public class CommonGoalCardFunctionContainer {
      */
     private static Boolean f9(Tile[][] matrix) {
         int countDifferentColumn = 0;
+
         for (int j = 0; j < COLUMNS; j++) {
             int countBookTile = 0, countCatTile = 0, countGameTile = 0, countTrophyTile = 0, countPlantTile = 0, countFrameTile = 0;
 
@@ -329,25 +261,6 @@ public class CommonGoalCardFunctionContainer {
                 if (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3)
                     countDifferentColumn++;
 
-                /*
-                if (matrix[i][j] == Tile.BOOK) {
-                    countBookTile = 1;
-                } else if (matrix[i][j] == Tile.CAT) {
-                    countCatTile = 1;
-                } else if (matrix[i][j] == Tile.GAME) {
-                    countGameTile = 1;
-                } else if (matrix[i][j] == Tile.TROPHY) {
-                    countTrophyTile = 1;
-                } else if (matrix[i][j] == Tile.PLANT) {
-                    countPlantTile = 1;
-                } else if (matrix[i][j] == Tile.FRAME) {
-                    countFrameTile = 1;
-                }
-                if (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile +
-                        countFrameTile <= 3)
-                    countDifferentColumn++;
-
-                 */
             }
         }
         return countDifferentColumn >= 3;
@@ -362,6 +275,9 @@ public class CommonGoalCardFunctionContainer {
     private static Boolean f10(Tile[][] matrix) {
         for (int i = 0; i < ROWS - 3; i++) {
             for (int j = 0; j < COLUMNS - 3; j++) {
+                if (matrix[i][j] == null)
+                    continue;
+
                 // enumerate cross points
                 Tile topLeft = matrix[i][j];
                 Tile topRight = matrix[i][j + 2];
@@ -372,7 +288,9 @@ public class CommonGoalCardFunctionContainer {
                 // check whether all the cross points are equal
                 boolean isCross = Stream.of(topLeft, topRight, bottomRight, bottomLeft).allMatch(it -> it == center);
 
-                if (isCross) return true;
+                // if pattern is a cross
+                if (isCross)
+                    return true;
             }
         }
 
@@ -426,5 +344,9 @@ public class CommonGoalCardFunctionContainer {
         return (count1 == 5 || count2 == 5);
     }
 
-    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12);
+    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
+
+    // public static final Map<CommonGoalCardIdentifier, CommonGoalCard> commonGoalCardMap() {
+    //     Map<CommonGoalCardIdentifier, CommonGoalCard> map = new HashMap<>();
+    // }
 }
