@@ -78,10 +78,10 @@ public class CommonGoalCardFunctionContainer {
         Tile t1 = matrix[0][0];
         Tile t2 = matrix[1][0];
         for (int i = 1; i < ROWS - 1; i++) {
-                if (hasAcceptableDiagonal1 && t1 != null && matrix[i][i] != t1) hasAcceptableDiagonal1 = false;
-                else if(t1 == null) hasAcceptableDiagonal1 = false;
-                if (hasAcceptableDiagonal2 && t2 != null && matrix[i + 1][i] != t2) hasAcceptableDiagonal2 = false;
-                else if(t2 == null) hasAcceptableDiagonal2 = false;
+            if (hasAcceptableDiagonal1 && t1 != null && matrix[i][i] != t1) hasAcceptableDiagonal1 = false;
+            else if (t1 == null) hasAcceptableDiagonal1 = false;
+            if (hasAcceptableDiagonal2 && t2 != null && matrix[i + 1][i] != t2) hasAcceptableDiagonal2 = false;
+            else if (t2 == null) hasAcceptableDiagonal2 = false;
         }
         return (hasAcceptableDiagonal1 || hasAcceptableDiagonal2);
     }
@@ -131,6 +131,9 @@ public class CommonGoalCardFunctionContainer {
             int countBookTile = 0, countCatTile = 0, countGameTile = 0, countTrophyTile = 0, countPlantTile = 0, countFrameTile = 0;
 
             for (int j = 0; j < COLUMNS; j++) {
+                if (matrix[i][j] == null) {
+                    break;
+                }
                 switch (matrix[i][j]) {
                     case BOOK -> countBookTile = 1;
                     case CAT -> countCatTile = 1;
@@ -139,10 +142,10 @@ public class CommonGoalCardFunctionContainer {
                     case PLANT -> countPlantTile = 1;
                     case FRAME -> countFrameTile = 1;
                 }
-
-                if (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3)
+                if (j == 4 && (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3))
                     countDifferentLines++;
             }
+
         }
         return countDifferentLines >= 4;
     }
@@ -163,15 +166,15 @@ public class CommonGoalCardFunctionContainer {
 
         for (int j = 0; j < COLUMNS; j++) {
             for (int i = 0; i < ROWS; i++) {
-                boolean hasSameTile = false;
+                boolean hasSameTileOrNull = false;
                 Tile t = matrix[i][j];
                 for (int h = i + 1; h < ROWS - 1; h++) {
-                    if (t == matrix[h][j]) {
-                        hasSameTile = true;
+                    if (t == null || t == matrix[h][j]) {
+                        hasSameTileOrNull = true;
                         break;
                     }
                 }
-                if (hasSameTile) {
+                if (hasSameTileOrNull) {
                     break;
                 }
                 count++;
@@ -190,7 +193,7 @@ public class CommonGoalCardFunctionContainer {
         for (int i = 0; i < ROWS - 1; i++) {
             for (int j = 0; j < COLUMNS - 1; j++) {
                 Tile t = matrixCopy[i][j];
-                if (t != null && t == matrixCopy[i][j - 1] && t == matrixCopy[i + 1][j] && t == matrixCopy[i + 1][j - 1]) {
+                if (t != null && t == matrixCopy[i][j + 1] && t == matrixCopy[i + 1][j] && t == matrixCopy[i + 1][j + 1]) {
                     groupCounter++;
                     matrixCopy[i][j] = null;
                     matrixCopy[i][j + 1] = null;
@@ -258,7 +261,7 @@ public class CommonGoalCardFunctionContainer {
                     case FRAME -> countFrameTile = 1;
                 }
 
-                if (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3)
+                if (i == 5 && (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3))
                     countDifferentColumn++;
 
             }
