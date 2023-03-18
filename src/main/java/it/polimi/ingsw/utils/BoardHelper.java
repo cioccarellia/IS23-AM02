@@ -23,32 +23,32 @@ public class BoardHelper {
 
         switch (edge) {
             case TOP -> {
-                if (coordinates.getY() - 1 < 0) {
+                if (coordinates.y() - 1 < 0) {
                     return true;
                 }
 
-                shiftedCoordinates = new Coordinates(coordinates.getX(), coordinates.getY() - 1);
+                shiftedCoordinates = new Coordinates(coordinates.x(), coordinates.y() - 1);
             }
             case LEFT -> {
-                if (coordinates.getX() - 1 < 0) {
+                if (coordinates.x() - 1 < 0) {
                     return true;
                 }
 
-                shiftedCoordinates = new Coordinates(coordinates.getX() - 1, coordinates.getY());
+                shiftedCoordinates = new Coordinates(coordinates.x() - 1, coordinates.y());
             }
             case BOTTOM -> {
-                if (coordinates.getY() + 1 > 9) {
+                if (coordinates.y() + 1 > 9) {
                     return true;
                 }
 
-                shiftedCoordinates = new Coordinates(coordinates.getX(), coordinates.getY() + 1);
+                shiftedCoordinates = new Coordinates(coordinates.x(), coordinates.y() + 1);
             }
             case RIGHT -> {
-                if (coordinates.getX() + 1 > 9) {
+                if (coordinates.x() + 1 > 9) {
                     return true;
                 }
 
-                shiftedCoordinates = new Coordinates(coordinates.getX() + 1, coordinates.getY());
+                shiftedCoordinates = new Coordinates(coordinates.x() + 1, coordinates.y());
             }
             default -> throw new IllegalStateException();
         }

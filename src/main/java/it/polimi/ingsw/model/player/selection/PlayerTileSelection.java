@@ -9,7 +9,7 @@ import java.util.Set;
  * */
 public class PlayerTileSelection {
     /**
-     * The selection is kept in a set
+     * The selection is kept in a set, since order does not matter
      * */
     private Set<Tile> selectedTiles;
 

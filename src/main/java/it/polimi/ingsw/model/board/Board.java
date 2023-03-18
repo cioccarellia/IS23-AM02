@@ -40,10 +40,10 @@ public class Board {
      * Returns the cell content at the given coordinates
      *
      * @param c are the coordinates at which we have to get the tile (cell's content)
-     * @return it returns the tile at the given coordinates
+     * @return the tile at the given coordinates
      */
     public Optional<Tile> getTileAt(Coordinates c) {
-        Cell required = matrix[c.getX()][c.getY()];
+        Cell required = matrix[c.x()][c.y()];
         return required.getContent();
     }
 
@@ -53,7 +53,7 @@ public class Board {
      * @param c are the coordinates at which we have to remove the tile from the cell
      */
     public void removeTileAt(Coordinates c) {
-        matrix[c.getX()][c.getY()].clear();
+        matrix[c.x()][c.y()].clear();
     }
 
     /**
