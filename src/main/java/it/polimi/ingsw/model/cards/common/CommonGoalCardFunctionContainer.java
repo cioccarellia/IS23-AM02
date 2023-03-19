@@ -8,6 +8,8 @@ import org.apache.commons.lang.SerializationUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
@@ -43,13 +45,12 @@ public class CommonGoalCardFunctionContainer {
     public static final CommonGoalCard EIGHT_TILES = new CommonGoalCard(CommonGoalCardIdentifier.EIGHT_TILES, CommonGoalCardFunctionContainer::f11);
     public static final CommonGoalCard STAIRS = new CommonGoalCard(CommonGoalCardIdentifier.STAIRS, CommonGoalCardFunctionContainer::f12);
 
-    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
-
     /**
      * Return true if there are 6 groups each containing at least 2 tiles of the same type
      *
      * @see CommonGoalCardIdentifier#SIX_PAIRS
      */
+    @Deprecated
     private static Boolean f1(Tile[][] matrix) {
         // FIXME
         Tile[][] matrixCopy = (Tile[][]) SerializationUtils.clone(matrix);
@@ -113,6 +114,7 @@ public class CommonGoalCardFunctionContainer {
      *
      * @see CommonGoalCardIdentifier#FOUR_GROUP_FOUR
      */
+    @Deprecated
     private static Boolean f3(Tile[][] matrix) {
         int countGroups = 0;
         int countTilesGroup = 1;
@@ -182,6 +184,7 @@ public class CommonGoalCardFunctionContainer {
                 if (matrix[i][j] == null) {
                     break;
                 }
+
                 switch (matrix[i][j]) {
                     case BOOK -> countBookTile = 1;
                     case CAT -> countCatTile = 1;
@@ -190,7 +193,10 @@ public class CommonGoalCardFunctionContainer {
                     case PLANT -> countPlantTile = 1;
                     case FRAME -> countFrameTile = 1;
                 }
-                if (j == 4 && (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3))
+
+                boolean isSumUnder3 = (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3);
+
+                if (j == 4 && isSumUnder3)
                     countDifferentLines++;
             }
 
@@ -286,7 +292,9 @@ public class CommonGoalCardFunctionContainer {
                     case FRAME -> countFrameTile = 1;
                 }
 
-                if (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile == 5)
+                boolean isSumEqualTo5 = countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile == 5;
+
+                if (isSumEqualTo5)
                     countLines++;
             }
         }
@@ -318,9 +326,10 @@ public class CommonGoalCardFunctionContainer {
                     case FRAME -> countFrameTile = 1;
                 }
 
-                if (i == 5 && (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3))
-                    countDifferentColumn++;
+                boolean isSumLowerThan3 = (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3);
 
+                if (i == 5 && isSumLowerThan3)
+                    countDifferentColumn++;
             }
         }
         return countDifferentColumn >= 3;
@@ -384,7 +393,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * return true if there's left side stair or a right side stair
+     * Return true if there's left side stair or a right side stair
      *
      * @see CommonGoalCardIdentifier#STAIRS
      */
@@ -402,7 +411,15 @@ public class CommonGoalCardFunctionContainer {
         return (count1 == 5 || count2 == 5);
     }
 
-    // public static final Map<CommonGoalCardIdentifier, CommonGoalCard> commonGoalCardMap() {
-    //     Map<CommonGoalCardIdentifier, CommonGoalCard> map = new HashMap<>();
-    // }
+    /**
+     * List of all valid instances of {@link CommonGoalCard}
+     */
+    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
+
+    /**
+     * Maps a {@link CommonGoalCardIdentifier} to its associated {@link CommonGoalCard}
+     * */
+    public static Map<CommonGoalCardIdentifier, CommonGoalCard> commonGoalCardMap() {
+        return commonGoalCardDomain.stream().collect(Collectors.toMap(CommonGoalCard::getId, Function.identity()));
+    }
 }

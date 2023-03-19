@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-public class BookshelfUnitTester {
-
+public class BookshelfUnitTest {
 
     @Test
     @DisplayName("Bookshelf matrix editing")

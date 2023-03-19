@@ -5,22 +5,37 @@ import it.polimi.ingsw.model.board.Tile;
 import java.util.function.Function;
 
 /**
- * Card given by the game, each card represents a goal that all the players need to reach
+ * Represents a shared objective among players
  */
 public class CommonGoalCard {
-    private final Function<Tile[][], Boolean> evaluationFunction;
+    private final Function<Tile[][], Boolean> f;
+    private final CommonGoalCardIdentifier id;
 
-    public CommonGoalCard(CommonGoalCardIdentifier id, Function<Tile[][], Boolean> f) {
-        evaluationFunction = f;
+    /**
+     * @param identifier            the {@code CommonGoalCard}'s identifier
+     * @param evaluationFunction    the function for matching the card
+     */
+    public CommonGoalCard(CommonGoalCardIdentifier identifier, Function<Tile[][], Boolean> evaluationFunction) {
+        id = identifier;
+        f = evaluationFunction;
+    }
+
+
+    /**
+     * Returns the {@code CommonGoalCard}'s identifier
+     * */
+    public CommonGoalCardIdentifier getId() {
+        return id;
     }
 
     /**
-     * Applies the internal evaluation function to the given tile matrix
-     * and returns whether
+     * Applies the internal evaluation function to the given tile matrix,
+     * and returns whether the criteria is satisfied or not.
      *
-     * @param shelfMatrix
+     * @param shelfMatrix   the game matrix to compute the logic on.
      */
     public boolean matches(Tile[][] shelfMatrix) {
-        return evaluationFunction.apply(shelfMatrix);
+        return f.apply(shelfMatrix);
     }
+
 }

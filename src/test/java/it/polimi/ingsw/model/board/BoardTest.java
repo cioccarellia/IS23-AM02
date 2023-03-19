@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.costants.BoardConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static it.polimi.ingsw.costants.BoardConstants.BOARD_DIMENSION;
 
 public class BoardTest {
 
@@ -11,8 +12,8 @@ public class BoardTest {
     public void test_board_disposition() {
         Board board = new Board();
 
-        for (int i = 0; i < BoardConstants.BOARD_DIMENSION; i++) {
-            for (int j = 0; j < BoardConstants.BOARD_DIMENSION; j++) {
+        for (int i = 0; i < BOARD_DIMENSION; i++) {
+            for (int j = 0; j < BOARD_DIMENSION; j++) {
                 Coordinates c = new Coordinates(i, j);
             }
         }

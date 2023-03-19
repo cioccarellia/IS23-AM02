@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.board;
 import java.io.Serializable;
 
 /**
- * Enumeration representing the 6 possible game tiles
+ * Enumeration representing the 6 possible game tiles.
  */
 public enum Tile implements Serializable {
     BOOK,
