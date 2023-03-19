@@ -43,7 +43,7 @@ public class GroupFinder {
 
     /**
      * Returns a {@link Map} of all the groups found having a specific {@link Group#type()}.
-     * */
+     */
     public Map<Tile, List<Group>> computeGroupPartitionMap() {
         List<Group> partitions = computeGroupPartition();
         return partitions.stream().collect(Collectors.groupingBy(Group::type));
@@ -54,7 +54,7 @@ public class GroupFinder {
      * Returns the list of groups for the given matrix.
      *
      * @implNote a {@link Set} isn't used because a certain group may appear more than once
-     * */
+     */
     public List<Group> computeGroupPartition() {
         List<Group> results = new ArrayList<>();
 

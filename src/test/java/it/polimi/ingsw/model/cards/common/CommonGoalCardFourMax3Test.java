@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -20,10 +21,10 @@ public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.CAT, Tile.CAT, Tile.CAT, Tile.CAT, Tile.CAT},
-                {Tile.PLANT, Tile.TROPHY, Tile.CAT, Tile.TROPHY, Tile.PLANT},
-                {Tile.PLANT, Tile.TROPHY, Tile.CAT, Tile.TROPHY, Tile.PLANT},
-                {Tile.PLANT, Tile.TROPHY, Tile.CAT, Tile.TROPHY, Tile.PLANT}
+                {CAT, CAT, CAT, CAT, CAT},
+                {PLANT, TROPHY, CAT, TROPHY, PLANT},
+                {PLANT, TROPHY, CAT, TROPHY, PLANT},
+                {PLANT, TROPHY, CAT, TROPHY, PLANT}
         };
 
         boolean doesMatrixMatch = fourMax3DiffCGC.matches(testPositiveMatrix);
@@ -36,11 +37,11 @@ public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
     public void test_f4_positive_2() {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, Tile.CAT, Tile.CAT, Tile.CAT, Tile.CAT},
-                {Tile.CAT, Tile.CAT, Tile.CAT, Tile.CAT, Tile.CAT},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT}
+                {CAT, CAT, CAT, CAT, CAT},
+                {CAT, CAT, CAT, CAT, CAT},
+                {PLANT, PLANT, PLANT, PLANT, PLANT},
+                {PLANT, PLANT, PLANT, PLANT, PLANT},
+                {PLANT, PLANT, PLANT, PLANT, PLANT}
         };
 
         boolean doesMatrixMatch = fourMax3DiffCGC.matches(testPositiveMatrix);
@@ -53,11 +54,11 @@ public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
     public void test_f4_negative_1() {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT}
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {PLANT, PLANT, PLANT, PLANT, PLANT},
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {PLANT, PLANT, PLANT, PLANT, PLANT}
         };
 
         boolean doesMatrixMatch = fourMax3DiffCGC.matches(testPositiveMatrix);
@@ -70,11 +71,11 @@ public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
     public void test_f4_negative_2() {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME}
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {PLANT, PLANT, PLANT, PLANT, PLANT},
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {CAT, CAT, PLANT, TROPHY, GAME}
         };
 
         boolean doesMatrixMatch = fourMax3DiffCGC.matches(testPositiveMatrix);

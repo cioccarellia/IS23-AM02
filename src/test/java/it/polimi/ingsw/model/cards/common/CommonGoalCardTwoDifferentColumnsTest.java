@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,12 +17,12 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
     @DisplayName("Verify TWO_DIFF_COLUMNS positively #1")
     public void test_f6_positive_1() {
         Tile[][] testPositiveMatrix = {
-                {Tile.CAT, null, null, null, Tile.CAT},
-                {Tile.TROPHY, null, null, null, Tile.GAME},
-                {Tile.GAME, null, null, null, Tile.PLANT},
-                {Tile.PLANT, null, null, null, Tile.TROPHY},
-                {Tile.FRAME, null, null, null, Tile.BOOK},
-                {Tile.BOOK, null, null, null, Tile.FRAME}
+                {CAT, null, null, null, CAT},
+                {TROPHY, null, null, null, GAME},
+                {GAME, null, null, null, PLANT},
+                {PLANT, null, null, null, TROPHY},
+                {FRAME, null, null, null, BOOK},
+                {BOOK, null, null, null, FRAME}
         };
 
         boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
@@ -33,12 +34,12 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
     @DisplayName("Verify TWO_DIFF_COLUMNS positively #2")
     public void test_f6_positive_2() {
         Tile[][] testPositiveMatrix = {
-                {null, Tile.CAT, Tile.CAT, null, null},
-                {null, Tile.TROPHY, Tile.GAME, null, null},
-                {null, Tile.GAME, Tile.PLANT, null, null},
-                {null, Tile.PLANT, Tile.TROPHY, null, null},
-                {null, Tile.FRAME, Tile.BOOK, null, null},
-                {null, Tile.BOOK, Tile.FRAME, null, null}
+                {null, CAT, CAT, null, null},
+                {null, TROPHY, GAME, null, null},
+                {null, GAME, PLANT, null, null},
+                {null, PLANT, TROPHY, null, null},
+                {null, FRAME, BOOK, null, null},
+                {null, BOOK, FRAME, null, null}
         };
 
         boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
@@ -50,12 +51,12 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
     @DisplayName("Verify TWO_DIFF_COLUMNS negatively #1")
     public void test_f6_negative_1() {
         Tile[][] testNegativeMatrix = {
-                {null, Tile.CAT, Tile.BOOK, null, null},
-                {null, Tile.CAT, Tile.GAME, null, null},
-                {null, Tile.GAME, Tile.PLANT, null, null},
-                {null, Tile.PLANT, Tile.TROPHY, null, null},
-                {null, Tile.FRAME, Tile.BOOK, null, null},
-                {null, Tile.BOOK, Tile.FRAME, null, null}
+                {null, CAT, BOOK, null, null},
+                {null, CAT, GAME, null, null},
+                {null, GAME, PLANT, null, null},
+                {null, PLANT, TROPHY, null, null},
+                {null, FRAME, BOOK, null, null},
+                {null, BOOK, FRAME, null, null}
         };
 
         boolean doesMatrixMatch = twoDiffColumns.matches(testNegativeMatrix);
@@ -67,12 +68,12 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
     @DisplayName("Verify TWO_DIFF_COLUMNS negatively #2")
     public void test_f6_negative_2() {
         Tile[][] testNegativeMatrix = {
-                {Tile.CAT, null, null, null, null},
-                {Tile.CAT, null, Tile.GAME, null, null},
-                {Tile.CAT, null, Tile.PLANT, null, null},
-                {Tile.CAT, null, Tile.TROPHY, null, null},
-                {Tile.FRAME, null, Tile.BOOK, null, null},
-                {Tile.BOOK, null, Tile.FRAME, null, null}
+                {CAT, null, null, null, null},
+                {CAT, null, GAME, null, null},
+                {CAT, null, PLANT, null, null},
+                {CAT, null, TROPHY, null, null},
+                {FRAME, null, BOOK, null, null},
+                {BOOK, null, FRAME, null, null}
         };
 
         boolean doesMatrixMatch = twoDiffColumns.matches(testNegativeMatrix);

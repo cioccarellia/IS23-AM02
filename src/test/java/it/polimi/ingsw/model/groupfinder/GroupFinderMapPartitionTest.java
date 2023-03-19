@@ -36,7 +36,6 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
         assertEquals(2, groupMap.keySet().size());
 
 
-
         // expected group result for Tile.PLANT
         List<Group> plantPartition = List.of(
                 new Group(Tile.PLANT, 12)
@@ -47,7 +46,6 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
         assertTrue(
                 groupMap.get(Tile.PLANT).containsAll(plantPartition)
         );
-
 
 
         // expected group result for Tile.GAME
@@ -61,7 +59,6 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
                 groupMap.get(Tile.GAME).containsAll(gamePartition)
         );
     }
-
 
 
     @Test
@@ -85,7 +82,6 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
         assertEquals(2, groupMap.keySet().size());
 
 
-
         // expected group result for Tile.PLANT
         List<Group> plantPartition = List.of(
                 new Group(Tile.PLANT, 6),
@@ -98,7 +94,6 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
         assertTrue(
                 groupMap.get(Tile.PLANT).containsAll(plantPartition)
         );
-
 
 
         // expected group result for Tile.GAME

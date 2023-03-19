@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,12 +17,12 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_SQUARES positively #1")
     public void test_f7_positive_1() {
         Tile[][] testPositiveMatrix = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.GAME, Tile.CAT, null, null, Tile.PLANT},
-                {Tile.PLANT, Tile.CAT, null, null, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, null, Tile.FRAME, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, null, Tile.FRAME, Tile.FRAME}
+                {CAT, CAT, null, null, CAT},
+                {CAT, CAT, null, null, GAME},
+                {GAME, CAT, null, null, PLANT},
+                {PLANT, CAT, null, null, TROPHY},
+                {FRAME, CAT, null, FRAME, FRAME},
+                {BOOK, CAT, null, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
@@ -33,12 +34,12 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_SQUARES positively #2")
     public void test_f7_positive_2() {
         Tile[][] testPositiveMatrix = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.GAME, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
-                {Tile.PLANT, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, null, Tile.TROPHY, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, null, Tile.FRAME, Tile.FRAME}
+                {CAT, CAT, null, null, CAT},
+                {CAT, CAT, null, null, GAME},
+                {GAME, CAT, null, TROPHY, TROPHY},
+                {PLANT, CAT, null, TROPHY, TROPHY},
+                {FRAME, CAT, null, TROPHY, FRAME},
+                {BOOK, CAT, null, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
@@ -50,12 +51,12 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_SQUARES negatively #1")
     public void test_f7_negative_1() {
         Tile[][] testNegativeMatrix = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
-                {Tile.CAT, Tile.GAME, null, null, Tile.GAME},
-                {Tile.GAME, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
-                {Tile.PLANT, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+                {CAT, CAT, null, null, CAT},
+                {CAT, GAME, null, null, GAME},
+                {GAME, CAT, null, TROPHY, TROPHY},
+                {PLANT, CAT, null, TROPHY, TROPHY},
+                {FRAME, CAT, TROPHY, TROPHY, FRAME},
+                {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = twoSquares.matches(testNegativeMatrix);
@@ -68,11 +69,11 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     public void test_f7_negative_2() {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.TROPHY, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT},
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.TROPHY, Tile.PLANT, Tile.TROPHY, Tile.GAME}
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {CAT, TROPHY, PLANT, TROPHY, GAME},
+                {PLANT, PLANT, PLANT, PLANT, PLANT},
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {CAT, TROPHY, PLANT, TROPHY, GAME}
         };
 
         boolean doesMatrixMatch = twoSquares.matches(testNegativeMatrix);

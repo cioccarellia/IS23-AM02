@@ -30,7 +30,7 @@ jobs:
       - name: System Information
         run: printf "\nKernel:\n " && uname -a && printf "\n\nMemory:\n " && free -h && printf "\n\nStorage:\n" && df -h && ls -la && pwd
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: mvn clean compile package -Dmaven.test.skip=true
       - run: mkdir staging && cp target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:

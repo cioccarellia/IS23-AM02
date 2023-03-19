@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,9 +20,9 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.PLANT, null, Tile.PLANT, null, null},
-                {Tile.GAME, Tile.PLANT, Tile.PLANT, null, null},
-                {Tile.PLANT, Tile.TROPHY, Tile.PLANT, null, null}
+                {PLANT, null, PLANT, null, null},
+                {GAME, PLANT, PLANT, null, null},
+                {PLANT, TROPHY, PLANT, null, null}
         };
 
         boolean doesMatrixMatch = xTiles.matches(testPositiveMatrix);
@@ -33,12 +34,12 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
     @DisplayName("Verify X_TILES positively #2")
     public void test_f10_positive_2() {
         Tile[][] testPositiveMatrix = {
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, null, Tile.PLANT, null, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, Tile.TROPHY, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, Tile.TROPHY, Tile.PLANT, null, Tile.PLANT}
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, null},
+                {PLANT, PLANT, PLANT, null, PLANT},
+                {PLANT, TROPHY, PLANT, null, PLANT},
+                {PLANT, TROPHY, PLANT, null, PLANT}
         };
 
         boolean doesMatrixMatch = xTiles.matches(testPositiveMatrix);
@@ -51,11 +52,11 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
     public void test_f10_negative_1() {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, Tile.GAME, null, Tile.PLANT, Tile.GAME},
-                {Tile.GAME, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
-                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+                {CAT, GAME, null, PLANT, GAME},
+                {GAME, CAT, GAME, TROPHY, TROPHY},
+                {PLANT, CAT, GAME, TROPHY, TROPHY},
+                {FRAME, CAT, TROPHY, TROPHY, FRAME},
+                {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = xTiles.matches(testNegativeMatrix);
@@ -69,10 +70,10 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {null, null, Tile.PLANT, null, null},
-                {null, null, Tile.TROPHY, null, Tile.GAME},
-                {Tile.TROPHY, null, Tile.TROPHY, null, Tile.PLANT},
-                {Tile.TROPHY, null, Tile.TROPHY, null, Tile.PLANT}
+                {null, null, PLANT, null, null},
+                {null, null, TROPHY, null, GAME},
+                {TROPHY, null, TROPHY, null, PLANT},
+                {TROPHY, null, TROPHY, null, PLANT}
         };
 
         boolean doesMatrixMatch = xTiles.matches(testNegativeMatrix);

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,10 +23,10 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null}
+                {PLANT, PLANT, PLANT, PLANT, null},
+                {PLANT, PLANT, PLANT, PLANT, null},
+                {PLANT, PLANT, PLANT, PLANT, null},
+                {PLANT, PLANT, PLANT, PLANT, null}
         };
 
         boolean doesMatrixMatch = fourGroupFour.matches(testPositiveMatrix);
@@ -41,12 +42,12 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
         // fixme this should be a negative test, as there are not 4 contiguous groups in the matrix
 
         Tile[][] testPositiveMatrix = {
-                {null,       null,       null,       null,      null},
-                {null,       null,       Tile.PLANT, null,      null},
-                {Tile.BOOK,  Tile.BOOK,  Tile.PLANT, null,      null},
-                {Tile.BOOK,  Tile.BOOK,  Tile.PLANT, Tile.CAT,  null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.CAT,  null},
-                {Tile.PLANT, Tile.PLANT, Tile.CAT,   Tile.CAT,  null},
+                {null, null, null, null, null},
+                {null, null, PLANT, null, null},
+                {BOOK, BOOK, PLANT, null, null},
+                {BOOK, BOOK, PLANT, CAT, null},
+                {PLANT, PLANT, PLANT, CAT, null},
+                {PLANT, PLANT, CAT, CAT, null},
 
         };
 
@@ -60,12 +61,12 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     @DisplayName("Verify FOUR_GROUP_FOUR negatively #1")
     public void test_f3_negative_1() {
         Tile[][] testNegativeMatrix = {
-                {Tile.PLANT, null, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, null, Tile.GAME, Tile.TROPHY, null},
-                {Tile.PLANT, null, Tile.TROPHY, Tile.GAME, null},
-                {Tile.PLANT, null, Tile.PLANT, Tile.CAT, null},
-                {Tile.BOOK, null, Tile.GAME, Tile.FRAME, null},
-                {Tile.GAME, null, Tile.FRAME, Tile.CAT, null}
+                {PLANT, null, PLANT, PLANT, null},
+                {PLANT, null, GAME, TROPHY, null},
+                {PLANT, null, TROPHY, GAME, null},
+                {PLANT, null, PLANT, CAT, null},
+                {BOOK, null, GAME, FRAME, null},
+                {GAME, null, FRAME, CAT, null}
         };
 
         boolean doesMatrixMatch = fourGroupFour.matches(testNegativeMatrix);
@@ -79,12 +80,12 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     public void test_f3_negative_2() {
         // fixme questo crasha perché è sbagliata la funzione, dobbiamo capire come farla
         Tile[][] testNegativeMatrix = {
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.GAME, Tile.CAT, Tile.FRAME, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null},
-                {Tile.PLANT, Tile.FRAME, Tile.PLANT, Tile.TROPHY, null},
-                {Tile.GAME, Tile.CAT, Tile.FRAME, Tile.CAT, null},
-                {Tile.PLANT, Tile.CAT, Tile.FRAME, Tile.CAT, null}
+                {PLANT, PLANT, PLANT, PLANT, null},
+                {PLANT, GAME, CAT, FRAME, null},
+                {PLANT, PLANT, PLANT, PLANT, null},
+                {PLANT, FRAME, PLANT, TROPHY, null},
+                {GAME, CAT, FRAME, CAT, null},
+                {PLANT, CAT, FRAME, CAT, null}
         };
 
         boolean doesMatrixMatch = fourGroupFour.matches(testNegativeMatrix);
@@ -100,10 +101,10 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {null, null, null, null, Tile.PLANT},
-                {Tile.BOOK, Tile.FRAME, Tile.FRAME, Tile.FRAME, Tile.PLANT},
-                {Tile.BOOK, Tile.BOOK, Tile.FRAME, Tile.GAME, Tile.PLANT},
-                {Tile.BOOK, Tile.GAME, Tile.GAME, Tile.GAME, Tile.PLANT}
+                {null, null, null, null, PLANT},
+                {BOOK, FRAME, FRAME, FRAME, PLANT},
+                {BOOK, BOOK, FRAME, GAME, PLANT},
+                {BOOK, GAME, GAME, GAME, PLANT}
         };
 
         boolean doesMatrixMatch = fourGroupFour.matches(testPositiveMatrix);

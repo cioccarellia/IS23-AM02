@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.CAT;
+import static it.polimi.ingsw.model.board.Tile.PLANT;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,11 +18,11 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     @DisplayName("Verify DIAGONAL positively: upper diagonal")
     public void test_f2_positive_1() {
         Tile[][] testPositiveMatrix = {
-                {Tile.PLANT, null, null, null, null},
-                {null, Tile.PLANT, null, null, null},
-                {null, null, Tile.PLANT, null, null},
-                {null, null, null, Tile.PLANT, null},
-                {null, null, null, null, Tile.PLANT},
+                {PLANT, null, null, null, null},
+                {null, PLANT, null, null, null},
+                {null, null, PLANT, null, null},
+                {null, null, null, PLANT, null},
+                {null, null, null, null, PLANT},
                 {null, null, null, null, null}
         };
 
@@ -34,11 +36,11 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     public void test_f2_positive_2() {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, null, null, null, null},
-                {null, Tile.CAT, null, null, null},
-                {null, null, Tile.CAT, null, null},
-                {null, null, null, Tile.CAT, null},
-                {null, null, null, null, Tile.CAT}
+                {CAT, null, null, null, null},
+                {null, CAT, null, null, null},
+                {null, null, CAT, null, null},
+                {null, null, null, CAT, null},
+                {null, null, null, null, CAT}
         };
 
         boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
@@ -51,11 +53,11 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     public void test_f2_negative_1() {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
-                {Tile.CAT, null, null, null, null},
-                {null, Tile.CAT, null, null, null},
+                {CAT, null, null, null, null},
+                {null, CAT, null, null, null},
                 {null, null, null, null, null},
-                {null, null, null, Tile.CAT, null},
-                {null, null, null, null, Tile.CAT}
+                {null, null, null, CAT, null},
+                {null, null, null, null, CAT}
         };
 
         boolean doesMatrixMatch = diagonalCGC.matches(testNegativeMatrix);

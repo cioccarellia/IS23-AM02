@@ -44,6 +44,10 @@ public class CommonGoalCardFunctionContainer {
     public static final CommonGoalCard X_TILES = new CommonGoalCard(CommonGoalCardIdentifier.X_TILES, CommonGoalCardFunctionContainer::f10);
     public static final CommonGoalCard EIGHT_TILES = new CommonGoalCard(CommonGoalCardIdentifier.EIGHT_TILES, CommonGoalCardFunctionContainer::f11);
     public static final CommonGoalCard STAIRS = new CommonGoalCard(CommonGoalCardIdentifier.STAIRS, CommonGoalCardFunctionContainer::f12);
+    /**
+     * List of all valid instances of {@link CommonGoalCard}
+     */
+    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
 
     /**
      * Return true if there are 6 groups each containing at least 2 tiles of the same type
@@ -71,7 +75,6 @@ public class CommonGoalCardFunctionContainer {
         }
         return countPairs >= 6;
     }
-
 
     private static Boolean f1_groupfinder(Tile[][] matrix) {
         GroupFinder f = new GroupFinder(matrix);
@@ -167,7 +170,6 @@ public class CommonGoalCardFunctionContainer {
 
         return amountOfValidGroups >= 4;
     }
-
 
     /**
      * returns if there are four lines with at most 3 different types of tile
@@ -412,13 +414,8 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * List of all valid instances of {@link CommonGoalCard}
-     */
-    public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
-
-    /**
      * Maps a {@link CommonGoalCardIdentifier} to its associated {@link CommonGoalCard}
-     * */
+     */
     public static Map<CommonGoalCardIdentifier, CommonGoalCard> commonGoalCardMap() {
         return commonGoalCardDomain.stream().collect(Collectors.toMap(CommonGoalCard::getId, Function.identity()));
     }

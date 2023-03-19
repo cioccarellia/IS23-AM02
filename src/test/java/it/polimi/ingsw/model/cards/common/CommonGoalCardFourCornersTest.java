@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.CAT;
+import static it.polimi.ingsw.model.board.Tile.TROPHY;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,12 +18,12 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
     @DisplayName("Verify FOUR_CORNERS positively #1")
     public void test_f5_positive_1() {
         Tile[][] testPositiveMatrix = {
-                {Tile.CAT, null, null, null, Tile.CAT},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.CAT, null, null, null, Tile.CAT}
+                {CAT, null, null, null, CAT},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {CAT, null, null, null, CAT}
         };
 
         boolean doesMatrixMatch = fourCorners.matches(testPositiveMatrix);
@@ -33,12 +35,12 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
     @DisplayName("Verify FOUR_CORNERS negatively #1")
     public void test_f5_negative_1() {
         Tile[][] testNegativeMatrix = {
-                {Tile.TROPHY, null, null, null, Tile.CAT},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.CAT, null, null, null, Tile.TROPHY}
+                {TROPHY, null, null, null, CAT},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {CAT, null, null, null, TROPHY}
         };
 
         boolean doesMatrixMatch = fourCorners.matches(testNegativeMatrix);
@@ -50,12 +52,12 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
     @DisplayName("Verify FOUR_CORNERS negatively #2")
     public void test_f5_negative_2() {
         Tile[][] testNegativeMatrix = {
-                {null, null, null, null, Tile.CAT},
-                {null, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.TROPHY, null, null, null, Tile.TROPHY},
-                {Tile.CAT, null, null, null, Tile.TROPHY}
+                {null, null, null, null, CAT},
+                {null, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {TROPHY, null, null, null, TROPHY},
+                {CAT, null, null, null, TROPHY}
         };
 
         boolean doesMatrixMatch = fourCorners.matches(testNegativeMatrix);

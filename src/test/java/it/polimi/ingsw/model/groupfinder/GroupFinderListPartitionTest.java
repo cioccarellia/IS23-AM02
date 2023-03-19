@@ -75,7 +75,6 @@ public class GroupFinderListPartitionTest implements ShelfMatrixTester {
     }
 
 
-
     @Test
     @DisplayName("Null matrix should not produce any group")
     public void groupfind_sparseMatrix() {
@@ -90,7 +89,6 @@ public class GroupFinderListPartitionTest implements ShelfMatrixTester {
         assertTrue(groups.containsAll(correctPartition));
         assertEquals(0, groups.size());
     }
-
 
 
     @Test

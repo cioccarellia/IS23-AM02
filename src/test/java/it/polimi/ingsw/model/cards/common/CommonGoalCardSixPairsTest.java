@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,10 +22,10 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.PLANT}
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT}
         };
 
         boolean doesMatrixMatch = sixPairsCGC.matches(testPositiveMatrix);
@@ -41,10 +42,10 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.GAME, null, Tile.TROPHY, null, Tile.PLANT},
-                {Tile.GAME, null, Tile.TROPHY, null, Tile.PLANT},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.TROPHY},
-                {Tile.PLANT, null, Tile.PLANT, null, Tile.TROPHY}
+                {GAME, null, TROPHY, null, PLANT},
+                {GAME, null, TROPHY, null, PLANT},
+                {PLANT, null, PLANT, null, TROPHY},
+                {PLANT, null, PLANT, null, TROPHY}
         };
 
         boolean doesMatrixMatch = sixPairsCGC.matches(testPositiveMatrix);
@@ -62,8 +63,8 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null}
+                {PLANT, PLANT, null, null, null},
+                {PLANT, PLANT, null, null, null}
         };
 
         boolean doesMatrixMatch = sixPairsCGC.matches(testNegativeMatrix);
@@ -78,10 +79,10 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null}
+                {PLANT, PLANT, null, null, null},
+                {PLANT, PLANT, null, null, null},
+                {PLANT, PLANT, null, null, null},
+                {PLANT, PLANT, null, null, null}
         };
 
         boolean doesMatrixMatch = sixPairsCGC.matches(testNegativeMatrix);
@@ -96,10 +97,10 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null},
-                {Tile.PLANT, Tile.PLANT, null, null, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.BOOK, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.PLANT, null}
+                {PLANT, PLANT, null, null, null},
+                {PLANT, PLANT, null, null, null},
+                {PLANT, PLANT, PLANT, BOOK, null},
+                {PLANT, PLANT, PLANT, PLANT, null}
         };
 
         boolean doesMatrixMatch = sixPairsCGC.matches(testNegativeMatrix);

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,12 +17,12 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_DIFF_LINES positively #1")
     public void test_f8_positive_1() {
         Tile[][] testPositiveMatrix = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.GAME, Tile.CAT, null, null, Tile.PLANT},
-                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, Tile.TROPHY, Tile.FRAME, Tile.PLANT}
+                {CAT, CAT, null, null, CAT},
+                {CAT, CAT, null, null, GAME},
+                {GAME, CAT, null, null, PLANT},
+                {PLANT, CAT, GAME, FRAME, TROPHY},
+                {FRAME, CAT, CAT, FRAME, FRAME},
+                {BOOK, CAT, TROPHY, FRAME, PLANT}
         };
 
         boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
@@ -33,12 +34,12 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_DIFF_LINES positively #2")
     public void test_f8_positive_2() {
         Tile[][] testPositiveMatrix = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.GAME, Tile.PLANT},
-                {Tile.PLANT, Tile.CAT, Tile.FRAME, Tile.GAME, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+                {CAT, CAT, null, null, CAT},
+                {CAT, CAT, null, null, GAME},
+                {FRAME, CAT, TROPHY, GAME, PLANT},
+                {PLANT, CAT, FRAME, GAME, TROPHY},
+                {FRAME, CAT, CAT, FRAME, FRAME},
+                {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
@@ -50,12 +51,12 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_DIFF_LINES negatively #1")
     public void test_f8_negative_1() {
         Tile[][] testNegativeMatrix = {
-                {Tile.CAT, Tile.CAT, Tile.PLANT, Tile.TROPHY, Tile.CAT},
-                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.PLANT, Tile.GAME},
-                {Tile.GAME, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
-                {Tile.PLANT, Tile.CAT, Tile.GAME, Tile.TROPHY, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, Tile.TROPHY, Tile.TROPHY, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, Tile.CAT, Tile.FRAME, Tile.FRAME}
+                {CAT, CAT, PLANT, TROPHY, CAT},
+                {CAT, GAME, FRAME, PLANT, GAME},
+                {GAME, CAT, GAME, TROPHY, TROPHY},
+                {PLANT, CAT, GAME, TROPHY, TROPHY},
+                {FRAME, CAT, TROPHY, TROPHY, FRAME},
+                {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = twoDiffLines.matches(testNegativeMatrix);
@@ -67,12 +68,12 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
     @DisplayName("Verify TWO_DIFF_LINES negatively #2")
     public void test_f8_negative_2() {
         Tile[][] testNegativeMatrix = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.CAT},
-                {Tile.CAT, Tile.GAME, null, null, Tile.GAME},
-                {Tile.GAME, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
-                {Tile.PLANT, Tile.CAT, null, Tile.TROPHY, Tile.TROPHY},
-                {Tile.FRAME, Tile.CAT, null, Tile.TROPHY, Tile.FRAME},
-                {Tile.BOOK, Tile.CAT, null, Tile.FRAME, Tile.FRAME}
+                {CAT, CAT, null, null, CAT},
+                {CAT, GAME, null, null, GAME},
+                {GAME, CAT, null, TROPHY, TROPHY},
+                {PLANT, CAT, null, TROPHY, TROPHY},
+                {FRAME, CAT, null, TROPHY, FRAME},
+                {BOOK, CAT, null, FRAME, FRAME}
         };
 
         boolean doesMatrixMatch = twoDiffLines.matches(testNegativeMatrix);

@@ -12,8 +12,8 @@ public class CommonGoalCard {
     private final CommonGoalCardIdentifier id;
 
     /**
-     * @param identifier            the {@code CommonGoalCard}'s identifier
-     * @param evaluationFunction    the function for matching the card
+     * @param identifier         the {@code CommonGoalCard}'s identifier
+     * @param evaluationFunction the function for matching the card
      */
     public CommonGoalCard(CommonGoalCardIdentifier identifier, Function<Tile[][], Boolean> evaluationFunction) {
         id = identifier;
@@ -23,7 +23,7 @@ public class CommonGoalCard {
 
     /**
      * Returns the {@code CommonGoalCard}'s identifier
-     * */
+     */
     public CommonGoalCardIdentifier getId() {
         return id;
     }
@@ -32,7 +32,7 @@ public class CommonGoalCard {
      * Applies the internal evaluation function to the given tile matrix,
      * and returns whether the criteria is satisfied or not.
      *
-     * @param shelfMatrix   the game matrix to compute the logic on.
+     * @param shelfMatrix the game matrix to compute the logic on.
      */
     public boolean matches(Tile[][] shelfMatrix) {
         return f.apply(shelfMatrix);

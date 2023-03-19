@@ -7,7 +7,8 @@ import org.jetbrains.annotations.NotNull;
  * A group is a contiguous sector of {@link Tile}s.
  * A tile is defined to be contiguous to another tile if they share an edge.
  *
- * @param type  The specific tile composing the group
- * @param size  The amount of tiles contained in the group
- * */
-public record Group(@NotNull Tile type, int size) {}
+ * @param type The specific tile composing the group
+ * @param size The amount of tiles contained in the group
+ */
+public record Group(@NotNull Tile type, int size) {
+}

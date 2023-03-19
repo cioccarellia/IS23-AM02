@@ -8,17 +8,13 @@ import it.polimi.ingsw.model.board.Coordinates;
  */
 public class BoardUtils {
 
-    public enum Edge {
-        TOP, LEFT, BOTTOM, RIGHT
-    }
-
     /**
      * Given a coordinate (which identifies a cell), checks whether a specific edge of that cell is free
      *
-     * @param board         game board
-     * @param coordinates   position of referenced cell
-     * @param edge          direction to check the free edge in
-     * @return  whether the selected cell has a free edge in that direction
+     * @param board       game board
+     * @param coordinates position of referenced cell
+     * @param edge        direction to check the free edge in
+     * @return whether the selected cell has a free edge in that direction
      */
     public static boolean hasFreeEdge(final Board board, Coordinates coordinates, Edge edge) {
         Coordinates shiftedCoordinates;
@@ -56,5 +52,9 @@ public class BoardUtils {
         }
 
         return board.getTileAt(shiftedCoordinates).isEmpty();
+    }
+
+    public enum Edge {
+        TOP, LEFT, BOTTOM, RIGHT
     }
 }

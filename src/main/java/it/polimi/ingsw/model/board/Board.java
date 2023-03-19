@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.board;
 import it.polimi.ingsw.model.board.cell.Cell;
 import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.utils.BoardUtils;
+import org.apache.commons.lang.SerializationUtils;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -36,8 +38,10 @@ public class Board {
         }
     }
 
-    public Cell[][] getMatrix() {
-        return matrix;
+    @TestOnly
+    public Cell[][] getCellMatrix() {
+        // deep cloning
+        return (Cell[][]) SerializationUtils.clone(matrix);
     }
 
     /**

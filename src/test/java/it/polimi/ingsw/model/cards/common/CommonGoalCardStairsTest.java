@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.board.Tile.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,11 +18,11 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
 
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
-                {Tile.TROPHY, null, null, null, null},
-                {Tile.GAME, Tile.GAME, null, null, null},
-                {Tile.TROPHY, Tile.GAME, Tile.TROPHY, null, null},
-                {Tile.GAME, Tile.GAME, Tile.PLANT, Tile.GAME, null},
-                {Tile.CAT, Tile.GAME, Tile.GAME, Tile.BOOK, Tile.FRAME}
+                {TROPHY, null, null, null, null},
+                {GAME, GAME, null, null, null},
+                {TROPHY, GAME, TROPHY, null, null},
+                {GAME, GAME, PLANT, GAME, null},
+                {CAT, GAME, GAME, BOOK, FRAME}
         };
 
         boolean doesMatrixMatch = stairs.matches(testPositiveMatrix);
@@ -35,11 +36,11 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
 
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
-                {null, null, null, null,Tile.CAT},
-                {null, null, null, Tile.GAME, Tile.PLANT},
-                {null, null, Tile.TROPHY, Tile.GAME, Tile.GAME},
-                {null, Tile.GAME, Tile.GAME, Tile.GAME, Tile.GAME},
-                {Tile.FRAME, Tile.PLANT, Tile.GAME, Tile.TROPHY, Tile.CAT}
+                {null, null, null, null, CAT},
+                {null, null, null, GAME, PLANT},
+                {null, null, TROPHY, GAME, GAME},
+                {null, GAME, GAME, GAME, GAME},
+                {FRAME, PLANT, GAME, TROPHY, CAT}
         };
 
         boolean doesMatrixMatch = stairs.matches(testPositiveMatrix);
@@ -54,10 +55,10 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.GAME, Tile.GAME, null, null, null},
-                {Tile.TROPHY, Tile.GAME, Tile.TROPHY, null, null},
-                {Tile.GAME, Tile.GAME, Tile.PLANT, Tile.GAME, null},
-                {Tile.CAT, Tile.GAME, Tile.GAME, Tile.BOOK, null}
+                {GAME, GAME, null, null, null},
+                {TROPHY, GAME, TROPHY, null, null},
+                {GAME, GAME, PLANT, GAME, null},
+                {CAT, GAME, GAME, BOOK, null}
         };
 
         boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
@@ -72,10 +73,10 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {null, null, null, Tile.GAME, Tile.PLANT},
-                {null, null, Tile.TROPHY, Tile.GAME, Tile.GAME},
-                {null, Tile.GAME, Tile.GAME, Tile.GAME, Tile.GAME},
-                {null, Tile.PLANT, Tile.GAME, Tile.TROPHY, Tile.CAT}
+                {null, null, null, GAME, PLANT},
+                {null, null, TROPHY, GAME, GAME},
+                {null, GAME, GAME, GAME, GAME},
+                {null, PLANT, GAME, TROPHY, CAT}
         };
 
         boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
@@ -90,10 +91,10 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {Tile.GAME, null, null, null, null},
-                {Tile.TROPHY, Tile.GAME, null, null, null},
-                {Tile.GAME, Tile.GAME, Tile.PLANT, null, null},
-                {Tile.CAT, Tile.GAME, Tile.GAME, Tile.BOOK, null}
+                {GAME, null, null, null, null},
+                {TROPHY, GAME, null, null, null},
+                {GAME, GAME, PLANT, null, null},
+                {CAT, GAME, GAME, BOOK, null}
         };
 
         boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
@@ -108,10 +109,10 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {null, null, null, null, Tile.PLANT},
-                {null, null, null, Tile.GAME, Tile.GAME},
-                {null, null, Tile.GAME, Tile.GAME, Tile.GAME},
-                {null, Tile.PLANT, Tile.GAME, Tile.TROPHY, Tile.CAT}
+                {null, null, null, null, PLANT},
+                {null, null, null, GAME, GAME},
+                {null, null, GAME, GAME, GAME},
+                {null, PLANT, GAME, TROPHY, CAT}
         };
 
         boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);

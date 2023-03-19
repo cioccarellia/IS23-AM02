@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.cards.common;
 
 /**
  * Uniquely identifies a {@link CommonGoalCard}
- * */
+ */
 public enum CommonGoalCardIdentifier {
     SIX_PAIRS,
     DIAGONAL,
