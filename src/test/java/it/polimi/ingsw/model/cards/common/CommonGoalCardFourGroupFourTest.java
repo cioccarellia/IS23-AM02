@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model.cards.common;
 
+import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.cards.BaseShelfMatrixTester;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CommonGoalCardFourGroupFourTest extends BaseShelfMatrixTester {
+public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
 
     CommonGoalCard fourGroupFour = CommonGoalCardFunctionContainer.FOUR_GROUP_FOUR;
 
@@ -87,7 +87,7 @@ public class CommonGoalCardFourGroupFourTest extends BaseShelfMatrixTester {
     }
 
     @Test
-    @DisplayName("Edge case for FOUR_GROUP_FOUR: 3 raws and 1 column: #1")
+    @DisplayName("Edge case for FOUR_GROUP_FOUR: 3 rows and 1 column: #1")
     public void test_f3_edge_1() {
         // fixme normale che crashi perché la funzione è da sistemare
         Tile[][] testPositiveMatrix = {

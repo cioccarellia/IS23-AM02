@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model.cards.common;
 
+import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.cards.BaseShelfMatrixTester;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CommonGoalCardTwoDifferentColumnsTest extends BaseShelfMatrixTester {
+public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester {
 
     CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
 
