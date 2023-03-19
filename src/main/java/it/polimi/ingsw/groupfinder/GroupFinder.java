@@ -24,12 +24,12 @@ public class GroupFinder {
     /**
      * Matrix containing the elements to be grouped.
      */
-    Tile[][] matrix;
+    private Tile[][] matrix;
 
     /**
      * Contains the markers for duplication checks.
      */
-    boolean[][] markers = new boolean[rows][cols];
+    private boolean[][] markers = new boolean[rows][cols];
 
     /**
      * Initializes the class and sets the matrix for the algorithm.
@@ -56,6 +56,7 @@ public class GroupFinder {
      * @implNote a {@link Set} isn't used because a certain group may appear more than once
      */
     public List<Group> computeGroupPartition() {
+        markers = new boolean[rows][cols];
         List<Group> results = new ArrayList<>();
 
         for (int i = 0; i < rows; i++) {
