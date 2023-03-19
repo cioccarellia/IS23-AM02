@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,10 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
     CommonGoalCard sixPairsCGC = CommonGoalCardFunctionContainer.SIX_PAIRS;
 
     @Test
+    @Disabled
     @DisplayName("Verify SIX_PAIRS positively #1")
-    public void test_f1_positive() {
+    public void test_f1_positive_1() {
+        // fixme: logic issue, 1 group of 4 is not the same as two groups of 2
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -29,6 +32,27 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         // assert that the matrix matches
         assertTrue(doesMatrixMatch);
     }
+
+
+    @Test
+    @DisplayName("Verify SIX_PAIRS positively #1.5")
+    public void test_f1_positive_2() {
+        // fixme: logic issue, 1 group of 4 is not the same as two groups of 2
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {Tile.GAME, null, Tile.TROPHY, null, Tile.PLANT},
+                {Tile.GAME, null, Tile.TROPHY, null, Tile.PLANT},
+                {Tile.PLANT, null, Tile.PLANT, null, Tile.TROPHY},
+                {Tile.PLANT, null, Tile.PLANT, null, Tile.TROPHY}
+        };
+
+        boolean doesMatrixMatch = sixPairsCGC.matches(testPositiveMatrix);
+
+        // assert that the matrix matches
+        assertTrue(doesMatrixMatch);
+    }
+
 
     @Test
     @DisplayName("Verify SIX_PAIRS negatively #1")

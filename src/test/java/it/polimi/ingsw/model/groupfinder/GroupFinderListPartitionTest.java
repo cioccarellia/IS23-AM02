@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GroupFinderTest implements ShelfMatrixTester {
+public class GroupFinderListPartitionTest implements ShelfMatrixTester {
 
     @Test
     @DisplayName("Verifies the GroupFinder on a column matrix")

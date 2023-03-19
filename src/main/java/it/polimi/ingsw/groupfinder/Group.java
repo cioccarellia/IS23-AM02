@@ -10,5 +10,4 @@ import org.jetbrains.annotations.NotNull;
  * @param type  The specific tile composing the group
  * @param size  The amount of tiles contained in the group
  * */
-public record Group(@NotNull Tile type, int size) {
-}
+public record Group(@NotNull Tile type, int size) {}

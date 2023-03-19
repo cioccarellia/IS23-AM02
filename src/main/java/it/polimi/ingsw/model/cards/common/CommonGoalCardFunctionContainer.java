@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model.cards.common;
 
+import it.polimi.ingsw.groupfinder.Group;
+import it.polimi.ingsw.groupfinder.GroupFinder;
 import it.polimi.ingsw.model.board.Tile;
 import org.apache.commons.lang.SerializationUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
@@ -27,9 +30,9 @@ import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
 
 public class CommonGoalCardFunctionContainer {
 
-    public static final CommonGoalCard SIX_PAIRS = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::f1);
+    public static final CommonGoalCard SIX_PAIRS = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::f1_groupfinder);
     public static final CommonGoalCard DIAGONAL = new CommonGoalCard(CommonGoalCardIdentifier.DIAGONAL, CommonGoalCardFunctionContainer::f2);
-    public static final CommonGoalCard FOUR_GROUP_FOUR = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::f3);
+    public static final CommonGoalCard FOUR_GROUP_FOUR = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::f3_groupfinder);
     public static final CommonGoalCard FOUR_MAX3DIFF_LINES = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_MAX3DIFF_LINES, CommonGoalCardFunctionContainer::f4);
     public static final CommonGoalCard FOUR_CORNERS = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_CORNERS, CommonGoalCardFunctionContainer::f5);
     public static final CommonGoalCard TWO_DIFF_COLUMNS = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_COLUMNS, CommonGoalCardFunctionContainer::f6);
@@ -68,6 +71,14 @@ public class CommonGoalCardFunctionContainer {
         return countPairs >= 6;
     }
 
+
+    private static Boolean f1_groupfinder(Tile[][] matrix) {
+        GroupFinder f = new GroupFinder(matrix);
+        List<Group> groups = f.computeGroupPartition();
+
+        return groups.stream().filter(group -> group.size() == 2).toList().size() >= 6;
+    }
+
     /**
      * Return true if there are one or two diagonals each containing 5 tiles of the same type
      *
@@ -76,14 +87,24 @@ public class CommonGoalCardFunctionContainer {
     private static Boolean f2(Tile[][] matrix) {
         boolean hasAcceptableDiagonal1 = true;
         boolean hasAcceptableDiagonal2 = true;
+
         Tile t1 = matrix[0][0];
         Tile t2 = matrix[1][0];
+
         for (int i = 1; i < ROWS - 1; i++) {
-            if (hasAcceptableDiagonal1 && t1 != null && matrix[i][i] != t1) hasAcceptableDiagonal1 = false;
-            else if (t1 == null) hasAcceptableDiagonal1 = false;
-            if (hasAcceptableDiagonal2 && t2 != null && matrix[i + 1][i] != t2) hasAcceptableDiagonal2 = false;
-            else if (t2 == null) hasAcceptableDiagonal2 = false;
+            if (hasAcceptableDiagonal1 && t1 != null && matrix[i][i] != t1) {
+                hasAcceptableDiagonal1 = false;
+            } else if (t1 == null) {
+                hasAcceptableDiagonal1 = false;
+            }
+
+            if (hasAcceptableDiagonal2 && t2 != null && matrix[i + 1][i] != t2) {
+                hasAcceptableDiagonal2 = false;
+            } else if (t2 == null) {
+                hasAcceptableDiagonal2 = false;
+            }
         }
+
         return (hasAcceptableDiagonal1 || hasAcceptableDiagonal2);
     }
 
@@ -120,14 +141,40 @@ public class CommonGoalCardFunctionContainer {
         return countGroups >= 4;
     }
 
+    private static Boolean f3_groupfinder(Tile[][] matrix) {
+        // grouping and mapping tiles
+        GroupFinder f = new GroupFinder(matrix);
+        Map<Tile, List<Group>> groupMap = f.computeGroupPartitionMap();
+
+        // how many distinct groups satisfy the card's criteria
+        int amountOfValidGroups = 0;
+
+        for (Tile tileKey : groupMap.keySet()) {
+            // list of groups of the same tile type
+            List<Group> sameTileGroup = groupMap.get(tileKey);
+
+            // increments the number of valid groups by the number of valid groups
+            // found in the current tile key set.
+            // a group is valid if there are at least 4 tiles of the same type
+            amountOfValidGroups += sameTileGroup
+                    .stream()
+                    .filter(group -> group.size() >= 4)
+                    .toList()
+                    .size();
+        }
+
+        return amountOfValidGroups >= 4;
+    }
+
+
     /**
      * returns if there are four lines with at most 3 different types of tile
      *
      * @see CommonGoalCardIdentifier#FOUR_MAX3DIFF_LINES
      */
     private static Boolean f4(Tile[][] matrix) {
-
         int countDifferentLines = 0;
+
         for (int i = 0; i < ROWS; i++) {
             int countBookTile = 0, countCatTile = 0, countGameTile = 0, countTrophyTile = 0, countPlantTile = 0, countFrameTile = 0;
 
@@ -155,8 +202,15 @@ public class CommonGoalCardFunctionContainer {
      * @see CommonGoalCardIdentifier#FOUR_CORNERS
      */
     private static Boolean f5(Tile[][] matrix) {
-        Tile t = matrix[0][0];
-        return (t != null && t == matrix[0][COLUMNS - 1] && t == matrix[ROWS - 1][COLUMNS - 1] && t == matrix[ROWS - 1][0]);
+        Tile topLeft = matrix[0][0];
+        Tile topRight = matrix[0][COLUMNS - 1];
+        Tile bottomLeft = matrix[ROWS - 1][0];
+        Tile bottomRight = matrix[ROWS - 1][COLUMNS - 1];
+
+        return (topLeft != null) &&
+                (topLeft == topRight) &&
+                (topLeft == bottomRight) &&
+                (topLeft == bottomLeft);
     }
 
     /**
@@ -169,18 +223,21 @@ public class CommonGoalCardFunctionContainer {
             for (int i = 0; i < ROWS; i++) {
                 boolean hasSameTileOrNull = false;
                 Tile t = matrix[i][j];
+
                 for (int h = i + 1; h < ROWS - 1; h++) {
                     if (t == null || t == matrix[h][j]) {
                         hasSameTileOrNull = true;
                         break;
                     }
                 }
+
                 if (hasSameTileOrNull) {
                     break;
                 }
                 count++;
             }
         }
+
         return count >= 2;
     }
 

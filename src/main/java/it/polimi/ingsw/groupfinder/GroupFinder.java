@@ -5,7 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
 import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
@@ -37,6 +39,16 @@ public class GroupFinder {
     public GroupFinder(@NotNull Tile[][] shelfMatrix) {
         matrix = shelfMatrix;
     }
+
+
+    /**
+     * Returns a {@link Map} of all the groups found having a specific {@link Group#type()}.
+     * */
+    public Map<Tile, List<Group>> computeGroupPartitionMap() {
+        List<Group> partitions = computeGroupPartition();
+        return partitions.stream().collect(Collectors.groupingBy(Group::type));
+    }
+
 
     /**
      * Returns the list of groups for the given matrix.

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,11 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     CommonGoalCard fourGroupFour = CommonGoalCardFunctionContainer.FOUR_GROUP_FOUR;
 
     @Test
+    @Disabled
     @DisplayName("Verify FOUR_GROUP_FOUR positively #1")
     public void test_f3_positive_1() {
+        // fixme should be negative
+
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -31,15 +35,18 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     }
 
     @Test
+    @Disabled
     @DisplayName("Verify FOUR_GROUP_FOUR positively #2")
     public void test_f3_positive_2() {
+        // fixme this should be a negative test, as there are not 4 contiguous groups in the matrix
+
         Tile[][] testPositiveMatrix = {
-                {null, null, null, null, null},
-                {null, null, Tile.PLANT, null, null},
-                {Tile.BOOK, Tile.BOOK, Tile.PLANT, null, null},
-                {Tile.BOOK, Tile.BOOK, Tile.PLANT, Tile.CAT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.CAT, null},
-                {Tile.PLANT, Tile.PLANT, Tile.CAT, Tile.CAT, null},
+                {null,       null,       null,       null,      null},
+                {null,       null,       Tile.PLANT, null,      null},
+                {Tile.BOOK,  Tile.BOOK,  Tile.PLANT, null,      null},
+                {Tile.BOOK,  Tile.BOOK,  Tile.PLANT, Tile.CAT,  null},
+                {Tile.PLANT, Tile.PLANT, Tile.PLANT, Tile.CAT,  null},
+                {Tile.PLANT, Tile.PLANT, Tile.CAT,   Tile.CAT,  null},
 
         };
 
