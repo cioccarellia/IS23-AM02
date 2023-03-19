@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.board.cell.Cell;
 import it.polimi.ingsw.model.board.cell.CellPattern;
-import it.polimi.ingsw.utils.BoardHelper;
+import it.polimi.ingsw.utils.BoardUtils;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -89,8 +89,8 @@ public class Board {
      * @return returns the free edges of the tile at the given coordinates
      */
     public int countFreeEdges(Coordinates c) {
-        return Arrays.stream(BoardHelper.Edge.values())
-                .mapToInt(it -> BoardHelper.hasFreeEdge(this, c, it) ? 1 : 0)
+        return Arrays.stream(BoardUtils.Edge.values())
+                .mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0)
                 .sum();
     }
 

@@ -91,4 +91,23 @@ public class GroupFinderTest implements ShelfMatrixTester {
         assertEquals(0, groups.size());
     }
 
+
+
+    @Test
+    @DisplayName("Null matrix should not produce any group")
+    public void groupfind_fullMatrix() {
+        // expected result
+        List<Group> correctPartition = List.of(
+                new Group(Tile.PLANT, 30)
+        );
+
+        // group computation
+        GroupFinder f = new GroupFinder(fullOf(Tile.PLANT));
+        List<Group> groups = f.computeGroupPartition();
+
+        // assertions
+        assertTrue(groups.containsAll(correctPartition));
+        assertEquals(1, groups.size());
+    }
+
 }
