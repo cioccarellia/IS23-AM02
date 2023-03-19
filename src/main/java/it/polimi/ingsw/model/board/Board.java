@@ -36,6 +36,10 @@ public class Board {
         }
     }
 
+    public Cell[][] getMatrix() {
+        return matrix;
+    }
+
     /**
      * Returns the cell content at the given coordinates
      *
