@@ -2,8 +2,10 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.board.cell.Cell;
 import it.polimi.ingsw.model.board.cell.CellPattern;
+import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.utils.BoardUtils;
 import org.apache.commons.lang.SerializationUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
 import java.util.Arrays;
@@ -110,14 +112,32 @@ public class Board {
         return countFreeEdges(c) > 0;
     }
 
+
+    private CellPattern mapFromGameMode(@NotNull GameMode mode) {
+        switch (mode) {
+            case GAME_MODE_2_PLAYERS -> {
+                return CellPattern.NORMAL;
+            }
+            case GAME_MODE_3_PLAYERS -> {
+                return CellPattern.THREE_DOTS;
+            }
+            case GAME_MODE_4_PLAYERS -> {
+                return CellPattern.FOUR_DOTS;
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + mode);
+        }
+    }
+
     /**
      * counts all the board's empty cells
      *
-     * @param upperbound is the highest accepted cell pattern: if the analised cell pattern is higher, then we do not
-     *                   count it, if it's lower (or equal) and it is empty we count it as an acceptable cell
+     * @param mode      is the highest accepted cell pattern: if the analised cell pattern is higher, then we do not
+     *                  count it, if it's lower (or equal) and it is empty we count it as an acceptable cell
      * @return it returns the number of empty acceptable cells
      */
-    public int countEmptyCells(CellPattern upperbound) {
+    public int countEmptyCells(GameMode mode) {
+        CellPattern upperBound = mapFromGameMode(mode);
+
         int emptyCellsCounter = 0;
 
         for (int i = 0; i < BOARD_DIMENSION; i++) {
@@ -127,7 +147,7 @@ public class Board {
                 if (c.isDead())
                     continue;
 
-                boolean isAcceptable = c.getPattern().getPlayerCount() <= upperbound.getPlayerCount();
+                boolean isAcceptable = c.getPattern().getPlayerCount() <= upperBound.getPlayerCount();
 
                 if (isAcceptable && c.isEmpty()) {
                     emptyCellsCounter++;
@@ -143,14 +163,16 @@ public class Board {
      * Runs under the assumption that the given tile list contains the same number of elements as
      * there are empty spaces in the board.
      *
-     * @param newElements list of tiles to be inserted in the board matrix
-     * @param upperBound  highest pattern of cell to be considered
+     * @param newElements   list of tiles to be inserted in the board matrix
+     * @param mode          highest pattern of cell to be considered
      * @throws IllegalArgumentException if the list of new tiles has a greater size than how many
      *                                  empty spaces there are on the board
-     * @see Board#countEmptyCells(CellPattern)
+     * @see Board#countEmptyCells(GameMode)
      */
-    public void fill(List<Tile> newElements, CellPattern upperBound) {
-        if (newElements.size() >= countEmptyCells(upperBound)) {
+    public void fill(List<Tile> newElements, GameMode mode) {
+        CellPattern upperBound = mapFromGameMode(mode);
+
+        if (newElements.size() >= countEmptyCells(mode)) {
             throw new IllegalArgumentException("Impossible to fit the designated elements inside the board: not enough space");
         }
 

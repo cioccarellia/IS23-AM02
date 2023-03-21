@@ -16,28 +16,6 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify SIX_PAIRS positively #1")
     public void test_f1_positive_1() {
-        // todo criteria for matrix selection
-        // fixme: logic issue, 1 group of 4 is not the same as two groups of 2
-        Tile[][] testPositiveMatrix = {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {PLANT, null, PLANT, null, PLANT},
-                {PLANT, null, PLANT, null, PLANT},
-                {PLANT, null, PLANT, null, PLANT},
-                {PLANT, null, PLANT, null, PLANT}
-        };
-
-        boolean doesMatrixMatch = sixPairsCGC.matches(testPositiveMatrix);
-
-        // assert that the matrix matches
-        assertTrue(doesMatrixMatch);
-    }
-
-
-    @Test
-    @DisplayName("Verify SIX_PAIRS positively #1.5")
-    public void test_f1_positive_2() {
-        // fixme: logic issue, 1 group of 4 is not the same as two groups of 2
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -56,7 +34,7 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
 
     @Test
     @DisplayName("Verify SIX_PAIRS negatively #1")
-    public void test_f1_negative() {
+    public void test_f1_negative_1() {
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -69,6 +47,25 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         boolean doesMatrixMatch = sixPairsCGC.matches(testNegativeMatrix);
 
         // assert that the matrix does not match
+        assertFalse(doesMatrixMatch);
+    }
+
+
+    @Test
+    @DisplayName("Verify SIX_PAIRS negatively #2")
+    public void test_f1_negative_2() {
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT},
+                {PLANT, null, PLANT, null, PLANT}
+        };
+
+        boolean doesMatrixMatch = sixPairsCGC.matches(testPositiveMatrix);
+
+        // assert that the matrix matches
         assertFalse(doesMatrixMatch);
     }
 

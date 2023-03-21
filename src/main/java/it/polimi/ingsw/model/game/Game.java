@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor;
@@ -12,7 +11,6 @@ import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.utils.ListUtils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +29,7 @@ public class Game {
     private final GameStatus status;
     private PlayerNumber startingPlayer;
     private PlayerNumber currentPlayer;
+
     /**
      * Holds the current statuses for the common goal cards.
      */
@@ -47,8 +46,8 @@ public class Game {
         CommonGoalCard card1 = commonGoalCardExtractor.extract();
         CommonGoalCard card2 = commonGoalCardExtractor.extract();
 
-        CommonGoalCardStatus cardStatus1 = new CommonGoalCardStatus(card1, Arrays.asList(Token.COMMON_GOAL_TOKEN_8_POINTS, Token.COMMON_GOAL_TOKEN_6_POINTS));
-        CommonGoalCardStatus cardStatus2 = new CommonGoalCardStatus(card2, Arrays.asList(Token.COMMON_GOAL_TOKEN_8_POINTS, Token.COMMON_GOAL_TOKEN_6_POINTS));
+        CommonGoalCardStatus cardStatus1 = new CommonGoalCardStatus(card1, mode);
+        CommonGoalCardStatus cardStatus2 = new CommonGoalCardStatus(card2, mode);
 
         commonGoalCardStatuses.add(cardStatus1);
         commonGoalCardStatuses.add(cardStatus2);
@@ -60,13 +59,10 @@ public class Game {
 
 
         // refill board
-        // todo understand how to map model data
-        CellPattern pattern = CellPattern.FOUR_DOTS;
+        int emptyBoardCells = board.countEmptyCells(mode);
+        List<Tile> extractedTiles = tileExtractor.extract(emptyBoardCells);
 
-        int emptyBoardCells = board.countEmptyCells(pattern);
-        List<Tile> tiles = tileExtractor.extract(emptyBoardCells);
-
-        board.fill(tiles, pattern);
+        board.fill(extractedTiles, mode);
     }
 
     /**

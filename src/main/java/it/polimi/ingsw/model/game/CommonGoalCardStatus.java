@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -20,10 +19,27 @@ public class CommonGoalCardStatus {
      */
     private final Stack<Token> tokenStack = new Stack<>();
 
-    public CommonGoalCardStatus(CommonGoalCard commonGoalCard, List<Token> tokens) {
+    public CommonGoalCardStatus(CommonGoalCard commonGoalCard, GameMode gameMode) {
         this.commonGoalCard = commonGoalCard;
 
-        tokens.forEach(tokenStack::push);
+        switch (gameMode) {
+            case GAME_MODE_2_PLAYERS -> {
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_4_POINTS);
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_8_POINTS);
+            }
+            case GAME_MODE_3_PLAYERS -> {
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_4_POINTS);
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_6_POINTS);
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_8_POINTS);
+            }
+            case GAME_MODE_4_PLAYERS -> {
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_2_POINTS);
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_4_POINTS);
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_6_POINTS);
+                tokenStack.push(Token.COMMON_GOAL_TOKEN_8_POINTS);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + gameMode);
+        }
     }
 
     public CommonGoalCard getCommonGoalCard() {

@@ -15,22 +15,29 @@ import java.util.List;
 public class PlayerSession {
 
     private final String username;
+
+    private Bookshelf bookshelf;
     private final PersonalGoalCard personalGoalCard;
-    private final int tokenCounter = 0;
-    private PlayerNumber playerNumber;
+
+    private final PlayerNumber playerNumber;
     private PlayerStatus playerStatus;
     private PlayerCurrentAction playerCurrentAction;
+
     private PlayerTileSelection playerTileSelection;
-    private Bookshelf bookshelf;
+
+
+
     /**
      * Tokens acquired by the current user.
      */
     private List<Token> acquiredTokens;
+
     /**
      * Identifiers of all the {@link it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier}s that
      * have been acquired by the user during the game (i.e. for which the user has received any common goal card tokens).
      */
     private List<CommonGoalCardIdentifier> achievedCommonGoalCards;
+
 
     public PlayerSession(String username, PlayerNumber playerNumber, PersonalGoalCard personalGoalCard) {
         this.username = username;
@@ -44,10 +51,6 @@ public class PlayerSession {
 
     public PlayerNumber getPlayerNumber() {
         return playerNumber;
-    }
-
-    public void setPlayerNumber(PlayerNumber number) {
-        this.playerNumber = number;
     }
 
     public PersonalGoalCard getPersonalGoalCard() {
@@ -76,4 +79,5 @@ public class PlayerSession {
     public int calculateCurrentPoint() {
         return acquiredTokens.stream().mapToInt(Token::getPoints).sum();
     }
+
 }

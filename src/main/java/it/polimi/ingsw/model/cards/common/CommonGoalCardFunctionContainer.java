@@ -44,6 +44,7 @@ public class CommonGoalCardFunctionContainer {
     public static final CommonGoalCard X_TILES = new CommonGoalCard(CommonGoalCardIdentifier.X_TILES, CommonGoalCardFunctionContainer::f10);
     public static final CommonGoalCard EIGHT_TILES = new CommonGoalCard(CommonGoalCardIdentifier.EIGHT_TILES, CommonGoalCardFunctionContainer::f11);
     public static final CommonGoalCard STAIRS = new CommonGoalCard(CommonGoalCardIdentifier.STAIRS, CommonGoalCardFunctionContainer::f12);
+
     /**
      * List of all valid instances of {@link CommonGoalCard}
      */
