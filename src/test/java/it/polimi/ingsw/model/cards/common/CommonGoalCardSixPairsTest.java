@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +14,9 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
     CommonGoalCard sixPairsCGC = CommonGoalCardFunctionContainer.SIX_PAIRS;
 
     @Test
-    @Disabled
     @DisplayName("Verify SIX_PAIRS positively #1")
     public void test_f1_positive_1() {
+        // todo criteria for matrix selection
         // fixme: logic issue, 1 group of 4 is not the same as two groups of 2
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},

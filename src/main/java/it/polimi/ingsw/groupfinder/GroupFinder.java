@@ -24,7 +24,7 @@ public class GroupFinder {
     /**
      * Matrix containing the elements to be grouped.
      */
-    private Tile[][] matrix;
+    private final Tile[][] matrix;
 
     /**
      * Contains the markers for duplication checks.

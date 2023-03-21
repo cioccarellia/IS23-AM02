@@ -60,6 +60,7 @@ public class Game {
 
 
         // refill board
+        // todo understand how to map model data
         CellPattern pattern = CellPattern.FOUR_DOTS;
 
         int emptyBoardCells = board.countEmptyCells(pattern);

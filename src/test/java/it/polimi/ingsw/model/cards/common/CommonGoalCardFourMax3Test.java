@@ -16,8 +16,6 @@ public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify FOUR_MAX3DIFFERENT_LINES positively #1")
     public void test_f4_positive_1() {
-        // fixme mi sa che c'è qualche problema con la copia della matrice nelle funzioni precedenti
-
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},

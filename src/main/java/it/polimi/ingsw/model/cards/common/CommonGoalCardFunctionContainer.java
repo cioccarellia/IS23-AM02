@@ -32,9 +32,9 @@ import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
 
 public class CommonGoalCardFunctionContainer {
 
-    public static final CommonGoalCard SIX_PAIRS = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::f1_groupfinder);
+    public static final CommonGoalCard SIX_PAIRS = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::f1);
     public static final CommonGoalCard DIAGONAL = new CommonGoalCard(CommonGoalCardIdentifier.DIAGONAL, CommonGoalCardFunctionContainer::f2);
-    public static final CommonGoalCard FOUR_GROUP_FOUR = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::f3_groupfinder);
+    public static final CommonGoalCard FOUR_GROUP_FOUR = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::f3);
     public static final CommonGoalCard FOUR_MAX3DIFF_LINES = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_MAX3DIFF_LINES, CommonGoalCardFunctionContainer::f4);
     public static final CommonGoalCard FOUR_CORNERS = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_CORNERS, CommonGoalCardFunctionContainer::f5);
     public static final CommonGoalCard TWO_DIFF_COLUMNS = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_COLUMNS, CommonGoalCardFunctionContainer::f6);
@@ -54,29 +54,7 @@ public class CommonGoalCardFunctionContainer {
      *
      * @see CommonGoalCardIdentifier#SIX_PAIRS
      */
-    @Deprecated
     private static Boolean f1(Tile[][] matrix) {
-        // FIXME
-        Tile[][] matrixCopy = (Tile[][]) SerializationUtils.clone(matrix);
-        int countPairs = 0;
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
-                Tile t = matrixCopy[i][j];
-                if (t != null && j + 1 < COLUMNS && t == matrixCopy[i][j + 1]) {
-                    countPairs++;
-                    matrixCopy[i][j] = null;
-                    matrixCopy[i][j + 1] = null;
-                } else if (t != null && i + 1 < ROWS && t == matrixCopy[i + 1][j]) {
-                    countPairs++;
-                    matrixCopy[i][j] = null;
-                    matrixCopy[i + 1][j] = null;
-                }
-            }
-        }
-        return countPairs >= 6;
-    }
-
-    private static Boolean f1_groupfinder(Tile[][] matrix) {
         GroupFinder f = new GroupFinder(matrix);
         List<Group> groups = f.computeGroupPartition();
 
@@ -117,36 +95,7 @@ public class CommonGoalCardFunctionContainer {
      *
      * @see CommonGoalCardIdentifier#FOUR_GROUP_FOUR
      */
-    @Deprecated
     private static Boolean f3(Tile[][] matrix) {
-        int countGroups = 0;
-        int countTilesGroup = 1;
-        Tile[][] matrixCopy = (Tile[][]) SerializationUtils.clone(matrix);        //FIXME (tutta da sistemare e deep copy)
-        for (int i = 0; i < ROWS - 1; i++) {
-            for (int j = 0; j < COLUMNS - 1; j++) {
-                Tile t = matrixCopy[i][j];
-                if (t != null && matrixCopy[i + 1][j] == t) {
-                    countTilesGroup++;
-                    matrixCopy[i + 1][j] = null;
-                    matrixCopy[i][j] = null;
-                }
-                if (t != null && matrix[i][j + 1] == t) {
-                    countTilesGroup++;
-                    matrixCopy[i][j + 1] = null;
-                    matrixCopy[i][j] = null;
-                }
-            }
-            if (countTilesGroup >= 8) {
-                countGroups += 2;
-            } else if (countTilesGroup >= 4) {
-                countGroups++;
-            }
-
-        }
-        return countGroups >= 4;
-    }
-
-    private static Boolean f3_groupfinder(Tile[][] matrix) {
         // grouping and mapping tiles
         GroupFinder f = new GroupFinder(matrix);
         Map<Tile, List<Group>> groupMap = f.computeGroupPartitionMap();
