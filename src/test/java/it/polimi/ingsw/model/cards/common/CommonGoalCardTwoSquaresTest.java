@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
 
-    CommonGoalCard twoSquares = CommonGoalCardFunctionContainer.TWO_SQUARES;
+    CommonGoalCard twoSquaresCGC = CommonGoalCardFunctionContainer.TWO_SQUARES;
 
     @Test
     @DisplayName("Verify TWO_SQUARES positively #1")
@@ -25,7 +25,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {BOOK, CAT, null, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -42,7 +42,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {BOOK, CAT, null, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoSquares.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -59,7 +59,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoSquares.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -76,9 +76,34 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {CAT, TROPHY, PLANT, TROPHY, GAME}
         };
 
-        boolean doesMatrixMatch = twoSquares.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
 
+    @Test
+    @DisplayName("Verify TWO_SQUARES negatively #3")
+    public void test_f7_negative_3() {
+        Tile[][] testNegativeMatrix = {
+                {null, null, null, null, null},
+                {CAT, CAT, CAT, TROPHY, GAME},
+                {CAT, CAT, CAT, TROPHY, GAME},
+                {PLANT, CAT, CAT, PLANT, PLANT},
+                {CAT, CAT, PLANT, TROPHY, GAME},
+                {CAT, TROPHY, PLANT, TROPHY, GAME}
+        };
+
+        boolean doesMatrixMatch = twoSquaresCGC.matches(testNegativeMatrix);
+
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_SQUARES negatively: null matrix")
+    public void test_f2_negative_null_matrix() {
+        boolean doesMatrixMatch = twoSquaresCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
+        assertFalse(doesMatrixMatch);
+    }
 }

@@ -80,4 +80,13 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
 
         assertFalse(doesMatrixMatch);
     }
+
+    @Test
+    @DisplayName("Verify X_TILES negatively: null matrix")
+    public void test_f10_negative_null_matrix() {
+        boolean doesMatrixMatch = xTiles.matches(nullMatrix);
+
+        // assert that the matrix does not match
+        assertFalse(doesMatrixMatch);
+    }
 }

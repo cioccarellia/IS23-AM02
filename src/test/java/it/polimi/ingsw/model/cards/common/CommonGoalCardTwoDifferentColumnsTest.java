@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester {
 
-    CommonGoalCard twoDiffColumns = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+    CommonGoalCard twoDiffColumnsCGC = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
 
     @Test
     @DisplayName("Verify TWO_DIFF_COLUMNS positively #1")
@@ -25,7 +25,7 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
                 {BOOK, null, null, null, FRAME}
         };
 
-        boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = twoDiffColumnsCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -42,7 +42,7 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
                 {null, BOOK, FRAME, null, null}
         };
 
-        boolean doesMatrixMatch = twoDiffColumns.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = twoDiffColumnsCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -59,7 +59,7 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
                 {null, BOOK, FRAME, null, null}
         };
 
-        boolean doesMatrixMatch = twoDiffColumns.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoDiffColumnsCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -76,8 +76,17 @@ public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester 
                 {BOOK, null, FRAME, null, null}
         };
 
-        boolean doesMatrixMatch = twoDiffColumns.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoDiffColumnsCGC.matches(testNegativeMatrix);
 
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_COLUMNS negatively: null matrix")
+    public void test_f6_negative_3() {
+        boolean doesMatrixMatch = twoDiffColumnsCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
 

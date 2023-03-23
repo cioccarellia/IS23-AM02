@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixTester {
 
-    CommonGoalCard threeMax3diffColumns = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+    CommonGoalCard threeMax3diffColumnsCGC = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
 
     @Test
     @DisplayName("Verify THREE_MAX3DIFF_COLUMNS positively #1")
@@ -26,7 +26,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
                 {BOOK, CAT, TROPHY, FRAME, PLANT}
         };
 
-        boolean doesMatrixMatch = threeMax3diffColumns.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -43,7 +43,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
                 {CAT, CAT, null, null, GAME}
         };
 
-        boolean doesMatrixMatch = threeMax3diffColumns.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -60,7 +60,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = threeMax3diffColumns.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -77,8 +77,16 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = threeMax3diffColumns.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(testNegativeMatrix);
 
+        assertFalse(doesMatrixMatch);
+    }
+    @Test
+    @DisplayName("Verify THREE_MAX3DIFF_COLUMNS negatively: null matrix")
+    public void test_f9_negative_3() {
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
 }

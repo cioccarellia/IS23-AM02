@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
 
-    CommonGoalCard twoDiffLines = CommonGoalCardFunctionContainer.TWO_DIFF_LINES;
+    CommonGoalCard twoDiffLinesCGC = CommonGoalCardFunctionContainer.TWO_DIFF_LINES;
 
     @Test
     @DisplayName("Verify TWO_DIFF_LINES positively #1")
@@ -25,7 +25,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
                 {BOOK, CAT, TROPHY, FRAME, PLANT}
         };
 
-        boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -42,7 +42,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoDiffLines.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -59,7 +59,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoDiffLines.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -76,8 +76,17 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
                 {BOOK, CAT, null, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoDiffLines.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(testNegativeMatrix);
 
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify TWO_DIFF_LINES negatively: null matrix")
+    public void test_f8_negative_3() {
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
 }

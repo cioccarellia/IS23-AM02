@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
-    CommonGoalCard eightTiles = CommonGoalCardFunctionContainer.EIGHT_TILES;
+    CommonGoalCard eightTilesCGC = CommonGoalCardFunctionContainer.EIGHT_TILES;
 
     @Test
     @DisplayName("Verify EIGHT_TILES positively #1")
@@ -24,7 +24,7 @@ public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
                 {PLANT, PLANT, PLANT, PLANT, PLANT}
         };
 
-        boolean doesMatrixMatch = eightTiles.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = eightTilesCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -41,7 +41,7 @@ public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
                 {PLANT, PLANT, PLANT, PLANT, PLANT}
         };
 
-        boolean doesMatrixMatch = eightTiles.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = eightTilesCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -49,7 +49,7 @@ public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Edge case for EIGHT_TILES: null matrix #1")
     public void test_f11_edge_1() {
-        boolean doesMatrixMatch = eightTiles.matches(nullMatrix);
+        boolean doesMatrixMatch = eightTilesCGC.matches(nullMatrix);
 
         assertFalse(doesMatrixMatch);
     }

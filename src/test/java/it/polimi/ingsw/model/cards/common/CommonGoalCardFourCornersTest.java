@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
 
-    CommonGoalCard fourCorners = CommonGoalCardFunctionContainer.FOUR_CORNERS;
+    CommonGoalCard fourCornersCGC = CommonGoalCardFunctionContainer.FOUR_CORNERS;
 
     @Test
     @DisplayName("Verify FOUR_CORNERS positively #1")
@@ -26,7 +26,7 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
                 {CAT, null, null, null, CAT}
         };
 
-        boolean doesMatrixMatch = fourCorners.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = fourCornersCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -43,7 +43,7 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
                 {CAT, null, null, null, TROPHY}
         };
 
-        boolean doesMatrixMatch = fourCorners.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourCornersCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -60,8 +60,17 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
                 {CAT, null, null, null, TROPHY}
         };
 
-        boolean doesMatrixMatch = fourCorners.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourCornersCGC.matches(testNegativeMatrix);
 
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify FOUR_CORNERS negatively: null matrix")
+    public void test_f5_negative_null_matrix() {
+        boolean doesMatrixMatch = fourCornersCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
 }

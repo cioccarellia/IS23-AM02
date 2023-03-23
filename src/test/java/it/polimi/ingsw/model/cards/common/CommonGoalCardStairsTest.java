@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardStairsTest implements ShelfMatrixTester {
-    CommonGoalCard stairs = CommonGoalCardFunctionContainer.STAIRS;
+    CommonGoalCard stairsCGC = CommonGoalCardFunctionContainer.STAIRS;
 
     @Test
     @DisplayName("Verify STAIRS positively #1")
@@ -25,7 +25,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {CAT, GAME, GAME, BOOK, FRAME}
         };
 
-        boolean doesMatrixMatch = stairs.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -43,7 +43,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {FRAME, PLANT, GAME, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = stairs.matches(testPositiveMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(testPositiveMatrix);
 
         assertTrue(doesMatrixMatch);
     }
@@ -61,7 +61,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {CAT, GAME, GAME, BOOK, null}
         };
 
-        boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -79,7 +79,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {null, PLANT, GAME, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -97,7 +97,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {CAT, GAME, GAME, BOOK, null}
         };
 
-        boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -115,8 +115,17 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {null, PLANT, GAME, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = stairs.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
 
+        assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify STAIRS negatively: null matrix")
+    public void test_f12_edge_3() {
+        boolean doesMatrixMatch = stairsCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
 
