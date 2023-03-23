@@ -2,20 +2,20 @@ package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.model.board.Tile;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Represents a shared objective among players
  */
 public class CommonGoalCard {
-    private final Function<Tile[][], Boolean> f;
     private final CommonGoalCardIdentifier id;
+    private final Predicate<Tile[][]> f;
 
     /**
      * @param identifier         the {@code CommonGoalCard}'s identifier
-     * @param evaluationFunction the function for matching the card
+     * @param evaluationFunction the function used for evaluating and testing the criteria on the given matrix
      */
-    public CommonGoalCard(CommonGoalCardIdentifier identifier, Function<Tile[][], Boolean> evaluationFunction) {
+    public CommonGoalCard(CommonGoalCardIdentifier identifier, Predicate<Tile[][]> evaluationFunction) {
         id = identifier;
         f = evaluationFunction;
     }
@@ -35,7 +35,7 @@ public class CommonGoalCard {
      * @param shelfMatrix the game matrix to compute the logic on.
      */
     public boolean matches(Tile[][] shelfMatrix) {
-        return f.apply(shelfMatrix);
+        return f.test(shelfMatrix);
     }
 
 }

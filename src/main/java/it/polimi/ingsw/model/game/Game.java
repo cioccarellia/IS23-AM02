@@ -22,16 +22,18 @@ public class Game {
 
     private final GameMode mode;
     private final Board board = new Board();
-    private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
-    private final TileExtractor tileExtractor = new TileExtractor();
-    private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
-    private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
     private final GameStatus status;
+    private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
     private PlayerNumber startingPlayer;
     private PlayerNumber currentPlayer;
 
+    private final TileExtractor tileExtractor = new TileExtractor();
+    private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
+    private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
+
+
     /**
-     * Holds the current statuses for the common goal cards.
+     * Holds the current statuses for the common goal cards.\
      */
     private List<CommonGoalCardStatus> commonGoalCardStatuses;
 

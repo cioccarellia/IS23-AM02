@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 
+import java.util.Optional;
 import java.util.Stack;
 
 /**
@@ -49,15 +50,15 @@ public class CommonGoalCardStatus {
     /**
      * Whether the current status still has possible tokens to be acquired
      */
-    public boolean hasTokenLeft() {
+    public boolean isEmpty() {
         return !tokenStack.isEmpty();
     }
 
     /**
      * Removes the highest token on the stack and returns it, if present
      */
-    public CommonGoalCard acquireAndRemoveTopToken() {
-        return commonGoalCard;
+    public Optional<Token> acquireAndRemoveTopToken() {
+        return Optional.of(tokenStack.pop());
     }
 
 }

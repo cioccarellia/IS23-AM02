@@ -7,7 +7,7 @@ import java.util.*;
 /**
  *
  */
-public class TileExtractor {
+public class TileExtractor extends ElementExtractor<Tile> {
 
     private static final int MAX_TILE_AMOUNT = 22;
 
@@ -33,7 +33,8 @@ public class TileExtractor {
     /**
      * Extracts a single tile, updating its associated status map entry.
      */
-    private Tile extract() {
+    @Override
+    public Tile extract() {
         Random generator = new Random();
 
         Tile extractedTile = Tile.values()[generator.nextInt(6)];
