@@ -10,15 +10,17 @@ import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.utils.ListUtils;
+import it.polimi.ingsw.controller.ControlInterface;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Model class representing an instance of a game.
  */
-public class Game {
+public class Game implements ControlInterface {
 
     private final GameMode mode;
     private final Board board = new Board();
@@ -43,7 +45,8 @@ public class Game {
     }
 
 
-    public void onGameStart() {
+    @Override
+    public void onGameStarted() {
         // Common goal card initialization
         CommonGoalCard card1 = commonGoalCardExtractor.extract();
         CommonGoalCard card2 = commonGoalCardExtractor.extract();
@@ -103,4 +106,42 @@ public class Game {
         return commonGoalCardStatuses;
     }
 
+
+
+
+
+    @Override
+    public void onPlayerQuit(){
+
+    }
+
+    @Override
+    public void onPLayerTileSelection(String username, Set<Tile> tiles){
+
+    }
+
+    @Override
+    public void onPlayerBookshelfTileInsertion(String username, int column, List<Tile> tiles){
+
+    }
+
+    @Override
+    public void onPlayerTokenUpdate(String username){
+
+    }
+
+    @Override
+    public void onTurnChange(){
+
+    }
+
+    @Override
+    public void onLastTurn(){
+
+    }
+
+    @Override
+    public void onGameEnded(){
+
+    }
 }
