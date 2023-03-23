@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/Users/cioccarellia/github/IS23-AM02/src/main/java</OriginalElement>
+  <nodes>
+    <node x="3232.174107142857" y="-14.0">it.polimi.ingsw.model.board.cell.CellPattern</node>
+    <node x="1043.060267857143" y="301.0">it.polimi.ingsw.model.game.extractors.ElementExtractor</node>
+    <node x="3430.560267857143" y="212.0">it.polimi.ingsw.model.board.cell.Cell</node>
+    <node x="3518.924107142857" y="661.0">it.polimi.ingsw.model.game.GameStatus</node>
+    <node x="249.0" y="1510.0">it.polimi.ingsw.App</node>
+    <node x="2221.549107142857" y="9.0">it.polimi.ingsw.model.board.Tile</node>
+    <node x="466.73772321428555" y="290.0">it.polimi.ingsw.groupfinder.Group</node>
+    <node x="1341.5" y="661.0">it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor</node>
+    <node x="479.0" y="1407.0">it.polimi.ingsw.utils.ListUtils</node>
+    <node x="-82.0" y="1407.0">it.polimi.ingsw.model.board.Coordinates</node>
+    <node x="3708.484375" y="279.0">it.polimi.ingsw.model.player.PlayerNumber</node>
+    <node x="3163.924107142857" y="583.5">it.polimi.ingsw.model.board.Board</node>
+    <node x="1616.5" y="683.5">it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer</node>
+    <node x="2155.560267857143" y="267.0">it.polimi.ingsw.model.game.Token</node>
+    <node x="2594.560267857143" y="290.0">it.polimi.ingsw.model.player.action.PlayerCurrentAction</node>
+    <node x="3839.984375" y="661.0">it.polimi.ingsw.model.game.GameMode</node>
+    <node x="2367.560267857143" y="267.5">it.polimi.ingsw.model.bookshelf.Bookshelf</node>
+    <node x="1892.1852678571431" y="289.5">it.polimi.ingsw.model.player.selection.PlayerTileSelection</node>
+    <node x="2892.560267857143" y="290.0">it.polimi.ingsw.model.player.PlayerStatus</node>
+    <node x="43.5" y="650.0">it.polimi.ingsw.groupfinder.GroupFinder</node>
+    <node x="442.5" y="638.0">it.polimi.ingsw.model.game.CommonGoalCardStatus</node>
+    <node x="3146.560267857143" y="301.0">it.polimi.ingsw.costants.BoardConstants</node>
+    <node x="-9.262276785714448" y="278.0">it.polimi.ingsw.model.cards.common.CommonGoalCard</node>
+    <node x="1536.2991071428569" y="301.0">it.polimi.ingsw.model.cards.personal.PersonalGoalCard</node>
+    <node x="862.5" y="661.0">it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor</node>
+    <node x="2119.746651785714" y="550.0">it.polimi.ingsw.model.player.PlayerSession</node>
+    <node x="230.0" y="1407.0">it.polimi.ingsw.launcher.LauncherParameters</node>
+    <node x="-160.0" y="1555.0">it.polimi.ingsw.utils.BoardUtils</node>
+    <node x="58.23772321428555" y="9.0">it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier</node>
+    <node x="-160.0" y="977.0">it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer</node>
+    <node x="1139.5" y="650.0">it.polimi.ingsw.model.game.extractors.TileExtractor</node>
+    <node x="1309.0" y="1407.0">it.polimi.ingsw.costants.BookShelfConstants</node>
+    <node x="1689.3716517857142" y="932.0">it.polimi.ingsw.model.game.Game</node>
+    <node x="856.0" y="1407.0">it.polimi.ingsw.utils.TurnHelper</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.groupfinder.Group" target="it.polimi.ingsw.model.board.Tile" relationship="TO_ONE">
+      <point x="2.767857145045127E-4" y="49.0" />
+      <point x="546.738" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.player.action.PlayerCurrentAction" relationship="TO_ONE">
+      <point x="196.5" y="-15.0" />
+      <point x="2733.560267857143" y="695.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.board.cell.Cell" target="it.polimi.ingsw.model.board.Tile" relationship="TO_ONE">
+      <point x="-2.6785714317156817E-4" y="127.0" />
+      <point x="3534.56" y="497.0" />
+      <point x="1841.0" y="497.0" />
+      <point x="1841.0" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.App" target="it.polimi.ingsw.launcher.LauncherParameters" relationship="CREATE">
+      <point x="-0.0" y="-38.0" />
+      <point x="-0.0" y="26.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.player.PlayerStatus" relationship="TO_ONE">
+      <point x="196.5" y="-0.0" />
+      <point x="3009.060267857143" y="710.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor" target="it.polimi.ingsw.model.game.extractors.ElementExtractor" relationship="GENERALIZATION">
+      <point x="64.25" y="-49.0" />
+      <point x="1055.25" y="528.0" />
+      <point x="1147.560267857143" y="528.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor" target="it.polimi.ingsw.model.game.extractors.ElementExtractor" relationship="GENERALIZATION">
+      <point x="-63.75" y="-49.0" />
+      <point x="1405.25" y="528.0" />
+      <point x="1147.560267857143" y="528.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.utils.BoardUtils" target="it.polimi.ingsw.model.board.Coordinates" relationship="CREATE">
+      <point x="-0.0" y="-38.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor" relationship="TO_ONE">
+      <point x="-201.5" y="60.0" />
+      <point x="991.0" y="1207.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.player.selection.PlayerTileSelection" relationship="TO_ONE">
+      <point x="-196.5" y="-127.0" />
+      <point x="2003.185" y="583.0" />
+      <point x="14.999732142856828" y="49.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.player.PlayerSession" relationship="CREATE">
+      <point x="-14.99965178571415" y="-215.0" />
+      <point x="1875.872" y="799.5" />
+      <point x="-196.5" y="89.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.groupfinder.GroupFinder" target="it.polimi.ingsw.model.board.Tile" relationship="TO_MANY">
+      <point x="-0.0" y="-60.0" />
+      <point x="233.0" y="497.0" />
+      <point x="1841.0" y="497.0" />
+      <point x="1841.0" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.board.cell.Cell" target="it.polimi.ingsw.model.board.cell.CellPattern" relationship="TO_ONE">
+      <point x="-2.6785714317156817E-4" y="-127.0" />
+      <point x="3534.56" y="171.0" />
+      <point x="3343.674" y="171.0" />
+      <point x="-1.0714285690482939E-4" y="72.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.extractors.TileExtractor" relationship="TO_ONE">
+      <point x="-201.5" y="30.0" />
+      <point x="1230.5" y="1177.0" />
+      <point x="-0.0" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.bookshelf.Bookshelf" target="it.polimi.ingsw.model.board.Tile" relationship="CREATE">
+      <point x="14.999732142856828" y="71.5" />
+      <point x="2486.06" y="432.0" />
+      <point x="3331.424" y="432.0" />
+      <point x="3331.424" y="512.0" />
+      <point x="3656.06" y="512.0" />
+      <point x="3656.06" y="-31.5" />
+      <point x="2310.549" y="-31.5" />
+      <point x="-1.0714285690482939E-4" y="-49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.common.CommonGoalCard" target="it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier" relationship="TO_ONE">
+      <point x="14.262276785714448" y="61.0" />
+      <point x="233.0" y="420.0" />
+      <point x="1025.56" y="420.0" />
+      <point x="1025.56" y="58.0" />
+      <point x="160.50027678571445" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.board.Board" target="it.polimi.ingsw.model.board.cell.Cell" relationship="CREATE">
+      <point x="145.0" y="-126.5" />
+      <point x="-58.136160714286234" y="127.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.CommonGoalCardStatus" relationship="TO_MANY">
+      <point x="-201.5" y="90.0" />
+      <point x="642.5" y="1237.0" />
+      <point x="-0.0" y="72.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.CommonGoalCardStatus" target="it.polimi.ingsw.model.cards.common.CommonGoalCard" relationship="TO_ONE">
+      <point x="-0.0" y="-72.0" />
+      <point x="642.5" y="583.0" />
+      <point x="218.0" y="583.0" />
+      <point x="-0.7377232142855519" y="61.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor" relationship="TO_ONE">
+      <point x="-201.5" y="15.0" />
+      <point x="1454.0" y="1162.0" />
+      <point x="-15.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.board.Board" target="it.polimi.ingsw.model.board.Tile" relationship="CREATE">
+      <point x="-1.0714285690482939E-4" y="-126.5" />
+      <point x="3331.424" y="512.0" />
+      <point x="3656.06" y="512.0" />
+      <point x="3656.06" y="-31.5" />
+      <point x="2310.549" y="-31.5" />
+      <point x="-1.0714285690482939E-4" y="-49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.extractors.TileExtractor" relationship="CREATE">
+      <point x="-201.5" y="45.0" />
+      <point x="1215.5" y="1192.0" />
+      <point x="-15.0" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.extractors.TileExtractor" target="it.polimi.ingsw.model.game.extractors.ElementExtractor" relationship="GENERALIZATION">
+      <point x="-45.5" y="-60.0" />
+      <point x="1185.0" y="528.0" />
+      <point x="1147.560267857143" y="528.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier" relationship="TO_MANY">
+      <point x="-183.74665178571422" y="-160.0" />
+      <point x="2132.5" y="420.0" />
+      <point x="1025.56" y="420.0" />
+      <point x="1025.56" y="58.0" />
+      <point x="160.50027678571445" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.bookshelf.Bookshelf" relationship="TO_ONE">
+      <point x="139.81334821428572" y="-160.0" />
+      <point x="-15.000267857143172" y="71.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.GameStatus" relationship="TO_ONE">
+      <point x="201.5" y="-15.0" />
+      <point x="3634.424107142857" y="1132.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.bookshelf.Bookshelf" target="it.polimi.ingsw.model.board.Tile" relationship="TO_MANY">
+      <point x="-2.6785714317156817E-4" y="71.5" />
+      <point x="2471.06" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.cards.personal.PersonalGoalCard" relationship="TO_ONE">
+      <point x="-196.49965178571438" y="-49.5" />
+      <point x="1804.0" y="660.5" />
+      <point x="1804.0" y="339.0" />
+      <point x="107.9998928571431" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer" target="it.polimi.ingsw.model.cards.common.CommonGoalCard" relationship="TO_MANY">
+      <point x="-76.0" y="-170.0" />
+      <point x="26.0" y="583.0" />
+      <point x="218.0" y="583.0" />
+      <point x="-0.7377232142855519" y="61.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor" relationship="CREATE">
+      <point x="-201.5" y="75.0" />
+      <point x="976.0" y="1222.0" />
+      <point x="-15.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.GameMode" relationship="TO_ONE">
+      <point x="201.5" y="-0.0" />
+      <point x="3952.984375" y="1147.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.board.Board" relationship="TO_ONE">
+      <point x="201.5" y="-45.0" />
+      <point x="3316.424107142857" y="1102.0" />
+      <point x="-15.0" y="126.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.CommonGoalCardStatus" relationship="CREATE">
+      <point x="-201.5" y="105.0" />
+      <point x="627.5" y="1252.0" />
+      <point x="-15.0" y="72.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.board.Board" target="it.polimi.ingsw.model.board.cell.Cell" relationship="TO_MANY">
+      <point x="160.0" y="-126.5" />
+      <point x="-43.136160714286234" y="127.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.board.Board" relationship="CREATE">
+      <point x="201.5" y="-30.0" />
+      <point x="3331.424107142857" y="1117.0" />
+      <point x="-0.0" y="126.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.costants.BoardConstants" target="it.polimi.ingsw.model.board.cell.CellPattern" relationship="TO_MANY">
+      <point x="-2.6785714317156817E-4" y="-38.0" />
+      <point x="3278.56" y="171.0" />
+      <point x="3343.674" y="171.0" />
+      <point x="-1.0714285690482939E-4" y="72.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer" target="it.polimi.ingsw.model.board.Tile" relationship="TO_MANY">
+      <point x="-0.0" y="-26.5" />
+      <point x="1767.0" y="497.0" />
+      <point x="1841.0" y="497.0" />
+      <point x="1841.0" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor" relationship="CREATE">
+      <point x="-201.5" y="-0.0" />
+      <point x="1469.0" y="1147.0" />
+      <point x="-0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor" target="it.polimi.ingsw.model.cards.personal.PersonalGoalCard" relationship="TO_MANY">
+      <point x="-0.0" y="-49.0" />
+      <point x="1469.0" y="469.0" />
+      <point x="1804.0" y="469.0" />
+      <point x="1804.0" y="339.0" />
+      <point x="107.9998928571431" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer" target="it.polimi.ingsw.groupfinder.GroupFinder" relationship="CREATE">
+      <point x="131.0" y="-170.0" />
+      <point x="-0.0" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer" target="it.polimi.ingsw.model.cards.personal.PersonalGoalCard" relationship="TO_MANY">
+      <point x="15.0" y="-26.5" />
+      <point x="1782.0" y="528.0" />
+      <point x="1804.0" y="528.0" />
+      <point x="1804.0" y="339.0" />
+      <point x="107.9998928571431" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer" target="it.polimi.ingsw.model.cards.common.CommonGoalCard" relationship="CREATE">
+      <point x="-143.76227678571445" y="-170.0" />
+      <point x="-41.76227678571445" y="339.0" />
+      <point x="-228.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.groupfinder.GroupFinder" target="it.polimi.ingsw.groupfinder.Group" relationship="CREATE">
+      <point x="-189.5" y="-0.0" />
+      <point x="-56.76227678571445" y="710.0" />
+      <point x="-56.76227678571445" y="249.5" />
+      <point x="546.7377232142856" y="249.5" />
+      <point x="-0.0" y="-49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor" target="it.polimi.ingsw.model.cards.common.CommonGoalCard" relationship="TO_MANY">
+      <point x="-0.0" y="-49.0" />
+      <point x="991.0" y="583.0" />
+      <point x="218.0" y="583.0" />
+      <point x="-0.7377232142855519" y="61.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.costants.BoardConstants" target="it.polimi.ingsw.model.board.cell.CellPattern" relationship="CREATE">
+      <point x="-15.000267857143172" y="-38.0" />
+      <point x="-80.11410714285694" y="72.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.game.Token" relationship="TO_MANY">
+      <point x="-64.6863839285711" y="-160.0" />
+      <point x="-0.0" y="72.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.player.PlayerNumber" relationship="TO_MANY">
+      <point x="3.482142858501902E-4" y="-215.0" />
+      <point x="1890.872" y="901.0" />
+      <point x="3822.484" y="901.0" />
+      <point x="-7.000375000000076" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.Game" target="it.polimi.ingsw.model.player.PlayerSession" relationship="TO_MANY">
+      <point x="15.00034821428585" y="-215.0" />
+      <point x="1905.872" y="814.5" />
+      <point x="-196.5" y="104.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.PlayerSession" target="it.polimi.ingsw.model.player.PlayerNumber" relationship="TO_ONE">
+      <point x="3.4821428562281653E-4" y="160.0" />
+      <point x="2316.247" y="901.0" />
+      <point x="3822.484" y="901.0" />
+      <point x="-7.000375000000076" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.personal.PersonalGoalCard" target="it.polimi.ingsw.model.board.Tile" relationship="TO_MANY">
+      <point x="-1.0714285690482939E-4" y="38.0" />
+      <point x="1644.299" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.player.selection.PlayerTileSelection" target="it.polimi.ingsw.model.board.Tile" relationship="TO_MANY">
+      <point x="-2.6785714317156817E-4" y="49.5" />
+      <point x="1988.185" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.game.extractors.TileExtractor" target="it.polimi.ingsw.model.board.Tile" relationship="TO_MANY">
+      <point x="-0.0" y="-60.0" />
+      <point x="1230.5" y="497.0" />
+      <point x="1841.0" y="497.0" />
+      <point x="1841.0" y="453.0" />
+      <point x="2101.685" y="453.0" />
+      <point x="2101.685" y="58.0" />
+      <point x="-89.0001071428569" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer" target="it.polimi.ingsw.model.cards.personal.PersonalGoalCard" relationship="CREATE">
+      <point x="-107.70100000000002" y="-26.5" />
+      <point x="14.999892857143095" y="38.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.517292365831129" showDependencies="true" x="1729.274503656792" y="739.1922397335522" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
