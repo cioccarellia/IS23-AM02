@@ -13,9 +13,11 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
 
     CommonGoalCard sixPairsCGC = CommonGoalCardFunctionContainer.SIX_PAIRS;
 
+
     @Test
-    @DisplayName("Verify SIX_PAIRS positively #1")
-    public void test_f1_positive_1() {
+    @DisplayName("Verify SIX_PAIRS positively #1.5")
+    public void test_f1_positive_2() {
+
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -50,10 +52,10 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
         assertFalse(doesMatrixMatch);
     }
 
-
     @Test
     @DisplayName("Verify SIX_PAIRS negatively #2")
     public void test_f1_negative_2() {
+
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -109,6 +111,25 @@ public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
     @DisplayName("edge case for SIX_PAIRS: null matrix")
     public void test_f1_edge_3() {
         boolean doesMatrixMatch = sixPairsCGC.matches(nullMatrix);
+
+        // assert that the matrix does not match
+        assertFalse(doesMatrixMatch);
+    }
+
+
+    @Test
+    @DisplayName("edge case for SIX_PAIRS #3")
+    public void test_f1_edge_4() {
+        Tile[][] testNegativeMatrix = {
+                {null, null, null, PLANT, PLANT},
+                {null, null, null, CAT, PLANT},
+                {null, null, null, CAT, TROPHY},
+                {null, null, null, TROPHY, TROPHY},
+                {PLANT, null, null, TROPHY, PLANT},
+                {PLANT, PLANT, null, PLANT, PLANT}
+        };
+
+        boolean doesMatrixMatch = sixPairsCGC.matches(testNegativeMatrix);
 
         // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
