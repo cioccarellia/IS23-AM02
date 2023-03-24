@@ -14,8 +14,25 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     CommonGoalCard diagonalCGC = CommonGoalCardFunctionContainer.DIAGONAL;
 
     @Test
-    @DisplayName("Verify DIAGONAL positively: upper diagonal")
-    public void test_f2_positive_1() {
+    @DisplayName("Verify DIAGONAL positively: upper diagonal, empty matrix")
+    public void test_f2_positive_upperDiagonalEmptyMatrix() {
+        Tile[][] testPositiveMatrix = {
+                {PLANT, null, null, null, null},
+                {null, PLANT, null, null, null},
+                {null, null, PLANT, null, null},
+                {null, null, null, PLANT, null},
+                {null, null, null, null, PLANT},
+                {null, null, null, null, null}
+        };
+
+        boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify DIAGONAL positively: upper diagonal, lower matrix")
+    public void test_f2_positive_upperDiagonalLowerMatrix() {
         Tile[][] testPositiveMatrix = {
                 {PLANT, null, null, null, null},
                 {CAT, PLANT, null, null, null},
@@ -31,8 +48,44 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     }
 
     @Test
-    @DisplayName("Verify DIAGONAL positively: lower diagonal")
-    public void test_f2_positive_2() {
+    @DisplayName("Verify DIAGONAL positively: upper diagonal, upper matrix")
+    public void test_f2_positive_upperDiagonalUpperMatrix() {
+        Tile[][] testPositiveMatrix = {
+                {PLANT, BOOK, BOOK, BOOK, BOOK},
+                {null, PLANT, BOOK, BOOK, BOOK},
+                {null, null, PLANT, BOOK, BOOK},
+                {null, null, null, PLANT, BOOK},
+                {null, null, null, null, PLANT},
+                {null, null, null, null, null}
+        };
+
+        boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+
+    @Test
+    @DisplayName("Verify DIAGONAL positively: lower diagonal, empty matrix")
+    public void test_f2_positive_lowerDiagonalEmptyMatrix() {
+        Tile[][] testPositiveMatrix = {
+                {null, null, null, null, null},
+                {CAT, null, null, null, null},
+                {null, CAT, null, null, null},
+                {null, null, CAT, null, null},
+                {null, null, null, CAT, null},
+                {null, null, null, null, CAT}
+        };
+
+        boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
+
+    @Test
+    @DisplayName("Verify DIAGONAL positively: lower diagonal, lower matrix")
+    public void test_f2_positive_lowerDiagonalLowerMatrix() {
         Tile[][] testPositiveMatrix = {
                 {null, null, null, null, null},
                 {CAT, null, null, null, null},
@@ -46,9 +99,27 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
 
         assertTrue(doesMatrixMatch);
     }
+
+    @Test
+    @DisplayName("Verify DIAGONAL positively: lower diagonal, upper matrix")
+    public void test_f2_positive_lowerDiagonalUpperMatrix() {
+        Tile[][] testPositiveMatrix = {
+                {PLANT, PLANT, PLANT, PLANT, PLANT},
+                {CAT, PLANT, PLANT, PLANT, PLANT},
+                {null, CAT, PLANT, PLANT, PLANT},
+                {null, null, CAT, PLANT, PLANT},
+                {null, null, null, CAT, PLANT},
+                {null, null, null, null, CAT}
+        };
+
+        boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
+
+        assertTrue(doesMatrixMatch);
+    }
+
     @Test
     @DisplayName("Verify DIAGONAL positively: lower diagonal")
-    public void test_f2_positive_3() {
+    public void test_f2_positive_() {
         Tile[][] testPositiveMatrix = {
                 {PLANT, null, null, null, null},
                 {CAT, PLANT, null, null, null},
@@ -99,10 +170,17 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
 
     @Test
     @DisplayName("Verify DIAGONAL negatively: null matrix")
-    public void test_f2_negative_3() {
+    public void test_f2_negative_empty() {
         boolean doesMatrixMatch = diagonalCGC.matches(nullMatrix);
 
-        // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
+    }
+
+    @Test
+    @DisplayName("Verify DIAGONAL negatively: full matrix")
+    public void test_f2_negative_full() {
+        boolean doesMatrixMatch = diagonalCGC.matches(generateFullMatrixOf(PLANT));
+
+        assertTrue(doesMatrixMatch);
     }
 }

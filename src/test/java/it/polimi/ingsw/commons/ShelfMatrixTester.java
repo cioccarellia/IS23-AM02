@@ -19,7 +19,7 @@ public interface ShelfMatrixTester {
     /**
      * Returns a matrix filled with the passed {@link Tile} value
      */
-    default Tile[][] fullOf(@NotNull Tile content) {
+    default Tile[][] generateFullMatrixOf(@NotNull Tile content) {
         Tile[][] fullMatrix = new Tile[ROWS][COLUMNS];
 
         for (int i = 0; i < ROWS; i++) {

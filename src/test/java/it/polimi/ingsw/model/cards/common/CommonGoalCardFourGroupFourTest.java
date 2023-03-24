@@ -116,9 +116,10 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
         // assert that the matrix matches
         assertFalse(doesMatrixMatch);
     }
+
     @Test
     @DisplayName("Edge case fot FOUR_GROUP_FOUR: false curious matrix #3")
-    public void test_f3_edge_3(){
+    public void test_f3_edge_3() {
 
         Tile[][] testNegativeMatrix = {
                 {null, null, null, null, null},

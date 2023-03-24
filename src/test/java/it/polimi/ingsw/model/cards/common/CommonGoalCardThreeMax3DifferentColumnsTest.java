@@ -81,12 +81,23 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
 
         assertFalse(doesMatrixMatch);
     }
+
     @Test
     @DisplayName("Verify THREE_MAX3DIFF_COLUMNS negatively: null matrix")
-    public void test_f9_negative_3() {
+    public void test_f9_negative_null() {
         boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(nullMatrix);
 
         // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
+
+    @Test
+    @DisplayName("Verify THREE_MAX3DIFF_COLUMNS positively: null matrix")
+    public void test_f9_negative_full() {
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(generateFullMatrixOf(PLANT));
+
+        // assert that the matrix does not match
+        assertTrue(doesMatrixMatch);
+    }
+
 }

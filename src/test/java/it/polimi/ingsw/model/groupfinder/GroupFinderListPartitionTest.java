@@ -100,7 +100,7 @@ public class GroupFinderListPartitionTest implements ShelfMatrixTester {
         );
 
         // group computation
-        GroupFinder f = new GroupFinder(fullOf(Tile.PLANT));
+        GroupFinder f = new GroupFinder(generateFullMatrixOf(Tile.PLANT));
         List<Group> groups = f.computeGroupPartition();
 
         // assertions

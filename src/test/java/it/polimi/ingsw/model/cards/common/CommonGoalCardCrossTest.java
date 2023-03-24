@@ -89,4 +89,14 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
         // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
     }
+
+
+    @Test
+    @DisplayName("Verify X_TILES negatively: full matrix")
+    public void test_f10_negative_full_matrix() {
+        boolean doesMatrixMatch = xTiles.matches(generateFullMatrixOf(PLANT));
+
+        // assert that the matrix does not match
+        assertTrue(doesMatrixMatch);
+    }
 }
