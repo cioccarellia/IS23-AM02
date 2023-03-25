@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.board.Coordinates;
 import it.polimi.ingsw.model.board.Tile;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ControlInterface {
 
     void onPlayerQuit();
 
-    void onPLayerTileSelection(String username, Set<Tile> tiles);
+    void onPLayerTileSelection(String username, Set<Coordinates> coordinates);
 
     void onPlayerBookshelfTileInsertion(String username, int column, List<Tile> tiles);
 
