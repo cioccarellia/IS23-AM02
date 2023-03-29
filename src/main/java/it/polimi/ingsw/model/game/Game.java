@@ -10,14 +10,14 @@ import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
+import it.polimi.ingsw.model.player.action.PlayerCurrentAction;
+import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.utils.ListUtils;
 import it.polimi.ingsw.controller.ControlInterface;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+//FIXME make the class abstract(?)
 /**
  * Model class representing an instance of a game.
  */
@@ -116,23 +116,75 @@ public class Game implements ControlInterface {
 
     }
 
+    /**
+     * Select Tiles from the board and set them inside current player session
+     * @param username
+     * @param coordinates
+     */
     @Override
-    public void onPLayerTileSelection(String username, Set<Tile> tiles){
-
+    public void onPLayerTileSelection(String username, Set<Coordinates> coordinates) {
+        assert getCurrentPlayer().getUsername().equals(username);
+        for (int i = 0; i < coordinates.size(); i++) {
+            assert board.countFreeEdges(coordinates.stream().toList().get(i)) != 0;
+            getCurrentPlayer().setPlayerCurrentAction(PlayerCurrentAction.SELECTING);
+            Set<Tile> currentTileSet = new HashSet<>();
+            PlayerTileSelection playerSelection = new PlayerTileSelection();
+            //FIXME get sure about using get methods on the next line
+            currentTileSet.add((board.getTileAt((coordinates.stream().toList().get(i))).get()));
+            playerSelection.setSelectedTiles(currentTileSet);
+            getCurrentPlayer().setPlayerTileSelection(playerSelection);
+        }
     }
 
+    /**
+     * Insert selected Tiles inside bookshelf after got sure there's empty space in a given column
+     * @param username
+     * @param column
+     * @param tiles
+     */
     @Override
     public void onPlayerBookshelfTileInsertion(String username, int column, List<Tile> tiles){
+        for(int i=0; i< tiles.size();i++){
+            assert getCurrentPlayer().getUsername().equals(username);
+            assert getCurrentPlayer().getBookshelf().canFit(column, tiles.size());
+            getCurrentPlayer().setPlayerCurrentAction(PlayerCurrentAction.INSERTING);
+            getCurrentPlayer().getBookshelf().insert(column,tiles);
+        //FIXME understand if removing Tiles from board could be useful
+        //board.removeTileAt(coordinates.stream().toList().get(i));
+        }
 
     }
 
+    /**
+     * update acquired token by current player
+     * @param username
+     * @param token
+     */
     @Override
-    public void onPlayerTokenUpdate(String username){
-
+    public void onPlayerTokenUpdate(String username, Token token){
+        assert getCurrentPlayer().getUsername().equals(username);
+        getCurrentPlayer().addAcquiredToken(token);
     }
-
+    //FIXME think about an optimized algorithm
+    /**
+     * update currentPlayer from current player to next player
+     */
     @Override
     public void onTurnChange(){
+        switch (currentPlayer) {
+            case PLAYER_1 -> {
+                currentPlayer=PlayerNumber.PLAYER_2;
+            }
+            case PLAYER_2 -> {
+                currentPlayer=PlayerNumber.PLAYER_3;
+            }
+            case PLAYER_3 -> {
+                currentPlayer=PlayerNumber.PLAYER_4;
+            }
+            case PLAYER_4 -> {
+                currentPlayer=PlayerNumber.PLAYER_1;
+            }
+        }
 
     }
 

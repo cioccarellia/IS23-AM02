@@ -21,6 +21,7 @@ public class PlayerSession {
 
     private final PlayerNumber playerNumber;
     private PlayerStatus playerStatus;
+
     private PlayerCurrentAction playerCurrentAction;
 
     private PlayerTileSelection playerTileSelection;
@@ -78,6 +79,12 @@ public class PlayerSession {
      */
     public int calculateCurrentPoint() {
         return acquiredTokens.stream().mapToInt(Token::getPoints).sum();
+    }
+    public void setPlayerTileSelection(PlayerTileSelection playerTileSelection) {
+        this.playerTileSelection = playerTileSelection;
+    }
+    public void setPlayerCurrentAction(PlayerCurrentAction playerCurrentAction) {
+        this.playerCurrentAction = playerCurrentAction;
     }
 
 }
