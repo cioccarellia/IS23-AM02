@@ -129,7 +129,7 @@ public class Game implements ControlInterface {
             getCurrentPlayer().setPlayerCurrentAction(PlayerCurrentAction.SELECTING);
             Set<Tile> currentTileSet = new HashSet<>();
             PlayerTileSelection playerSelection = new PlayerTileSelection();
-            //FIXME get sure about using get methods on the next line
+            //FIXME get sure about using get method on the next line
             currentTileSet.add((board.getTileAt((coordinates.stream().toList().get(i))).get()));
             playerSelection.setSelectedTiles(currentTileSet);
             getCurrentPlayer().setPlayerTileSelection(playerSelection);

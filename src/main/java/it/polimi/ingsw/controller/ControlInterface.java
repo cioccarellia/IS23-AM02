@@ -17,7 +17,6 @@ public interface ControlInterface {
 
     void onPlayerBookshelfTileInsertion(String username, int column, List<Tile> tiles);
 
-    void onPlayerTokenUpdate(String username);
 
     void onPlayerTokenUpdate(String username, Token token);
 
