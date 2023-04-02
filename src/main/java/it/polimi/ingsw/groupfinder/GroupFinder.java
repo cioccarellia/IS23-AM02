@@ -1,6 +1,7 @@
 package it.polimi.ingsw.groupfinder;
 
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -9,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
-import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
 
 /**
  * This class implements a group-finding algorithm to partition a matrix into a list of {@link Group}s.
@@ -18,8 +17,8 @@ import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
  */
 public class GroupFinder {
 
-    private final static int rows = ROWS;
-    private final static int cols = COLUMNS;
+    private final static int rows = BookshelfConfiguration.getInstance().rows();
+    private final static int cols = BookshelfConfiguration.getInstance().cols();
 
     /**
      * Matrix containing the elements to be grouped.

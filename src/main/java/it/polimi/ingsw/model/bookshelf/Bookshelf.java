@@ -77,9 +77,7 @@ public class Bookshelf {
         Tile[][] copy = new Tile[rows][cols];
 
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                bookshelfMatrix[i][j] = copy[i][j];
-            }
+            System.arraycopy(copy[i], 0, bookshelfMatrix[i], 0, cols);
         }
 
         return copy;

@@ -28,19 +28,15 @@ public class Game implements ControlInterface {
     // game status
     private final GameMode mode;
     private final Board board = new Board();
-    private GameStatus status;
     private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
-
-    // current state
-    private PlayerNumber startingPlayerNumber;
-    private PlayerNumber currentPlayerNumber;
-
     // extractors
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
-
-
+    private GameStatus status;
+    // current state
+    private PlayerNumber startingPlayerNumber;
+    private PlayerNumber currentPlayerNumber;
     /**
      * Holds the current statuses for the common goal cards.\
      */

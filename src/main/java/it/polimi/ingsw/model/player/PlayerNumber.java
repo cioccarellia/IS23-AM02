@@ -9,10 +9,6 @@ public enum PlayerNumber {
     PLAYER_3,
     PLAYER_4;
 
-    public PlayerNumber next(GameMode mode) {
-        return TurnHelper.getNextPlayerNumber(this, mode);
-    }
-
     static public PlayerNumber fromInt(int playerCount) {
         return switch (playerCount) {
             case 1 -> PLAYER_1;
@@ -21,5 +17,9 @@ public enum PlayerNumber {
             case 4 -> PLAYER_4;
             default -> throw new IllegalArgumentException("playerCount is not between 1 and 4");
         };
+    }
+
+    public PlayerNumber next(GameMode mode) {
+        return TurnHelper.getNextPlayerNumber(this, mode);
     }
 }

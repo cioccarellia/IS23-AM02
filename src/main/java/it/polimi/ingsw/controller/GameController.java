@@ -2,9 +2,9 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.connection.ClientConnection;
 import it.polimi.ingsw.controller.connection.ConnectionStatus;
-import it.polimi.ingsw.costants.BookShelfConstants;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
@@ -112,7 +112,7 @@ public class GameController {
             return; // WRONG_SELECTION
         }
 
-        if (column < 0 || column >= BookShelfConstants.COLUMNS) {
+        if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
             return; // ILLEGAL_COLUMN
         }
 

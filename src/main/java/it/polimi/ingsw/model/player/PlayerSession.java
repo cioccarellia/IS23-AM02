@@ -16,11 +16,9 @@ public class PlayerSession {
 
     private final String username;
     private final PlayerNumber playerNumber;
-    private PlayerCurrentGamePhase playerCurrentGamePhase;
-
-    private Bookshelf bookshelf;
     private final PersonalGoalCard personalGoalCard;
-
+    private PlayerCurrentGamePhase playerCurrentGamePhase;
+    private Bookshelf bookshelf;
     // If the player is after the selection phase, its selection is saved here
     private PlayerTileSelection playerTileSelection;
 
@@ -80,7 +78,6 @@ public class PlayerSession {
     }
 
 
-
     public PlayerTileSelection getPlayerTileSelection() {
         return playerTileSelection;
     }
@@ -88,7 +85,6 @@ public class PlayerSession {
     public void setPlayerTileSelection(PlayerTileSelection selection) {
         playerTileSelection = selection;
     }
-
 
 
     public PlayerCurrentGamePhase getPlayerCurrentGamePhase() {

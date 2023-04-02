@@ -5,4 +5,5 @@ import it.polimi.ingsw.model.config.Specifics;
 public record BoardSpecifics(
         int dimension,
         int[][] matrix
-) implements Specifics {}
+) implements Specifics {
+}

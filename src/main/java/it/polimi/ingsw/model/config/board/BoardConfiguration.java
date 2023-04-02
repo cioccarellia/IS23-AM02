@@ -8,7 +8,7 @@ import it.polimi.ingsw.utils.resources.ResourceReader;
  * Manages configuration parameters for {@link it.polimi.ingsw.model.board.Board}, according to
  * the matching specification {@link BoardSpecifics}.
  * The parameters are dimension and cell pattern matrix.
- * */
+ */
 public class BoardConfiguration extends Configuration<BoardSpecifics> {
 
     // used for singleton pattern
@@ -17,6 +17,13 @@ public class BoardConfiguration extends Configuration<BoardSpecifics> {
     // deserializes and stores the game specifics (from json)
     private final BoardSpecifics specs = ResourceReader.readAndDeserialize(provideResourcePath(), BoardSpecifics.class);
 
+    public static BoardConfiguration getInstance() {
+        if (instance == null) {
+            instance = new BoardConfiguration();
+        }
+
+        return instance;
+    }
 
     public int getDimension() {
         return specs.dimension();
@@ -37,7 +44,8 @@ public class BoardConfiguration extends Configuration<BoardSpecifics> {
                     case 2 -> matchingCellPattern = CellPattern.NORMAL;
                     case 3 -> matchingCellPattern = CellPattern.THREE_DOTS;
                     case 4 -> matchingCellPattern = CellPattern.FOUR_DOTS;
-                    default -> throw new IllegalStateException("Illegal specifications: [%d] is not 0, 2, 3 or 4".formatted(value));
+                    default ->
+                            throw new IllegalStateException("Illegal specifications: [%d] is not 0, 2, 3 or 4".formatted(value));
                 }
 
                 matrix[i][j] = matchingCellPattern;
@@ -47,7 +55,6 @@ public class BoardConfiguration extends Configuration<BoardSpecifics> {
         return matrix;
     }
 
-
     @Override
     protected BoardSpecifics provideSpecs() {
         return specs;
@@ -56,14 +63,5 @@ public class BoardConfiguration extends Configuration<BoardSpecifics> {
     @Override
     protected String provideResourcePath() {
         return "board/board.json";
-    }
-
-
-    public static BoardConfiguration getInstance() {
-        if (instance == null) {
-            instance = new BoardConfiguration();
-        }
-
-        return instance;
     }
 }

@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.resources.ResourceReader;
  * Manages configuration parameters for {@link it.polimi.ingsw.model.bookshelf.Bookshelf}, according to
  * the matching specification {@link BookshelfSpecifics}.
  * The parameters are rows and columns.
- * */
+ */
 public class BookshelfConfiguration extends Configuration<BookshelfSpecifics> {
 
     // used for singleton pattern
@@ -16,6 +16,13 @@ public class BookshelfConfiguration extends Configuration<BookshelfSpecifics> {
     // deserializes and stores the game specifics (from json)
     private final BookshelfSpecifics specs = ResourceReader.readAndDeserialize(provideResourcePath(), BookshelfSpecifics.class);
 
+    public static BookshelfConfiguration getInstance() {
+        if (instance == null) {
+            instance = new BookshelfConfiguration();
+        }
+
+        return instance;
+    }
 
     public int rows() {
         return specs.rows();
@@ -33,14 +40,5 @@ public class BookshelfConfiguration extends Configuration<BookshelfSpecifics> {
     @Override
     protected String provideResourcePath() {
         return "bookshelf/bookshelf.json";
-    }
-
-
-    public static BookshelfConfiguration getInstance() {
-        if (instance == null) {
-            instance = new BookshelfConfiguration();
-        }
-
-        return instance;
     }
 }

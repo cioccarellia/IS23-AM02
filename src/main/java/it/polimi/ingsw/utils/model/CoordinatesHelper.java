@@ -7,7 +7,7 @@ import java.util.List;
 public class CoordinatesHelper {
     /**
      * Returns true if all coordinates
-     * */
+     */
     static public boolean areCoordinatesInStraightLine(List<Coordinate> coordinates) {
         if (coordinates == null || coordinates.isEmpty()) {
             return false;

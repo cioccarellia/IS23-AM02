@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Utility class to import and stream resource files
- * */
+ */
 public class ResourceReader {
 
     public static InputStream readAsResource(String filename) {

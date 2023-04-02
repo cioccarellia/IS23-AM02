@@ -142,8 +142,8 @@ public class Board {
     /**
      * counts all the board's empty cells
      *
-     * @param mode      is the highest accepted cell pattern: if the analised cell pattern is higher, then we do not
-     *                  count it, if it's lower (or equal) and it is empty we count it as an acceptable cell
+     * @param mode is the highest accepted cell pattern: if the analised cell pattern is higher, then we do not
+     *             count it, if it's lower (or equal) and it is empty we count it as an acceptable cell
      * @return it returns the number of empty acceptable cells
      */
     public int countEmptyCells(GameMode mode) {
@@ -174,8 +174,8 @@ public class Board {
      * Runs under the assumption that the given tile list contains the same number of elements as
      * there are empty spaces in the board.
      *
-     * @param newElements   list of tiles to be inserted in the board matrix
-     * @param mode          highest pattern of cell to be considered
+     * @param newElements list of tiles to be inserted in the board matrix
+     * @param mode        highest pattern of cell to be considered
      * @throws IllegalArgumentException if the list of new tiles has a greater size than how many
      *                                  empty spaces there are on the board
      * @see Board#countEmptyCells(GameMode)
