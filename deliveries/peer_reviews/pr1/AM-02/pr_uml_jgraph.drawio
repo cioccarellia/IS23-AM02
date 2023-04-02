@@ -752,7 +752,7 @@
     <mxCell id="label64" parent="edge10" vertex="1" connectable="0" value="1" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
       <mxGeometry x="2718" y="627" as="geometry" />
     </mxCell>
-    <mxCell id="label65" parent="edge10" vertex="1" connectable="0" value="playerCurrentAction" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
+    <mxCell id="label65" parent="edge10" vertex="1" connectable="0" value="playerCurrentGamePhase" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
       <mxGeometry x="2734" y="393" as="geometry" />
     </mxCell>
     <mxCell id="edge48" edge="1" value="" parent="1" source="node25" target="node10" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=diamondThinstartSize=12;endArrow=openThin;endSize=12;strokeColor=#595959;exitX=0.500;exitY=1.000;exitDx=0;exitDy=0;entryX=0.471;entryY=1.000;entryDx=0;entryDy=0;">

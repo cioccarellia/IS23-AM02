@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.game.extractors;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer;
-import it.polimi.ingsw.utils.ListUtils;
+import it.polimi.ingsw.utils.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +23,6 @@ public class CommonGoalCardExtractor extends ElementExtractor<CommonGoalCard> {
      */
     @Override
     public CommonGoalCard extract() {
-        return ListUtils.extractAndRemoveRandomElement(state);
+        return CollectionUtils.extractAndRemoveRandomElement(state);
     }
 }

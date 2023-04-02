@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-public class ListUtils {
+public class CollectionUtils {
 
     static public <E> E extractRandomElement(final @NotNull Collection<E> collection) {
         // get random index

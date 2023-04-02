@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.player.action;
 
-public enum PlayerCurrentAction {
+public enum PlayerCurrentGamePhase {
     IDLE,
     SELECTING,
     INSERTING,

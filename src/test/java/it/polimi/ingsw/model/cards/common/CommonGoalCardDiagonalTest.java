@@ -64,25 +64,6 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
         assertTrue(doesMatrixMatch);
     }
 
-
-    @Test
-    @DisplayName("Verify DIAGONAL positively: lower diagonal, empty matrix")
-    public void test_f2_positive_lowerDiagonalEmptyMatrix() {
-        Tile[][] testPositiveMatrix = {
-                {null, null, null, null, null},
-                {CAT, null, null, null, null},
-                {null, CAT, null, null, null},
-                {null, null, CAT, null, null},
-                {null, null, null, CAT, null},
-                {null, null, null, null, CAT}
-        };
-
-        boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);
-
-        assertTrue(doesMatrixMatch);
-    }
-
-
     @Test
     @DisplayName("Verify DIAGONAL positively: lower diagonal, lower matrix")
     public void test_f2_positive_lowerDiagonalLowerMatrix() {
@@ -106,10 +87,10 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {PLANT, PLANT, PLANT, PLANT, PLANT},
                 {CAT, PLANT, PLANT, PLANT, PLANT},
-                {null, CAT, PLANT, PLANT, PLANT},
-                {null, null, CAT, PLANT, PLANT},
-                {null, null, null, CAT, PLANT},
-                {null, null, null, null, CAT}
+                {GAME, CAT, PLANT, PLANT, PLANT},
+                {GAME, GAME, CAT, PLANT, PLANT},
+                {GAME, GAME, GAME, CAT, PLANT},
+                {GAME, GAME, GAME, GAME, CAT}
         };
 
         boolean doesMatrixMatch = diagonalCGC.matches(testPositiveMatrix);

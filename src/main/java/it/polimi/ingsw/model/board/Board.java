@@ -2,34 +2,38 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.board.cell.Cell;
 import it.polimi.ingsw.model.board.cell.CellPattern;
+import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.utils.BoardUtils;
+import it.polimi.ingsw.utils.model.BoardUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import static it.polimi.ingsw.costants.BoardConstants.BOARD_DIMENSION;
-import static it.polimi.ingsw.costants.BoardConstants.DFU_BOARD_MATRIX;
-
 
 /**
- * Implements the game board and its
+ * Implements the game board and its functionalities
  */
 public class Board {
-    private final Cell[][] matrix = new Cell[BOARD_DIMENSION][BOARD_DIMENSION];
+
+    private final int dimension = BoardConfiguration.getInstance().getDimension();
+    private final Cell[][] matrix = new Cell[dimension][dimension];
+
 
     /**
      * Builds an empty board with different cells (dead, empty, with tile)
      */
     public Board() {
+        var defaultBoardPattern = BoardConfiguration.getInstance().getMatrix();
+
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                CellPattern defaultPattern = DFU_BOARD_MATRIX[i][j];
+                CellPattern defaultPattern = defaultBoardPattern[i][j];
 
                 if (defaultPattern == null) {
                     matrix[i][j] = new Cell(CellPattern.NORMAL, false);
@@ -40,7 +44,6 @@ public class Board {
         }
     }
 
-    @TestOnly
     public Cell[][] getCellMatrix() {
         // deep cloning
         return (Cell[][]) SerializationUtils.clone(matrix);
@@ -52,17 +55,25 @@ public class Board {
      * @param c are the coordinates at which we have to get the tile (cell's content)
      * @return the tile at the given coordinates
      */
-    public Optional<Tile> getTileAt(Coordinates c) {
+    public Optional<Tile> getTileAt(Coordinate c) {
         Cell required = matrix[c.x()][c.y()];
         return required.getContent();
     }
+
+
+    @TestOnly
+    @VisibleForTesting
+    public Cell getCellAt(Coordinate c) {
+        return matrix[c.x()][c.y()];
+    }
+
 
     /**
      * Removes the tile from the cell at the given coordinates
      *
      * @param c are the coordinates at which we have to remove the tile from the cell
      */
-    public void removeTileAt(Coordinates c) {
+    public void removeTileAt(Coordinate c) {
         matrix[c.x()][c.y()].clear();
     }
 
@@ -71,10 +82,10 @@ public class Board {
      */
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public Tile[][] getTileMatrix() {
-        Tile[][] tileMatrix = new Tile[BOARD_DIMENSION][BOARD_DIMENSION];
+        Tile[][] tileMatrix = new Tile[dimension][dimension];
 
-        for (int i = 0; i <= BOARD_DIMENSION; i++) {
-            for (int j = 0; i <= BOARD_DIMENSION; i++) {
+        for (int i = 0; i <= dimension; i++) {
+            for (int j = 0; i <= dimension; i++) {
                 Cell c = matrix[i][j];
 
                 if (c.isDead()) {
@@ -98,7 +109,7 @@ public class Board {
      * @param c are the coordinates of the cell we have to analyse
      * @return returns the free edges of the tile at the given coordinates
      */
-    public int countFreeEdges(Coordinates c) {
+    public int countFreeEdges(Coordinate c) {
         return Arrays.stream(BoardUtils.Edge.values())
                 .mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0)
                 .sum();
@@ -108,7 +119,7 @@ public class Board {
      * @param c are the coordinates of the cell we have to analyse
      * @return returns 1 if it has free edges, 0 if it doesn't
      */
-    public boolean hasAtLeastOneFreeEdge(Coordinates c) {
+    public boolean hasAtLeastOneFreeEdge(Coordinate c) {
         return countFreeEdges(c) > 0;
     }
 
@@ -140,8 +151,8 @@ public class Board {
 
         int emptyCellsCounter = 0;
 
-        for (int i = 0; i < BOARD_DIMENSION; i++) {
-            for (int j = 0; j < BOARD_DIMENSION; j++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 Cell c = matrix[i][j];
 
                 if (c.isDead())
@@ -179,8 +190,8 @@ public class Board {
         // we use this to stop when the list is empty
         Iterator<Tile> iterator = newElements.iterator();
 
-        for (int i = 0; i < BOARD_DIMENSION; i++) {
-            for (int j = 0; j < BOARD_DIMENSION; j++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 Cell c = matrix[i][j];
 
                 if (c.isDead()) {

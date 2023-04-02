@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.Token;
-import it.polimi.ingsw.model.player.action.PlayerCurrentAction;
+import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 
 import java.util.List;
@@ -15,21 +15,18 @@ import java.util.List;
 public class PlayerSession {
 
     private final String username;
+    private final PlayerNumber playerNumber;
+    private PlayerCurrentGamePhase playerCurrentGamePhase;
 
     private Bookshelf bookshelf;
     private final PersonalGoalCard personalGoalCard;
 
-    private final PlayerNumber playerNumber;
-    private PlayerStatus playerStatus;
-
-    private PlayerCurrentAction playerCurrentAction;
-
+    // If the player is after the selection phase, its selection is saved here
     private PlayerTileSelection playerTileSelection;
 
 
-
     /**
-     * Tokens acquired by the current user.
+     * Tokens acquired by the current user during gameplay.
      */
     private List<Token> acquiredTokens;
 
@@ -45,6 +42,7 @@ public class PlayerSession {
         this.playerNumber = playerNumber;
         this.personalGoalCard = personalGoalCard;
     }
+
 
     public String getUsername() {
         return username;
@@ -62,10 +60,10 @@ public class PlayerSession {
         return bookshelf;
     }
 
-
     public List<Token> getAcquiredTokens() {
         return acquiredTokens;
     }
+
 
     /**
      * Registers a token as acquired by the user
@@ -80,11 +78,29 @@ public class PlayerSession {
     public int calculateCurrentPoint() {
         return acquiredTokens.stream().mapToInt(Token::getPoints).sum();
     }
-    public void setPlayerTileSelection(PlayerTileSelection playerTileSelection) {
-        this.playerTileSelection = playerTileSelection;
-    }
-    public void setPlayerCurrentAction(PlayerCurrentAction playerCurrentAction) {
-        this.playerCurrentAction = playerCurrentAction;
+
+
+
+    public PlayerTileSelection getPlayerTileSelection() {
+        return playerTileSelection;
     }
 
+    public void setPlayerTileSelection(PlayerTileSelection selection) {
+        playerTileSelection = selection;
+    }
+
+
+
+    public PlayerCurrentGamePhase getPlayerCurrentGamePhase() {
+        return playerCurrentGamePhase;
+    }
+
+    public void setPlayerCurrentGamePhase(PlayerCurrentGamePhase phase) {
+        playerCurrentGamePhase = phase;
+    }
+
+
+    public List<CommonGoalCardIdentifier> getAchievedCommonGoalCards() {
+        return achievedCommonGoalCards;
+    }
 }

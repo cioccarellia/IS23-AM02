@@ -36,7 +36,7 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
         Tile[][] testPositiveMatrix = {
                 {PLANT, null, PLANT, null, PLANT},
                 {PLANT, null, PLANT, null, PLANT},
-                {PLANT, null, PLANT, null, null},
+                {PLANT, null, PLANT, null, GAME},
                 {PLANT, PLANT, PLANT, null, PLANT},
                 {PLANT, TROPHY, PLANT, null, PLANT},
                 {PLANT, TROPHY, PLANT, null, PLANT}

@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.controller.ControlInterface;
 import it.polimi.ingsw.model.board.Board;
-import it.polimi.ingsw.model.board.Coordinates;
+import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
@@ -10,26 +11,31 @@ import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
-import it.polimi.ingsw.model.player.action.PlayerCurrentAction;
+import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
-import it.polimi.ingsw.utils.ListUtils;
-import it.polimi.ingsw.controller.ControlInterface;
+import it.polimi.ingsw.utils.CollectionUtils;
+import it.polimi.ingsw.utils.model.CoordinatesHelper;
+import javafx.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-//FIXME make the class abstract(?)
 /**
  * Model class representing an instance of a game.
  */
 public class Game implements ControlInterface {
 
+    // game status
     private final GameMode mode;
     private final Board board = new Board();
-    private final GameStatus status;
+    private GameStatus status;
     private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
-    private PlayerNumber startingPlayer;
-    private PlayerNumber currentPlayer;
 
+    // current state
+    private PlayerNumber startingPlayerNumber;
+    private PlayerNumber currentPlayerNumber;
+
+    // extractors
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
@@ -45,7 +51,6 @@ public class Game implements ControlInterface {
         mode = _mode;
     }
 
-
     @Override
     public void onGameStarted() {
         // Common goal card initialization
@@ -59,17 +64,18 @@ public class Game implements ControlInterface {
         commonGoalCardStatuses.add(cardStatus2);
 
 
-        // Random first-player extraction
-        startingPlayer = ListUtils.extractRandomElement(playersMap.values()).getPlayerNumber();
-        currentPlayer = startingPlayer;
+        // Random first-player extraction (coincise)
+        startingPlayerNumber = CollectionUtils.extractRandomElement(playersMap.values()).getPlayerNumber();
+        currentPlayerNumber = startingPlayerNumber;
 
 
-        // refill board
+        // (re)fill board
         int emptyBoardCells = board.countEmptyCells(mode);
         List<Tile> extractedTiles = tileExtractor.extract(emptyBoardCells);
 
         board.fill(extractedTiles, mode);
     }
+
 
     /**
      *
@@ -83,118 +89,136 @@ public class Game implements ControlInterface {
         playersMap.put(newPlayerNumber, newSession);
     }
 
+    public Optional<PlayerSession> getPlayer(String username) {
+        return playersMap.values().stream().filter(it -> Objects.equals(it.getUsername(), username)).findFirst();
+    }
+
     public GameStatus getGameStatus() {
         return this.status;
     }
 
-    public GameMode getGameMode() {
-        return mode;
+    public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
+        boolean isSelectionAmountValid = coordinates.size() <= 3;
+        boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
+        boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
+
+        return isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
     }
 
     public PlayerSession getCurrentPlayer() {
-        return playersMap.get(currentPlayer);
+        return playersMap.get(currentPlayerNumber);
     }
 
     public List<PlayerSession> getPlayerSessions() {
         return playersMap.values().stream().toList();
     }
 
-    public PlayerNumber getStartingPlayer() {
-        return startingPlayer;
+    public PlayerNumber getStartingPlayerNumber() {
+        return startingPlayerNumber;
     }
 
     public List<CommonGoalCardStatus> getCommonGoalCards() {
         return commonGoalCardStatuses;
     }
 
-
-
-
-
-    @Override
-    public void onPlayerQuit(){
-
-    }
-
     /**
      * Select Tiles from the board and set them inside current player session
-     * @param username
+     *
      * @param coordinates
      */
     @Override
-    public void onPLayerTileSelection(String username, Set<Coordinates> coordinates) {
-        assert getCurrentPlayer().getUsername().equals(username);
-        for (int i = 0; i < coordinates.size(); i++) {
-            assert board.countFreeEdges(coordinates.stream().toList().get(i)) != 0;
-            getCurrentPlayer().setPlayerCurrentAction(PlayerCurrentAction.SELECTING);
-            Set<Tile> currentTileSet = new HashSet<>();
-            PlayerTileSelection playerSelection = new PlayerTileSelection();
-            //FIXME get sure about using get method on the next line
-            currentTileSet.add((board.getTileAt((coordinates.stream().toList().get(i))).get()));
-            playerSelection.setSelectedTiles(currentTileSet);
-            getCurrentPlayer().setPlayerTileSelection(playerSelection);
-        }
+    public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
+        List<Coordinate> orderedCoordinates = coordinates.stream().toList();
+
+        // we assume the selection is valid
+        List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates
+                .stream()
+                .map(it -> new Pair<>(it, board.getTileAt(it).get()))
+                .toList();
+
+        var tileSelection = new PlayerTileSelection(coordinatesAndValues);
+
+        // update model accordingly
+        getCurrentPlayer().setPlayerTileSelection(tileSelection);
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.INSERTING);
     }
 
     /**
      * Insert selected Tiles inside bookshelf after got sure there's empty space in a given column
-     * @param username
+     *
      * @param column
      * @param tiles
      */
     @Override
-    public void onPlayerBookshelfTileInsertion(String username, int column, List<Tile> tiles){
-        for(int i=0; i< tiles.size();i++){
-            assert getCurrentPlayer().getUsername().equals(username);
-            assert getCurrentPlayer().getBookshelf().canFit(column, tiles.size());
-            getCurrentPlayer().setPlayerCurrentAction(PlayerCurrentAction.INSERTING);
-            getCurrentPlayer().getBookshelf().insert(column,tiles);
-        //FIXME understand if removing Tiles from board could be useful
-        //board.removeTileAt(coordinates.stream().toList().get(i));
-        }
+    public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
 
+        // we assume tiles have been checked and match
+        getCurrentPlayer().getBookshelf().insert(column, tiles);
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
     }
 
     /**
      * update acquired token by current player
-     * @param username
-     * @param token
      */
     @Override
-    public void onPlayerTokenUpdate(String username, Token token){
-        assert getCurrentPlayer().getUsername().equals(username);
-        getCurrentPlayer().addAcquiredToken(token);
+    public void onPlayerCheckingPhase() {
+        // full bookshelf test
+        boolean isBookshelfFull = getCurrentPlayer().getBookshelf().isFull();
+
+        if (isBookshelfFull && status == GameStatus.RUNNING) {
+            getCurrentPlayer().addAcquiredToken(Token.FULL_SHELF_TOKEN);
+            status = GameStatus.LAST_ROUND;
+        }
+
+
+        // common goal card testing
+        for (CommonGoalCardStatus cardStatus : commonGoalCardStatuses) {
+            CommonGoalCard card = cardStatus.getCommonGoalCard();
+            Tile[][] shelf = getCurrentPlayer().getBookshelf().getShelfMatrix();
+
+            boolean isCardConditionVerified = card.matches(shelf);
+
+            boolean hasAlreadyAcquiredToken = getCurrentPlayer()
+                    .getAchievedCommonGoalCards()
+                    .contains(card.getId());
+
+            if (isCardConditionVerified && !hasAlreadyAcquiredToken) {
+                Optional<Token> pendingToken = cardStatus.acquireAndRemoveTopToken();
+                pendingToken.ifPresent(token -> getCurrentPlayer().getAcquiredTokens().add(token));
+            }
+        }
+
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.IDLE);
     }
-    //FIXME think about an optimized algorithm
+
     /**
      * update currentPlayer from current player to next player
      */
     @Override
-    public void onTurnChange(){
-        switch (currentPlayer) {
-            case PLAYER_1 -> {
-                currentPlayer=PlayerNumber.PLAYER_2;
-            }
-            case PLAYER_2 -> {
-                currentPlayer=PlayerNumber.PLAYER_3;
-            }
-            case PLAYER_3 -> {
-                currentPlayer=PlayerNumber.PLAYER_4;
-            }
-            case PLAYER_4 -> {
-                currentPlayer=PlayerNumber.PLAYER_1;
-            }
-        }
+    public void onNextTurn(String nextPlayerUsername) {
+        // assume the username is correct
+        assert getPlayer(nextPlayerUsername).isPresent();
+
+        currentPlayerNumber = getPlayer(nextPlayerUsername).get().getPlayerNumber();
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
+    }
+
+
+    public void onStandby() {
+        status = GameStatus.STANDBY;
+    }
+
+    public void onRunning() {
+        status = GameStatus.RUNNING;
+    }
+
+    @Override
+    public void onPlayerQuit(String username) {
 
     }
 
     @Override
-    public void onLastTurn(){
-
-    }
-
-    @Override
-    public void onGameEnded(){
+    public void onGameEnded() {
 
     }
 }

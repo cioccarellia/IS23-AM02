@@ -6,7 +6,17 @@ package it.polimi.ingsw.model.game;
  * of players in the game.
  */
 public enum GameMode {
-    GAME_MODE_2_PLAYERS,
-    GAME_MODE_3_PLAYERS,
-    GAME_MODE_4_PLAYERS
+    GAME_MODE_2_PLAYERS(2),
+    GAME_MODE_3_PLAYERS(3),
+    GAME_MODE_4_PLAYERS(4);
+
+    private final int players;
+
+    GameMode(int players) {
+        this.players = players;
+    }
+
+    public int playerCount() {
+        return players;
+    }
 }

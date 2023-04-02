@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.game.extractors;
 
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer;
-import it.polimi.ingsw.utils.ListUtils;
+import it.polimi.ingsw.utils.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +22,6 @@ public class PersonalGoalCardExtractor extends ElementExtractor<PersonalGoalCard
      */
     @Override
     public PersonalGoalCard extract() {
-        return ListUtils.extractAndRemoveRandomElement(state);
+        return CollectionUtils.extractAndRemoveRandomElement(state);
     }
 }

@@ -1,8 +1,7 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.board.Coordinates;
+import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.game.Token;
 
 import java.util.List;
 import java.util.Set;
@@ -11,18 +10,15 @@ public interface ControlInterface {
 
     void onGameStarted();
 
-    void onPlayerQuit();
+    void onPlayerQuit(String username);
 
-    void onPLayerTileSelection(String username, Set<Coordinates> coordinates);
+    void onPlayerSelectionPhase(Set<Coordinate> coordinates);
 
-    void onPlayerBookshelfTileInsertion(String username, int column, List<Tile> tiles);
+    void onPlayerInsertionPhase(int column, List<Tile> tiles);
 
+    void onPlayerCheckingPhase();
 
-    void onPlayerTokenUpdate(String username, Token token);
-
-    void onTurnChange();
-
-    void onLastTurn();
+    void onNextTurn(String nextUsername);
 
     void onGameEnded();
 }

@@ -275,7 +275,7 @@ PersonalGoalCardMatrixContainer "1" *--> "m1 *" Tile
 PlayerSession "1" *--> "bookshelf 1" Bookshelf 
 PlayerSession "1" *--> "achievedCommonGoalCards *" CommonGoalCardIdentifier 
 PlayerSession "1" *--> "personalGoalCard 1" PersonalGoalCard 
-PlayerSession "1" *--> "playerCurrentAction 1" PlayerCurrentAction 
+PlayerSession "1" *--> "playerCurrentGamePhase 1" PlayerCurrentAction 
 PlayerSession "1" *--> "playerNumber 1" PlayerNumber 
 PlayerSession "1" *--> "playerStatus 1" PlayerStatus 
 PlayerSession "1" *--> "playerTileSelection 1" PlayerTileSelection 

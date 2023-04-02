@@ -1,23 +1,24 @@
 package it.polimi.ingsw.model.bookshelf;
 
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static it.polimi.ingsw.costants.BookShelfConstants.COLUMNS;
-import static it.polimi.ingsw.costants.BookShelfConstants.ROWS;
 
 /**
  * Implements a 6 row, 5 column bookshelf of {@link it.polimi.ingsw.model.board.Tile}s.
  */
 public class Bookshelf {
 
-    private final Tile[][] bookshelfMatrix = new Tile[ROWS][COLUMNS];
+    private static final int rows = BookshelfConfiguration.getInstance().rows();
+    private static final int cols = BookshelfConfiguration.getInstance().cols();
+
+    private final Tile[][] bookshelfMatrix = new Tile[rows][cols];
 
     public Bookshelf() {
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 bookshelfMatrix[i][j] = null;
             }
         }
@@ -56,7 +57,7 @@ public class Bookshelf {
 
         // we check whether we have enough space on our column to insert
         // the selected items
-        int freeSpace = ROWS - (firstEmptyShelfIndex);
+        int freeSpace = rows - (firstEmptyShelfIndex);
 
         if (freeSpace < selection.size()) {
             throw new IllegalStateException("Selected tiles do not fit in designated column");
@@ -73,10 +74,10 @@ public class Bookshelf {
      * Returns the shelf game matrix
      */
     public Tile[][] getShelfMatrix() {
-        Tile[][] copy = new Tile[ROWS][COLUMNS];
+        Tile[][] copy = new Tile[rows][cols];
 
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 bookshelfMatrix[i][j] = copy[i][j];
             }
         }
@@ -90,7 +91,7 @@ public class Bookshelf {
      * @return 1 if they fit, 0 if they don't
      */
     public boolean canFit(int column, int amount) {
-        int i = ROWS - 1;
+        int i = rows - 1;
         while (bookshelfMatrix[i][column] != null) {
             i--;
         }
@@ -103,12 +104,12 @@ public class Bookshelf {
      */
     public boolean isFull() {
         int countNotEmptyRow = 0;
-        for (int i = 0; i < ROWS; i++) {
-            if (bookshelfMatrix[i][COLUMNS] != null) {
+        for (int i = 0; i < rows; i++) {
+            if (bookshelfMatrix[i][cols] != null) {
                 countNotEmptyRow++;
             }
         }
-        return countNotEmptyRow == ROWS;
+        return countNotEmptyRow == rows;
     }
 
 }
