@@ -117,6 +117,10 @@ public class Game implements ControlInterface {
         return commonGoalCardStatuses;
     }
 
+    public Tile[][] getGameMatrix() {
+        return board.getTileMatrix();
+    }
+
     /**
      * Select Tiles from the board and set them inside current player session
      *

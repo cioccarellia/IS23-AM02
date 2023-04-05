@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.cards.common;
 
 /**
- * Uniquely identifies a {@link CommonGoalCard}
+ * Uniquely identifies a {@link CommonGoalCard}.
+ * The enum fields are declared in order, as given in the game manual
  */
 public enum CommonGoalCardIdentifier {
     SIX_PAIRS,

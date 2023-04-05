@@ -10,8 +10,7 @@ import java.util.Set;
 
 public class CommonGoalCardExtractor extends ElementExtractor<CommonGoalCard> {
 
-    private final List<CommonGoalCard> state = CommonGoalCardFunctionContainer.commonGoalCardDomain;
-
+    private final List<CommonGoalCard> state = CommonGoalCardFunctionContainer.getActiveCommonGoalCards();
 
     public Set<CommonGoalCard> domain() {
         return new HashSet<>(state);

@@ -4,6 +4,7 @@ import it.polimi.ingsw.groupfinder.Group;
 import it.polimi.ingsw.groupfinder.GroupFinder;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
+import it.polimi.ingsw.model.config.common.CGCConfiguration;
 import org.apache.commons.lang.SerializationUtils;
 
 import java.util.Arrays;
@@ -53,6 +54,14 @@ public class CommonGoalCardFunctionContainer {
      */
     public static final List<CommonGoalCard> commonGoalCardDomain = Arrays.asList(SIX_PAIRS, DIAGONAL, FOUR_GROUP_FOUR, FOUR_MAX3DIFF_LINES, FOUR_CORNERS, TWO_DIFF_COLUMNS, TWO_SQUARES, TWO_DIFF_LINES, THREE_MAX3DIFF_COLUMNS, X_TILES, EIGHT_TILES, STAIRS);
 
+
+    /**
+     * Returns the active {@code CommonGoalCard}s list
+     * */
+    public static List<CommonGoalCard> getActiveCommonGoalCards() {
+        List<CommonGoalCardIdentifier> ids = CGCConfiguration.getInstance().getActiveCommonGoalCardIds();
+        return commonGoalCardDomain.stream().filter(it -> ids.contains(it.getId())).toList();
+    }
 
     /**
      * Return true if there are 6 groups each containing at least 2 tiles of the same type
