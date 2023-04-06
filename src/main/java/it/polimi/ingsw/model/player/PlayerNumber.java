@@ -3,6 +3,10 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.utils.model.TurnHelper;
 
+/**
+ * Enumeration representing the 4 possible player numbers.
+ * It also finds the next player and previous player through a TurnHelper method
+ */
 public enum PlayerNumber {
     PLAYER_1,
     PLAYER_2,

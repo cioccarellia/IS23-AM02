@@ -30,7 +30,7 @@ public class CommonGoalCard {
 
     /**
      * Applies the internal evaluation function to the given tile matrix,
-     * and returns whether the criteria is satisfied or not.
+     * and returns whether the criteria are satisfied or not.
      *
      * @param shelfMatrix the game matrix to compute the logic on.
      */

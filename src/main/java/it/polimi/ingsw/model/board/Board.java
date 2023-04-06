@@ -140,7 +140,7 @@ public class Board {
     }
 
     /**
-     * counts all the board's empty cells
+     * Counts all the board's empty cells
      *
      * @param mode is the highest accepted cell pattern: if the analised cell pattern is higher, then we do not
      *             count it, if it's lower (or equal) and it is empty we count it as an acceptable cell

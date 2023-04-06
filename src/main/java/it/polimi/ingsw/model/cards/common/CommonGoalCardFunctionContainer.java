@@ -64,7 +64,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * Return true if there are 6 groups each containing at least 2 tiles of the same type
+     * Returns true if there are 6 groups each containing at least 2 tiles of the same type
      *
      * @see CommonGoalCardIdentifier#SIX_PAIRS
      */
@@ -76,7 +76,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * Return true if there are one or two diagonals each containing 5 tiles of the same type
+     * Returns true if there are five tiles of the same type forming a diagonal
      *
      * @see CommonGoalCardIdentifier#DIAGONAL
      */
@@ -105,7 +105,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * Return true if there are 4 columns each containing at least 4 tiles
+     * Returns true if there are four groups each containing at least 4 tiles of the same type
      *
      * @see CommonGoalCardIdentifier#FOUR_GROUP_FOUR
      */
@@ -135,7 +135,8 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * returns if there are four lines with at most 3 different types of tile
+     * Returns true if there are four lines each formed by 5 tiles,
+     * with at most 3 different types of tile
      *
      * @see CommonGoalCardIdentifier#FOUR_MAX3DIFF_LINES
      */
@@ -170,6 +171,8 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
+     * Returns true if at the four corners of the bookshelf there are tiles of the same value
+     *
      * @see CommonGoalCardIdentifier#FOUR_CORNERS
      */
     private static Boolean f5(Tile[][] matrix) {
@@ -185,6 +188,8 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
+     * Returns true if there are two columns each formed by 6 different types of tiles
+     *
      * @see CommonGoalCardIdentifier#TWO_DIFF_COLUMNS
      */
     private static Boolean f6(Tile[][] matrix) {
@@ -213,6 +218,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
+     * Returns true if there are two groups each containing 4 tiles of the same type in a 2x2 square
      * @see CommonGoalCardIdentifier#TWO_SQUARES
      */
     private static Boolean f7(Tile[][] matrix) {
@@ -236,7 +242,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * Return true if there are 2 lines each formed by at least 5 different tiles
+     * Returns true if there are 2 lines each formed by 5 different types of tiles
      */
     private static Boolean f8(Tile[][] matrix) {
         int countLines = 0;
@@ -268,7 +274,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * returns if there are three columns with at most 3 different types of tile
+     * Returns true if there are three columns each formed by 6 tiles with at most 3 different types of tile
      *
      * @see CommonGoalCardIdentifier#THREE_MAX3DIFF_COLUMNS
      */
@@ -301,7 +307,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * returns if there are 5 tiles of the same type forming an X
+     * Returns true if there are 5 tiles of the same type forming an X
      *
      * @see CommonGoalCardIdentifier#X_TILES
      */
@@ -331,7 +337,7 @@ public class CommonGoalCardFunctionContainer {
     }
 
     /**
-     * returns true if there are 8 tiles of the same type
+     * Returns true if there are 8 tiles of the same type, with no other restriction
      *
      * @see CommonGoalCardIdentifier#EIGHT_TILES
      */

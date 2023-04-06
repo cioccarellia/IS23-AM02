@@ -33,7 +33,8 @@ public class PlayerTileSelection {
     }
 
     /**
-     * Checks whether the given list of tiles contains the same elements (and the same number of elements) as this selection.
+     * Checks whether the given list of tiles contains the same elements (and the same number of elements)
+     * as this selection.
      */
     public boolean selectionEquals(List<Tile> tiles) {
         return tiles.containsAll(getSelectedTiles()) && getSelectedTiles().containsAll(tiles);

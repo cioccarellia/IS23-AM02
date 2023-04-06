@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CoordinatesHelper {
     /**
-     * Returns true if all coordinates
+     * Returns true if all coordinates are in a straight line, either column or line
      */
     static public boolean areCoordinatesInStraightLine(List<Coordinate> coordinates) {
         if (coordinates == null || coordinates.isEmpty()) {

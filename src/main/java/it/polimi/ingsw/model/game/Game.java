@@ -122,10 +122,18 @@ public class Game implements ControlInterface {
         return board.getTileMatrix();
     }
 
+    /**
+     * Sets the player's, identified by the given username, attribute noMoreTurns as true
+     * @param username
+     */
     public void playerHasNoMoreTurns(String username) {
         playerHasNoMoreTurns(getPlayer(username).get().getPlayerNumber());
     }
 
+    /**
+     * Sets the player's, identified by the given player number, attribute noMoreTurns as true
+     * @param number
+     */
     private void playerHasNoMoreTurns(PlayerNumber number) {
         playersMap.get(number).noMoreTurns = true;
     }
@@ -167,7 +175,10 @@ public class Game implements ControlInterface {
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
     }
 
-
+    /**
+     * Sets noMoreTurns has true for all the players between the first player and the first that filled his bookshelf;
+     * if this two players are the same person, it simply puts his attribute has true
+     */
     private void setFlags() {
         // using currentPlayerNumber and startingPlayerNumber;
         // playersMap.get(number).noMoreTurns = true;
@@ -180,7 +191,7 @@ public class Game implements ControlInterface {
     }
 
     /**
-     * update acquired token by current player
+     * Updates acquired tokens by current player
      */
     @Override
     public void onPlayerCheckingPhase() {
@@ -220,7 +231,7 @@ public class Game implements ControlInterface {
     }
 
     /**
-     * update currentPlayer from current player to next player
+     * Updates currentPlayer from current player to next player
      */
     @Override
     public void onNextTurn(String nextPlayerUsername) {

@@ -23,7 +23,7 @@ public class Cell {
     }
 
     /**
-     * Builds a cell containing a tile
+     * Builds a cell containing a given tile
      *
      * @param pattern Defines the cell pattern
      * @param content Defines the cell content

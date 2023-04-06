@@ -8,7 +8,7 @@ import java.util.List;
 import static it.polimi.ingsw.model.board.Tile.*;
 
 /**
- * Personal goal card archive
+ * Personal goal cards archive
  */
 public class PersonalGoalCardMatrixContainer {
 
