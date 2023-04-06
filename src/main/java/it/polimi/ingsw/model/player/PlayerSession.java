@@ -22,6 +22,8 @@ public class PlayerSession {
     // If the player is after the selection phase, its selection is saved here
     private PlayerTileSelection playerTileSelection;
 
+    public boolean noMoreTurns = false;
+
 
     /**
      * Tokens acquired by the current user during gameplay.

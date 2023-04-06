@@ -1,8 +1,10 @@
 package it.polimi.ingsw.controller.result.failures;
 
-import it.polimi.ingsw.controller.result.RequestError;
-
 public enum SignUpRequest implements RequestError {
     ALREADY_CONNECTED_PLAYER,
-    MAX_PLAYER_REACHED
+    USERNAME_ALREADY_IN_USE,
+    MAX_PLAYER_REACHED,
+    WRONG_ACTIVE_PLAYER,
+
+    GAME_ALREADY_ENDED
 }

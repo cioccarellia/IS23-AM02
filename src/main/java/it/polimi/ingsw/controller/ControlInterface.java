@@ -10,8 +10,6 @@ public interface ControlInterface {
 
     void onGameStarted();
 
-    void onPlayerQuit(String username);
-
     void onPlayerSelectionPhase(Set<Coordinate> coordinates);
 
     void onPlayerInsertionPhase(int column, List<Tile> tiles);

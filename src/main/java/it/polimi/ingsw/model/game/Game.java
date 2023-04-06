@@ -34,6 +34,7 @@ public class Game implements ControlInterface {
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
     private GameStatus status;
+
     // current state
     private PlayerNumber startingPlayerNumber;
     private PlayerNumber currentPlayerNumber;
@@ -121,6 +122,15 @@ public class Game implements ControlInterface {
         return board.getTileMatrix();
     }
 
+    public void playerHasNoMoreTurns(String username) {
+        playerHasNoMoreTurns(getPlayer(username).get().getPlayerNumber());
+    }
+
+    private void playerHasNoMoreTurns(PlayerNumber number) {
+        playersMap.get(number).noMoreTurns = true;
+    }
+
+
     /**
      * Select Tiles from the board and set them inside current player session
      *
@@ -157,6 +167,18 @@ public class Game implements ControlInterface {
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
     }
 
+
+    private void setFlags() {
+        // using currentPlayerNumber and startingPlayerNumber;
+        // playersMap.get(number).noMoreTurns = true;
+        PlayerNumber player = startingPlayerNumber;
+        while(player != currentPlayerNumber){
+            playerHasNoMoreTurns(player);
+            player.next(mode);
+        }
+        playerHasNoMoreTurns(player);
+    }
+
     /**
      * update acquired token by current player
      */
@@ -168,6 +190,12 @@ public class Game implements ControlInterface {
         if (isBookshelfFull && status == GameStatus.RUNNING) {
             getCurrentPlayer().addAcquiredToken(Token.FULL_SHELF_TOKEN);
             status = GameStatus.LAST_ROUND;
+
+            setFlags();
+        }
+
+        if (status == GameStatus.LAST_ROUND) {
+            playerHasNoMoreTurns(currentPlayerNumber);
         }
 
 
@@ -201,20 +229,6 @@ public class Game implements ControlInterface {
 
         currentPlayerNumber = getPlayer(nextPlayerUsername).get().getPlayerNumber();
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
-    }
-
-
-    public void onStandby() {
-        status = GameStatus.STANDBY;
-    }
-
-    public void onRunning() {
-        status = GameStatus.RUNNING;
-    }
-
-    @Override
-    public void onPlayerQuit(String username) {
-
     }
 
     @Override

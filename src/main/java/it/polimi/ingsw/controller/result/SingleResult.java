@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller.result;
 
+import it.polimi.ingsw.controller.result.failures.RequestError;
+
 /**
  * Sealed class for representing a return value following an operation,
  * typed according to its content.

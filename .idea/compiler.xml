@@ -11,7 +11,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <option name="project" value="it.polimi.ingsw/shelfie" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/info/picocli/picocli-codegen/4.7.1/picocli-codegen-4.7.1.jar" />
           <entry name="$MAVEN_REPOSITORY$/info/picocli/picocli/4.7.1/picocli-4.7.1.jar" />
@@ -22,7 +21,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="shelfie" options="-Aproject=it.polimi.ingsw/shelfie" />
+      <module name="shelfie" options="" />
     </option>
   </component>
 </project>

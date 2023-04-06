@@ -5,117 +5,119 @@ import it.polimi.ingsw.model.board.Tile;
 import java.util.Arrays;
 import java.util.List;
 
+import static it.polimi.ingsw.model.board.Tile.*;
+
 /**
  * Personal goal card archive
  */
 public class PersonalGoalCardMatrixContainer {
 
     private static final Tile[][] m1 = {
-            {null, null, null, null, Tile.GAME},
+            {null, null, null, null, GAME},
             {null, null, null, null, null},
-            {Tile.TROPHY, null, Tile.FRAME, null, null},
-            {null, null, null, Tile.PLANT, null},
-            {null, Tile.BOOK, Tile.CAT, null, null},
+            {TROPHY, null, FRAME, null, null},
+            {null, null, null, PLANT, null},
+            {null, BOOK, CAT, null, null},
             {null, null, null, null, null}
     };
 
     private static final Tile[][] m2 = {
             {null, null, null, null, null},
-            {null, Tile.TROPHY, null, null, null},
+            {null, TROPHY, null, null, null},
             {null, null, null, null, null},
-            {null, Tile.FRAME, Tile.BOOK, null, null},
-            {null, null, null, null, Tile.PLANT},
-            {Tile.GAME, null, null, Tile.CAT, null}
+            {null, FRAME, BOOK, null, null},
+            {null, null, null, null, PLANT},
+            {GAME, null, null, CAT, null}
     };
 
     private static final Tile[][] m3 = {
-            {null, null, Tile.TROPHY, null, Tile.CAT},
+            {null, null, TROPHY, null, CAT},
             {null, null, null, null, null},
-            {null, null, null, Tile.BOOK, null},
+            {null, null, null, BOOK, null},
             {null, null, null, null, null},
-            {null, Tile.GAME, null, Tile.FRAME, null},
-            {Tile.PLANT, null, null, null, null}
+            {null, GAME, null, FRAME, null},
+            {PLANT, null, null, null, null}
     };
 
     private static final Tile[][] m4 = {
-            {Tile.CAT, null, null, null, null},
-            {null, null, null, Tile.FRAME, null},
-            {null, Tile.PLANT, null, null, null},
-            {Tile.TROPHY, null, null, null, null},
-            {null, null, null, null, Tile.GAME},
-            {null, null, Tile.BOOK, null, null}
+            {CAT, null, null, null, null},
+            {null, null, null, FRAME, null},
+            {null, PLANT, null, null, null},
+            {TROPHY, null, null, null, null},
+            {null, null, null, null, GAME},
+            {null, null, BOOK, null, null}
     };
 
     private static final Tile[][] m5 = {
             {null, null, null, null, null},
-            {null, Tile.PLANT, null, null, null},
-            {Tile.CAT, null, Tile.GAME, null, null},
-            {null, null, null, null, Tile.BOOK},
-            {null, null, null, Tile.TROPHY, null},
-            {null, null, null, null, Tile.FRAME}
+            {null, PLANT, null, null, null},
+            {CAT, null, GAME, null, null},
+            {null, null, null, null, BOOK},
+            {null, null, null, TROPHY, null},
+            {null, null, null, null, FRAME}
     };
 
     private static final Tile[][] m6 = {
-            {null, null, null, null, Tile.FRAME},
-            {null, Tile.CAT, null, null, null},
-            {null, null, Tile.TROPHY, null, null},
-            {Tile.PLANT, null, null, null, null},
-            {null, null, null, Tile.BOOK, null},
-            {null, null, null, Tile.GAME, null}
+            {null, null, null, null, FRAME},
+            {null, CAT, null, null, null},
+            {null, null, TROPHY, null, null},
+            {PLANT, null, null, null, null},
+            {null, null, null, BOOK, null},
+            {null, null, null, GAME, null}
     };
 
     private static final Tile[][] m7 = {
-            {null, null, Tile.GAME, null, null},
+            {null, null, GAME, null, null},
             {null, null, null, null, null},
-            {null, null, Tile.CAT, null, null},
-            {null, null, null, null, Tile.BOOK},
-            {null, Tile.TROPHY, null, null, Tile.PLANT},
-            {Tile.FRAME, null, null, null, null}
+            {null, null, CAT, null, null},
+            {null, null, null, null, BOOK},
+            {null, TROPHY, null, null, PLANT},
+            {FRAME, null, null, null, null}
     };
 
     private static final Tile[][] m8 = {
-            {null, null, null, null, Tile.TROPHY},
-            {null, Tile.GAME, null, null, null},
-            {Tile.BOOK, null, null, null, null},
-            {null, null, null, Tile.CAT, null},
-            {null, Tile.FRAME, null, null, null},
-            {null, null, null, Tile.PLANT, null}
+            {null, null, null, null, TROPHY},
+            {null, GAME, null, null, null},
+            {BOOK, null, null, null, null},
+            {null, null, null, CAT, null},
+            {null, FRAME, null, null, null},
+            {null, null, null, PLANT, null}
     };
 
     private static final Tile[][] m9 = {
-            {null, null, Tile.PLANT, null, null},
-            {null, Tile.BOOK, null, null, null},
-            {Tile.GAME, null, null, null, null},
-            {null, null, Tile.FRAME, null, null},
-            {null, null, null, null, Tile.CAT},
-            {null, null, null, Tile.TROPHY, null}
+            {null, null, PLANT, null, null},
+            {null, BOOK, null, null, null},
+            {GAME, null, null, null, null},
+            {null, null, FRAME, null, null},
+            {null, null, null, null, CAT},
+            {null, null, null, TROPHY, null}
     };
 
     private static final Tile[][] m10 = {
-            {null, null, Tile.BOOK, null, null},
-            {null, Tile.PLANT, null, null, null},
-            {null, null, Tile.FRAME, null, null},
-            {null, null, null, Tile.TROPHY, null},
-            {null, null, null, null, Tile.GAME},
-            {Tile.CAT, null, null, null, null}
+            {null, null, BOOK, null, null},
+            {null, PLANT, null, null, null},
+            {null, null, FRAME, null, null},
+            {null, null, null, TROPHY, null},
+            {null, null, null, null, GAME},
+            {CAT, null, null, null, null}
     };
 
     private static final Tile[][] m11 = {
-            {Tile.PLANT, null, Tile.FRAME, null, null},
-            {null, null, null, null, Tile.CAT},
-            {null, null, null, Tile.BOOK, null},
-            {null, Tile.GAME, null, null, null},
+            {PLANT, null, FRAME, null, null},
+            {null, null, null, null, CAT},
+            {null, null, null, BOOK, null},
+            {null, GAME, null, null, null},
             {null, null, null, null, null},
-            {null, null, Tile.TROPHY, null, null}
+            {null, null, TROPHY, null, null}
     };
 
     private static final Tile[][] m12 = {
             {null, null, null, null, null},
-            {Tile.FRAME, null, null, Tile.GAME, null},
-            {null, null, Tile.PLANT, null, null},
-            {null, Tile.CAT, null, null, Tile.TROPHY},
+            {FRAME, null, null, GAME, null},
+            {null, null, PLANT, null, null},
+            {null, CAT, null, null, TROPHY},
             {null, null, null, null, null},
-            {Tile.BOOK, null, null, null, null}
+            {BOOK, null, null, null, null}
     };
 
 

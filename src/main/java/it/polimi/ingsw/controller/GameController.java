@@ -2,10 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.connection.ClientConnection;
 import it.polimi.ingsw.controller.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.result.ControllerRequest;
 import it.polimi.ingsw.controller.result.SingleResult;
 import it.polimi.ingsw.controller.result.TypedResult;
-import it.polimi.ingsw.controller.result.failures.SignUpRequest;
-import it.polimi.ingsw.controller.result.failures.StatusError;
+import it.polimi.ingsw.controller.result.failures.*;
 import it.polimi.ingsw.controller.result.types.StatusSuccess;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -40,6 +40,11 @@ public class GameController {
     }
 
 
+    public void startCurrentTurn() {
+
+    }
+
+
     // Connection
     public SingleResult<SignUpRequest> onPlayerSignUpRequest(String username) {
         if (connections.size() >= maxPlayerAmount) {
@@ -47,13 +52,37 @@ public class GameController {
         }
 
         if (connections.containsKey(username)) {
-            return new SingleResult.Failure<>(SignUpRequest.ALREADY_CONNECTED_PLAYER);
+            return new SingleResult.Failure<>(SignUpRequest.USERNAME_ALREADY_IN_USE);
+        }
+
+        if (game.getGameStatus() == GameStatus.ENDED) {
+            return new SingleResult.Failure<>(SignUpRequest.GAME_ALREADY_ENDED);
         }
 
         connections.put(username, new ClientConnection(username));
         game.addPlayer(username);
 
         return new SingleResult.Success<>();
+    }
+
+    public void onPlayerDisconnection(String username) {
+        connections.get(username).setStatus(ConnectionStatus.DISCONNECTED);
+    }
+
+    public SingleResult<StatusError> onPlayerConnection(String username) {
+        if (game.getGameStatus() == GameStatus.ENDED) {
+            return new SingleResult.Failure<>(StatusError.GAME_ALREADY_ENDED);
+        }
+
+        connections.get(username).setStatus(ConnectionStatus.OPEN);
+
+        return new SingleResult.Success<>();
+    }
+
+
+    // Game logic
+    public boolean isUsernameActivePlayer(String username) {
+        return username.equals(game.getCurrentPlayer().getUsername());
     }
 
     public boolean shouldStandbyGame() {
@@ -64,102 +93,61 @@ public class GameController {
                 .count() >= maxPlayerAmount - 1;
     }
 
-    public void onPlayerDisconnection(String username) {
-        connections.get(username).setStatus(ConnectionStatus.DISCONNECTED);
 
-        if (shouldStandbyGame()) {
-            game.onStandby();
-        } else {
-            game.onRunning();
-        }
-    }
-
-    public TypedResult<StatusSuccess, StatusError> onPlayerConnection(String username) {
-        if (game.getGameStatus() == GameStatus.ENDED) {
-            return new TypedResult.Failure<>(StatusError.UNAUTHORIZED_OPERATION);
-        }
-
-        connections.get(username).setStatus(ConnectionStatus.OPEN);
-
-        if (shouldStandbyGame()) {
-            game.onStandby();
-        } else {
-            game.onRunning();
-        }
-
-        StatusSuccess data = new StatusSuccess(
-                game.getGameMatrix()
-        );
-
-        return new TypedResult.Success<>(data);
-    }
-
-
-    // Game logic
-    public boolean isUsernameActivePlayer(String username) {
-        return username.equals(game.getCurrentPlayer().getUsername());
-    }
-
-    public void onPlayerTileSelectionRequest(String username, Set<Coordinate> selection) {
+    public SingleResult<TileSelectionFailures> onPlayerTileSelectionRequest(String username, Set<Coordinate> selection) {
         if (!isUsernameActivePlayer(username)) {
-            return;
+            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
         }
 
         if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.SELECTING) {
-            return;
+            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION);
         }
 
         if (!game.isSelectionValid(selection)) {
-            return;
+            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION);
         }
 
         game.onPlayerSelectionPhase(selection);
+        return new SingleResult.Success<>();
     }
 
 
-    public void onPlayerBookshelfTileInsertionRequest(String username, int column, List<Tile> tiles) {
+    public SingleResult<BookshelfInsertionFailure> onPlayerBookshelfTileInsertionRequest(String username, int column, List<Tile> tiles) {
         if (!isUsernameActivePlayer(username)) {
-            return;
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
         }
 
         if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.INSERTING) {
-            return;
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS);
         }
 
         if (!game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles)) {
-            return; // WRONG_SELECTION
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION);
         }
 
         if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
-            return; // ILLEGAL_COLUMN
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN);
         }
 
         if (tiles.size() > 3) {
-            return; // TOO_MANY_TILES
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES);
         }
 
         if (!game.getCurrentPlayer().getBookshelf().canFit(column, tiles.size())) {
-            return; // NO_FIT
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT);
         }
 
         game.onPlayerInsertionPhase(column, tiles);
 
-        onPlayerCheckingRequest(username);
+        onPlayerCheckingRequest();
+        return new SingleResult.Success<>();
     }
 
-    public void onPlayerCheckingRequest(String username) {
-        if (!isUsernameActivePlayer(username)) {
-            return;
-        }
-
+    public void onPlayerCheckingRequest() {
         game.onPlayerCheckingPhase();
     }
 
-    public void onTurnChangeRequest(String username) {
-        // todo checking logic, determining next player / standby game
 
-        game.onNextTurn(username);
-    }
 
 
 }

@@ -22,4 +22,9 @@ public enum PlayerNumber {
     public PlayerNumber next(GameMode mode) {
         return TurnHelper.getNextPlayerNumber(this, mode);
     }
+
+    public PlayerNumber previous(GameMode mode) {
+        return TurnHelper.getPreviousPlayerNumber(this, mode);
+    }
+
 }
