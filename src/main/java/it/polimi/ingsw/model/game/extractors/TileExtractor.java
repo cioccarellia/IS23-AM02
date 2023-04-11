@@ -58,7 +58,8 @@ public class TileExtractor extends ElementExtractor<Tile> {
      * @param amount number of elements to be extracted
      * @return a list of randomly-extracted and coherent tiles
      */
-    public List<Tile> extract(int amount) {
+    @Override
+    public List<Tile> extractAmount(int amount) {
         List<Tile> extraction = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {

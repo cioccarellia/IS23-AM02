@@ -2,11 +2,11 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.connection.ClientConnection;
 import it.polimi.ingsw.controller.connection.ConnectionStatus;
-import it.polimi.ingsw.controller.result.ControllerRequest;
 import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.TypedResult;
-import it.polimi.ingsw.controller.result.failures.*;
-import it.polimi.ingsw.controller.result.types.StatusSuccess;
+import it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.result.failures.SignUpRequest;
+import it.polimi.ingsw.controller.result.failures.StatusError;
+import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
@@ -23,26 +23,30 @@ import java.util.Set;
 public class GameController {
 
     /**
-     * Maps a username to the details of its connection
+     * Keeps a map associating a username (unique identifier for a player)
+     * to the specific details of its connection to the server.
      */
     private final Map<String, ClientConnection> connections = new HashMap<>();
 
     /**
-     *
+     * Game instance
      */
     private final Game game;
 
     private final int maxPlayerAmount;
 
-    GameController(GameMode mode) {
-        game = new Game(mode);
-        maxPlayerAmount = mode.playerCount();
+    GameController(GameMode _mode) {
+        game = new Game(_mode);
+        maxPlayerAmount = _mode.playerCount();
     }
 
 
     public void startCurrentTurn() {
 
     }
+
+
+
 
 
     // Connection
@@ -59,8 +63,6 @@ public class GameController {
             return new SingleResult.Failure<>(SignUpRequest.GAME_ALREADY_ENDED);
         }
 
-        connections.put(username, new ClientConnection(username));
-        game.addPlayer(username);
 
         return new SingleResult.Success<>();
     }
@@ -74,7 +76,12 @@ public class GameController {
             return new SingleResult.Failure<>(StatusError.GAME_ALREADY_ENDED);
         }
 
-        connections.get(username).setStatus(ConnectionStatus.OPEN);
+        assert connections.size() <= maxPlayerAmount;
+        if (connections.size() == maxPlayerAmount) {
+            return new SingleResult.Failure<>(StatusError.MAX_PLAYERS_REACHED);
+        }
+
+        connections.put(username, new ClientConnection(username, ConnectionStatus.OPEN));
 
         return new SingleResult.Success<>();
     }

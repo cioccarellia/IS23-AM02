@@ -5,9 +5,9 @@ public class ClientConnection {
     private final String username;
     private ConnectionStatus status;
 
-    public ClientConnection(String username) {
-        this.username = username;
-        status = ConnectionStatus.OPEN;
+    public ClientConnection(String _username, ConnectionStatus _status) {
+        username = _username;
+        status = _status;
     }
 
     public String getUsername() {

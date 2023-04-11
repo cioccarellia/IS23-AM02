@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
@@ -25,23 +26,40 @@ import java.util.*;
  */
 public class Game implements ControlInterface {
 
-    // game status
+    /**
+     * Basic game related data
+     */
     private final GameMode mode;
+    private GameStatus status;
     private final Board board = new Board();
+
+    /**
+     * Maps a player number to its {@link PlayerSession}
+     */
     private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
-    // extractors
+
+    /**
+     * Markers for the current state of the game (needed for turn logic)
+     */
+    private PlayerNumber startingPlayerNumber, currentPlayerNumber;
+
+    /**
+     * Random, stateful extractors for the game
+     */
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
-    private GameStatus status;
 
-    // current state
-    private PlayerNumber startingPlayerNumber;
-    private PlayerNumber currentPlayerNumber;
     /**
-     * Holds the current statuses for the common goal cards.\
+     * Holder class for the common goal cards
+     * Holds the current statuses for the common goal cards.
      */
     private List<CommonGoalCardStatus> commonGoalCardStatuses;
+
+    /**
+     * External game configuration parameters
+     * */
+    private final LogicConfiguration config = LogicConfiguration.getInstance();
 
     public Game(GameMode _mode) {
         status = GameStatus.INITIALIZATION;
@@ -51,14 +69,11 @@ public class Game implements ControlInterface {
     @Override
     public void onGameStarted() {
         // Common goal card initialization
-        CommonGoalCard card1 = commonGoalCardExtractor.extract();
-        CommonGoalCard card2 = commonGoalCardExtractor.extract();
-
-        CommonGoalCardStatus cardStatus1 = new CommonGoalCardStatus(card1, mode);
-        CommonGoalCardStatus cardStatus2 = new CommonGoalCardStatus(card2, mode);
-
-        commonGoalCardStatuses.add(cardStatus1);
-        commonGoalCardStatuses.add(cardStatus2);
+        for (int cardNumber = 1; cardNumber < config.commonGoalCardAmount(); cardNumber++) {
+            CommonGoalCard card = commonGoalCardExtractor.extract();
+            CommonGoalCardStatus cardStatus = new CommonGoalCardStatus(card, mode);
+            commonGoalCardStatuses.add(cardStatus);
+        }
 
 
         // Random first-player extraction (coincise)
@@ -68,7 +83,7 @@ public class Game implements ControlInterface {
 
         // (re)fill board
         int emptyBoardCells = board.countEmptyCells(mode);
-        List<Tile> extractedTiles = tileExtractor.extract(emptyBoardCells);
+        List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
 
         board.fill(extractedTiles, mode);
     }
@@ -124,6 +139,7 @@ public class Game implements ControlInterface {
 
     /**
      * Sets the player's, identified by the given username, attribute noMoreTurns as true
+     *
      * @param username
      */
     public void playerHasNoMoreTurns(String username) {
@@ -132,6 +148,7 @@ public class Game implements ControlInterface {
 
     /**
      * Sets the player's, identified by the given player number, attribute noMoreTurns as true
+     *
      * @param number
      */
     private void playerHasNoMoreTurns(PlayerNumber number) {
@@ -183,7 +200,7 @@ public class Game implements ControlInterface {
         // using currentPlayerNumber and startingPlayerNumber;
         // playersMap.get(number).noMoreTurns = true;
         PlayerNumber player = startingPlayerNumber;
-        while(player != currentPlayerNumber){
+        while (player != currentPlayerNumber) {
             playerHasNoMoreTurns(player);
             player.next(mode);
         }

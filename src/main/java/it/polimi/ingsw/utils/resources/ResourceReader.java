@@ -21,7 +21,6 @@ public class ResourceReader {
         try (InputStream file = readAsResource(filename)) {
             String content = new String(file.readAllBytes(), StandardCharsets.UTF_8);
 
-            file.close();
             return content;
         } catch (IOException e) {
             throw new RuntimeException(e);

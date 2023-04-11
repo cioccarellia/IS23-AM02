@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.config.common;
 
-import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.config.Configuration;
 import it.polimi.ingsw.utils.resources.ResourceReader;
@@ -10,9 +9,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * Manages configuration parameters for {@link Board}, according to
+ * Manages configuration parameters for {@link it.polimi.ingsw.model.cards.common.CommonGoalCard}, according to
  * the matching specification {@link it.polimi.ingsw.model.config.common.CGCSpecifics}.
- * The parameters are dimension and cell pattern matrix.
+ * The parameters are the list of active CGC ids.
  */
 public class CGCConfiguration extends Configuration<CGCSpecifics> {
 
@@ -47,6 +46,6 @@ public class CGCConfiguration extends Configuration<CGCSpecifics> {
 
     @Override
     protected String provideResourcePath() {
-        return "board/board.json";
+        return "cards/personal.json";
     }
 }

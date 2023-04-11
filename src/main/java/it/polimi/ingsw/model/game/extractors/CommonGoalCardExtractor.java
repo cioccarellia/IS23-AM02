@@ -22,6 +22,13 @@ public class CommonGoalCardExtractor extends ElementExtractor<CommonGoalCard> {
      */
     @Override
     public CommonGoalCard extract() {
+        assert state.size() > 0;
         return CollectionUtils.extractAndRemoveRandomElement(state);
+    }
+
+    @Override
+    public List<CommonGoalCard> extractAmount(int amount) {
+        assert amount < state.size();
+        return CollectionUtils.extractAndRemoveRandomElementAmount(state, amount);
     }
 }

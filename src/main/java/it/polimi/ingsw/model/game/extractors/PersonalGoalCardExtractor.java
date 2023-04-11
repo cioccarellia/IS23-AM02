@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.game.extractors;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer;
 import it.polimi.ingsw.utils.CollectionUtils;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,5 +24,10 @@ public class PersonalGoalCardExtractor extends ElementExtractor<PersonalGoalCard
     @Override
     public PersonalGoalCard extract() {
         return CollectionUtils.extractAndRemoveRandomElement(state);
+    }
+
+    @Override
+    public List<PersonalGoalCard> extractAmount(int amount) {
+        throw new NotImplementedException("Can not extract a list of personal goal cards");
     }
 }
