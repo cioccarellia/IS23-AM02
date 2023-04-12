@@ -4,13 +4,14 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer;
 import it.polimi.ingsw.utils.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class CommonGoalCardExtractor extends ElementExtractor<CommonGoalCard> {
 
-    private final List<CommonGoalCard> state = CommonGoalCardFunctionContainer.getActiveCommonGoalCards();
+    private final List<CommonGoalCard> state = new ArrayList<>(CommonGoalCardFunctionContainer.getActiveCommonGoalCards());
 
     public Set<CommonGoalCard> domain() {
         return new HashSet<>(state);

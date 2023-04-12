@@ -14,6 +14,8 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameController {
+
+    protected static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
     /**
      * Keeps a map associating a username (unique identifier for a player)
@@ -38,6 +42,8 @@ public class GameController {
     GameController(GameMode _mode) {
         game = new Game(_mode);
         maxPlayerAmount = _mode.playerCount();
+
+        logger.info("GameController initialized");
     }
 
 
@@ -79,6 +85,7 @@ public class GameController {
         }
 
         connections.put(username, new ClientConnection(username, ConnectionStatus.OPEN));
+        game.addPlayer(username);
 
         return new SingleResult.Success<>();
     }

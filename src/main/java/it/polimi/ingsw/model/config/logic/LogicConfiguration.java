@@ -36,6 +36,6 @@ public class LogicConfiguration extends Configuration<LogicSpecifics> {
 
     @Override
     protected String provideResourcePath() {
-        return "game/logic.json";
+        return "config/game/logic.json";
     }
 }

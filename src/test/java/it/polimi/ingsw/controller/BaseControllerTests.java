@@ -4,15 +4,16 @@ import it.polimi.ingsw.controller.result.SingleResult;
 import it.polimi.ingsw.controller.result.failures.StatusError;
 import it.polimi.ingsw.model.game.GameMode;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BaseControllerTests {
 
-    GameController controller = new GameController(GameMode.GAME_MODE_4_PLAYERS);
 
     @Test
     public void x() {
+        GameController controller = new GameController(GameMode.GAME_MODE_4_PLAYERS);
+
         var a = controller.onPlayerConnection("alberto");
         var b = controller.onPlayerConnection("cookie");
         var c = controller.onPlayerConnection("giulia");

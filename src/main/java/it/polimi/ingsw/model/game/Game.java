@@ -19,6 +19,8 @@ import it.polimi.ingsw.utils.model.CoordinatesHelper;
 import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -62,13 +64,20 @@ public class Game implements ControlInterface {
      * */
     private final LogicConfiguration config = LogicConfiguration.getInstance();
 
+
+    protected static final Logger logger = LoggerFactory.getLogger(Game.class);
+
     public Game(GameMode _mode) {
         status = GameStatus.INITIALIZATION;
         mode = _mode;
+
+        logger.info("Game initialized");
     }
 
     @Override
     public void onGameStarted() {
+        logger.info("onGameStarted()");
+
         // Common goal card initialization
         for (int cardNumber = 1; cardNumber < config.commonGoalCardAmount(); cardNumber++) {
             CommonGoalCard card = commonGoalCardExtractor.extract();
@@ -91,7 +100,9 @@ public class Game implements ControlInterface {
 
 
     /**
+     * Inserts a player into the game flow
      *
+     * @
      */
     public void addPlayer(String username) {
         PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
@@ -100,6 +111,8 @@ public class Game implements ControlInterface {
         PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
 
         playersMap.put(newPlayerNumber, newSession);
+
+        logger.info("addPlayer({}): player added", username);
     }
 
     public Optional<PlayerSession> getPlayer(String username) {
@@ -107,7 +120,7 @@ public class Game implements ControlInterface {
     }
 
     public GameStatus getGameStatus() {
-        return this.status;
+        return status;
     }
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {

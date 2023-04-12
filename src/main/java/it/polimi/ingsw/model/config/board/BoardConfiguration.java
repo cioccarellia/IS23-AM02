@@ -62,6 +62,6 @@ public class BoardConfiguration extends Configuration<BoardSpecifics> {
 
     @Override
     protected String provideResourcePath() {
-        return "board/board.json";
+        return "config/board/board.json";
     }
 }

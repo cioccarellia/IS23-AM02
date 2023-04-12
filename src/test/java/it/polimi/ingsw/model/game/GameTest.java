@@ -11,16 +11,20 @@ public class GameTest {
 
     @Test
     @DisplayName("Verify player adding positively")
-    //FIXME
-    public void test_game_positively(){
+    public void test_game_positively() {
+        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        Game gameTester= new Game(GameMode.GAME_MODE_2_PLAYERS);
+        final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB";
 
-        gameTester.addPlayer("PlayerA");
-        gameTester.addPlayer("PlayerB");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
-        assertEquals(2, gameTester.getPlayersMap().size());
-        assertEquals("PlayerA", gameTester.getPlayer("PlayerA").toString());
-        assertEquals("PlayerB", gameTester.getPlayer("PlayerB").toString());
+        assertEquals(2, game.getPlayersMap().size());
+
+        assertTrue(game.getPlayer(PLAYER_A).isPresent());
+        assertTrue(game.getPlayer(PLAYER_B).isPresent());
+
+        assertEquals(PLAYER_A, game.getPlayer(PLAYER_A).get().getUsername());
+        assertEquals(PLAYER_B, game.getPlayer(PLAYER_B).get().getUsername());
     }
 }

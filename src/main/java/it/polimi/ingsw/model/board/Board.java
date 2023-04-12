@@ -5,10 +5,10 @@ import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.utils.model.BoardUtils;
-import org.apache.commons.lang.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
-import org.jetbrains.annotations.VisibleForTesting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -21,7 +21,15 @@ import java.util.Optional;
  */
 public class Board {
 
+    // logger
+    private static final Logger logger = LoggerFactory.getLogger(Board.class);
+
+    // configuration parameters
     private final int dimension = BoardConfiguration.getInstance().getDimension();
+
+    /**
+     * Matrix of {@link Cell}s, containing tiles.
+     * */
     private final Cell[][] matrix = new Cell[dimension][dimension];
 
 
@@ -42,6 +50,8 @@ public class Board {
                 }
             }
         }
+
+        logger.info("Board initialized");
     }
 
     public Cell[][] getCellMatrix() {
@@ -54,15 +64,15 @@ public class Board {
      * @param c are the coordinates at which we have to get the tile (cell's content)
      * @return the tile at the given coordinates
      */
-    public Optional<Tile> getTileAt(Coordinate c) {
+    public Optional<Tile> getTileAt(@NotNull Coordinate c) {
         Cell required = matrix[c.x()][c.y()];
         return required.getContent();
     }
 
 
     @TestOnly
-    @VisibleForTesting
-    public Cell getCellAt(Coordinate c) {
+    public Cell getCellAt(@NotNull Coordinate c) {
+        logger.warn("calling test method getCellAt({})", c);
         return matrix[c.x()][c.y()];
     }
 
@@ -72,7 +82,7 @@ public class Board {
      *
      * @param c are the coordinates at which we have to remove the tile from the cell
      */
-    public void removeTileAt(Coordinate c) {
+    public void removeTileAt(@NotNull Coordinate c) {
         matrix[c.x()][c.y()].clear();
     }
 
@@ -108,7 +118,7 @@ public class Board {
      * @param c are the coordinates of the cell we have to analyse
      * @return returns the free edges of the tile at the given coordinates
      */
-    public int countFreeEdges(Coordinate c) {
+    public int countFreeEdges(@NotNull Coordinate c) {
         return Arrays.stream(BoardUtils.Edge.values())
                 .mapToInt(it -> {
                     return BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0;
@@ -120,7 +130,7 @@ public class Board {
      * @param c are the coordinates of the cell we have to analyse
      * @return returns 1 if it has free edges, 0 if it doesn't
      */
-    public boolean hasAtLeastOneFreeEdge(Coordinate c) {
+    public boolean hasAtLeastOneFreeEdge(@NotNull Coordinate c) {
         return countFreeEdges(c) > 0;
     }
 
@@ -147,7 +157,7 @@ public class Board {
      *             count it, if it's lower (or equal) and it is empty we count it as an acceptable cell
      * @return it returns the number of empty acceptable cells
      */
-    public int countEmptyCells(GameMode mode) {
+    public int countEmptyCells(@NotNull GameMode mode) {
         CellPattern upperBound = mapFromGameMode(mode);
 
         int emptyCellsCounter = 0;
@@ -181,7 +191,7 @@ public class Board {
      *                                  empty spaces there are on the board
      * @see Board#countEmptyCells(GameMode)
      */
-    public void fill(List<Tile> newElements, GameMode mode) {
+    public void fill(@NotNull List<Tile> newElements, GameMode mode) {
         CellPattern upperBound = mapFromGameMode(mode);
 
         if (newElements.size() >= countEmptyCells(mode)) {

@@ -1,14 +1,12 @@
 package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.board.cell.CellPattern;
-import org.jetbrains.annotations.TestOnly;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static it.polimi.ingsw.model.board.cell.CellPattern.*;
 import static it.polimi.ingsw.model.board.Tile.*;
+import static it.polimi.ingsw.model.board.cell.CellPattern.*;
 
 public class HardcodedBoardConstants {
     public static final CellPattern[][] DFU_BOARD_MATRIX = {

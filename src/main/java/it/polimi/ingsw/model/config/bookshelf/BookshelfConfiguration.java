@@ -39,6 +39,6 @@ public class BookshelfConfiguration extends Configuration<BookshelfSpecifics> {
 
     @Override
     protected String provideResourcePath() {
-        return "bookshelf/bookshelf.json";
+        return "config/bookshelf/bookshelf.json";
     }
 }

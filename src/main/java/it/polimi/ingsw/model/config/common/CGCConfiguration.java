@@ -46,6 +46,6 @@ public class CGCConfiguration extends Configuration<CGCSpecifics> {
 
     @Override
     protected String provideResourcePath() {
-        return "cards/personal.json";
+        return "config/cards/personal.json";
     }
 }

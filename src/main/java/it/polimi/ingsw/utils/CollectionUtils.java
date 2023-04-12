@@ -17,28 +17,28 @@ public class CollectionUtils {
         return collection.stream().toList().get(randomIndex);
     }
 
-    static public <E> E extractAndRemoveRandomElement(final @NotNull List<E> collection) {
+    static public <E> E extractAndRemoveRandomElement(@NotNull List<E> list) {
         // get random index
-        int randomIndex = new Random().nextInt(collection.size());
+        int randomIndex = new Random().nextInt(list.size());
 
         // extract and save to a temporary variable the random element
-        E savedElement = collection.get(randomIndex);
+        E savedElement = list.get(randomIndex);
 
         // remove the element from the original collection
-        collection.remove(randomIndex);
+        list.remove(randomIndex);
 
         // return the removed element
         return savedElement;
     }
 
-    static public <E> List<E> extractAndRemoveRandomElementAmount(final @NotNull List<E> collection, final int amount) {
+    static public <E> List<E> extractAndRemoveRandomElementAmount(final @NotNull List<E> list, final int amount) {
         assert amount > 0;
 
         List<E> extractedElements = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {
             extractedElements.add(
-                    extractAndRemoveRandomElement(collection)
+                    extractAndRemoveRandomElement(list)
             );
         }
 
