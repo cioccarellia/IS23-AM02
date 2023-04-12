@@ -18,6 +18,7 @@ import it.polimi.ingsw.utils.CollectionUtils;
 import it.polimi.ingsw.utils.model.CoordinatesHelper;
 import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.*;
 
@@ -258,9 +259,14 @@ public class Game implements ControlInterface {
         currentPlayerNumber = getPlayer(nextPlayerUsername).get().getPlayerNumber();
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
     }
-
+    
     @Override
     public void onGameEnded() {
 
+    }
+
+    @TestOnly
+    public Map<PlayerNumber, PlayerSession> getPlayersMap() {
+        return playersMap;
     }
 }

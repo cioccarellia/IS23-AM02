@@ -21,32 +21,32 @@ public class BoardUtils {
 
         switch (edge) {
             case TOP -> {
-                if (coordinate.y() - 1 < 0) {
-                    return true;
-                }
-
-                shiftedCoordinate = new Coordinate(coordinate.x(), coordinate.y() - 1);
-            }
-            case LEFT -> {
                 if (coordinate.x() - 1 < 0) {
                     return true;
                 }
 
                 shiftedCoordinate = new Coordinate(coordinate.x() - 1, coordinate.y());
             }
-            case BOTTOM -> {
-                if (coordinate.y() + 1 > 9) {
+            case LEFT -> {
+                if (coordinate.y() - 1 < 0) {
                     return true;
                 }
 
-                shiftedCoordinate = new Coordinate(coordinate.x(), coordinate.y() + 1);
+                shiftedCoordinate = new Coordinate(coordinate.x(), coordinate.y() - 1);
             }
-            case RIGHT -> {
+            case BOTTOM -> {
                 if (coordinate.x() + 1 > 9) {
                     return true;
                 }
 
                 shiftedCoordinate = new Coordinate(coordinate.x() + 1, coordinate.y());
+            }
+            case RIGHT -> {
+                if (coordinate.y() + 1 > 9) {
+                    return true;
+                }
+
+                shiftedCoordinate = new Coordinate(coordinate.x(), coordinate.y() + 1);
             }
             default -> throw new IllegalStateException();
         }

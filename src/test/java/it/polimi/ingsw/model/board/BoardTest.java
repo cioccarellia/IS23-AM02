@@ -6,8 +6,7 @@ import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
@@ -33,5 +32,21 @@ public class BoardTest {
                 }
             }
         }
+    }
+
+    @Test
+    @DisplayName("Tests the right functionality of countFreeEdges method")
+    public void test_countFreeEdges_method_positively(){
+        Board positiveBoard = new Board();
+        Cell[][] testCell = positiveBoard.getCellMatrix();
+
+        for (int i = 0; i < BOAR_DIMENSION; i++){
+            for (int j = 0; j < BOAR_DIMENSION; j++){
+               testCell[i][j].setContent(HardcodedBoardConstants.getTile(i,j));
+            }
+        }
+
+        Coordinate coordsTest = new Coordinate(1,5);
+        assertEquals(3, positiveBoard.countFreeEdges(coordsTest));
     }
 }

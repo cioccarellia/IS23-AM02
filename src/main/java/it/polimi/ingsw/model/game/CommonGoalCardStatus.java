@@ -58,7 +58,7 @@ public class CommonGoalCardStatus {
      * Removes the highest token on the stack and returns it, if present
      */
     public Optional<Token> acquireAndRemoveTopToken() {
-        return Optional.of(tokenStack.pop());
+        return Optional.ofNullable(tokenStack.pop());
     }
 
 }

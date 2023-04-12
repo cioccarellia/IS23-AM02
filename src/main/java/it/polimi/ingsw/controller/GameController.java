@@ -46,9 +46,6 @@ public class GameController {
     }
 
 
-
-
-
     // Connection
     public SingleResult<SignUpRequest> onPlayerSignUpRequest(String username) {
         if (connections.size() >= maxPlayerAmount) {

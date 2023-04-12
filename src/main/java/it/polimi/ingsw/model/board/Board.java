@@ -45,8 +45,7 @@ public class Board {
     }
 
     public Cell[][] getCellMatrix() {
-        // deep cloning
-        return (Cell[][]) SerializationUtils.clone(matrix);
+        return matrix;
     }
 
     /**
@@ -111,7 +110,9 @@ public class Board {
      */
     public int countFreeEdges(Coordinate c) {
         return Arrays.stream(BoardUtils.Edge.values())
-                .mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0)
+                .mapToInt(it -> {
+                    return BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0;
+                })
                 .sum();
     }
 

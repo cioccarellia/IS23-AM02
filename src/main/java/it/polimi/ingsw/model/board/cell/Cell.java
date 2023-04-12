@@ -52,7 +52,7 @@ public class Cell {
     }
 
     public Optional<Tile> getContent() {
-        return Optional.of(content);
+        return Optional.ofNullable(content);
     }
 
     public void setContent(Tile content) {

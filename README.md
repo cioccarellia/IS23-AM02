@@ -16,8 +16,8 @@
 
 | Functionality  | State |
 |:---------------|:-----:|
-| Basic rules    |  🟡   |
-| Complete rules |  🟡   |
+| Basic rules    |  🟢   |
+| Complete rules |  🟢   |
 | Socket         |  🟡   |
 | RMI            |  🟡   |
 | GUI            |  🟡   |
