@@ -52,9 +52,12 @@ public class GameController {
     }
 
 
-    // Connection
+    // Creates a connectioon between client and server
     public SingleResult<SignUpRequest> onPlayerSignUpRequest(String username) {
-        if (connections.size() >= maxPlayerAmount) {
+        logger.info("onPlayerSignUpRequest(username={})", username);
+
+        assert connections.size() <= maxPlayerAmount;
+        if (connections.size() == maxPlayerAmount) {
             return new SingleResult.Failure<>(SignUpRequest.MAX_PLAYER_REACHED);
         }
 
@@ -66,29 +69,29 @@ public class GameController {
             return new SingleResult.Failure<>(SignUpRequest.GAME_ALREADY_ENDED);
         }
 
-
-        return new SingleResult.Success<>();
-    }
-
-    public void onPlayerDisconnection(String username) {
-        connections.get(username).setStatus(ConnectionStatus.DISCONNECTED);
-    }
-
-    public SingleResult<StatusError> onPlayerConnection(String username) {
-        if (game.getGameStatus() == GameStatus.ENDED) {
-            return new SingleResult.Failure<>(StatusError.GAME_ALREADY_ENDED);
-        }
-
-        assert connections.size() <= maxPlayerAmount;
-        if (connections.size() == maxPlayerAmount) {
-            return new SingleResult.Failure<>(StatusError.MAX_PLAYERS_REACHED);
-        }
-
         connections.put(username, new ClientConnection(username, ConnectionStatus.OPEN));
         game.addPlayer(username);
 
         return new SingleResult.Success<>();
     }
+
+
+    // Sets the state of the connection for a client to be open
+    public SingleResult<StatusError> onPlayerConnection(String username) {
+        logger.info("onPlayerConnection(username={})", username);
+
+        connections.get(username).setStatus(ConnectionStatus.OPEN);
+
+
+        return new SingleResult.Success<>();
+    }
+
+    // Sets the state of the connection for a client to be disconnected
+    public void onPlayerDisconnection(String username) {
+        logger.info("onPlayerDisconnection({}), username");
+        connections.get(username).setStatus(ConnectionStatus.DISCONNECTED);
+    }
+
 
 
     // Game logic
@@ -106,6 +109,8 @@ public class GameController {
 
 
     public SingleResult<TileSelectionFailures> onPlayerTileSelectionRequest(String username, Set<Coordinate> selection) {
+        logger.info("onPlayerTileSelectionRequest(username={}, selection={})", username, selection);
+
         if (!isUsernameActivePlayer(username)) {
             return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
         }
@@ -124,6 +129,8 @@ public class GameController {
 
 
     public SingleResult<BookshelfInsertionFailure> onPlayerBookshelfTileInsertionRequest(String username, int column, List<Tile> tiles) {
+        logger.info("onPlayerBookshelfTileInsertionRequest(username={}, column={}, tiles={})", username, column, tiles);
+
         if (!isUsernameActivePlayer(username)) {
             return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
         }
@@ -155,6 +162,7 @@ public class GameController {
     }
 
     public void onPlayerCheckingRequest() {
+        logger.info("onPlayerCheckingRequest()");
         game.onPlayerCheckingPhase();
     }
 

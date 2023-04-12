@@ -1,8 +1,9 @@
 package it.polimi.ingsw.controller.result.types;
 
-import it.polimi.ingsw.controller.result.TypedResult;
-
 /**
- * Every {@link TypedResult} entry has an instance of {@link}
+ * Marker interface for a class representing a request type, to be
+ * implemented as a type parametyer for {@link it.polimi.ingsw.controller.result.TypedResult.Success}.
  * */
-public interface RequestType {}
+public interface RequestType 
+{
+}

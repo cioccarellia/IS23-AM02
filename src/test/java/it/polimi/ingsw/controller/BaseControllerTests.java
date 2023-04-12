@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.game.GameMode;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class BaseControllerTests {
 
@@ -14,25 +15,37 @@ public class BaseControllerTests {
     public void x() {
         GameController controller = new GameController(GameMode.GAME_MODE_4_PLAYERS);
 
-        var a = controller.onPlayerConnection("alberto");
-        var b = controller.onPlayerConnection("cookie");
-        var c = controller.onPlayerConnection("giulia");
-        var d = controller.onPlayerConnection("marco");
+        var a = controller.onPlayerSignUpRequest("alberto");
+        var b = controller.onPlayerSignUpRequest("cookie");
+        var c = controller.onPlayerSignUpRequest("giulia");
+        var d = controller.onPlayerSignUpRequest("marco");
+
+        
+        var err = controller.onPlayerSignUpRequest("__err");
 
         switch (a) {
-            case SingleResult.Success<StatusError> s -> {
-
+            case SingleResult.Success<SignUpRequest> success -> {
+                // ok
             }
-            case SingleResult.Failure<StatusError> failure -> {
-
+            case SingleResult.Failure<SignUpRequest> failure -> {
+                fail("Sign up request should have been successful");
+            }
+        }
+        
+        switch (err) {
+            case SingleResult.Success<SignUpRequest> success -> {
+                fail("Sign up request should have been unsuccessful");
+            }
+            case SingleResult.Failure<SignUpRequest> failure -> {
+                // ok
             }
         }
 
-        assertTrue(a instanceof SingleResult.Success<StatusError>);
-        assertTrue(b instanceof SingleResult.Success<StatusError>);
-        assertTrue(c instanceof SingleResult.Success<StatusError>);
-        assertTrue(d instanceof SingleResult.Success<StatusError>);
-
+        assertTrue(a instanceof SingleResult.Success<SignUpRequest>);
+        assertTrue(b instanceof SingleResult.Success<SignUpRequest>);
+        assertTrue(c instanceof SingleResult.Success<SignUpRequest>);
+        assertTrue(d instanceof SingleResult.Success<SignUpRequest>);
+        assertTrue(err instanceof SingleResult.Failure<SignUpRequest>);
     }
 
 }

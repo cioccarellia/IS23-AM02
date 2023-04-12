@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
-    private static final int BOAR_DIMENSION = BoardConfiguration.getInstance().getDimension();
+    private static final int BOARD_DIMENSION = BoardConfiguration.getInstance().getDimension();
 
 
     @Test
@@ -18,8 +18,8 @@ public class BoardTest {
     public void test_board_disposition() {
         Board board = new Board();
 
-        for (int i = 0; i < BOAR_DIMENSION; i++) {
-            for (int j = 0; j < BOAR_DIMENSION; j++) {
+        for (int i = 0; i < BOARD_DIMENSION; i++) {
+            for (int j = 0; j < BOARD_DIMENSION; j++) {
                 Coordinate c = new Coordinate(i, j);
 
                 Cell boardTile = board.getCellAt(c);
@@ -35,13 +35,13 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("Tests the right functionality of countFreeEdges method")
+    @DisplayName("Tests the correct functionality of countFreeEdges method")
     public void test_countFreeEdges_method_positively(){
         Board positiveBoard = new Board();
         Cell[][] testCell = positiveBoard.getCellMatrix();
 
-        for (int i = 0; i < BOAR_DIMENSION; i++){
-            for (int j = 0; j < BOAR_DIMENSION; j++){
+        for (int i = 0; i < BOARD_DIMENSION; i++){
+            for (int j = 0; j < BOARD_DIMENSION; j++){
                testCell[i][j].setContent(HardcodedBoardConstants.getTile(i,j));
             }
         }
