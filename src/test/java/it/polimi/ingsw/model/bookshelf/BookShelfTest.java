@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BookShelfTest implements ShelfMatrixTester {
 
     @Test
-    @DisplayName("Verify the correct functionality of insert method, positively")
+    @DisplayName("Verify the correct functionality of insert method in an empty bookshelf, positively")
     public void test_insert_method_positively() {
         Bookshelf shelf = new Bookshelf();
         List<Tile> tiles = List.of(CAT, TROPHY, PLANT);
@@ -23,10 +23,12 @@ public class BookShelfTest implements ShelfMatrixTester {
 
         Tile[][] matrix = shelf.getShelfMatrix();
 
-        assertEquals(CAT, matrix[0][column]);
-        assertEquals(TROPHY, matrix[1][column]);
-        assertEquals(PLANT, matrix[2][column]);
-        assertNull(matrix[3][column]);
-        assertNull(matrix[4][column]);
+        assertEquals(CAT, matrix[5][column]);
+        assertEquals(TROPHY, matrix[4][column]);
+        assertEquals(PLANT, matrix[3][column]);
+        assertNull(matrix[2][column]);
+        assertNull(matrix[1][column]);
+        assertNull(matrix[0][column]);
+
     }
 }

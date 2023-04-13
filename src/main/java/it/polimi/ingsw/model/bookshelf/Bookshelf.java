@@ -50,16 +50,16 @@ public class Bookshelf {
 
         // we find the first void on the designated column.
         // this is also the number of elements in a certain column.
-        int firstEmptyShelfIndex = 0;
+        int lastEmptyShelfIndex = 0;
 
-        while (bookshelfMatrix[firstEmptyShelfIndex][columnIndex] != null) {
-            firstEmptyShelfIndex++;
+        while (bookshelfMatrix[lastEmptyShelfIndex][columnIndex] == null && lastEmptyShelfIndex + 1 < rows) {
+            lastEmptyShelfIndex++;
         }
 
 
         // we check whether we have enough space on our column to insert
         // the selected items
-        int freeSpace = rows - (firstEmptyShelfIndex);
+        int freeSpace = lastEmptyShelfIndex + 1;
 
         if (freeSpace < selection.size()) {
             throw new IllegalStateException("Selected tiles do not fit in designated column");
@@ -68,7 +68,7 @@ public class Bookshelf {
 
         // we insert the elements one by one
         for (Tile tile : selection) {
-            bookshelfMatrix[firstEmptyShelfIndex++][columnIndex] = tile;
+            bookshelfMatrix[lastEmptyShelfIndex--][columnIndex] = tile;
         }
     }
 
@@ -79,7 +79,7 @@ public class Bookshelf {
         Tile[][] copy = new Tile[rows][cols];
 
         for (int i = 0; i < rows; i++) {
-            System.arraycopy(copy[i], 0, bookshelfMatrix[i], 0, cols);
+            System.arraycopy(bookshelfMatrix[i], 0, copy[i], 0, cols);
         }
 
         return copy;

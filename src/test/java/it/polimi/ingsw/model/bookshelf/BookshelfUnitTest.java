@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static it.polimi.ingsw.model.board.Tile.*;
+
 public class BookshelfUnitTest {
 
     @Test
@@ -19,7 +21,7 @@ public class BookshelfUnitTest {
 
         Tile[][] clonedInternals = bookshelf.getShelfMatrix();
 
-        clonedInternals[0][0] = Tile.PLANT;
+        clonedInternals[0][0] = PLANT;
 
         //assertNull(bookshelf.getShelfMatrix()[0][0]);
     }
@@ -30,7 +32,7 @@ public class BookshelfUnitTest {
     public void test_serialization_gson_1() {
         Bookshelf bookshelf = new Bookshelf();
 
-        bookshelf.insert(0, Arrays.asList(Tile.GAME, Tile.FRAME, Tile.PLANT));
+        bookshelf.insert(0, Arrays.asList(GAME, FRAME, PLANT));
 
         Gson gson = new GsonBuilder().create();
         String jsonSerializedObject = gson.toJson(bookshelf);
