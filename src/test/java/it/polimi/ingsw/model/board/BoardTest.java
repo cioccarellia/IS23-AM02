@@ -266,14 +266,13 @@ public class BoardTest {
         positiveBoard.fill(testingElements.extractAmount(positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS)),GAME_MODE_2_PLAYERS);
 
         Coordinate coordsTest = new Coordinate(1,3);
-        boolean isEquals1= positiveBoard.countFreeEdges(coordsTest)==(2);
+        assertEquals(2,positiveBoard.countFreeEdges(coordsTest));
         Coordinate coordsTest_1 = new Coordinate(0,3);
-        boolean isEquals2= positiveBoard.countFreeEdges(coordsTest_1)==(3);
+        assertEquals(3,positiveBoard.countFreeEdges(coordsTest_1));
         Coordinate coordsTest_2 = new Coordinate(0,4);
-        boolean isEquals3= positiveBoard.countFreeEdges(coordsTest_2)==(3);
+        assertEquals(3,positiveBoard.countFreeEdges(coordsTest_2));
         Coordinate coordsTest_3 = new Coordinate(5,5);
-        boolean isEquals4= positiveBoard.countFreeEdges(coordsTest_3)==(0);
-        assertTrue(isEquals1 && isEquals2 && isEquals3 && isEquals4);
+        assertEquals(0,positiveBoard.countFreeEdges(coordsTest_3));
     }
 
     @Test

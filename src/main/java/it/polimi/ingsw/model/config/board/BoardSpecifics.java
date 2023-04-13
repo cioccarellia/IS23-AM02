@@ -8,5 +8,6 @@ public record BoardSpecifics(
         int dimension,
         @SerializedName("matrix")
         int[][] matrix
-) implements Specifics {
+) implements Specifics
+{
 }

@@ -124,7 +124,7 @@ public class Game implements ControlInterface {
     }
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
-        boolean isSelectionAmountValid = coordinates.size() <= 3;
+        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 
@@ -156,7 +156,9 @@ public class Game implements ControlInterface {
      *
      * @param username
      */
+
     public void playerHasNoMoreTurns(String username) {
+        assert getPlayer(username).isPresent();
         playerHasNoMoreTurns(getPlayer(username).get().getPlayerNumber());
     }
 

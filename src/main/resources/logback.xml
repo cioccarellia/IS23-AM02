@@ -5,7 +5,11 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <logger name="it.polimi.ingsw" level="WARNING" />
+    <logger name="it.polimi.ingsw.tests" level="ERROR" />
+
+    <root level="warning">
         <appender-ref ref="STDOUT" />
     </root>
+
 </configuration>

@@ -10,6 +10,7 @@ import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
@@ -147,7 +148,7 @@ public class GameController {
             return new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN);
         }
 
-        if (tiles.size() > 3) {
+        if (tiles.size() > LogicConfiguration.getInstance().maxSelectionSize()) {
             return new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES);
         }
 

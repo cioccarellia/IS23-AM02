@@ -24,6 +24,10 @@ public class LogicConfiguration extends Configuration<LogicSpecifics> {
         return instance;
     }
 
+    public int maxSelectionSize() {
+        return specs.maxSelectionSize();
+    }
+
     public int commonGoalCardAmount() {
         assert specs.commonGoalCardLogic().amount() > 0;
         return specs.commonGoalCardLogic().amount();

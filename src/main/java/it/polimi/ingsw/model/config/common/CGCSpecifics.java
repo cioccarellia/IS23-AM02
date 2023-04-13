@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import it.polimi.ingsw.model.config.Specifics;
 
 public record CGCSpecifics(
-        @SerializedName("activeCardIds")
+        @SerializedName("active_card_ids")
         int[] activeCardIds
 ) implements Specifics {}

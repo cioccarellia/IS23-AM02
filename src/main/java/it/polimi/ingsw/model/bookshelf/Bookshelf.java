@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.bookshelf;
 
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class Bookshelf {
 
     private static final int rows = BookshelfConfiguration.getInstance().rows();
     private static final int cols = BookshelfConfiguration.getInstance().cols();
+    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
 
     private final Tile[][] bookshelfMatrix = new Tile[rows][cols];
 
@@ -37,11 +39,11 @@ public class Bookshelf {
      * @throws IllegalStateException    if the selected column has not the space to house the selected tiles
      */
     public void insert(int columnIndex, @NotNull List<Tile> selection) {
-        if (columnIndex < 0 || columnIndex >= 5) {
+        if (columnIndex < 0 || columnIndex >= cols) {
             throw new IllegalArgumentException("Received column index our of bounds. Expected [0,4], received %d".formatted(columnIndex));
         }
 
-        if (selection.size() > 3) {
+        if (selection.size() > maxSelectionSize) {
             throw new IllegalArgumentException("Received a selection of tiles with more than three elements");
         }
 

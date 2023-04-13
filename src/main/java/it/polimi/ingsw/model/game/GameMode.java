@@ -12,8 +12,8 @@ public enum GameMode {
 
     private final int players;
 
-    GameMode(int players) {
-        this.players = players;
+    GameMode(int _players) {
+        players = _players;
     }
 
     public int playerCount() {

@@ -39,8 +39,8 @@ public class Board {
     public Board() {
         var defaultBoardPattern = BoardConfiguration.getInstance().getMatrix();
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 CellPattern defaultPattern = defaultBoardPattern[i][j];
 
                 if (defaultPattern == null) {

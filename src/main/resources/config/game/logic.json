@@ -1,10 +1,11 @@
 {
-	"commonGoalCards": {
+	"common_goal_cards": {
 		"amount": 2,
 		"tokenMap": [
 			[4, 8],
 			[4, 6, 8],
 			[2, 4, 6, 8]
 		]
-	}
+	},
+	"selection_max_size": 3
 }
