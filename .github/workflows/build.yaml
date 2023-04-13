@@ -22,10 +22,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: Setup JDK 17
+      - name: Setup JDK 19
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '19'
           distribution: 'temurin'
       - name: System Information
         run: printf "\nKernel:\n " && uname -a && printf "\n\nMemory:\n " && free -h && printf "\n\nStorage:\n" && df -h && ls -la && pwd
