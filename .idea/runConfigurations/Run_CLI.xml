@@ -2,6 +2,7 @@
   <configuration default="false" name="Run CLI" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.App" />
     <module name="shelfie" />
+    <option name="PROGRAM_PARAMETERS" value="--configuration CLIENT --server-address localhost:8080" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

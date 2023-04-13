@@ -98,6 +98,14 @@
 
 
 
+        <!-- ArgParser -->
+        <dependency>
+            <groupId>net.sourceforge.argparse4j</groupId>
+            <artifactId>argparse4j</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+
+
         <!-- Logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -116,6 +124,8 @@
             <artifactId>slf4j-api</artifactId>
             <version>2.0.7</version>
         </dependency>
+
+
 
 
 

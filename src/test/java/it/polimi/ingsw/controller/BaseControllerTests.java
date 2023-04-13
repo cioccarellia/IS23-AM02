@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.StatusError;
+import it.polimi.ingsw.controller.result.failures.SignUpRequest;
 import it.polimi.ingsw.model.game.GameMode;
 import org.junit.jupiter.api.Test;
 
