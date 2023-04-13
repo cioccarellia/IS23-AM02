@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.cell.Cell;
 import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -145,8 +144,6 @@ public class BoardTest {
 
     @Test
     @DisplayName("Tests the correct functionality of getTileMatrix method")
-    @Disabled
-    //FIXME out of bounds warning - failing test
     public void test_getTileMatrix_method(){
         Board positiveBoard = new Board();
         Cell[][] testingCell = positiveBoard.getCellMatrix();
@@ -158,6 +155,7 @@ public class BoardTest {
         }
 
         boolean isEqual= Arrays.deepEquals(positiveBoard.getTileMatrix(), GLOBAL_BOARD_MATRIX);
+
         assertTrue(isEqual);
     }
 
@@ -175,7 +173,7 @@ public class BoardTest {
 
         Coordinate coordsTest = new Coordinate(3,5);
         positiveBoard.removeTileAt(coordsTest);
-       assertTrue(positiveBoard.hasAtLeastOneFreeEdge(coordsTest));
+        assertTrue(positiveBoard.hasAtLeastOneFreeEdge(coordsTest));
     }
 
     @Test

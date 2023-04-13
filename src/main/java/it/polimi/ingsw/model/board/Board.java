@@ -93,8 +93,8 @@ public class Board {
     public Tile[][] getTileMatrix() {
         Tile[][] tileMatrix = new Tile[dimension][dimension];
 
-        for (int i = 0; i <= dimension; i++) {
-            for (int j = 0; i <= dimension; i++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 Cell c = matrix[i][j];
 
                 if (c.isDead()) {
