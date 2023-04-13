@@ -266,7 +266,7 @@ public class BoardTest {
         positiveBoard.fill(testingElements.extractAmount(positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS)),GAME_MODE_2_PLAYERS);
 
         Coordinate coordsTest = new Coordinate(1,3);
-        boolean isEquals1= positiveBoard.countFreeEdges(coordsTest)==(1);
+        boolean isEquals1= positiveBoard.countFreeEdges(coordsTest)==(2);
         Coordinate coordsTest_1 = new Coordinate(0,3);
         boolean isEquals2= positiveBoard.countFreeEdges(coordsTest_1)==(3);
         Coordinate coordsTest_2 = new Coordinate(0,4);

@@ -193,8 +193,9 @@ public class Board {
      */
     public void fill(@NotNull List<Tile> newElements, GameMode mode) {
         CellPattern upperBound = mapFromGameMode(mode);
-
-        if (newElements.size() >= countEmptyCells(mode)) {
+        //FIXME deleted "=" for exception because the assumption says: "the given tile list contains the same number of elements as
+        //     * there are empty spaces in the board." so ">=" is not corrct => check the correction of the assumption
+        if (newElements.size() > countEmptyCells(mode)) {
             throw new IllegalArgumentException("Impossible to fit the designated elements inside the board: not enough space");
         }
 
