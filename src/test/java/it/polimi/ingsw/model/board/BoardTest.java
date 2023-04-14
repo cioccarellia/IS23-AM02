@@ -23,7 +23,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the hardcoded board pattern")
     public void test_board_disposition() {
-        Board board = new Board(game.getGameMatrix());
+        Board board = new Board();
 
         for (int i = 0; i < BOARD_DIMENSION; i++) {
             for (int j = 0; j < BOARD_DIMENSION; j++) {
@@ -44,7 +44,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of countFreeEdges method, positive case")
     public void test_countFreeEdges_method_positively(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         Cell[][] testPositiveCell = positiveBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -60,7 +60,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of countFreeEdges method, negative case")
     public void test_countFreeEdges_method_negatively(){
-        Board negativeBoard = new Board(game.getGameMatrix());
+        Board negativeBoard = new Board();
         Cell[][] testNegativeCell = negativeBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -76,7 +76,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of countFreeEdges method, edge case")
     public void test_countFreeEdges_method_edge_case(){
-        Board TestingBoard = new Board(game.getGameMatrix());
+        Board TestingBoard = new Board();
         Cell[][] testingCell = TestingBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -93,7 +93,7 @@ public class BoardTest {
     @DisplayName("Tests the correct functionality of getTileAt method")
     //FIXME understand if returning optional instead of Tile could be better
     public void test_getTileAt_method(){
-        Board TestingBoard = new Board(game.getGameMatrix());
+        Board TestingBoard = new Board();
         Cell[][] testCell = TestingBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -110,7 +110,7 @@ public class BoardTest {
     @DisplayName("Tests the correct functionality of removeTileAt method, positive case")
     //FIXME understand if returning optional instead of Tile could be better
     public void test_removeTileAt_method_positively(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         Cell[][] testPositiveCell = positiveBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -128,7 +128,7 @@ public class BoardTest {
     @DisplayName("Tests the correct functionality of removeTileAt method, edge case")
     //FIXME understand if returning optional instead of Tile could be better
     public void test_removeTileAt_method_edge_case(){
-        Board testingBoard = new Board(game.getGameMatrix());
+        Board testingBoard = new Board();
         Cell[][] testingCell = testingBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -145,7 +145,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of getTileMatrix method")
     public void test_getTileMatrix_method(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         Cell[][] testingCell = positiveBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -162,7 +162,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of hasAtLeastOneFreeEdg, positive case")
     public void test_hasAtLeastOneFreeEdge_method_positively(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         Cell[][] testingCell = positiveBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -179,7 +179,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of hasAtLeastOneFreeEdg, negative case")
     public void test_hasAtLeastOneFreeEdge_method_negatively(){
-        Board negativeBoard = new Board(game.getGameMatrix());
+        Board negativeBoard = new Board();
         Cell[][] testingCell = negativeBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -196,7 +196,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of hasAtLeastOneFreeEdg, #1 edge case")
     public void test_hasAtLeastOneFreeEdge_method_edge_case_1(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         Cell[][] testingCell = positiveBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -213,7 +213,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of hasAtLeastOneFreeEdg, #2 edge case")
     public void test_hasAtLeastOneFreeEdge_method_edge_case_2(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         Cell[][] testingCell = positiveBoard.getCellMatrix();
 
         for (int i = 0; i < BOARD_DIMENSION; i++){
@@ -230,28 +230,28 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of countEmptyCells method, #1 positive case")
     public void test_countEmptyCells_method_positively_1(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         assertEquals(45, positiveBoard.countEmptyCells(GAME_MODE_4_PLAYERS));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of countEmptyCells method, #2 positive case")
     public void test_countEmptyCells_method_positively_2(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         assertEquals(38, positiveBoard.countEmptyCells(GAME_MODE_3_PLAYERS));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of countEmptyCells method, #3 positive case")
     public void test_countEmptyCells_method_positively_3(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         assertEquals(30, positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of fill method, #1 positively")
     public void test_fill_method_positively_1(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         TileExtractor testingElements = new TileExtractor();
         positiveBoard.fill(testingElements.extractAmount(positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS)),GAME_MODE_2_PLAYERS);
         assertEquals(0, positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS));
@@ -259,7 +259,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of fill method, #2 positively")
     public void test_fill_method_positively_2(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         TileExtractor testingElements = new TileExtractor();
         positiveBoard.fill(testingElements.extractAmount(positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS)),GAME_MODE_2_PLAYERS);
 
@@ -276,7 +276,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of fill method, #3 positively")
     public void test_fill_method_positively_3(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         TileExtractor testingElements = new TileExtractor();
         positiveBoard.fill(testingElements.extractAmount(positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS)),GAME_MODE_2_PLAYERS);
         Coordinate coordsTest = new Coordinate(5,5);
@@ -287,7 +287,7 @@ public class BoardTest {
     @Test
     @DisplayName("Tests the correct functionality of fill method, #4 positively")
     public void test_fill_method_positively_4(){
-        Board positiveBoard = new Board(game.getGameMatrix());
+        Board positiveBoard = new Board();
         TileExtractor testingElements = new TileExtractor();
         positiveBoard.fill(testingElements.extractAmount(positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS)),GAME_MODE_2_PLAYERS);
         Coordinate coordsTest = new Coordinate(5,5);
