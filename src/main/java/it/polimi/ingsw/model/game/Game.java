@@ -86,7 +86,7 @@ public class Game implements ControlInterface {
         }
 
 
-        // Random first-player extraction (coincise)
+        // Random first-player extraction (concise)
         startingPlayerNumber = CollectionUtils.extractRandomElement(playersMap.values()).getPlayerNumber();
         currentPlayerNumber = startingPlayerNumber;
 

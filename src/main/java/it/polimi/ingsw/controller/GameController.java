@@ -53,7 +53,7 @@ public class GameController {
     }
 
 
-    // Creates a connectioon between client and server
+    // Creates a connection between client and server
     public SingleResult<SignUpRequest> onPlayerSignUpRequest(String username) {
         logger.info("onPlayerSignUpRequest(username={})", username);
 
@@ -112,7 +112,7 @@ public class GameController {
     public SingleResult<TileSelectionFailures> onPlayerTileSelectionRequest(String username, Set<Coordinate> selection) {
         logger.info("onPlayerTileSelectionRequest(username={}, selection={})", username, selection);
 
-        if (!isUsernameActivePlayer(username)) {
+        if (isUsernameActivePlayer(username)) {
             return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
         }
 
@@ -132,7 +132,7 @@ public class GameController {
     public SingleResult<BookshelfInsertionFailure> onPlayerBookshelfTileInsertionRequest(String username, int column, List<Tile> tiles) {
         logger.info("onPlayerBookshelfTileInsertionRequest(username={}, column={}, tiles={})", username, column, tiles);
 
-        if (!isUsernameActivePlayer(username)) {
+        if (isUsernameActivePlayer(username)) {
             return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
         }
 

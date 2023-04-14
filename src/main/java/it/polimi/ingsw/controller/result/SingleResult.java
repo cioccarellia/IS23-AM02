@@ -6,7 +6,7 @@ import it.polimi.ingsw.controller.result.failures.RequestError;
  * Sealed class representing the result of an operation executed by a method.
  * 
  * The {@code SingleResult} class is typed according to its content: it accepts 
- * only one type paratemer: {@code R}.
+ * only one type parameter: {@code R}.
  * <ul>
  * <li>{@code R} is used to define the type of the value contained in 
  * an instance of {@code Failure}.

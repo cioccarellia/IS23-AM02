@@ -7,7 +7,7 @@ import it.polimi.ingsw.controller.result.types.RequestType;
  * Sealed class representing the result of an operation executed by a method.
  * 
  * The {@code TypedResult} class is typed according to its content: it accepts 
- * two type paratemers: {@code T} and {@code R}.
+ * two type parameters: {@code T} and {@code R}.
  * <ul>
  * <li>{@code T} is used to define the type of the value contained in 
  * an instance of {@code Success}.

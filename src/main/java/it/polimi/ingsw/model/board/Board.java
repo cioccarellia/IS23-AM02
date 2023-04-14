@@ -120,9 +120,7 @@ public class Board {
      */
     public int countFreeEdges(@NotNull Coordinate c) {
         return Arrays.stream(BoardUtils.Edge.values())
-                .mapToInt(it -> {
-                    return BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0;
-                })
+                .mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0)
                 .sum();
     }
 
@@ -153,7 +151,7 @@ public class Board {
     /**
      * Counts all the board's empty cells
      *
-     * @param mode is the highest accepted cell pattern: if the analised cell pattern is higher, then we do not
+     * @param mode is the highest accepted cell pattern: if the analized cell pattern is higher, then we do not
      *             count it, if it's lower (or equal) and it is empty we count it as an acceptable cell
      * @return it returns the number of empty acceptable cells
      */
@@ -194,7 +192,7 @@ public class Board {
     public void fill(@NotNull List<Tile> newElements, GameMode mode) {
         CellPattern upperBound = mapFromGameMode(mode);
         //FIXME deleted "=" for exception because the assumption says: "the given tile list contains the same number of elements as
-        //     * there are empty spaces in the board." so ">=" is not corrct => check the correction of the assumption
+        //     * there are empty spaces in the board." so ">=" is not correct => check the correction of the assumption
         if (newElements.size() > countEmptyCells(mode)) {
             throw new IllegalArgumentException("Impossible to fit the designated elements inside the board: not enough space");
         }

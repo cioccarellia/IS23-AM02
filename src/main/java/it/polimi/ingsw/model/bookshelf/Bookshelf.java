@@ -30,13 +30,12 @@ public class Bookshelf {
 
     @TestOnly
     @VisibleForTesting
-    public void fillUpBookShelf(Tile[][] matrix){
+    public void fillUpBookShelf(Tile[][] matrix) {
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                bookshelfMatrix[i][j] = matrix[i][j];
-            }
+            if (cols >= 0) System.arraycopy(matrix[i], 0, bookshelfMatrix[i], 0, cols);
         }
     }
+
     /**
      * Inserts vertically a list of (at most) three tiles in the designated column, given that
      * it has enough space.
@@ -51,7 +50,7 @@ public class Bookshelf {
      */
     public void insert(int columnIndex, @NotNull List<Tile> selection) {
         if (columnIndex < 0 || columnIndex >= cols) {
-            throw new IllegalArgumentException("Received column index our of bounds. Expected [0,4], received %d".formatted(columnIndex));
+            throw new IllegalArgumentException("Received column index out of bounds. Expected [0,4], received %d".formatted(columnIndex));
         }
 
         if (selection.size() > maxSelectionSize) {
@@ -103,7 +102,7 @@ public class Bookshelf {
      */
     public boolean canFit(int column, int amount) {
         int i = rows - 1;
-        while (bookshelfMatrix[i][column] != null && i>0) {
+        while (bookshelfMatrix[i][column] != null && i > 0) {
             i--;
         }
 
@@ -114,13 +113,14 @@ public class Bookshelf {
      * @return 1 if the bookshelf is full, 0 if not
      */
     public boolean isFull() {
-        int countNotEmptyRow = 0;
         for (int i = 0; i < rows; i++) {
-            if (bookshelfMatrix[i][cols-1] != null) {
-                countNotEmptyRow++;
+            for (int j = 0; j < cols; j++) {
+                if (bookshelfMatrix[i][j] == null) {
+                    return false;
+                }
             }
         }
-        return countNotEmptyRow == rows;
+        return true;
     }
 
 }
