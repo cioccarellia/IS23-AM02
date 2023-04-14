@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.List;
 
@@ -26,6 +28,15 @@ public class Bookshelf {
         }
     }
 
+    @TestOnly
+    @VisibleForTesting
+    public void fillUpBookShelf(Tile[][] matrix){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                bookshelfMatrix[i][j] = matrix[i][j];
+            }
+        }
+    }
     /**
      * Inserts vertically a list of (at most) three tiles in the designated column, given that
      * it has enough space.
@@ -92,7 +103,7 @@ public class Bookshelf {
      */
     public boolean canFit(int column, int amount) {
         int i = rows - 1;
-        while (bookshelfMatrix[i][column] != null) {
+        while (bookshelfMatrix[i][column] != null && i>0) {
             i--;
         }
 
@@ -105,7 +116,7 @@ public class Bookshelf {
     public boolean isFull() {
         int countNotEmptyRow = 0;
         for (int i = 0; i < rows; i++) {
-            if (bookshelfMatrix[i][cols] != null) {
+            if (bookshelfMatrix[i][cols-1] != null) {
                 countNotEmptyRow++;
             }
         }
