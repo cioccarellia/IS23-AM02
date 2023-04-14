@@ -37,22 +37,6 @@ public class BookShelfTest implements ShelfMatrixTester {
         assertNull(matrix[0][column]);
 
     }
-
-    /*
-        @Test
-        @DisplayName("Verify the correct functionality of insert method in a filled up bookshelf, positively")
-        public void test_insert_method_full_bookShelf_positively() {
-            Bookshelf shelf = new Bookshelf();
-            shelf.fillUpBookShelf(defaultBookshelf.BOOKSHELF_MATRIX);
-            List<Tile> tiles = List.of(CAT, TROPHY, PLANT);
-
-            final int column = 1;
-            shelf.insert(column,tiles);
-            assertFalse(false);
-
-        }
-        */
-
     @Test
     @DisplayName("Verify the insert method throws out of bounds column exception")
     public void test_insert_out_of_bounds_column_exception() {
