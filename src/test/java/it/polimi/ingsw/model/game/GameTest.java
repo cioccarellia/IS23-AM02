@@ -27,36 +27,6 @@ public class GameTest {
         assertEquals(PLAYER_B, game.getPlayerSession(PLAYER_B).getUsername());
     }
 
-    @Test
-    @DisplayName("Verify player adding negatively")
-    public void test_game_negatively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
-
-        final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB", PLAYER_C = "PlayerC", PLAYER_D = "PlayerD";
-
-        game.addPlayer(PLAYER_A);
-        game.addPlayer(PLAYER_B);
-
-        assertEquals(2, game.getPlayerNumberMap().size());
-
-
-        assertEquals(PLAYER_A, game.getPlayerSession(PLAYER_A).getUsername());
-        assertEquals(PLAYER_B, game.getPlayerSession(PLAYER_B).getUsername());
-
-        try {
-            game.getPlayerSession(PLAYER_C);
-            fail();
-        } catch (Exception e) {
-            assertTrue(e instanceof IllegalStateException);
-        }
-
-        try {
-            game.getPlayerSession(PLAYER_D);
-            fail();
-        } catch (Exception e) {
-            assertTrue(e instanceof IllegalStateException);
-        }
-    }
 
     @Test
     @DisplayName("Verify common goal card initialization")

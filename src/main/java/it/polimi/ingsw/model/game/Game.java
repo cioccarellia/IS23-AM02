@@ -90,6 +90,10 @@ public class Game implements ControlInterface {
             throw new IllegalStateException("Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(status));
         }
 
+        if (sessions.size() == mode.playerCount()) {
+            throw new IllegalStateException("Impossible to add a player: the game is full (having %d players for %s mode)".formatted(sessions.size(), mode));
+        }
+
         // Creating new player session
         PlayerNumber newPlayerNumber = PlayerNumber.fromInt(sessions.size() + 1);
         PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
@@ -98,7 +102,7 @@ public class Game implements ControlInterface {
         // Adding session
         sessions.put(newSession);
 
-        logger.info("addPlayer({}): player added", username);
+        logger.info("addPlayer(username={}): player added", username);
     }
 
     public PlayerSession getPlayerSession(String username) {
@@ -193,6 +197,8 @@ public class Game implements ControlInterface {
      */
     @Override
     public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
+        assert isSelectionValid(coordinates);
+
         List<Coordinate> orderedCoordinates = coordinates.stream().toList();
 
         // we assume the selection is valid

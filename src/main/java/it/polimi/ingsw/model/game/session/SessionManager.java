@@ -49,10 +49,6 @@ public class SessionManager {
     public void put(@NotNull PlayerSession session) {
         String username = session.getUsername();
 
-        if (map.size() == mode.playerCount()) {
-            throw new IllegalStateException("Impossible to add a player: the game is full (having %d players for %s mode)".formatted(map.size(), mode));
-        }
-
         if (map.containsKey(username)) {
             throw new IllegalStateException("Impossible to add a player: username %s already present in game".formatted(username));
         }
