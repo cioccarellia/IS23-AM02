@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.model.game.session.SessionManager;
+import it.polimi.ingsw.model.player.PlayerSession;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -44,4 +46,14 @@ public class CollectionUtils {
 
         return extractedElements;
     }
+
+
+    static public PlayerSession extractRandomElement(final @NotNull SessionManager collection) {
+        // get random index
+        int randomIndex = new Random().nextInt(collection.size());
+
+        // extract and return the random element
+        return collection.values().stream().toList().get(randomIndex);
+    }
+
 }

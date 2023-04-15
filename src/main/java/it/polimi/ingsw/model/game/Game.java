@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
+import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
+import it.polimi.ingsw.model.game.goal.Token;
+import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
@@ -33,13 +36,13 @@ public class Game implements ControlInterface {
      * Basic game related data
      */
     private final GameMode mode;
-    private GameStatus status;
+    private GameStatus status = GameStatus.INITIALIZATION;
     private final Board board = new Board();
 
     /**
-     * Maps a player number to its {@link PlayerSession}
+     * Maps a player to its {@link PlayerSession}
      */
-    private final Map<PlayerNumber, PlayerSession> playersMap = new HashMap<>();
+    private final SessionManager sessions;
 
     /**
      * Markers for the current state of the game (needed for turn logic)
@@ -57,29 +60,65 @@ public class Game implements ControlInterface {
      * Holder class for the common goal cards
      * Holds the current statuses for the common goal cards.
      */
-    private List<CommonGoalCardStatus> commonGoalCardStatuses;
+    private final List<CommonGoalCardStatus> commonGoalCardStatuses = new ArrayList<>();
 
     /**
      * External game configuration parameters
      * */
     private final LogicConfiguration config = LogicConfiguration.getInstance();
 
-
-    protected static final Logger logger = LoggerFactory.getLogger(Game.class);
+    // Game logger
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
     public Game(GameMode _mode) {
-        status = GameStatus.INITIALIZATION;
         mode = _mode;
+        sessions = new SessionManager(mode);
 
         logger.info("Game initialized");
     }
+
+
+
+
+    /**
+     * Inserts a player into the game
+     * @param username  The username for the given player
+     * @throws IllegalStateException
+     */
+    public void addPlayer(String username) {
+        if (status != GameStatus.INITIALIZATION) {
+            throw new IllegalStateException("Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(status));
+        }
+
+        // Creating new player session
+        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(sessions.size() + 1);
+        PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
+        PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
+
+        // Adding session
+        sessions.put(newSession);
+
+        logger.info("addPlayer({}): player added", username);
+    }
+
+    public PlayerSession getPlayerSession(String username) {
+        if (!sessions.isPresent(username)) {
+            throw new IllegalStateException("Username not found in sessions");
+        }
+        return sessions.getByUsername(username);
+    }
+
 
     @Override
     public void onGameStarted() {
         logger.info("onGameStarted()");
 
+        if (sessions.size() != mode.playerCount()) {
+            throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.playerCount(), sessions.size()));
+        }
+
         // Common goal card initialization
-        for (int cardNumber = 1; cardNumber < config.commonGoalCardAmount(); cardNumber++) {
+        for (int cardNumber = 1; cardNumber <= config.commonGoalCardAmount(); cardNumber++) {
             CommonGoalCard card = commonGoalCardExtractor.extract();
             CommonGoalCardStatus cardStatus = new CommonGoalCardStatus(card, mode);
             commonGoalCardStatuses.add(cardStatus);
@@ -87,7 +126,7 @@ public class Game implements ControlInterface {
 
 
         // Random first-player extraction (concise)
-        startingPlayerNumber = CollectionUtils.extractRandomElement(playersMap.values()).getPlayerNumber();
+        startingPlayerNumber = CollectionUtils.extractRandomElement(sessions).getPlayerNumber();
         currentPlayerNumber = startingPlayerNumber;
 
 
@@ -96,27 +135,6 @@ public class Game implements ControlInterface {
         List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
 
         board.fill(extractedTiles, mode);
-    }
-
-
-    /**
-     * Inserts a player into the game flow
-     *
-     * @
-     */
-    public void addPlayer(String username) {
-        PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
-        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(playersMap.size() + 1);
-
-        PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
-
-        playersMap.put(newPlayerNumber, newSession);
-
-        logger.info("addPlayer({}): player added", username);
-    }
-
-    public Optional<PlayerSession> getPlayer(String username) {
-        return playersMap.values().stream().filter(it -> Objects.equals(it.getUsername(), username)).findFirst();
     }
 
     public GameStatus getGameStatus() {
@@ -132,11 +150,7 @@ public class Game implements ControlInterface {
     }
 
     public PlayerSession getCurrentPlayer() {
-        return playersMap.get(currentPlayerNumber);
-    }
-
-    public List<PlayerSession> getPlayerSessions() {
-        return playersMap.values().stream().toList();
+        return sessions.getByNumber(currentPlayerNumber);
     }
 
     public PlayerNumber getStartingPlayerNumber() {
@@ -158,8 +172,8 @@ public class Game implements ControlInterface {
      */
 
     public void playerHasNoMoreTurns(String username) {
-        assert getPlayer(username).isPresent();
-        playerHasNoMoreTurns(getPlayer(username).get().getPlayerNumber());
+        assert sessions.isPresent(username);
+        playerHasNoMoreTurns(sessions.getByUsername(username).getPlayerNumber());
     }
 
     /**
@@ -168,7 +182,7 @@ public class Game implements ControlInterface {
      * @param number
      */
     private void playerHasNoMoreTurns(PlayerNumber number) {
-        playersMap.get(number).noMoreTurns = true;
+        sessions.getByNumber(number).noMoreTurns = true;
     }
 
 
@@ -269,9 +283,9 @@ public class Game implements ControlInterface {
     @Override
     public void onNextTurn(String nextPlayerUsername) {
         // assume the username is correct
-        assert getPlayer(nextPlayerUsername).isPresent();
+        assert sessions.isPresent(nextPlayerUsername);
 
-        currentPlayerNumber = getPlayer(nextPlayerUsername).get().getPlayerNumber();
+        currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
     }
     
@@ -281,7 +295,7 @@ public class Game implements ControlInterface {
     }
 
     @TestOnly
-    public Map<PlayerNumber, PlayerSession> getPlayersMap() {
-        return playersMap;
+    public Map<PlayerNumber, PlayerSession> getPlayerNumberMap() {
+        return sessions.getNumberMap();
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.game;
+package it.polimi.ingsw.model.game.goal;
 
 /**
  * General element, assignable to a {@link it.polimi.ingsw.model.player.PlayerSession}

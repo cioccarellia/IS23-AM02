@@ -1,13 +1,14 @@
-package it.polimi.ingsw.model.game;
+package it.polimi.ingsw.model.game.goal;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
+import it.polimi.ingsw.model.game.GameMode;
 
 import java.util.Optional;
 import java.util.Stack;
 
 /**
  * Represents the current status of a {@link it.polimi.ingsw.model.cards.common.CommonGoalCard} instance,
- * along with its associated possible {@link it.polimi.ingsw.model.game.Token}s.
+ * along with its associated possible {@link Token}s.
  */
 public class CommonGoalCardStatus {
 

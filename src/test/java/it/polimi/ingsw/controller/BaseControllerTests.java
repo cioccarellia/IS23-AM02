@@ -20,7 +20,7 @@ public class BaseControllerTests {
         var c = controller.onPlayerSignUpRequest("giulia");
         var d = controller.onPlayerSignUpRequest("marco");
 
-        
+
         var err = controller.onPlayerSignUpRequest("__err");
 
         switch (a) {
@@ -31,7 +31,7 @@ public class BaseControllerTests {
                 fail("Sign up request should have been successful");
             }
         }
-        
+
         switch (err) {
             case SingleResult.Success<SignUpRequest> success -> {
                 fail("Sign up request should have been unsuccessful");

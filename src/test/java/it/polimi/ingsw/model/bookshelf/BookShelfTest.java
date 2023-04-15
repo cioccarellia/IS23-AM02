@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.bookshelf;
 
 import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-
-import it.polimi.ingsw.model.config.logic.LogicConfiguration;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookShelfTest implements ShelfMatrixTester {
@@ -37,6 +35,7 @@ public class BookShelfTest implements ShelfMatrixTester {
         assertNull(matrix[0][column]);
 
     }
+
     @Test
     @DisplayName("Verify the insert method throws out of bounds column exception")
     public void test_insert_out_of_bounds_column_exception() {
@@ -181,8 +180,8 @@ public class BookShelfTest implements ShelfMatrixTester {
         shelf.fillUpBookShelf(defaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
         Tile[][] matrix = shelf.getShelfMatrix();
 
-        for(int i = 2; i < rows; i++){
-            for(int j = 0; j < cols; j++){
+        for (int i = 2; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 assertEquals(CAT, matrix[i][j]);
             }
         }

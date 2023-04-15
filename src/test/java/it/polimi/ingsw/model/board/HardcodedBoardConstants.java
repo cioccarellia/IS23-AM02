@@ -34,11 +34,11 @@ public class HardcodedBoardConstants {
 
     };
 
-    public static Tile getTile(int x, int y){
+    public static Tile getTile(int x, int y) {
         return GLOBAL_BOARD_MATRIX[x][y];
     }
 
-    public static List<Tile[]> tileToList(){
+    public static List<Tile[]> tileToList() {
         return Arrays.stream(GLOBAL_BOARD_MATRIX).toList();
     }
 }

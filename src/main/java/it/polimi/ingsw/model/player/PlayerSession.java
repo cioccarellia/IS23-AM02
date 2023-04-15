@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
-import it.polimi.ingsw.model.game.Token;
+import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 
