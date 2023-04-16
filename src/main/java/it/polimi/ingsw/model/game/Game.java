@@ -22,6 +22,7 @@ import it.polimi.ingsw.utils.model.CoordinatesHelper;
 import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,6 +141,7 @@ public class Game implements ControlInterface {
 
         board.fill(extractedTiles, mode);
     }
+
 
     public GameStatus getGameStatus() {
         return status;
@@ -298,6 +300,10 @@ public class Game implements ControlInterface {
     @Override
     public void onGameEnded() {
 
+    }
+
+    public SessionManager getSessions(PlayerNumber number) {
+        return sessions;
     }
 
     @TestOnly

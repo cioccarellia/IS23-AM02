@@ -8,6 +8,7 @@ public class CoordinatesHelper {
     /**
      * Returns true if all coordinates are in a straight line, either column or line
      */
+    //FIXME change coordinates from list to set, is unuseful using a list for null paramters if is passed a test inside caller method
     static public boolean areCoordinatesInStraightLine(List<Coordinate> coordinates) {
         if (coordinates == null || coordinates.isEmpty()) {
             return false;
