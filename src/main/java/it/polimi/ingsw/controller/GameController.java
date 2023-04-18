@@ -44,7 +44,12 @@ public class GameController {
         game = new Game(_mode);
         maxPlayerAmount = _mode.playerCount();
 
-        logger.info("GameController initialized");
+        logger.info("GameController initialized, mode={}", _mode);
+    }
+
+
+    public void startCurrentTurn() {
+
     }
 
 
@@ -89,10 +94,6 @@ public class GameController {
     }
 
 
-
-
-
-
     // Game logic
     public boolean isUsernameActivePlayer(String username) {
         return username.equals(game.getCurrentPlayer().getUsername());
@@ -105,13 +106,6 @@ public class GameController {
                 .filter(player -> player.getStatus() == ConnectionStatus.DISCONNECTED)
                 .count() >= maxPlayerAmount - 1;
     }
-
-
-    public void startCurrentTurn() {
-
-    }
-
-
 
 
     public SingleResult<TileSelectionFailures> onPlayerTileSelectionRequest(String username, Set<Coordinate> selection) {
@@ -171,8 +165,6 @@ public class GameController {
         logger.info("onPlayerCheckingRequest()");
         game.onPlayerCheckingPhase();
     }
-
-
 
 
 }

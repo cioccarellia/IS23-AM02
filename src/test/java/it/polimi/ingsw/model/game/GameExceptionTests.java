@@ -24,7 +24,6 @@ public class GameExceptionTests {
     }
 
 
-
     @Test
     @DisplayName("Tests that starting a game without enough players throws an exception")
     public void test_onGameStarted_throwsException_TooManyPlayers() {
@@ -54,7 +53,6 @@ public class GameExceptionTests {
             assertTrue(e instanceof IllegalStateException);
         }
     }
-
 
 
     @Test

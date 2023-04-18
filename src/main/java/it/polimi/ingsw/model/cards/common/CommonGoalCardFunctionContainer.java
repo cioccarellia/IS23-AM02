@@ -31,14 +31,13 @@ import java.util.stream.Stream;
 
 public class CommonGoalCardFunctionContainer {
 
-    // bookshelf parameters
-    private final static int rows = BookshelfConfiguration.getInstance().rows();
-    private final static int cols = BookshelfConfiguration.getInstance().cols();
-
     // common goal cards
     public static final CommonGoalCard SIX_PAIRS = new CommonGoalCard(CommonGoalCardIdentifier.SIX_PAIRS, CommonGoalCardFunctionContainer::sixPairs);
-    public static final CommonGoalCard DIAGONAL = new CommonGoalCard(CommonGoalCardIdentifier.DIAGONAL, CommonGoalCardFunctionContainer::diagonal);
     public static final CommonGoalCard FOUR_GROUP_FOUR = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_GROUP_FOUR, CommonGoalCardFunctionContainer::fourGroupFour);
+    // bookshelf parameters
+    private final static int rows = BookshelfConfiguration.getInstance().rows();
+    public static final CommonGoalCard DIAGONAL = new CommonGoalCard(CommonGoalCardIdentifier.DIAGONAL, CommonGoalCardFunctionContainer::diagonal);
+    private final static int cols = BookshelfConfiguration.getInstance().cols();
     public static final CommonGoalCard FOUR_MAX3DIFF_LINES = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_MAX3DIFF_LINES, CommonGoalCardFunctionContainer::fourMaxThreeDiffLines);
     public static final CommonGoalCard FOUR_CORNERS = new CommonGoalCard(CommonGoalCardIdentifier.FOUR_CORNERS, CommonGoalCardFunctionContainer::fourCorners);
     public static final CommonGoalCard TWO_DIFF_COLUMNS = new CommonGoalCard(CommonGoalCardIdentifier.TWO_DIFF_COLUMNS, CommonGoalCardFunctionContainer::twoDiffColumns);
@@ -57,7 +56,7 @@ public class CommonGoalCardFunctionContainer {
 
     /**
      * Returns the active {@code CommonGoalCard}s list
-     * */
+     */
     public static List<CommonGoalCard> getActiveCommonGoalCards() {
         List<CommonGoalCardIdentifier> ids = CGCConfiguration.getInstance().getActiveCommonGoalCardIds();
         return commonGoalCardDomain.stream().filter(it -> ids.contains(it.getId())).toList();
@@ -219,6 +218,7 @@ public class CommonGoalCardFunctionContainer {
 
     /**
      * Returns true if there are two groups each containing 4 tiles of the same type in a 2x2 square
+     *
      * @see CommonGoalCardIdentifier#TWO_SQUARES
      */
     private static Boolean twoSquares(Tile[][] matrix) {
@@ -243,7 +243,7 @@ public class CommonGoalCardFunctionContainer {
 
     /**
      * Returns true if there are 2 lines each formed by 5 different types of tiles
-     * 
+     *
      * @see CommonGoalCardIdentifier#TWO_DIFF_LINES
      */
     private static Boolean twoDiffLines(Tile[][] matrix) {

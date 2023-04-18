@@ -4,15 +4,14 @@ import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.board.cell.Cell;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
-
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.CHECKING;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -277,7 +276,7 @@ public class GameTest implements GameTester {
 
     @Test
     @DisplayName("verify the function onPlayerSelectionPhase, coordinates are not valid exception")
-    public void test_onPlayerSelectionPhase_coordinates_not_valid_exception(){
+    public void test_onPlayerSelectionPhase_coordinates_not_valid_exception() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);

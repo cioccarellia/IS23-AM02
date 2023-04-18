@@ -9,6 +9,5 @@ public record LogicSpecifics(
 
         @SerializedName("selection_max_size")
         int maxSelectionSize
-) implements Specifics
-{
+) implements Specifics {
 }

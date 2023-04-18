@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Class for managing and updating player sessions.
  * Provides independence between accessing a session with the player's username and game number.
- * */
+ */
 public class SessionManager {
 
     private final Map<String, PlayerSession> map = new HashMap<>();
@@ -24,28 +24,28 @@ public class SessionManager {
 
     /**
      * Returns the amount of sessions
-     * */
+     */
     public int size() {
         return map.size();
     }
 
     /**
      * Returns the maximum amount of sessions that can be added
-     * */
+     */
     public int maxSize() {
         return mode.playerCount();
     }
 
     /**
      * Returns a collection containing the sessions
-     * */
+     */
     public Collection<PlayerSession> values() {
         return map.values();
     }
 
     /**
      * Inserts a new session
-     * */
+     */
     public void put(@NotNull PlayerSession session) {
         String username = session.getUsername();
 

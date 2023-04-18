@@ -29,7 +29,7 @@ public class Board {
 
     /**
      * Matrix of {@link Cell}s, containing tiles.
-     * */
+     */
     private final Cell[][] matrix = new Cell[dimension][dimension];
 
 

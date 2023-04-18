@@ -17,14 +17,11 @@ public class PlayerSession {
     private final String username;
     private final PlayerNumber playerNumber;
     private final PersonalGoalCard personalGoalCard;
-    private PlayerCurrentGamePhase playerCurrentGamePhase;
     private final Bookshelf bookshelf = new Bookshelf();
+    public boolean noMoreTurns = false;
+    private PlayerCurrentGamePhase playerCurrentGamePhase;
     // If the player is after the selection phase, its selection is saved here
     private PlayerTileSelection playerTileSelection;
-
-    public boolean noMoreTurns = false;
-
-
     /**
      * Tokens acquired by the current user during gameplay.
      */

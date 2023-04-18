@@ -32,43 +32,38 @@ import java.util.*;
  */
 public class Game implements ControlInterface {
 
+    // Game logger
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
     /**
      * Basic game related data
      */
     private final GameMode mode;
-    private GameStatus status = GameStatus.INITIALIZATION;
     private final Board board = new Board();
 
     /**
      * Maps a player to its {@link PlayerSession}
      */
     private final SessionManager sessions;
-
-    /**
-     * Markers for the current state of the game (needed for turn logic)
-     */
-    private PlayerNumber startingPlayerNumber, currentPlayerNumber;
-
     /**
      * Random, stateful extractors for the game
      */
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
-
     /**
      * Holder class for the common goal cards
      * Holds the current statuses for the common goal cards.
      */
     private final List<CommonGoalCardStatus> commonGoalCardStatuses = new ArrayList<>();
-
     /**
      * External game configuration parameters
-     * */
+     */
     private final LogicConfiguration config = LogicConfiguration.getInstance();
-
-    // Game logger
-    private static final Logger logger = LoggerFactory.getLogger(Game.class);
+    private GameStatus status = GameStatus.INITIALIZATION;
+    /**
+     * Markers for the current state of the game (needed for turn logic)
+     */
+    private PlayerNumber startingPlayerNumber, currentPlayerNumber;
 
     public Game(GameMode _mode) {
         mode = _mode;
@@ -78,11 +73,10 @@ public class Game implements ControlInterface {
     }
 
 
-
-
     /**
      * Inserts a player into the game
-     * @param username  The username for the given player
+     *
+     * @param username The username for the given player
      * @throws IllegalStateException
      */
     public void addPlayer(String username) {
@@ -109,6 +103,7 @@ public class Game implements ControlInterface {
         if (!sessions.isPresent(username)) {
             throw new IllegalStateException("Username not found in sessions");
         }
+
         return sessions.getByUsername(username);
     }
 
@@ -231,11 +226,12 @@ public class Game implements ControlInterface {
      * @param tiles
      */
     @Override
-    //FIXME PLayers could choose which tile goes where inside the same column, in this function the arguments are just col and tiles
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
-            // we assume tiles have been checked and match
-            getCurrentPlayer().getBookshelf().insert(column, tiles);
-            getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
+        //FIXME PLayers could choose which tile goes where inside the same column, in this function the arguments are just col and tiles
+
+        // we assume tiles have been checked and match
+        getCurrentPlayer().getBookshelf().insert(column, tiles);
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
     }
 
     /**
@@ -250,6 +246,7 @@ public class Game implements ControlInterface {
             playerHasNoMoreTurns(player);
             player.next(mode);
         }
+
         playerHasNoMoreTurns(player);
     }
 
@@ -305,7 +302,7 @@ public class Game implements ControlInterface {
         currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
     }
-    
+
     @Override
     public void onGameEnded() {
 
