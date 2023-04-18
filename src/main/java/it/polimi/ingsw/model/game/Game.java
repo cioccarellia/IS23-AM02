@@ -308,8 +308,8 @@ public class Game implements ControlInterface {
 
     }
 
-    public SessionManager getSessions(PlayerNumber number) {
-        return sessions;
+    public PlayerSession getSessionFor(String username) {
+        return sessions.getByUsername(username);
     }
 
     @TestOnly

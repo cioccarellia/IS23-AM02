@@ -3,9 +3,12 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.launcher.AppLaunchConfiguration;
 import it.polimi.ingsw.launcher.ClientMode;
 import it.polimi.ingsw.launcher.ClientProtocol;
+import it.polimi.ingsw.launcher.argparser.CLIDestinations;
+import it.polimi.ingsw.launcher.argparser.CLIParser;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,63 +19,28 @@ import org.slf4j.LoggerFactory;
  */
 public class App {
 
-    protected static final Logger logger = LoggerFactory.getLogger(App.class);
-
+    public static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
         logger.info("Starting app with args={}", (Object) args);
 
-        ArgumentParser parser = ArgumentParsers.newFor("myshelfie").build()
-                .description("MyShelfie game.");
+        CLIParser parser = new CLIParser("myshelfie");
 
-        parser.addArgument("-v", "--verbose")
-                .dest("verbose")
-                .type(Boolean.class)
-                .setConst(true)
-                .help("Enable verbose output.");
+        Namespace result = parser.parse(args);
+        logger.info("Arguments successfully parsed");
 
-        parser.addArgument("-c", "--configuration")
-                .dest("config")
-                .required(true)
-                .type(AppLaunchConfiguration.class)
-                .help("Defines the type of configuration launched.");
+        boolean areArgumentsExhaustive = parser.areArgumentsExhaustive(result);
 
-        parser.addArgument("--server-address")
-                .dest("ip_and_port")
-                .metavar("HOST:PORT")
-                .required(true)
-                .help("The server address");
+        if (areArgumentsExhaustive) {
+            Boolean isVerbose = result.get(CLIDestinations.VERBOSE);
+            AppLaunchConfiguration config = result.get(CLIDestinations.CONFIG);
+            String ipAndPort = result.get(CLIDestinations.IP_AND_PORT);
+            ClientMode optionalModePreselection = result.get(CLIDestinations.CLIENT_MODE);
+            ClientProtocol optionalProtocolPreselection = result.get(CLIDestinations.CLIENT_PROTOCOL);
 
-        parser.addArgument("--client-mode")
-                .dest("client_mode")
-                .type(ClientMode.class)
-                .help("Defines the mode for the current client.");
-
-        parser.addArgument("--client-protocol")
-                .dest("client_proto")
-                .type(ClientProtocol.class)
-                .help("Defines the protocol for the current client.");
-
-
-        try {
-            var r = parser.parseArgs(args);
-
-            Boolean isVerbose = r.get("verbose");
-            AppLaunchConfiguration config = r.get("config");
-
-            String ipAndPort = r.get("ip_and_port");
-
-
-            ClientMode optionalModePreselection = r.get("client_mode");
-            ClientProtocol optionalProtocolPreselection = r.get("client_proto");
-
-
-            logger.info("Arguments successfully parsed");
 
             switch (config) {
-                case SERVER -> {
-                    startServer(ipAndPort);
-                }
+                case SERVER -> startServer(ipAndPort);
                 case CLIENT -> {
                     startClient(ipAndPort, optionalModePreselection, optionalProtocolPreselection);
                 }
@@ -82,11 +50,8 @@ public class App {
                 }
                 default -> throw new IllegalStateException("Unexpected value: " + config);
             }
-
-
-        } catch (ArgumentParserException e) {
-            logger.error("Exception while parsing arguments", e);
-            throw new RuntimeException(e);
+        } else {
+            // start wizard
         }
     }
 
