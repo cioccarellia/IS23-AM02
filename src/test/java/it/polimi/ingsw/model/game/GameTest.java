@@ -15,6 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.IDLE;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.CHECKING;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -200,9 +204,9 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("verify the function onPlayerTileSelection, positively")
+    @DisplayName("verify the function onPlayerSelectionPhase, positively")
     @Disabled
-    public void test_on_player_tile_selection_1_positively()
+    public void test_on_player_selection_phase1_positively()
     {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
@@ -221,13 +225,14 @@ public class GameTest {
                                               game.getGameMatrix()[coords2.x()][coords2.y()]);
 
         assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingtileslist));
+        assertEquals(game.getCurrentPlayer().getPlayerCurrentGamePhase(), INSERTING);
 
     }
 
     @Test
-    @DisplayName("verify the function onPlayerTileSelection, negatively")
+    @DisplayName("verify the function onPlayerSelectionPhase, negatively")
     @Disabled
-    public void test_on_player_tile_selection_1_negatively()
+    public void test_on_player_selection_phase_1_negatively()
     {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
@@ -246,6 +251,37 @@ public class GameTest {
                                               game.getGameMatrix()[coords2.x()][coords2.y()]);
 
         assertFalse(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingtileslist));
+
+    }
+
+    @Test
+    @DisplayName("verify the function onPlayerInsertionPhase, positively")
+    @Disabled
+    public void test_on_player_insertion_phase_1_positively()
+    {
+        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+
+        game.addPlayer("A");
+        game.addPlayer("B");
+
+        game.onGameStarted();
+
+        Coordinate coords1 = new Coordinate(3,1);
+        Coordinate coords2 = new Coordinate(4,1);
+
+        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+
+        game.onPlayerSelectionPhase(testingCoordinates);
+
+        List<Tile> testingTileslist = List.of(game.getGameMatrix()[coords1.x()][coords1.y()],
+                                              game.getGameMatrix()[coords2.x()][coords2.y()]);
+
+        int c = 1;
+        game.onPlayerInsertionPhase(c,testingTileslist);
+
+        // int c column must be a sequence of tile like testingTileList
+        //...
+        assertEquals(game.getCurrentPlayer().getPlayerCurrentGamePhase(), CHECKING);
 
     }
 

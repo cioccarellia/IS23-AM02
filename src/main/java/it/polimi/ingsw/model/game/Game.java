@@ -140,6 +140,7 @@ public class Game implements ControlInterface {
         List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
 
         board.fill(extractedTiles, mode);
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
     }
 
 
@@ -284,6 +285,7 @@ public class Game implements ControlInterface {
 
         getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.IDLE);
     }
+
 
     /**
      * Updates currentPlayer from current player to next player
