@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class BaseControllerTests {
 
-
     @Test
     public void x() {
         GameController controller = new GameController(GameMode.GAME_MODE_4_PLAYERS);

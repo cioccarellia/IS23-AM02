@@ -29,28 +29,28 @@ public class BoardUtils {
 
         switch (edge) {
             case TOP -> {
-                if (topOutOfBounds < 0) {
+                if (topOutOfBounds <= 0) {
                     return true;
                 }
 
                 shiftedCoordinate = new Coordinate(coordinate.x() - 1, coordinate.y());
             }
             case LEFT -> {
-                if (leftOutOfBounds < 0) {
+                if (leftOutOfBounds <= 0) {
                     return true;
                 }
 
                 shiftedCoordinate = new Coordinate(coordinate.x(), coordinate.y() - 1);
             }
             case BOTTOM -> {
-                if (bottomOutOfBounds > dimension) {
+                if (bottomOutOfBounds >= dimension) {
                     return true;
                 }
 
                 shiftedCoordinate = new Coordinate(coordinate.x() + 1, coordinate.y());
             }
             case RIGHT -> {
-                if (rightOutOfBounds > dimension) {
+                if (rightOutOfBounds >= dimension) {
                     return true;
                 }
 

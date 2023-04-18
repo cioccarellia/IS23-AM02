@@ -2,36 +2,27 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
-import it.polimi.ingsw.model.board.HardcodedBoardConstants;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.board.cell.Cell;
-import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
-import it.polimi.ingsw.model.config.board.BoardConfiguration;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.IDLE;
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.CHECKING;
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class GameTest {
-    private static final int dimension = BoardConfiguration.getInstance().getDimension();
+public class GameTest implements GameTester {
 
 
     @Test
     @DisplayName("Verify player adding positively")
     public void test_game_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
-
-        final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB";
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -47,12 +38,12 @@ public class GameTest {
 
 
     @Test
-    @DisplayName("Verify common goal card initialization")
-    public void test_on_game_started_1_positively() {
+    @DisplayName("Verify common goal card initialization #1")
+    public void test_onGameStarted_1_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
@@ -61,26 +52,26 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("Verify personal goal card initialization")
-    public void test_on_game_started_2_positively() {
+    @DisplayName("Verify personal goal card initialization #2")
+    public void test_onGameStarted_2_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
         // all the player must have a personal goal card
-        assertNotNull(game.getPlayerSession("A").getPersonalGoalCard());
-        assertNotNull(game.getPlayerSession("B").getPersonalGoalCard());
+        assertNotNull(game.getPlayerSession(PLAYER_A).getPersonalGoalCard());
+        assertNotNull(game.getPlayerSession(PLAYER_B).getPersonalGoalCard());
 
         // verificare che la personal goal card esista effettivamente
-        //assertEquals(game.getPlayerSession("A").getPersonalGoalCard(), )
+        //assertEquals(game.getPlayerSession(PLAYER_A).getPersonalGoalCard(), )
     }
 
     @Test
-    @DisplayName("verify starting player and current player initialization")
-    public void test_on_game_started_3_positively() {
+    @DisplayName("verify starting player and current player initialization #3")
+    public void test_onGameStarted_3_positively() {
         Game game = new Game(GameMode.GAME_MODE_3_PLAYERS);
 
         final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB", PLAYER_C = "PlayerC";
@@ -99,17 +90,16 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("verify the correct (re)fill of the board, positively")
-    public void test_on_game_started_4_positively()
-    {
+    @DisplayName("verify the correct (re)fill of the board, positively #4")
+    public void test_onGameStarted_4_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
-        Board testingBoard=new Board();
-        Cell[][] testingCell=testingBoard.getCellMatrix();
+        Board testingBoard = new Board();
+        Cell[][] testingCell = testingBoard.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -122,167 +112,223 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("verify the function isSelectionValid, positively")
-    @Disabled
-    //FIXME isSelectionValid thorw a UnsupportedOperationException
-    public void test_is_selection_valid_1_positively()
-    {
+    @DisplayName("verify the function isSelectionValid, positively #1")
+    public void test_isSelectionValid_1_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(3,1);
-        Coordinate coords2 = new Coordinate(4,1);
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+        Coordinate coords1 = new Coordinate(4, 1);
+        Coordinate coords2 = new Coordinate(5, 1);
+        Set<Coordinate> selction = Set.of(coords1, coords2);
 
-        assertTrue(game.isSelectionValid(testingCoordinates));
+        assertTrue(game.isSelectionValid(selction));
     }
 
     @Test
-    @DisplayName("verify the function isSelectionValid, positively")
-    @Disabled
-    //FIXME isSelectionValid thorw a UnsupportedOperationException
-    public void test_is_selection_valid_2_positively()
-    {
+    @DisplayName("verify the function isSelectionValid, positively #2")
+    public void test_isSelectionValid_2_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(1,5);
-        Coordinate coords2 = new Coordinate(1,4);
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+        Coordinate coords1 = new Coordinate(1, 5);
+        Coordinate coords2 = new Coordinate(1, 4);
+        Coordinate coords3 = new Coordinate(1, 3);
+        Set<Coordinate> selction = Set.of(coords1, coords2, coords3);
 
-        assertTrue(game.isSelectionValid(testingCoordinates));
+        assertTrue(game.isSelectionValid(selction));
     }
+
     @Test
-    @DisplayName("verify the function isSelectionValid, negatively")
-    @Disabled
-    //FIXME
-    public void test_is_selection_valid_1_negatively()
-    {
+    @DisplayName("verify the function isSelectionValid, positively #3")
+    public void test_isSelectionValid_3_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(7,1);
-        Coordinate coords2 = new Coordinate(7,2);
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+        Coordinate coords1 = new Coordinate(1, 5);
+        Coordinate coords2 = new Coordinate(1, 4);
+        Set<Coordinate> selction = Set.of(coords1, coords2);
 
-        assertFalse(game.isSelectionValid(testingCoordinates));
+        assertTrue(game.isSelectionValid(selction));
     }
 
     @Test
-    @DisplayName("verify the function isSelectionValid, negatively")
-    @Disabled
-    //FIXME
-    public void test_is_selection_valid_2_negatively()
-    {
+    @DisplayName("verify the function isSelectionValid, negatively #1")
+    public void test_isSelectionValid_1_negatively() {
+        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+
+        game.onGameStarted();
+
+        Coordinate coords1 = new Coordinate(7, 1);
+        Coordinate coords2 = new Coordinate(7, 4);
+        Set<Coordinate> selction = Set.of(coords1, coords2);
+
+        assertFalse(game.isSelectionValid(selction));
+    }
+
+    @Test
+    @DisplayName("verify the function isSelectionValid, negatively #2")
+    public void test_isSelectionValid_2_negatively() {
         Game game = new Game(GameMode.GAME_MODE_3_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
-        game.addPlayer("C");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+        game.addPlayer(PLAYER_C);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(1,4);
-        Coordinate coords2 = new Coordinate(1,5);
-        Coordinate coords3 = new Coordinate(1,6);
+        Coordinate coords1 = new Coordinate(1, 4);
+        Coordinate coords2 = new Coordinate(1, 5);
+        Coordinate coords3 = new Coordinate(1, 8);
 
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2,coords3);
+        Set<Coordinate> selction = Set.of(coords1, coords2, coords3);
 
-        assertFalse(game.isSelectionValid(testingCoordinates));
+        assertFalse(game.isSelectionValid(selction));
     }
 
     @Test
-    @DisplayName("verify the function onPlayerSelectionPhase, positively")
-    @Disabled
-    public void test_on_player_selection_phase1_positively()
-    {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+    @DisplayName("verify the function isSelectionValid, negatively #3")
+    public void test_isSelectionValid_3_negatively() {
+        Game game = new Game(GameMode.GAME_MODE_3_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+        game.addPlayer(PLAYER_C);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(7,3);
-        Coordinate coords2 = new Coordinate(7,4);
+        Coordinate coords1 = new Coordinate(4, 2);
+        Coordinate coords2 = new Coordinate(4, 3);
+        Coordinate coords3 = new Coordinate(4, 4);
 
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+        Set<Coordinate> selection = Set.of(coords1, coords2, coords3);
 
-        game.onPlayerSelectionPhase(testingCoordinates);
-        List<Tile> testingtileslist = List.of(game.getGameMatrix()[coords1.x()][coords1.y()],
-                                              game.getGameMatrix()[coords2.x()][coords2.y()]);
+        assertFalse(game.isSelectionValid(selection));
+    }
 
-        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingtileslist));
-        assertEquals(game.getCurrentPlayer().getPlayerCurrentGamePhase(), INSERTING);
+    @Test
+    @DisplayName("verify the function onPlayerSelectionPhase, positively #1")
+    public void test_onPlayerSelectionPhase_1_positively() {
+        Game game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+        game.addPlayer(PLAYER_C);
+        game.addPlayer(PLAYER_D);
+
+        game.onGameStarted();
+
+        Coordinate coords1 = new Coordinate(8, 5);
+        Coordinate coords2 = new Coordinate(8, 4);
+
+        Set<Coordinate> selction = Set.of(coords1, coords2);
+
+        game.onPlayerSelectionPhase(selction);
+
+        List<Tile> testingTiles = List.of(game.getGameMatrix()[coords1.x()][coords1.y()],
+                game.getGameMatrix()[coords2.x()][coords2.y()]);
+
+        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingTiles));
+        assertEquals(INSERTING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
 
     }
 
     @Test
-    @DisplayName("verify the function onPlayerSelectionPhase, negatively")
-    @Disabled
-    public void test_on_player_selection_phase_1_negatively()
-    {
+    @DisplayName("Checks that calling onPlayerSelectionPhase(coordinates) actually saves the selection on" +
+            "the user session upon successful execution")
+    public void test_onPlayerSelectionPhase_assertSelectionSavesCoordinatesinUserSession() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(5,1);
-        Coordinate coords2 = new Coordinate(5,2);
+        Coordinate coords1 = new Coordinate(5, 1);
+        Coordinate coords2 = new Coordinate(5, 2);
 
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+        Set<Coordinate> selction = Set.of(coords1, coords2);
 
-        game.onPlayerSelectionPhase(testingCoordinates);
-        List<Tile> testingtileslist = List.of(game.getGameMatrix()[coords1.x()][coords1.y()],
-                                              game.getGameMatrix()[coords2.x()][coords2.y()]);
 
-        assertFalse(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingtileslist));
+        game.onPlayerSelectionPhase(selction);
+
+        List<Tile> testingTiles = List.of(
+                game.getGameMatrix()[coords1.x()][coords1.y()],
+                game.getGameMatrix()[coords2.x()][coords2.y()]
+        );
+
+        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingTiles));
+
+    }
+
+    @Test
+    @DisplayName("verify the function onPlayerSelectionPhase, coordinates are not valid exception")
+    public void test_onPlayerSelectionPhase_coordinates_not_valid_exception(){
+        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+
+        game.onGameStarted();
+
+        Coordinate c1 = new Coordinate(0, 0);
+        Coordinate c2 = new Coordinate(0, 1);
+
+        Set<Coordinate> selection = Set.of(c1, c2);
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> game.onPlayerSelectionPhase(selection));
+
+        String expectedMessage = "Coordinates are not valid";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
 
     }
 
     @Test
     @DisplayName("verify the function onPlayerInsertionPhase, positively")
-    @Disabled
-    public void test_on_player_insertion_phase_1_positively()
-    {
+    public void test_onPlayerInsertionPhase_positively() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("A");
-        game.addPlayer("B");
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(3,1);
-        Coordinate coords2 = new Coordinate(4,1);
+        Coordinate c1 = new Coordinate(1, 3);
+        Coordinate c2 = new Coordinate(1, 4);
 
-        Set<Coordinate> testingCoordinates = Set.of(coords1,coords2);
+        Set<Coordinate> selection = Set.of(c1, c2);
 
-        game.onPlayerSelectionPhase(testingCoordinates);
+        game.onPlayerSelectionPhase(selection);
 
-        List<Tile> testingTileslist = List.of(game.getGameMatrix()[coords1.x()][coords1.y()],
-                                              game.getGameMatrix()[coords2.x()][coords2.y()]);
 
-        int c = 1;
-        game.onPlayerInsertionPhase(c,testingTileslist);
+        Tile[][] matrix = game.getGameMatrix();
 
-        // int c column must be a sequence of tile like testingTileList
-        //...
-        assertEquals(game.getCurrentPlayer().getPlayerCurrentGamePhase(), CHECKING);
+        List<Tile> testingTilesList = List.of(
+                matrix[c1.x()][c1.y()],
+                matrix[c2.x()][c2.y()]
+        );
 
+        game.onPlayerInsertionPhase(1, testingTilesList);
+
+        assertEquals(matrix[c1.x()][c1.y()], testingTilesList.get(0));
+        assertEquals(matrix[c2.x()][c2.y()], testingTilesList.get(1));
+        assertEquals(CHECKING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
     }
 
 }

@@ -22,7 +22,6 @@ import it.polimi.ingsw.utils.model.CoordinatesHelper;
 import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
-import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,11 +148,14 @@ public class Game implements ControlInterface {
     }
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
+        // fixme throws tons of exceptions
+
+        boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
         boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 
-        return isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
+        return areCoordinatesReferencingValidTiles && isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
     }
 
     public PlayerSession getCurrentPlayer() {
@@ -193,6 +195,11 @@ public class Game implements ControlInterface {
     }
 
 
+    private boolean areAllCoordinatesPresent(@NotNull Collection<Coordinate> coordinates) {
+        return coordinates.stream().allMatch(it -> board.getTileAt(it).isPresent());
+    }
+
+
     /**
      * Select Tiles from the board and set them inside current player session
      *
@@ -200,9 +207,9 @@ public class Game implements ControlInterface {
      */
     @Override
     public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
-        assert isSelectionValid(coordinates);
-
-        List<Coordinate> orderedCoordinates = coordinates.stream().toList();
+        if (!isSelectionValid(coordinates)) {
+            throw new IllegalStateException("Coordinates are not valid");
+        }
 
         // we assume the selection is valid
         List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates
@@ -224,11 +231,11 @@ public class Game implements ControlInterface {
      * @param tiles
      */
     @Override
+    //FIXME PLayers could choose which tile goes where inside the same column, in this function the arguments are just col and tiles
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
-
-        // we assume tiles have been checked and match
-        getCurrentPlayer().getBookshelf().insert(column, tiles);
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
+            // we assume tiles have been checked and match
+            getCurrentPlayer().getBookshelf().insert(column, tiles);
+            getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
     }
 
     /**

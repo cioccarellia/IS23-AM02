@@ -18,7 +18,7 @@ public class PlayerSession {
     private final PlayerNumber playerNumber;
     private final PersonalGoalCard personalGoalCard;
     private PlayerCurrentGamePhase playerCurrentGamePhase;
-    private Bookshelf bookshelf;
+    private final Bookshelf bookshelf = new Bookshelf();
     // If the player is after the selection phase, its selection is saved here
     private PlayerTileSelection playerTileSelection;
 

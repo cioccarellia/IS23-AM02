@@ -48,11 +48,6 @@ public class GameController {
     }
 
 
-    public void startCurrentTurn() {
-
-    }
-
-
     // Creates a connection between client and server
     public SingleResult<SignUpRequest> onPlayerSignUpRequest(String username) {
         logger.info("onPlayerSignUpRequest(username={})", username);
@@ -89,9 +84,12 @@ public class GameController {
 
     // Sets the state of the connection for a client to be disconnected
     public void onPlayerDisconnection(String username) {
-        logger.info("onPlayerDisconnection({}), username");
+        logger.info("onPlayerDisconnection({})", username);
         connections.get(username).setStatus(ConnectionStatus.DISCONNECTED);
     }
+
+
+
 
 
 
@@ -107,6 +105,13 @@ public class GameController {
                 .filter(player -> player.getStatus() == ConnectionStatus.DISCONNECTED)
                 .count() >= maxPlayerAmount - 1;
     }
+
+
+    public void startCurrentTurn() {
+
+    }
+
+
 
 
     public SingleResult<TileSelectionFailures> onPlayerTileSelectionRequest(String username, Set<Coordinate> selection) {
