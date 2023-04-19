@@ -18,15 +18,15 @@ public class BoardGetTileAtTest {
     //FIXME understand if returning optional instead of Tile could be better
     public void test_getTileAt_method() {
         Board board = new Board();
-        Cell[][] testCell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                testCell[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
+                cellMatrix[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
             }
         }
 
-        Coordinate coordsTest = new Coordinate(1, 5);
-        assertEquals(Optional.of(GAME), board.getTileAt(coordsTest));
+        Coordinate c = new Coordinate(1, 5);
+        assertEquals(Optional.of(GAME), board.getTileAt(c));
     }
 }

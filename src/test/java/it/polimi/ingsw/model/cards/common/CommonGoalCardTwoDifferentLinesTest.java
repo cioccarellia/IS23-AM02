@@ -50,7 +50,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify TWO_DIFF_LINES negatively #1")
     public void test_f8_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {CAT, CAT, PLANT, TROPHY, CAT},
                 {CAT, GAME, FRAME, PLANT, GAME},
                 {GAME, CAT, GAME, TROPHY, TROPHY},
@@ -59,7 +59,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoDiffLinesCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -67,7 +67,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify TWO_DIFF_LINES negatively #2")
     public void test_f8_negative_2() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {CAT, CAT, null, null, CAT},
                 {CAT, GAME, null, null, GAME},
                 {GAME, CAT, null, TROPHY, TROPHY},
@@ -76,7 +76,7 @@ public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
                 {BOOK, CAT, null, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoDiffLinesCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoDiffLinesCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

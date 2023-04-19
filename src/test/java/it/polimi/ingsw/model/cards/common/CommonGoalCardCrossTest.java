@@ -50,7 +50,7 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify X_TILES negatively #1")
     public void test_f10_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {CAT, GAME, null, PLANT, GAME},
                 {GAME, CAT, GAME, TROPHY, TROPHY},
@@ -59,7 +59,7 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = xTiles.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = xTiles.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -67,7 +67,7 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify X_TILES negatively #2")
     public void test_f10_negative_2() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, PLANT, null, null},
@@ -76,7 +76,7 @@ public class CommonGoalCardCrossTest implements ShelfMatrixTester {
                 {TROPHY, null, TROPHY, null, PLANT}
         };
 
-        boolean doesMatrixMatch = xTiles.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = xTiles.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

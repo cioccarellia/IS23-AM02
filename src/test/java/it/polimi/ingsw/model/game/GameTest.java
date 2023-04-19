@@ -58,12 +58,13 @@ public class GameTest implements GameTester {
         game.addPlayer(PLAYER_B);
 
         game.onGameStarted();
+
         Board board = new Board();
-        Cell[][] cell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                cell[i][j].setContent(game.getGameMatrix()[i][j]);
+                cellMatrix[i][j].setContent(game.getGameMatrix()[i][j]);
             }
         }
 

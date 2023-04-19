@@ -32,7 +32,7 @@ public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify EIGHT_TILES negatively #1")
     public void test_f11_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, GAME, TROPHY, TROPHY, TROPHY},
                 {CAT, CAT, TROPHY, TROPHY, TROPHY},
                 {BOOK, BOOK, BOOK, BOOK, TROPHY},
@@ -41,7 +41,7 @@ public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
                 {PLANT, PLANT, PLANT, PLANT, PLANT}
         };
 
-        boolean doesMatrixMatch = eightTilesCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = eightTilesCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

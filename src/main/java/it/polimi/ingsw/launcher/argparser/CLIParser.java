@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Class implementing a basic CLI parser for the startup program
- * */
+ */
 public class CLIParser {
 
     private final String programName;
@@ -52,15 +52,9 @@ public class CLIParser {
 
     /**
      * Returns whether the given arguments are exhaustive and can allow for an immediate start
-     * */
+     */
     public boolean areArgumentsExhaustive(Namespace ns) {
-        if (ns.get("config") == null || ns.get("ip_and_port") == null) {
-            return false;
-        }
-
-
-
-        return true;
+        return ns.get("config") != null && ns.get("ip_and_port") != null;
     }
 
     public Namespace parse(String[] args) {

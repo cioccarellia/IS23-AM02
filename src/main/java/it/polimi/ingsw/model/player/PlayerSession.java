@@ -19,6 +19,11 @@ public class PlayerSession {
     private final PlayerNumber playerNumber;
     private final PersonalGoalCard personalGoalCard;
     private final Bookshelf bookshelf = new Bookshelf();
+    /**
+     * Identifiers of all the {@link it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier}s that
+     * have been acquired by the user during the game (i.e. for which the user has received any common goal card tokens).
+     */
+    private final List<CommonGoalCardIdentifier> achievedCommonGoalCards = new ArrayList<>();
     public boolean noMoreTurns = false;
     private PlayerCurrentGamePhase playerCurrentGamePhase;
     // If the player is after the selection phase, its selection is saved here
@@ -27,12 +32,6 @@ public class PlayerSession {
      * Tokens acquired by the current user during gameplay.
      */
     private List<Token> acquiredTokens;
-
-    /**
-     * Identifiers of all the {@link it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier}s that
-     * have been acquired by the user during the game (i.e. for which the user has received any common goal card tokens).
-     */
-    private final List<CommonGoalCardIdentifier> achievedCommonGoalCards = new ArrayList<>();
 
 
     public PlayerSession(String username, PlayerNumber playerNumber, PersonalGoalCard personalGoalCard) {

@@ -14,47 +14,47 @@ public class BoardCountFreeEdgesTest {
     @DisplayName("Tests the correct functionality of countFreeEdges method, positive case")
     public void test_countFreeEdges_method_positively() {
         Board board = new Board();
-        Cell[][] testPositiveCell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                testPositiveCell[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
+                cellMatrix[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
             }
         }
 
-        Coordinate coordsTest = new Coordinate(1, 5);
-        assertEquals(3, board.countFreeEdges(coordsTest));
+        Coordinate c = new Coordinate(1, 5);
+        assertEquals(3, board.countFreeEdges(c));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of countFreeEdges method, negative case")
     public void test_countFreeEdges_method_negatively() {
         Board board = new Board();
-        Cell[][] testNegativeCell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                testNegativeCell[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
+                cellMatrix[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
             }
         }
 
-        Coordinate coordsTest = new Coordinate(4, 4);
-        assertEquals(0, board.countFreeEdges(coordsTest));
+        Coordinate c = new Coordinate(4, 4);
+        assertEquals(0, board.countFreeEdges(c));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of countFreeEdges method, edge case")
     public void test_countFreeEdges_method_edge_case() {
         Board board = new Board();
-        Cell[][] cell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                cell[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
+                cellMatrix[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
             }
         }
 
-        Coordinate coordsTest = new Coordinate(0, 0);
-        assertEquals(4, board.countFreeEdges(coordsTest));
+        Coordinate c = new Coordinate(0, 0);
+        assertEquals(4, board.countFreeEdges(c));
     }
 }

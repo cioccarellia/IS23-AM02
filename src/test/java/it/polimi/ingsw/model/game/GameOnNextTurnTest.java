@@ -30,8 +30,10 @@ public class GameOnNextTurnTest implements GameTester {
 
         testingGame.onNextTurn(PLAYER_B);
 
-        boolean isFalse = testingGame.getSessionFor(PLAYER_B).getPlayerCurrentGamePhase().equals(PlayerCurrentGamePhase.IDLE);
-        assertFalse(isFalse);
-    }
+        boolean isPlayerGamePhaseIdle = testingGame.getSessionFor(PLAYER_B)
+                .getPlayerCurrentGamePhase()
+                .equals(PlayerCurrentGamePhase.IDLE);
 
+        assertFalse(isPlayerGamePhaseIdle);
+    }
 }

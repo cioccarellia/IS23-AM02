@@ -18,7 +18,6 @@ public class BookShelfGetShelfMatrixTest {
         Tile[][] expectedMatrix = DefaultBookshelf.BOOKSHELF_MATRIX;
 
         assertTrue(Objects.deepEquals(actualMatrix, expectedMatrix));
-
     }
 
     @Test
@@ -30,7 +29,5 @@ public class BookShelfGetShelfMatrixTest {
         Tile[][] expectedMatrix = DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX;
 
         assertTrue(Objects.deepEquals(actualMatrix, expectedMatrix));
-
     }
-
 }

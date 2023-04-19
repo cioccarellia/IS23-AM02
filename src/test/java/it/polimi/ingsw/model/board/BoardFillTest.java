@@ -15,8 +15,9 @@ public class BoardFillTest {
     @DisplayName("Tests the correct functionality of fill method, #1 positively")
     public void test_fill_method_positively_1() {
         Board board = new Board();
-        TileExtractor testingElements = new TileExtractor();
-        board.fill(testingElements.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
+        TileExtractor extractor = new TileExtractor();
+
+        board.fill(extractor.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
         assertEquals(0, board.countEmptyCells(GAME_MODE_2_PLAYERS));
     }
 
@@ -24,37 +25,37 @@ public class BoardFillTest {
     @DisplayName("Tests the correct functionality of fill method, #2 positively")
     public void test_fill_method_positively_2() {
         Board board = new Board();
-        TileExtractor testingElements = new TileExtractor();
-        board.fill(testingElements.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
+        TileExtractor extractor = new TileExtractor();
+        board.fill(extractor.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
 
-        Coordinate coordsTest = new Coordinate(1, 3);
-        assertEquals(2, board.countFreeEdges(coordsTest));
-        Coordinate coordsTest_1 = new Coordinate(0, 3);
-        assertEquals(3, board.countFreeEdges(coordsTest_1));
-        Coordinate coordsTest_2 = new Coordinate(0, 4);
-        assertEquals(3, board.countFreeEdges(coordsTest_2));
-        Coordinate coordsTest_3 = new Coordinate(5, 5);
-        assertEquals(0, board.countFreeEdges(coordsTest_3));
+        Coordinate c1 = new Coordinate(1, 3), c2 = new Coordinate(0, 3), c3 = new Coordinate(0, 4), c4 = new Coordinate(5, 5);
+
+        assertEquals(2, board.countFreeEdges(c1));
+        assertEquals(3, board.countFreeEdges(c2));
+        assertEquals(3, board.countFreeEdges(c3));
+        assertEquals(0, board.countFreeEdges(c4));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of fill method, #3 positively")
     public void test_fill_method_positively_3() {
         Board board = new Board();
-        TileExtractor testingElements = new TileExtractor();
-        board.fill(testingElements.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
-        Coordinate coordsTest = new Coordinate(5, 5);
-        board.removeTileAt(coordsTest);
-        assertEquals(Optional.empty(), board.getTileAt(coordsTest));
+        TileExtractor extractor = new TileExtractor();
+
+        board.fill(extractor.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
+        Coordinate c = new Coordinate(5, 5);
+        board.removeTileAt(c);
+        assertEquals(Optional.empty(), board.getTileAt(c));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of fill method, #4 positively")
     public void test_fill_method_positively_4() {
         Board board = new Board();
-        TileExtractor testingElements = new TileExtractor();
-        board.fill(testingElements.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
-        Coordinate coordsTest = new Coordinate(5, 5);
-        assertFalse(board.hasAtLeastOneFreeEdge(coordsTest));
+        TileExtractor extractor = new TileExtractor();
+
+        board.fill(extractor.extractAmount(board.countEmptyCells(GAME_MODE_2_PLAYERS)), GAME_MODE_2_PLAYERS);
+        Coordinate c = new Coordinate(5, 5);
+        assertFalse(board.hasAtLeastOneFreeEdge(c));
     }
 }

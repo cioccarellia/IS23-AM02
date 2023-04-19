@@ -50,7 +50,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify TWO_SQUARES negatively #1")
     public void test_f7_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {CAT, CAT, null, null, CAT},
                 {CAT, GAME, null, null, GAME},
                 {GAME, CAT, null, TROPHY, TROPHY},
@@ -59,7 +59,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = twoSquaresCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -67,7 +67,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify TWO_SQUARES negatively #2")
     public void test_f7_negative_2() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {CAT, CAT, PLANT, TROPHY, GAME},
                 {CAT, TROPHY, PLANT, TROPHY, GAME},
@@ -76,7 +76,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {CAT, TROPHY, PLANT, TROPHY, GAME}
         };
 
-        boolean doesMatrixMatch = twoSquaresCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -84,7 +84,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify TWO_SQUARES negatively #3")
     public void test_f7_negative_3() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {CAT, CAT, CAT, TROPHY, GAME},
                 {CAT, CAT, CAT, TROPHY, GAME},
@@ -93,7 +93,7 @@ public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
                 {CAT, TROPHY, PLANT, TROPHY, GAME}
         };
 
-        boolean doesMatrixMatch = twoSquaresCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = twoSquaresCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

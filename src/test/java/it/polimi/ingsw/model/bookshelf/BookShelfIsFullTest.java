@@ -18,7 +18,6 @@ public class BookShelfIsFullTest {
         shelf.fillUpBookShelf(DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
 
         assertFalse(shelf.isFull());
-
     }
 
     @Test

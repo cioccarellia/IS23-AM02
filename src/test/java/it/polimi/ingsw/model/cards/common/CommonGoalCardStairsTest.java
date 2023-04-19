@@ -52,7 +52,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
     @DisplayName("Verify STAIRS negatively #1")
     public void test_f12_negative_1() {
 
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {GAME, GAME, null, null, null},
@@ -61,7 +61,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {CAT, GAME, GAME, BOOK, null}
         };
 
-        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -70,7 +70,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
     @DisplayName("Verify STAIRS negatively #2")
     public void test_f12_negative_2() {
 
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, GAME, PLANT},
@@ -79,7 +79,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {null, PLANT, GAME, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -88,7 +88,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
     @DisplayName("Edge case for STAIRS: little stair on the left #1")
     public void test_f12_edge_1() {
 
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {GAME, null, null, null, null},
@@ -97,7 +97,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {CAT, GAME, GAME, BOOK, null}
         };
 
-        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -106,7 +106,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
     @DisplayName("Edge case for STAIRS positively: little stair on the right #2")
     public void test_f12_edge_2() {
 
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, PLANT},
@@ -115,7 +115,7 @@ public class CommonGoalCardStairsTest implements ShelfMatrixTester {
                 {null, PLANT, GAME, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = stairsCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = stairsCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

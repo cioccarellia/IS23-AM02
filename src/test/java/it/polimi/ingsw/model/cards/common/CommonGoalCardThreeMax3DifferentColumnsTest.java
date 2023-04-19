@@ -51,7 +51,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
     @Test
     @DisplayName("Verify THREE_MAX3DIFF_COLUMNS negatively #1")
     public void test_f9_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {CAT, CAT, PLANT, TROPHY, CAT},
                 {CAT, GAME, FRAME, PLANT, GAME},
                 {GAME, TROPHY, GAME, CAT, TROPHY},
@@ -60,7 +60,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -68,7 +68,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
     @Test
     @DisplayName("Verify THREE_MAX3DIFF_COLUMNS negatively #2")
     public void test_f9_negative_2() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {CAT, GAME, null, PLANT, GAME},
                 {GAME, CAT, GAME, TROPHY, TROPHY},
@@ -77,7 +77,7 @@ public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixT
                 {BOOK, CAT, CAT, FRAME, FRAME}
         };
 
-        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = threeMax3diffColumnsCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

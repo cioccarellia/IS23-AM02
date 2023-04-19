@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.board.Coordinate;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -117,9 +116,8 @@ public class GameExceptionTests implements GameTester {
 
     }
 
-    @Test
+    /*@Test
     @DisplayName("Verify the function of playerHasNoMoreTurns, edge case #1")
-    @Disabled
     public void test_playerHasNoMoreTurns_edgeCase_1() {
         //FIXME Exception management
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
@@ -128,7 +126,7 @@ public class GameExceptionTests implements GameTester {
         game.addPlayer(PLAYER_B);
 
         //assertThrows(IllegalArgumentException,game.getSessionFor(PLAYER_A).noMoreTurns);
-    }
+    }*/
 
 
 }

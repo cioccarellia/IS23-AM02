@@ -2,9 +2,6 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.board.cell.CellPattern;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static it.polimi.ingsw.model.board.Tile.*;
 import static it.polimi.ingsw.model.board.cell.CellPattern.*;
 
@@ -36,9 +33,5 @@ public class HardcodedBoardConstants {
 
     public static Tile getTile(int x, int y) {
         return GLOBAL_BOARD_MATRIX[x][y];
-    }
-
-    public static List<Tile[]> tileToList() {
-        return Arrays.stream(GLOBAL_BOARD_MATRIX).toList();
     }
 }

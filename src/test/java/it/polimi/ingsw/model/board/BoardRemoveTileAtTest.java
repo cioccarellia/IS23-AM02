@@ -17,17 +17,17 @@ public class BoardRemoveTileAtTest {
     //FIXME understand if returning optional instead of Tile could be better
     public void test_removeTileAt_method_positively() {
         Board board = new Board();
-        Cell[][] testPositiveCell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                testPositiveCell[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
+                cellMatrix[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
             }
         }
 
-        Coordinate coordsTest = new Coordinate(1, 5);
-        board.removeTileAt(coordsTest);
-        assertEquals(Optional.empty(), board.getTileAt(coordsTest));
+        Coordinate c = new Coordinate(1, 5);
+        board.removeTileAt(c);
+        assertEquals(Optional.empty(), board.getTileAt(c));
     }
 
     @Test
@@ -35,16 +35,16 @@ public class BoardRemoveTileAtTest {
     //FIXME understand if returning optional instead of Tile could be better
     public void test_removeTileAt_method_edge_case() {
         Board board = new Board();
-        Cell[][] cell = board.getCellMatrix();
+        Cell[][] cellMatrix = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                cell[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
+                cellMatrix[i][j].setContent(HardcodedBoardConstants.getTile(i, j));
             }
         }
 
-        Coordinate coordsTest = new Coordinate(0, 0);
-        board.removeTileAt(coordsTest);
-        assertEquals(Optional.empty(), board.getTileAt(coordsTest));
+        Coordinate c = new Coordinate(0, 0);
+        board.removeTileAt(c);
+        assertEquals(Optional.empty(), board.getTileAt(c));
     }
 }

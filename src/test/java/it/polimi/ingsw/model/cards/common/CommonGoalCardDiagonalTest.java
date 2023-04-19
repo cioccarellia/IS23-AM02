@@ -118,7 +118,7 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify DIAGONAL negatively: almost diagonal")
     public void test_f2_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {CAT, null, null, null, null},
                 {FRAME, CAT, null, null, null},
@@ -127,7 +127,7 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
                 {TROPHY, TROPHY, TROPHY, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = diagonalCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = diagonalCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -135,7 +135,7 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify DIAGONAL negatively: almost diagonal")
     public void test_f2_negative_2() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {CAT, null, null, null, null},
                 {FRAME, CAT, null, null, null},
@@ -144,7 +144,7 @@ public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
                 {TROPHY, TROPHY, TROPHY, TROPHY, CAT}
         };
 
-        boolean doesMatrixMatch = diagonalCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = diagonalCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

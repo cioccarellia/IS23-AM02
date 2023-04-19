@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.controller.ControlInterface;
+import it.polimi.ingsw.controller.EventControl;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * Model class representing an instance of a game.
  */
-public class Game implements ControlInterface {
+public class Game implements EventControl {
 
     // Game logger
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
@@ -44,22 +44,26 @@ public class Game implements ControlInterface {
      * Maps a player to its {@link PlayerSession}
      */
     private final SessionManager sessions;
+
     /**
      * Random, stateful extractors for the game
      */
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
+
     /**
      * Holder class for the common goal cards
      * Holds the current statuses for the common goal cards.
      */
     private final List<CommonGoalCardStatus> commonGoalCardStatuses = new ArrayList<>();
+
     /**
      * External game configuration parameters
      */
     private final LogicConfiguration config = LogicConfiguration.getInstance();
     private GameStatus status = GameStatus.INITIALIZATION;
+
     /**
      * Markers for the current state of the game (needed for turn logic)
      */
@@ -148,7 +152,10 @@ public class Game implements ControlInterface {
     public GameStatus getGameStatus() {
         return status;
     }
-    public void setGameStatus(GameStatus status){this.status=status;}
+
+    public void setGameStatus(GameStatus status) {
+        this.status = status;
+    }
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);

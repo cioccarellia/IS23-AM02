@@ -55,7 +55,7 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify FOUR_GROUP_FOUR negatively #1")
     public void test_f3_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {PLANT, null, PLANT, PLANT, null},
                 {PLANT, null, GAME, TROPHY, null},
                 {PLANT, null, TROPHY, GAME, null},
@@ -64,7 +64,7 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
                 {GAME, null, FRAME, CAT, null}
         };
 
-        boolean doesMatrixMatch = fourGroupFourCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourGroupFourCGC.matches(tileMatrix);
 
         // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
@@ -74,7 +74,7 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     @DisplayName("Verify FOUR_GROUP_FOUR negatively #2")
     public void test_f3_negative_2() {
 
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {PLANT, PLANT, PLANT, PLANT, null},
                 {PLANT, GAME, CAT, FRAME, null},
                 {PLANT, PLANT, PLANT, PLANT, null},
@@ -83,7 +83,7 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
                 {PLANT, CAT, FRAME, CAT, null}
         };
 
-        boolean doesMatrixMatch = fourGroupFourCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourGroupFourCGC.matches(tileMatrix);
 
         // assert that the matrix does not match
         assertFalse(doesMatrixMatch);
@@ -121,7 +121,7 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
     @DisplayName("Edge case fot FOUR_GROUP_FOUR: false curious matrix #3")
     public void test_f3_edge_3() {
 
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, null},
                 {null, null, PLANT, null, null},
                 {BOOK, BOOK, PLANT, CAT, null},
@@ -130,7 +130,7 @@ public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
                 {PLANT, PLANT, CAT, CAT, null},
 
         };
-        boolean doesMatrixMatch = fourGroupFourCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourGroupFourCGC.matches(tileMatrix);
         assertFalse(doesMatrixMatch);
     }
 }

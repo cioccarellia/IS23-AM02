@@ -29,7 +29,6 @@ public class GameOnPlayerInsertionPhaseTest implements GameTester {
 
         game.onPlayerSelectionPhase(selection);
 
-
         Tile[][] matrix = game.getGameMatrix();
 
         List<Tile> tiles = List.of(

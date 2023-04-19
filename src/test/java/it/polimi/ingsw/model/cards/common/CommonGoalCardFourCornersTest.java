@@ -34,7 +34,7 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify FOUR_CORNERS negatively #1")
     public void test_f5_negative_1() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {TROPHY, null, null, null, CAT},
                 {TROPHY, null, null, null, TROPHY},
                 {TROPHY, null, null, null, TROPHY},
@@ -43,7 +43,7 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
                 {CAT, null, null, null, TROPHY}
         };
 
-        boolean doesMatrixMatch = fourCornersCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourCornersCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }
@@ -51,7 +51,7 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify FOUR_CORNERS negatively #2")
     public void test_f5_negative_2() {
-        Tile[][] testNegativeMatrix = {
+        Tile[][] tileMatrix = {
                 {null, null, null, null, CAT},
                 {null, null, null, null, TROPHY},
                 {TROPHY, null, null, null, TROPHY},
@@ -60,7 +60,7 @@ public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
                 {CAT, null, null, null, TROPHY}
         };
 
-        boolean doesMatrixMatch = fourCornersCGC.matches(testNegativeMatrix);
+        boolean doesMatrixMatch = fourCornersCGC.matches(tileMatrix);
 
         assertFalse(doesMatrixMatch);
     }

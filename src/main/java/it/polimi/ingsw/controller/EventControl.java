@@ -6,8 +6,15 @@ import it.polimi.ingsw.model.board.Tile;
 import java.util.List;
 import java.util.Set;
 
-public interface ControlInterface {
+/**
+ * Notifies the game of events happening as a result of the interactions between client and server.
+ * 
+ */
+public interface EventControl {
 
+    /**
+     * The game 
+     */
     void onGameStarted();
 
     void onPlayerSelectionPhase(Set<Coordinate> coordinates);
