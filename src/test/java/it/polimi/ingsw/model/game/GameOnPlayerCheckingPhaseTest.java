@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
@@ -38,22 +38,20 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
         Tile[][] matrix = game.getGameMatrix();
 
-        List<Tile> testingTilesList = List.of(
+        List<Tile> tiles = List.of(
                 matrix[c1.x()][c1.y()],
                 matrix[c2.x()][c2.y()]
         );
 
-        game.onPlayerInsertionPhase(1, testingTilesList);
+        game.onPlayerInsertionPhase(1, tiles);
     }
 
     @Test
     @DisplayName("verify the function OnPlayerCheckingPhase, positively")
     public void test_OnPlayerCheckingPhase_positively() {
-
         game.onPlayerCheckingPhase();
 
         assertFalse(game.getCurrentPlayer().getBookshelf().isFull());
-
-        assertEquals(game.getCurrentPlayer().getAcquiredTokens(), null);
+        assertNull(game.getCurrentPlayer().getAcquiredTokens());
     }
 }

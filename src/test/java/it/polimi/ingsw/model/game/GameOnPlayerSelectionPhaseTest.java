@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GameOnPlayerSelectionPhaseTest implements GameTester{
+public class GameOnPlayerSelectionPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerSelectionPhase, positively #1")
     public void test_onPlayerSelectionPhase_1_positively() {
@@ -25,17 +25,19 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester{
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(8, 5);
-        Coordinate coords2 = new Coordinate(8, 4);
+        Coordinate c1 = new Coordinate(8, 5);
+        Coordinate c2 = new Coordinate(8, 4);
 
-        Set<Coordinate> selection = Set.of(coords1, coords2);
+        Set<Coordinate> selection = Set.of(c1, c2);
 
         game.onPlayerSelectionPhase(selection);
 
-        List<Tile> testingTiles = List.of(game.getGameMatrix()[coords1.x()][coords1.y()],
-                game.getGameMatrix()[coords2.x()][coords2.y()]);
+        List<Tile> tiles = List.of(
+                game.getGameMatrix()[c1.x()][c1.y()],
+                game.getGameMatrix()[c2.x()][c2.y()]
+        );
 
-        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingTiles));
+        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
         assertEquals(INSERTING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
 
     }
@@ -51,20 +53,20 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester{
 
         game.onGameStarted();
 
-        Coordinate coords1 = new Coordinate(5, 1);
-        Coordinate coords2 = new Coordinate(5, 2);
+        Coordinate c1 = new Coordinate(5, 1);
+        Coordinate c2 = new Coordinate(5, 2);
 
-        Set<Coordinate> selection = Set.of(coords1, coords2);
+        Set<Coordinate> selection = Set.of(c1, c2);
 
 
         game.onPlayerSelectionPhase(selection);
 
-        List<Tile> testingTiles = List.of(
-                game.getGameMatrix()[coords1.x()][coords1.y()],
-                game.getGameMatrix()[coords2.x()][coords2.y()]
+        List<Tile> tiles = List.of(
+                game.getGameMatrix()[c1.x()][c1.y()],
+                game.getGameMatrix()[c2.x()][c2.y()]
         );
 
-        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(testingTiles));
+        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
 
     }
 
