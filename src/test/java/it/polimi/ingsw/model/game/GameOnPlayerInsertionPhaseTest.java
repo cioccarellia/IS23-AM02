@@ -11,7 +11,7 @@ import java.util.Set;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.CHECKING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameOnPlayerInsertionPhaseTest implements GameTester{
+public class GameOnPlayerInsertionPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerInsertionPhase, positively")
     public void test_onPlayerInsertionPhase_positively() {
@@ -32,15 +32,16 @@ public class GameOnPlayerInsertionPhaseTest implements GameTester{
 
         Tile[][] matrix = game.getGameMatrix();
 
-        List<Tile> testingTilesList = List.of(
+        List<Tile> tiles = List.of(
                 matrix[c1.x()][c1.y()],
                 matrix[c2.x()][c2.y()]
         );
 
-        game.onPlayerInsertionPhase(1, testingTilesList);
+        game.onPlayerInsertionPhase(1, tiles);
 
-        assertEquals(matrix[c1.x()][c1.y()], testingTilesList.get(0));
-        assertEquals(matrix[c2.x()][c2.y()], testingTilesList.get(1));
+        assertEquals(matrix[c1.x()][c1.y()], tiles.get(0));
+        assertEquals(matrix[c2.x()][c2.y()], tiles.get(1));
+
         assertEquals(CHECKING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
     }
 }

@@ -13,21 +13,21 @@ public class BoardCountEmptyCellsTest {
     @Test
     @DisplayName("Tests the correct functionality of countEmptyCells method, #1 positive case")
     public void test_countEmptyCells_method_positively_1() {
-        Board positiveBoard = new Board();
-        assertEquals(45, positiveBoard.countEmptyCells(GAME_MODE_4_PLAYERS));
+        Board board = new Board();
+        assertEquals(45, board.countEmptyCells(GAME_MODE_4_PLAYERS));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of countEmptyCells method, #2 positive case")
     public void test_countEmptyCells_method_positively_2() {
-        Board positiveBoard = new Board();
-        assertEquals(38, positiveBoard.countEmptyCells(GAME_MODE_3_PLAYERS));
+        Board board = new Board();
+        assertEquals(38, board.countEmptyCells(GAME_MODE_3_PLAYERS));
     }
 
     @Test
     @DisplayName("Tests the correct functionality of countEmptyCells method, #3 positive case")
     public void test_countEmptyCells_method_positively_3() {
-        Board positiveBoard = new Board();
-        assertEquals(30, positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS));
+        Board board = new Board();
+        assertEquals(30, board.countEmptyCells(GAME_MODE_2_PLAYERS));
     }
 }

@@ -19,9 +19,9 @@ public class BookshelfUnitTest {
     public void test_shelf_matrix() {
         Bookshelf bookshelf = new Bookshelf();
 
-        Tile[][] clonedInternals = bookshelf.getShelfMatrix();
+        Tile[][] matrix = bookshelf.getShelfMatrix();
 
-        clonedInternals[0][0] = PLANT;
+        matrix[0][0] = PLANT;
 
         //assertNull(bookshelf.getShelfMatrix()[0][0]);
     }

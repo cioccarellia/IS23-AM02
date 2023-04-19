@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameStatus.*;
+import static it.polimi.ingsw.model.game.GameStatus.RUNNING;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameExceptionTests implements GameTester {
@@ -129,7 +129,6 @@ public class GameExceptionTests implements GameTester {
 
         //assertThrows(IllegalArgumentException,game.getSessionFor(PLAYER_A).noMoreTurns);
     }
-
 
 
 }

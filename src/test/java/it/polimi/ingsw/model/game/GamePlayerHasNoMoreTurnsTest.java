@@ -3,9 +3,10 @@ package it.polimi.ingsw.model.game;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GamePlayerHasNoMoreTurnsTest implements GameTester{
+public class GamePlayerHasNoMoreTurnsTest implements GameTester {
     @Test
     @DisplayName("Verify the function of playerHasNoMoreTurns, positively")
     public void test_playerHasNoMoreTurns_positively() {

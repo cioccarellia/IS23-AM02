@@ -131,13 +131,19 @@ public class Game implements ControlInterface {
 
 
         // (re)fill board
+        onRefill();
+
+        // Set first state
+        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
+    }
+
+
+    public void onRefill() {
         int emptyBoardCells = board.countEmptyCells(mode);
         List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
 
         board.fill(extractedTiles, mode);
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
     }
-
 
     public GameStatus getGameStatus() {
         return status;
@@ -145,8 +151,6 @@ public class Game implements ControlInterface {
     public void setGameStatus(GameStatus status){this.status=status;}
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
-        // fixme throws tons of exceptions
-
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
         boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);

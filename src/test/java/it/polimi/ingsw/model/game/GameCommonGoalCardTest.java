@@ -18,7 +18,7 @@ public class GameCommonGoalCardTest implements GameTester {
 
         game.onGameStarted();
 
-        // list must be composed by 2 commongoalcards
+        // list must be composed of 2 commongoalcards
         assertEquals(2, game.getCommonGoalCards().size());
     }
 

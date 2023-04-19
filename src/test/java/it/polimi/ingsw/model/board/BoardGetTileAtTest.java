@@ -17,8 +17,8 @@ public class BoardGetTileAtTest {
     @DisplayName("Tests the correct functionality of getTileAt method")
     //FIXME understand if returning optional instead of Tile could be better
     public void test_getTileAt_method() {
-        Board TestingBoard = new Board();
-        Cell[][] testCell = TestingBoard.getCellMatrix();
+        Board board = new Board();
+        Cell[][] testCell = board.getCellMatrix();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -27,6 +27,6 @@ public class BoardGetTileAtTest {
         }
 
         Coordinate coordsTest = new Coordinate(1, 5);
-        assertEquals(Optional.of(GAME), TestingBoard.getTileAt(coordsTest));
+        assertEquals(Optional.of(GAME), board.getTileAt(coordsTest));
     }
 }
