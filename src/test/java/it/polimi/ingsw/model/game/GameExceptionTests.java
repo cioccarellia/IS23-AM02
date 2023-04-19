@@ -68,9 +68,8 @@ public class GameExceptionTests implements GameTester {
         game.addPlayer("A");
         game.addPlayer("B");
 
-        game.onGameStarted();
 
-        Exception exception = assertThrows(IllegalStateException.class, () -> game.addPlayer("C"));
+        Exception exception = assertThrows(IllegalStateException.class, () -> game.addPlayer(PLAYER_C));
 
         String expectedMessage = "Impossible to add a player: the game is full (having %d players for %s mode)".formatted(2, GameMode.GAME_MODE_2_PLAYERS);
         String actualMessage = exception.getMessage();

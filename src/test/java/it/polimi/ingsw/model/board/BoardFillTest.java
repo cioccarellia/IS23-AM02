@@ -1,69 +1,16 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.board.cell.Cell;
-import it.polimi.ingsw.model.board.cell.CellPattern;
-import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Optional;
 
-import static it.polimi.ingsw.model.board.HardcodedBoardConstants.GLOBAL_BOARD_MATRIX;
-import static it.polimi.ingsw.model.board.Tile.GAME;
-import static it.polimi.ingsw.model.game.GameMode.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class BoardTest {
-
-    private static final int dimension = BoardConfiguration.getInstance().getDimension();
-
-
-    @Test
-    @DisplayName("Tests the hardcoded board pattern")
-    public void test_board_disposition() {
-        Board board = new Board();
-
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                Coordinate c = new Coordinate(i, j);
-
-                Cell boardTile = board.getCellAt(c);
-                CellPattern hardcodedPattern = HardcodedBoardConstants.DFU_BOARD_MATRIX[i][j];
-
-                if (boardTile.isDead()) {
-                    assertNull(hardcodedPattern);
-                } else {
-                    assertSame(boardTile.getPattern(), hardcodedPattern);
-                }
-            }
-        }
-    }
-
-
-
-    @Test
-    @DisplayName("Tests the correct functionality of countEmptyCells method, #1 positive case")
-    public void test_countEmptyCells_method_positively_1() {
-        Board positiveBoard = new Board();
-        assertEquals(45, positiveBoard.countEmptyCells(GAME_MODE_4_PLAYERS));
-    }
-
-    @Test
-    @DisplayName("Tests the correct functionality of countEmptyCells method, #2 positive case")
-    public void test_countEmptyCells_method_positively_2() {
-        Board positiveBoard = new Board();
-        assertEquals(38, positiveBoard.countEmptyCells(GAME_MODE_3_PLAYERS));
-    }
-
-    @Test
-    @DisplayName("Tests the correct functionality of countEmptyCells method, #3 positive case")
-    public void test_countEmptyCells_method_positively_3() {
-        Board positiveBoard = new Board();
-        assertEquals(30, positiveBoard.countEmptyCells(GAME_MODE_2_PLAYERS));
-    }
-
+public class BoardFillTest {
     @Test
     @DisplayName("Tests the correct functionality of fill method, #1 positively")
     public void test_fill_method_positively_1() {
@@ -110,6 +57,4 @@ public class BoardTest {
         Coordinate coordsTest = new Coordinate(5, 5);
         assertFalse(positiveBoard.hasAtLeastOneFreeEdge(coordsTest));
     }
-
-
 }

@@ -111,6 +111,7 @@ public class Game implements ControlInterface {
     @Override
     public void onGameStarted() {
         logger.info("onGameStarted()");
+        setGameStatus(GameStatus.RUNNING);
 
         if (sessions.size() != mode.playerCount()) {
             throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.playerCount(), sessions.size()));
@@ -141,6 +142,7 @@ public class Game implements ControlInterface {
     public GameStatus getGameStatus() {
         return status;
     }
+    public void setGameStatus(GameStatus status){this.status=status;}
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         // fixme throws tons of exceptions
