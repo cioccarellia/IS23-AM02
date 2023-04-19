@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.CHECKING;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOnPlayerInsertionPhaseTest implements GameTester {
     @Test

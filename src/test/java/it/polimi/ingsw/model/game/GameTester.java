@@ -5,5 +5,5 @@ import it.polimi.ingsw.model.config.board.BoardConfiguration;
 public interface GameTester {
 
     int dimension = BoardConfiguration.getInstance().getDimension();
-    String PLAYER_A = "Player Alberto", PLAYER_B = "Player Bortone", PLAYER_C = "Player Cookie", PLAYER_D = "Player D - Marco";
+    String PLAYER_A = "Player A - Alberto", PLAYER_B = "Player B - Bortone", PLAYER_C = "Player C - Cookie", PLAYER_D = "Player D - Marco";
 }

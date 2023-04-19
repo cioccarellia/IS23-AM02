@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static it.polimi.ingsw.model.game.GameMode.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardFillTest {
     @Test

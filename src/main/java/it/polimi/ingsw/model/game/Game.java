@@ -198,7 +198,7 @@ public class Game implements EventControl {
      *
      * @param number
      */
-    private void playerHasNoMoreTurns(PlayerNumber number) {
+    public void playerHasNoMoreTurns(PlayerNumber number) {
         sessions.getByNumber(number).noMoreTurns = true;
     }
 

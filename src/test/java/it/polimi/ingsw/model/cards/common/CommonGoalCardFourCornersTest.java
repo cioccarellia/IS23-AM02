@@ -5,10 +5,8 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.board.Tile.CAT;
-import static it.polimi.ingsw.model.board.Tile.TROPHY;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static it.polimi.ingsw.model.board.Tile.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
 

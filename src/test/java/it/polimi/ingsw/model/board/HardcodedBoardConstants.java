@@ -30,6 +30,21 @@ public class HardcodedBoardConstants {
             {null, null, null, null, null, null, null, null, null}
 
     };
+    /*
+    public static final Tile[][] GLOBAL_BOARD_MATRIX_3_PLAYERS = {
+            {null, null, null, CAT, null, null, null, null, null},
+            {null, null, null, CAT, CAT, GAME, null, null, null},
+            {null, null, CAT, FRAME, GAME, GAME, CAT, null, null},
+            {null, null, BOOK, CAT, FRAME, CAT, CAT, CAT, CAT},
+            {null, BOOK, TROPHY, CAT, FRAME, GAME, BOOK, BOOK, null},
+            {CAT, CAT, BOOK, TROPHY, TROPHY, GAME, CAT, null, null},
+            {null, null, CAT, FRAME, GAME, CAT, CAT, null, null},
+            {null, null, null, CAT, TROPHY, CAT, null, null, null},
+            {null, null, null, null, null, CAT, null, null, null}
+
+    };
+
+     */
 
     public static Tile getTile(int x, int y) {
         return GLOBAL_BOARD_MATRIX[x][y];

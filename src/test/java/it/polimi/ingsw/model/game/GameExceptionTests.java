@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameStatus.RUNNING;
+import static it.polimi.ingsw.model.game.GameStatus.*;
+import static it.polimi.ingsw.model.player.PlayerNumber.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameExceptionTests implements GameTester {
@@ -78,7 +79,7 @@ public class GameExceptionTests implements GameTester {
 
     @Test
     @DisplayName("Tests that players can not be added after the game has started")
-    public void test_onGameStarted_throwsException_PlayersAddedInInitializingGamePhase() {
+    public void test_onGameStarted_throwsException_PlayersAddedNotInInitializingGamePhase() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -116,17 +117,20 @@ public class GameExceptionTests implements GameTester {
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("Verify the function of playerHasNoMoreTurns, edge case #1")
     public void test_playerHasNoMoreTurns_edgeCase_1() {
-        //FIXME Exception management
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
 
-        //assertThrows(IllegalArgumentException,game.getSessionFor(PLAYER_A).noMoreTurns);
-    }*/
+        Exception exception = assertThrows(IllegalStateException.class, () -> game.playerHasNoMoreTurns(PLAYER_3));
 
+        String expectedMessage = "Given number does not match to any session";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
 }

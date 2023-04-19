@@ -1,14 +1,15 @@
 package it.polimi.ingsw.model.bookshelf;
 
+import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class BookShelfGetShelfMatrixTest {
+public class BookShelfGetShelfMatrixTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify the correct functionality of getShelfMatrix method in a filled up bookshelf, positively")
     public void test_getShelfMatrix_method_positively() {
