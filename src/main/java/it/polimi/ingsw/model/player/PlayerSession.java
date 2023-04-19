@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class PlayerSession {
      * Identifiers of all the {@link it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier}s that
      * have been acquired by the user during the game (i.e. for which the user has received any common goal card tokens).
      */
-    private List<CommonGoalCardIdentifier> achievedCommonGoalCards;
+    private final List<CommonGoalCardIdentifier> achievedCommonGoalCards = new ArrayList<>();
 
 
     public PlayerSession(String username, PlayerNumber playerNumber, PersonalGoalCard personalGoalCard) {

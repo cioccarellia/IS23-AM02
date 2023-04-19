@@ -82,9 +82,10 @@ public class GameExceptionTests implements GameTester {
     @DisplayName("Tests that players can not be added after the game has started")
     public void test_onGameStarted_throwsException_PlayersAddedInInitializingGamePhase() {
         Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
-
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> game.addPlayer("C"));
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+        game.onGameStarted();
+        Exception exception = assertThrows(IllegalStateException.class, () -> game.addPlayer(PLAYER_C));
 
         String expectedMessage = "Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(RUNNING);
         String actualMessage = exception.getMessage();
