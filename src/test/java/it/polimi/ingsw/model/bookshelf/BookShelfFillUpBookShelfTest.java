@@ -15,7 +15,7 @@ public class BookShelfFillUpBookShelfTest implements ShelfMatrixTester {
     @DisplayName("Verify the correct functionality of fillUpBookshelf method, positively")
     public void test_fillUpBookshelf_method_positively() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(defaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
         Tile[][] matrix = shelf.getShelfMatrix();
 
         for (int i = 2; i < rows; i++) {

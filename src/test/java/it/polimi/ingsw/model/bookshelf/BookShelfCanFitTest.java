@@ -30,7 +30,7 @@ public class BookShelfCanFitTest {
     @DisplayName("Verify the correct functionality of canFit method in a filled up bookshelf, negatively")
     public void test_canFit_method_filledUp_bookShelf_negatively() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(defaultBookshelf.BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(DefaultBookshelf.BOOKSHELF_MATRIX);
         final int column = 1;
 
         assertFalse(shelf.canFit(column, maxSelectionSize));
@@ -40,7 +40,7 @@ public class BookShelfCanFitTest {
     @DisplayName("Verify the correct functionality of canFit method in a filled up bookshelf, negatively")
     public void test_canFit_method_almost_full_bookShelf_negatively() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(defaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
         final int column = 2;
 
         assertFalse(shelf.canFit(column, maxSelectionSize));

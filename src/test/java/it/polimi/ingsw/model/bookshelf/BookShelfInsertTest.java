@@ -67,7 +67,7 @@ public class BookShelfInsertTest {
     @DisplayName("Verify the insert method throws can't fit tiles in that column exception")
     public void test_insert_cannot_fit_exception() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(defaultBookshelf.BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(DefaultBookshelf.BOOKSHELF_MATRIX);
         List<Tile> tiles = List.of(CAT, FRAME, GAME);
         final int column = 2;
 
