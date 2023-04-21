@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.Callable;
 import it.polimi.ingsw.controller.connection.ClientConnection;
 import it.polimi.ingsw.controller.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.result.SingleResult;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GameController {
+public class GameController implements Callable {
 
     protected static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
@@ -40,7 +41,7 @@ public class GameController {
 
     private final int maxPlayerAmount;
 
-    GameController(GameMode _mode) {
+    public GameController(GameMode _mode) {
         game = new Game(_mode);
         maxPlayerAmount = _mode.playerCount();
 
@@ -54,6 +55,7 @@ public class GameController {
 
 
     // Creates a connection between client and server
+    @Override
     public SingleResult<SignUpRequest> onPlayerSignUpRequest(String username) {
         logger.info("onPlayerSignUpRequest(username={})", username);
 

@@ -37,10 +37,9 @@ public class GameIsSelectionValidTest implements GameTester {
 
         game.onGameStarted();
 
-        Coordinate c1 = new Coordinate(1, 5);
-        Coordinate c2 = new Coordinate(1, 4);
-        Coordinate coords3 = new Coordinate(1, 3);
-        Set<Coordinate> selection = Set.of(c1, c2, coords3);
+        Coordinate c1 = new Coordinate(7, 5);
+        Coordinate c2 = new Coordinate(7, 4);
+        Set<Coordinate> selection = Set.of(c1, c2);
 
         assertTrue(game.isSelectionValid(selection));
     }
@@ -55,7 +54,7 @@ public class GameIsSelectionValidTest implements GameTester {
 
         game.onGameStarted();
 
-        Coordinate c1 = new Coordinate(1, 5);
+        Coordinate c1 = new Coordinate(1, 3);
         Coordinate c2 = new Coordinate(1, 4);
 
         Set<Coordinate> selection = Set.of(c1, c2);

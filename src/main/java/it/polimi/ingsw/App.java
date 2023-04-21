@@ -33,13 +33,13 @@ public class App {
         if (areArgumentsExhaustive) {
             // we read the values and assemble the configuration
             AppLaunchTarget target = result.get(CLIDestinations.TARGET);
-            String serverIpAndPort = result.get(CLIDestinations.SERVER_IP_AND_PORT);
-            String usernamePreselection = result.get(CLIDestinations.CLIENT_USERNAME);
+            String serverIp = result.get(CLIDestinations.SERVER_IP);
+            int serverPort = result.get(CLIDestinations.SERVER_PORT);
             ClientMode modePreselection = result.get(CLIDestinations.CLIENT_MODE);
             ClientProtocol protocolPreselection = result.get(CLIDestinations.CLIENT_PROTOCOL);
 
-            var clientConfig = new ClientExhaustiveConfiguration(usernamePreselection, modePreselection, protocolPreselection);
-            var finalConfig = new ExhaustiveLaunchConfiguration(target, serverIpAndPort, List.of(clientConfig));
+            var clientConfig = new ClientExhaustiveConfiguration(modePreselection, protocolPreselection);
+            var finalConfig = new ExhaustiveLaunchConfiguration(target, serverIp, serverPort, List.of(clientConfig));
 
             launchConfiguration(finalConfig);
         } else {
@@ -55,7 +55,7 @@ public class App {
     private static @NotNull ExhaustiveLaunchConfiguration launchWizardForConfig(Namespace nonExhaustivePresetConfig) {
         return new ExhaustiveLaunchConfiguration(
                 AppLaunchTarget.SERVER,
-                "localhost:8080",
+                "localhost", 8080,
                 List.of()
         );
     }
@@ -66,27 +66,27 @@ public class App {
     private static void launchConfiguration(ExhaustiveLaunchConfiguration config) {
         switch (config.appLaunchTarget()) {
             case SERVER -> {
-                startServer(config.serverIpAndPort());
+                startServer(config.serverIp(), config.serverPort());
             }
             case CLIENT -> {
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIpAndPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverIp(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
             case SERVER_AND_CLIENT -> {
-                startServer(config.serverIpAndPort());
+                startServer(config.serverIp(), config.serverPort());
 
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIpAndPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverIp(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
         }
     }
 
 
-    private static void startServer(String serverIpAndPort) {
+    private static void startServer(String serverIp, int serverPort) {
 
     }
 
-    private static void startClient(String serverIpAndPort, @Nullable ClientMode mode, @Nullable ClientProtocol protocol) {
+    private static void startClient(String serverIp, int serverPort, @Nullable ClientMode mode, @Nullable ClientProtocol protocol) {
 
     }
 

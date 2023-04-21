@@ -35,9 +35,15 @@ public class CLIParser {
                 .help("Defines the type of configuration launched.");
 
         parser.addArgument("--server-address")
-                .dest(CLIDestinations.SERVER_IP_AND_PORT)
-                .metavar("HOST:PORT")
-                .help("The server address");
+                .dest(CLIDestinations.SERVER_IP)
+                .metavar("HOST")
+                .help("The server ip address");
+
+        parser.addArgument("--server-port")
+                .dest(CLIDestinations.SERVER_PORT)
+                .metavar("PORT")
+                .type(Integer.class)
+                .help("The server port");
 
         parser.addArgument("--client-mode")
                 .dest(CLIDestinations.CLIENT_MODE)

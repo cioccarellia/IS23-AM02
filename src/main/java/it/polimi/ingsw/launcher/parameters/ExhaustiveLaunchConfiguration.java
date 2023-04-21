@@ -4,7 +4,8 @@ import java.util.List;
 
 public record ExhaustiveLaunchConfiguration(
         AppLaunchTarget appLaunchTarget,
-        String serverIpAndPort,
+        String serverIp,
+        int serverPort,
         List<ClientExhaustiveConfiguration> clientConfigurations
 ) {
 }
