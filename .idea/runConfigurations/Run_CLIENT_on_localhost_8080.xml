@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run CLI" type="Application" factoryName="Application">
+  <configuration default="false" name="Run CLIENT on localhost:8080" type="Application" factoryName="Application" singleton="false">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.App" />
     <module name="shelfie" />
-    <option name="PROGRAM_PARAMETERS" value="--configuration CLIENT --server-address localhost:8080" />
+    <option name="PROGRAM_PARAMETERS" value="--target CLIENT --server-address localhost:8080" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
