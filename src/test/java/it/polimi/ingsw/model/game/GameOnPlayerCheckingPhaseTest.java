@@ -17,7 +17,7 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
     /*
     @BeforeEach()
     void init() {
-        game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+        new Game(GameMode.GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

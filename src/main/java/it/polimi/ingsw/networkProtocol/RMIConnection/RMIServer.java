@@ -1,18 +1,18 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.networkProtocol.RMIConnection;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
+import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.networkProtocol.RMIConnection.Callable;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class AppServer {
-
+public class RMIServer {
     GameController controller = new GameController(GameMode.GAME_MODE_2_PLAYERS);
 
-    public AppServer(String serverAddress, int serverPort) {
+    public RMIServer(String serverAddress, int serverPort) {
 
         try {
             Callable stub = (Callable) UnicastRemoteObject.exportObject(controller, serverPort);
@@ -30,5 +30,7 @@ public class AppServer {
             System.err.println("Server exception: " + e);
             e.printStackTrace();
         }
+
     }
+
 }

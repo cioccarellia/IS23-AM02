@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.Callable;
+import it.polimi.ingsw.networkProtocol.RMIConnection.Callable;
 import it.polimi.ingsw.controller.connection.ClientConnection;
 import it.polimi.ingsw.controller.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.result.SingleResult;
@@ -74,6 +74,7 @@ public class GameController implements Callable {
 
         connections.put(username, new ClientConnection(username, ConnectionStatus.OPEN));
         game.addPlayer(username);
+        System.out.println(username + "logged");
 
         return new SingleResult.Success<>();
     }

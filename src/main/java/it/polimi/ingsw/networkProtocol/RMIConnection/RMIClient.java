@@ -1,25 +1,13 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.networkProtocol.RMIConnection;
+
+import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
+import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import it.polimi.ingsw.launcher.parameters.*;
-import it.polimi.ingsw.networkProtocol.RMIConnection.Callable;
-
-public class AppClient {
-
-    public AppClient(ClientExhaustiveConfiguration config, String serverIp, int serverPort) {
-
-        ClientProtocol proto = config.protocol();
-
-        switch (proto) {
-            case RMI -> {
-
-            }
-            case SOCKET -> {
-
-            }
-        }
-
+public class RMIClient {
+    public RMIClient(String serverIp, int serverPort) {
 
         try {
             // Getting the registry
@@ -38,4 +26,5 @@ public class AppClient {
             e.printStackTrace();
         }
     }
+
 }

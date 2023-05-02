@@ -31,4 +31,5 @@ public class ClientConnection {
     public void setStatus(ConnectionStatus status) {
         this.status = status;
     }
+
 }

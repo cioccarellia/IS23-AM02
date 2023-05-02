@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.networkProtocol.RMIConnection;
 
 import it.polimi.ingsw.controller.result.SingleResult;
 import it.polimi.ingsw.controller.result.failures.SignUpRequest;
