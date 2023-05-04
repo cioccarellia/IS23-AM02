@@ -5,6 +5,9 @@ import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.GameMode;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -23,14 +26,13 @@ public class RMIServer {
 
             registry.bind("Callable", stub);
 
-            System.err.println("Server ready");
-
-
+            System.err.println("RMI Server ready");
+            ServerSocket serverSocket = new ServerSocket(serverPort);
+            System.err.println("socket Server Ready");
         } catch (Exception e) {
             System.err.println("Server exception: " + e);
             e.printStackTrace();
         }
 
     }
-
 }

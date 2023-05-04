@@ -2,6 +2,7 @@ package it.polimi.ingsw.networkProtocol.RMIConnection;
 
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+import it.polimi.ingsw.model.game.Game;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,11 +16,9 @@ public class RMIClient {
 
             // Looking up the registry for the remote object
             Callable stub = (Callable) registry.lookup("Callable");
-
             // Calling the remote method using the obtained object
             stub.onPlayerSignUpRequest("marco");
-
-
+            stub.onPlayerConnection("marco");
 
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
