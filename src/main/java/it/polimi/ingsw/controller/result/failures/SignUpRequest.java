@@ -5,5 +5,6 @@ public enum SignUpRequest implements RequestError {
     USERNAME_ALREADY_IN_USE,
     MAX_PLAYER_REACHED,
     WRONG_ACTIVE_PLAYER,
+    GAME_ALREADY_STARTED,
     GAME_ALREADY_ENDED
 }

@@ -2,29 +2,33 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.networkProtocol.RMIConnection.Callable;
+import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
 
+import java.net.ServerSocket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 public class AppServer {
 
-    GameController controller = new GameController(GameMode.GAME_MODE_2_PLAYERS);
+    GameController controller = new GameController();
 
     public AppServer(String serverAddress, int serverPort) {
 
         try {
-            Callable stub = (Callable) UnicastRemoteObject.exportObject(controller, serverPort);
+            ServerGateway stub = (ServerGateway) UnicastRemoteObject.exportObject(controller, serverPort);
 
             // Bind the remote object's stub in the registry
             // NO Registry registry = LocateRegistry.getRegistry();
             Registry registry = LocateRegistry.createRegistry(serverPort);
 
-            registry.bind("Callable", stub);
+            registry.bind(ServerGateway.NAME, stub);
+
+
+            ServerSocket serverSocket = new ServerSocket(serverPort);
+            System.err.println("socket Server Ready");
 
             System.err.println("Server ready");
-
 
         } catch (Exception e) {
             System.err.println("Server exception: " + e);

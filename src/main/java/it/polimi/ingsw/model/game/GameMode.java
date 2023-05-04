@@ -12,11 +12,11 @@ public enum GameMode {
 
     private final int players;
 
-    GameMode(int _players) {
-        players = _players;
+    GameMode(int maxPlayers) {
+        players = maxPlayers;
     }
 
-    public int playerCount() {
+    public int maxPlayerAmount() {
         return players;
     }
 }

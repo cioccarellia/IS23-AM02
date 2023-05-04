@@ -33,7 +33,7 @@ public class SessionManager {
      * Returns the maximum amount of sessions that can be added
      */
     public int maxSize() {
-        return mode.playerCount();
+        return mode.maxPlayerAmount();
     }
 
     /**

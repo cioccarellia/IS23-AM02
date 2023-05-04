@@ -1,14 +1,15 @@
 package it.polimi.ingsw;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import it.polimi.ingsw.launcher.parameters.*;
-import it.polimi.ingsw.networkProtocol.RMIConnection.Callable;
+import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
+import org.jetbrains.annotations.NotNull;
 
 public class AppClient {
 
-    public AppClient(ClientExhaustiveConfiguration config, String serverIp, int serverPort) {
-
+    public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverIp, int serverPort) {
         ClientProtocol proto = config.protocol();
 
         switch (proto) {
@@ -26,10 +27,10 @@ public class AppClient {
             Registry registry = LocateRegistry.getRegistry(serverIp, serverPort);
 
             // Looking up the registry for the remote object
-            Callable stub = (Callable) registry.lookup("Callable");
+            ServerGateway stub = (ServerGateway) registry.lookup(ServerGateway.NAME);
 
             // Calling the remote method using the obtained object
-            stub.onPlayerSignUpRequest("marco");
+            var status = stub.serverStatusRequest();
 
 
 

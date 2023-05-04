@@ -88,7 +88,7 @@ public class Game implements EventControl {
             throw new IllegalStateException("Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(status));
         }
 
-        if (sessions.size() == mode.playerCount()) {
+        if (sessions.size() == mode.maxPlayerAmount()) {
             throw new IllegalStateException("Impossible to add a player: the game is full (having %d players for %s mode)".formatted(sessions.size(), mode));
         }
 
@@ -117,8 +117,8 @@ public class Game implements EventControl {
         logger.info("onGameStarted()");
         setGameStatus(GameStatus.RUNNING);
 
-        if (sessions.size() != mode.playerCount()) {
-            throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.playerCount(), sessions.size()));
+        if (sessions.size() != mode.maxPlayerAmount()) {
+            throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.maxPlayerAmount(), sessions.size()));
         }
 
         // Common goal card initialization
