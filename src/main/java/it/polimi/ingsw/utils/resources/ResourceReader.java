@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Utility class to import and stream resource files
@@ -19,9 +20,8 @@ public class ResourceReader {
 
     public static @NotNull String readAndMapToString(String filename) {
         try (InputStream file = readAsResource(filename)) {
-            String content = new String(file.readAllBytes(), StandardCharsets.UTF_8);
 
-            return content;
+            return new String(file.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

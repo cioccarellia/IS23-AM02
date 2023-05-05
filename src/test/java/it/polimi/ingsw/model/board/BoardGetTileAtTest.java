@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.Tile.GAME;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardGetTileAtTest {
     private static final int dimension = BoardConfiguration.getInstance().getDimension();

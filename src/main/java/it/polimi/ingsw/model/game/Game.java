@@ -15,7 +15,6 @@ import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
-import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.utils.CollectionUtils;
 import it.polimi.ingsw.utils.model.CoordinatesHelper;
@@ -26,6 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+
+import static it.polimi.ingsw.model.game.GameStatus.*;
+import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
 
 /**
  * Model class representing an instance of a game.
@@ -62,7 +65,7 @@ public class Game implements EventControl {
      * External game configuration parameters
      */
     private final LogicConfiguration config = LogicConfiguration.getInstance();
-    private GameStatus status = GameStatus.INITIALIZATION;
+    private GameStatus status = INITIALIZATION;
 
     /**
      * Markers for the current state of the game (needed for turn logic)
@@ -81,10 +84,9 @@ public class Game implements EventControl {
      * Inserts a player into the game
      *
      * @param username The username for the given player
-     * @throws IllegalStateException
      */
     public void addPlayer(String username) {
-        if (status != GameStatus.INITIALIZATION) {
+        if (status != INITIALIZATION) {
             throw new IllegalStateException("Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(status));
         }
 
@@ -115,7 +117,7 @@ public class Game implements EventControl {
     @Override
     public void onGameStarted() {
         logger.info("onGameStarted()");
-        setGameStatus(GameStatus.RUNNING);
+        setGameStatus(RUNNING);
 
         if (sessions.size() != mode.maxPlayerAmount()) {
             throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.maxPlayerAmount(), sessions.size()));
@@ -138,7 +140,7 @@ public class Game implements EventControl {
         onRefill();
 
         // Set first state
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
+        getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 
 
@@ -185,7 +187,7 @@ public class Game implements EventControl {
     /**
      * Sets the player's, identified by the given username, attribute noMoreTurns as true
      *
-     * @param username
+     * @param username player's username
      */
 
     public void playerHasNoMoreTurns(String username) {
@@ -196,7 +198,7 @@ public class Game implements EventControl {
     /**
      * Sets the player's, identified by the given player number, attribute noMoreTurns as true
      *
-     * @param number
+     * @param number player's number
      */
     public void playerHasNoMoreTurns(PlayerNumber number) {
         sessions.getByNumber(number).noMoreTurns = true;
@@ -211,7 +213,7 @@ public class Game implements EventControl {
     /**
      * Select Tiles from the board and set them inside current player session
      *
-     * @param coordinates
+     * @param coordinates set of the player's selected tiles' coordinates
      */
     @Override
     public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
@@ -220,23 +222,20 @@ public class Game implements EventControl {
         }
 
         // we assume the selection is valid
-        List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates
-                .stream()
-                .map(it -> new Pair<>(it, board.getTileAt(it).get()))
-                .toList();
+        List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates.stream().map(it -> new Pair<>(it, board.getTileAt(it).get())).toList();
 
         var tileSelection = new PlayerTileSelection(coordinatesAndValues);
 
         // update model accordingly
         getCurrentPlayer().setPlayerTileSelection(tileSelection);
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.INSERTING);
+        getCurrentPlayer().setPlayerCurrentGamePhase(INSERTING);
     }
 
     /**
      * Insert selected Tiles inside bookshelf after got sure there's empty space in a given column
      *
-     * @param column
-     * @param tiles
+     * @param column the column in which the player wants to add the tiles
+     * @param tiles the tiles the players wants to insert in their bookshelf
      */
     @Override
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
@@ -244,7 +243,7 @@ public class Game implements EventControl {
 
         // we assume tiles have been checked and match
         getCurrentPlayer().getBookshelf().insert(column, tiles);
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.CHECKING);
+        getCurrentPlayer().setPlayerCurrentGamePhase(CHECKING);
     }
 
     /**
@@ -271,14 +270,14 @@ public class Game implements EventControl {
         // full bookshelf test
         boolean isBookshelfFull = getCurrentPlayer().getBookshelf().isFull();
 
-        if (isBookshelfFull && status == GameStatus.RUNNING) {
-            getCurrentPlayer().addAcquiredToken(Token.FULL_SHELF_TOKEN);
-            status = GameStatus.LAST_ROUND;
+        if (isBookshelfFull && status == RUNNING) {
+            getCurrentPlayer().addAcquiredToken(FULL_SHELF_TOKEN);
+            status = LAST_ROUND;
 
             setFlags();
         }
 
-        if (status == GameStatus.LAST_ROUND) {
+        if (status == LAST_ROUND) {
             playerHasNoMoreTurns(currentPlayerNumber);
         }
 
@@ -290,9 +289,7 @@ public class Game implements EventControl {
 
             boolean isCardConditionVerified = card.matches(shelf);
 
-            boolean hasAlreadyAcquiredToken = getCurrentPlayer()
-                    .getAchievedCommonGoalCards()
-                    .contains(card.getId());
+            boolean hasAlreadyAcquiredToken = getCurrentPlayer().getAchievedCommonGoalCards().contains(card.getId());
 
             if (isCardConditionVerified && !hasAlreadyAcquiredToken) {
                 Optional<Token> pendingToken = cardStatus.acquireAndRemoveTopToken();
@@ -300,7 +297,7 @@ public class Game implements EventControl {
             }
         }
 
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.IDLE);
+        getCurrentPlayer().setPlayerCurrentGamePhase(IDLE);
     }
 
 
@@ -313,7 +310,7 @@ public class Game implements EventControl {
         assert sessions.isPresent(nextPlayerUsername);
 
         currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
-        getCurrentPlayer().setPlayerCurrentGamePhase(PlayerCurrentGamePhase.SELECTING);
+        getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 
     @Override

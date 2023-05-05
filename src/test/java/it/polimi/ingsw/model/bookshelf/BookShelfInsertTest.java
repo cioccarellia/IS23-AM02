@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class BookShelfInsertTest implements ShelfMatrixTester {
     @Test

@@ -82,8 +82,7 @@ public class GroupFinder {
      * Follows a path where it finds a tile of the same value
      */
     private int pathfind(int i, int j, Tile value) {
-        if (i < 0 || i >= rows || j < 0 || j >= cols)
-            return 0;
+        if (i < 0 || i >= rows || j < 0 || j >= cols) return 0;
 
         boolean marker = markers[i][j];
         Tile element = matrix[i][j];

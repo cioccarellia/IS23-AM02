@@ -8,12 +8,11 @@ import java.util.Set;
 
 /**
  * Notifies the game of events happening as a result of the interactions between client and server.
- * 
  */
 public interface EventControl {
 
     /**
-     * The game 
+     * The game
      */
     void onGameStarted();
 

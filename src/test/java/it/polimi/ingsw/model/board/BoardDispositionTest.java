@@ -6,7 +6,9 @@ import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.HardcodedBoardConstants.DFU_BOARD_MATRIX;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class BoardDispositionTest {
 
@@ -22,7 +24,7 @@ public class BoardDispositionTest {
                 Coordinate c = new Coordinate(i, j);
 
                 Cell boardTile = board.getCellAt(c);
-                CellPattern hardcodedPattern = HardcodedBoardConstants.DFU_BOARD_MATRIX[i][j];
+                CellPattern hardcodedPattern = DFU_BOARD_MATRIX[i][j];
 
                 if (boardTile.isDead()) {
                     assertNull(hardcodedPattern);

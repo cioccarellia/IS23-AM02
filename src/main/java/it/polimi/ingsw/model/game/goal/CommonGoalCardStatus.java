@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.game.GameMode;
 import java.util.Optional;
 import java.util.Stack;
 
+import static it.polimi.ingsw.model.game.goal.Token.*;
+
 /**
  * Represents the current status of a {@link it.polimi.ingsw.model.cards.common.CommonGoalCard} instance,
  * along with its associated possible {@link Token}s.
@@ -26,19 +28,19 @@ public class CommonGoalCardStatus {
 
         switch (gameMode) {
             case GAME_MODE_2_PLAYERS -> {
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_4_POINTS);
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_8_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_4_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_8_POINTS);
             }
             case GAME_MODE_3_PLAYERS -> {
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_4_POINTS);
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_6_POINTS);
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_8_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_4_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_6_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_8_POINTS);
             }
             case GAME_MODE_4_PLAYERS -> {
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_2_POINTS);
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_4_POINTS);
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_6_POINTS);
-                tokenStack.push(Token.COMMON_GOAL_TOKEN_8_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_2_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_4_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_6_POINTS);
+                tokenStack.push(COMMON_GOAL_TOKEN_8_POINTS);
             }
             default -> throw new IllegalStateException("Unexpected value: " + gameMode);
         }

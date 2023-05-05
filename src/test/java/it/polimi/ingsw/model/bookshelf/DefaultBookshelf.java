@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.bookshelf;
 
 import it.polimi.ingsw.model.board.Tile;
 
-import static it.polimi.ingsw.model.board.Tile.*;
+import static it.polimi.ingsw.model.board.Tile.CAT;
 
 public class DefaultBookshelf {
 

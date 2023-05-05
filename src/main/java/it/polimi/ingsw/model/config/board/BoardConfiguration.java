@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.model.config.Configuration;
 import it.polimi.ingsw.utils.resources.ResourceReader;
 
+import static it.polimi.ingsw.model.board.cell.CellPattern.*;
+
 /**
  * Manages configuration parameters for {@link it.polimi.ingsw.model.board.Board}, according to
  * the matching specification {@link BoardSpecifics}.
@@ -41,9 +43,9 @@ public class BoardConfiguration extends Configuration<BoardSpecifics> {
 
                 switch (value) {
                     case 0 -> matchingCellPattern = null;
-                    case 2 -> matchingCellPattern = CellPattern.NORMAL;
-                    case 3 -> matchingCellPattern = CellPattern.THREE_DOTS;
-                    case 4 -> matchingCellPattern = CellPattern.FOUR_DOTS;
+                    case 2 -> matchingCellPattern = NORMAL;
+                    case 3 -> matchingCellPattern = THREE_DOTS;
+                    case 4 -> matchingCellPattern = FOUR_DOTS;
                     default ->
                             throw new IllegalStateException("Illegal specifications: [%d] is not 0, 2, 3 or 4".formatted(value));
                 }

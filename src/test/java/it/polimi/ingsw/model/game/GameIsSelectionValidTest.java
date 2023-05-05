@@ -6,13 +6,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_3_PLAYERS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameIsSelectionValidTest implements GameTester {
     @Test
     @DisplayName("verify the function isSelectionValid, positively #1")
     public void test_isSelectionValid_1_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -30,7 +33,7 @@ public class GameIsSelectionValidTest implements GameTester {
     @Test
     @DisplayName("verify the function isSelectionValid, positively #2")
     public void test_isSelectionValid_2_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -47,7 +50,7 @@ public class GameIsSelectionValidTest implements GameTester {
     @Test
     @DisplayName("verify the function isSelectionValid, positively #3")
     public void test_isSelectionValid_3_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -65,7 +68,7 @@ public class GameIsSelectionValidTest implements GameTester {
     @Test
     @DisplayName("verify the function isSelectionValid, negatively #1")
     public void test_isSelectionValid_1_negatively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -83,7 +86,7 @@ public class GameIsSelectionValidTest implements GameTester {
     @Test
     @DisplayName("verify the function isSelectionValid, negatively #2")
     public void test_isSelectionValid_2_negatively() {
-        Game game = new Game(GameMode.GAME_MODE_3_PLAYERS);
+        Game game = new Game(GAME_MODE_3_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -103,7 +106,7 @@ public class GameIsSelectionValidTest implements GameTester {
     @Test
     @DisplayName("verify the function isSelectionValid, negatively #3")
     public void test_isSelectionValid_3_negatively() {
-        Game game = new Game(GameMode.GAME_MODE_3_PLAYERS);
+        Game game = new Game(GAME_MODE_3_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import static it.polimi.ingsw.model.board.cell.CellPattern.*;
+
 
 /**
  * Implements the game board and its functionalities
@@ -44,7 +46,7 @@ public class Board {
                 CellPattern defaultPattern = defaultBoardPattern[i][j];
 
                 if (defaultPattern == null) {
-                    matrix[i][j] = new Cell(CellPattern.NORMAL, false);
+                    matrix[i][j] = new Cell(NORMAL, false);
                 } else {
                     matrix[i][j] = new Cell(defaultPattern, true);
                 }
@@ -119,9 +121,7 @@ public class Board {
      * @return returns the free edges of the tile at the given coordinates
      */
     public int countFreeEdges(@NotNull Coordinate c) {
-        return Arrays.stream(BoardUtils.Edge.values())
-                .mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0)
-                .sum();
+        return Arrays.stream(BoardUtils.Edge.values()).mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0).sum();
     }
 
     /**
@@ -136,13 +136,13 @@ public class Board {
     private CellPattern mapFromGameMode(@NotNull GameMode mode) {
         switch (mode) {
             case GAME_MODE_2_PLAYERS -> {
-                return CellPattern.NORMAL;
+                return NORMAL;
             }
             case GAME_MODE_3_PLAYERS -> {
-                return CellPattern.THREE_DOTS;
+                return THREE_DOTS;
             }
             case GAME_MODE_4_PLAYERS -> {
-                return CellPattern.FOUR_DOTS;
+                return FOUR_DOTS;
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
@@ -164,8 +164,7 @@ public class Board {
             for (int j = 0; j < dimension; j++) {
                 Cell c = matrix[i][j];
 
-                if (c.isDead())
-                    continue;
+                if (c.isDead()) continue;
 
                 boolean isAcceptable = c.getPattern().getPlayerCount() <= upperBound.getPlayerCount();
 

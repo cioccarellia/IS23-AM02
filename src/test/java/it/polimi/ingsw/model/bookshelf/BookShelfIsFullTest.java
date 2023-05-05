@@ -8,14 +8,17 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.bookshelf.DefaultBookshelf.BOOKSHELF_MATRIX;
+import static it.polimi.ingsw.model.bookshelf.DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookShelfIsFullTest implements ShelfMatrixTester {
     @Test
     @DisplayName("Verify the correct functionality of isFull method in almost filled up bookshelf, negatively")
     public void test_isFull_method_almost_full_bookShelf_negatively() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(NOT_FULL_BOOKSHELF_MATRIX);
 
         assertFalse(shelf.isFull());
     }
@@ -36,7 +39,7 @@ public class BookShelfIsFullTest implements ShelfMatrixTester {
     @DisplayName("Verify the correct functionality of isFull method in a filled up bookshelf, positively")
     public void test_isFull_method_full_bookShelf_positively() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(DefaultBookshelf.BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(BOOKSHELF_MATRIX);
 
         assertTrue(shelf.isFull());
 

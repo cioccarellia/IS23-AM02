@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.Tile.GAME;
+import static it.polimi.ingsw.model.board.Tile.PLANT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
 
@@ -19,12 +22,12 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
     public void groupfind_columnMatrix_positive_1() {
         // matrix to be tested
         Tile[][] threeAdjacentColumns = {
-                {Tile.PLANT, Tile.PLANT, null, null, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, null, null, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, null, null, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, null, null, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, null, null, Tile.GAME},
-                {Tile.PLANT, Tile.PLANT, null, null, Tile.GAME}
+                {PLANT, PLANT, null, null, GAME},
+                {PLANT, PLANT, null, null, GAME},
+                {PLANT, PLANT, null, null, GAME},
+                {PLANT, PLANT, null, null, GAME},
+                {PLANT, PLANT, null, null, GAME},
+                {PLANT, PLANT, null, null, GAME}
         };
 
         // group computation
@@ -37,25 +40,25 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
 
         // expected group result for Tile.PLANT
         List<Group> plantPartition = List.of(
-                new Group(Tile.PLANT, 12)
+                new Group(PLANT, 12)
         );
 
         // checking Tile.PLANT's expected group is the only group in its keyset
-        assertEquals(1, groupMap.get(Tile.PLANT).size());
+        assertEquals(1, groupMap.get(PLANT).size());
         assertTrue(
-                groupMap.get(Tile.PLANT).containsAll(plantPartition)
+                groupMap.get(PLANT).containsAll(plantPartition)
         );
 
 
         // expected group result for Tile.GAME
         List<Group> gamePartition = List.of(
-                new Group(Tile.GAME, 6)
+                new Group(GAME, 6)
         );
 
         // checking Tile.PLANT's expected group is the only group in its keyset
-        assertEquals(1, groupMap.get(Tile.GAME).size());
+        assertEquals(1, groupMap.get(GAME).size());
         assertTrue(
-                groupMap.get(Tile.GAME).containsAll(gamePartition)
+                groupMap.get(GAME).containsAll(gamePartition)
         );
     }
 
@@ -65,12 +68,12 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
     public void groupfind_columnMatrix_positive_2() {
         // matrix to be tested
         Tile[][] threeAdjacentColumns = {
-                {Tile.PLANT, Tile.GAME, Tile.PLANT, Tile.GAME, Tile.PLANT},
-                {Tile.PLANT, Tile.GAME, Tile.PLANT, Tile.GAME, Tile.PLANT},
-                {Tile.PLANT, Tile.GAME, Tile.PLANT, Tile.GAME, Tile.PLANT},
-                {Tile.PLANT, Tile.GAME, Tile.PLANT, Tile.GAME, Tile.PLANT},
-                {Tile.PLANT, Tile.GAME, Tile.PLANT, Tile.GAME, Tile.PLANT},
-                {Tile.PLANT, Tile.GAME, Tile.PLANT, Tile.GAME, Tile.PLANT}
+                {PLANT, GAME, PLANT, GAME, PLANT},
+                {PLANT, GAME, PLANT, GAME, PLANT},
+                {PLANT, GAME, PLANT, GAME, PLANT},
+                {PLANT, GAME, PLANT, GAME, PLANT},
+                {PLANT, GAME, PLANT, GAME, PLANT},
+                {PLANT, GAME, PLANT, GAME, PLANT}
         };
 
         // group computation
@@ -83,28 +86,28 @@ public class GroupFinderMapPartitionTest implements ShelfMatrixTester {
 
         // expected group result for Tile.PLANT
         List<Group> plantPartition = List.of(
-                new Group(Tile.PLANT, 6),
-                new Group(Tile.PLANT, 6),
-                new Group(Tile.PLANT, 6)
+                new Group(PLANT, 6),
+                new Group(PLANT, 6),
+                new Group(PLANT, 6)
         );
 
         // checking Tile.PLANT's expected group is the only group in its keyset
-        assertEquals(3, groupMap.get(Tile.PLANT).size());
+        assertEquals(3, groupMap.get(PLANT).size());
         assertTrue(
-                groupMap.get(Tile.PLANT).containsAll(plantPartition)
+                groupMap.get(PLANT).containsAll(plantPartition)
         );
 
 
         // expected group result for Tile.GAME
         List<Group> gamePartition = List.of(
-                new Group(Tile.GAME, 6),
-                new Group(Tile.GAME, 6)
+                new Group(GAME, 6),
+                new Group(GAME, 6)
         );
 
         // checking Tile.PLANT's expected group is the only group in its keyset
-        assertEquals(2, groupMap.get(Tile.GAME).size());
+        assertEquals(2, groupMap.get(GAME).size());
         assertTrue(
-                groupMap.get(Tile.GAME).containsAll(gamePartition)
+                groupMap.get(GAME).containsAll(gamePartition)
         );
     }
 }

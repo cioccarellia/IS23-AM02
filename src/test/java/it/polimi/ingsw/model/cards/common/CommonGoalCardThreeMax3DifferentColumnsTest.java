@@ -6,11 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardThreeMax3DifferentColumnsTest implements ShelfMatrixTester {
 
-    CommonGoalCard threeMax3diffColumnsCGC = CommonGoalCardFunctionContainer.THREE_MAX3DIFF_COLUMNS;
+    CommonGoalCard threeMax3diffColumnsCGC = THREE_MAX3DIFF_COLUMNS;
 
     @Test
     @DisplayName("Verify THREE_MAX3DIFF_COLUMNS positively #1")

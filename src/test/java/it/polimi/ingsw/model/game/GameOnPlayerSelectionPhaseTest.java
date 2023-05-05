@@ -8,14 +8,17 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameOnPlayerSelectionPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerSelectionPhase, positively #1")
     public void test_onPlayerSelectionPhase_1_positively() {
-        Game game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+        Game game = new Game(GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -45,7 +48,7 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
     @DisplayName("Checks that calling onPlayerSelectionPhase(coordinates) actually saves the selection on" +
             "the user session upon successful execution")
     public void test_onPlayerSelectionPhase_assertSelectionSavesCoordinatesinUserSession() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

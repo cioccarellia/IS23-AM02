@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static it.polimi.ingsw.model.board.Tile.*;
+import static it.polimi.ingsw.model.board.Tile.CAT;
 import static it.polimi.ingsw.model.game.GameMode.*;
 import static org.junit.jupiter.api.Assertions.*;
 

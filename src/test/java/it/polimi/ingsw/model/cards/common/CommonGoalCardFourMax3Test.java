@@ -6,11 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.FOUR_MAX3DIFF_LINES;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
 
-    CommonGoalCard fourMax3DiffCGC = CommonGoalCardFunctionContainer.FOUR_MAX3DIFF_LINES;
+    CommonGoalCard fourMax3DiffCGC = FOUR_MAX3DIFF_LINES;
 
     @Test
     @DisplayName("Verify FOUR_MAX3DIFFERENT_LINES positively #1")

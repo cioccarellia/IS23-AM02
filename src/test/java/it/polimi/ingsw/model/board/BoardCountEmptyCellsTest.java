@@ -1,11 +1,10 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.game.GameMode.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardCountEmptyCellsTest {
 

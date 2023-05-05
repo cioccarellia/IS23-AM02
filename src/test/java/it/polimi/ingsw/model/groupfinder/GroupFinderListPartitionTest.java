@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.Tile.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GroupFinderListPartitionTest implements ShelfMatrixTester {
 
@@ -18,18 +20,18 @@ public class GroupFinderListPartitionTest implements ShelfMatrixTester {
     public void groupfind_columnMatrix_positive_1() {
         // matrix to be tested
         Tile[][] threeAdjacentColumns = {
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME},
-                {Tile.CAT, Tile.CAT, null, null, Tile.GAME}
+                {CAT, CAT, null, null, GAME},
+                {CAT, CAT, null, null, GAME},
+                {CAT, CAT, null, null, GAME},
+                {CAT, CAT, null, null, GAME},
+                {CAT, CAT, null, null, GAME},
+                {CAT, CAT, null, null, GAME}
         };
 
         // expected result
         List<Group> correctPartition = List.of(
-                new Group(Tile.CAT, 12),
-                new Group(Tile.GAME, 6)
+                new Group(CAT, 12),
+                new Group(GAME, 6)
         );
 
         // group computation
@@ -47,21 +49,21 @@ public class GroupFinderListPartitionTest implements ShelfMatrixTester {
     public void groupfind_columnMatrix_positive_2() {
         // matrix to be tested
         Tile[][] threeAdjacentColumns = {
-                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY, Tile.GAME},
-                {Tile.CAT, Tile.GAME, Tile.FRAME, Tile.TROPHY, Tile.GAME},
-                {null, Tile.GAME, Tile.FRAME, Tile.TROPHY, Tile.GAME}
+                {CAT, GAME, FRAME, TROPHY, GAME},
+                {CAT, GAME, FRAME, TROPHY, GAME},
+                {CAT, GAME, FRAME, TROPHY, GAME},
+                {CAT, GAME, FRAME, TROPHY, GAME},
+                {CAT, GAME, FRAME, TROPHY, GAME},
+                {null, GAME, FRAME, TROPHY, GAME}
         };
 
         // expected result
         List<Group> correctPartition = List.of(
-                new Group(Tile.CAT, 5),
-                new Group(Tile.GAME, 6),
-                new Group(Tile.FRAME, 6),
-                new Group(Tile.TROPHY, 6),
-                new Group(Tile.GAME, 6)
+                new Group(CAT, 5),
+                new Group(GAME, 6),
+                new Group(FRAME, 6),
+                new Group(TROPHY, 6),
+                new Group(GAME, 6)
         );
 
         // group computation
@@ -95,11 +97,11 @@ public class GroupFinderListPartitionTest implements ShelfMatrixTester {
     public void groupfind_fullMatrix() {
         // expected result
         List<Group> correctPartition = List.of(
-                new Group(Tile.PLANT, 30)
+                new Group(PLANT, 30)
         );
 
         // group computation
-        GroupFinder f = new GroupFinder(generateFullMatrixOf(Tile.PLANT));
+        GroupFinder f = new GroupFinder(generateFullMatrixOf(PLANT));
         List<Group> groups = f.computeGroupPartition();
 
         // assertions

@@ -6,8 +6,9 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.Tile.CAT;
+import static it.polimi.ingsw.model.bookshelf.DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BookShelfFillUpBookShelfTest implements ShelfMatrixTester {
 
@@ -15,7 +16,7 @@ public class BookShelfFillUpBookShelfTest implements ShelfMatrixTester {
     @DisplayName("Verify the correct functionality of fillUpBookshelf method, positively")
     public void test_fillUpBookshelf_method_positively() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(DefaultBookshelf.NOT_FULL_BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(NOT_FULL_BOOKSHELF_MATRIX);
         Tile[][] matrix = shelf.getShelfMatrix();
 
         for (int i = 2; i < rows; i++) {

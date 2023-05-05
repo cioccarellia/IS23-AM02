@@ -2,22 +2,22 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
-    private Game game;
     /*
     @BeforeEach()
     void init() {
-        new Game(GameMode.GAME_MODE_4_PLAYERS);
+        new Game(GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -49,7 +49,7 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function OnPlayerCheckingPhase, positively")
     public void test_OnPlayerCheckingPhase_positively() {
-        game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+        Game game = new Game(GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

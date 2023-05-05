@@ -6,10 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.EIGHT_TILES;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
-    CommonGoalCard eightTilesCGC = CommonGoalCardFunctionContainer.EIGHT_TILES;
+    CommonGoalCard eightTilesCGC = EIGHT_TILES;
 
     @Test
     @DisplayName("Verify EIGHT_TILES positively #1")

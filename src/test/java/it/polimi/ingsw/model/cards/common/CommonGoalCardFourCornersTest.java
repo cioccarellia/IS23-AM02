@@ -5,12 +5,15 @@ import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.Tile.CAT;
+import static it.polimi.ingsw.model.board.Tile.TROPHY;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.FOUR_CORNERS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardFourCornersTest implements ShelfMatrixTester {
 
-    CommonGoalCard fourCornersCGC = CommonGoalCardFunctionContainer.FOUR_CORNERS;
+    CommonGoalCard fourCornersCGC = FOUR_CORNERS;
 
     @Test
     @DisplayName("Verify FOUR_CORNERS positively #1")

@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.board.cell.Cell;
-import it.polimi.ingsw.model.board.cell.CellPattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static it.polimi.ingsw.model.board.Tile.*;
+import static it.polimi.ingsw.model.board.cell.CellPattern.THREE_DOTS;
 
 public class BookshelfUnitTest {
 
@@ -44,7 +44,7 @@ public class BookshelfUnitTest {
     @Test
     @DisplayName("Serialization with gson #2")
     public void test_serialization_gson_2() {
-        Cell cell = new Cell(CellPattern.THREE_DOTS, true);
+        Cell cell = new Cell(THREE_DOTS, true);
 
         Gson gson = new GsonBuilder().create();
         String jsonCell = gson.toJson(cell);

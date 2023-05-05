@@ -8,14 +8,15 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.CHECKING;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameOnPlayerInsertionPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerInsertionPhase, positively")
     public void test_onPlayerInsertionPhase_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -31,10 +32,7 @@ public class GameOnPlayerInsertionPhaseTest implements GameTester {
 
         Tile[][] matrix = game.getGameMatrix();
 
-        List<Tile> tiles = List.of(
-                matrix[c1.x()][c1.y()],
-                matrix[c2.x()][c2.y()]
-        );
+        List<Tile> tiles = List.of(matrix[c1.x()][c1.y()], matrix[c2.x()][c2.y()]);
 
         game.onPlayerInsertionPhase(1, tiles);
 

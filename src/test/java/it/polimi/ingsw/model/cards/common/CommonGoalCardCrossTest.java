@@ -6,11 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.X_TILES;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardCrossTest implements ShelfMatrixTester {
 
-    CommonGoalCard xTiles = CommonGoalCardFunctionContainer.X_TILES;
+    CommonGoalCard xTiles = X_TILES;
 
     @Test
     @DisplayName("Verify X_TILES positively #1")

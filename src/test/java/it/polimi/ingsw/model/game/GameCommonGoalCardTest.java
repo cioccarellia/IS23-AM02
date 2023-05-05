@@ -3,14 +3,16 @@ package it.polimi.ingsw.model.game;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GameCommonGoalCardTest implements GameTester {
 
     @Test
     @DisplayName("Verify common goal card initialization #1")
     public void test_onGameStarted_1_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -24,7 +26,7 @@ public class GameCommonGoalCardTest implements GameTester {
     @Test
     @DisplayName("Verify personal goal card initialization #2")
     public void test_onGameStarted_2_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

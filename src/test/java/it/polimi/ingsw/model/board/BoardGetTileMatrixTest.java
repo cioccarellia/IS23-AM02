@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static it.polimi.ingsw.model.board.HardcodedBoardConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.board.HardcodedBoardConstants.GLOBAL_BOARD_MATRIX;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardGetTileMatrixTest {
     private static final int dimension = BoardConfiguration.getInstance().getDimension();

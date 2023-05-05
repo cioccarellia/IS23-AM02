@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.bookshelf.DefaultBookshelf.BOOKSHELF_MATRIX;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookshelfExceptionTests implements ShelfMatrixTester {
     @Test
@@ -47,7 +49,7 @@ public class BookshelfExceptionTests implements ShelfMatrixTester {
     @DisplayName("Verify the insert method throws can't fit tiles in that column exception")
     public void test_insert_cannot_fit_exception() {
         Bookshelf shelf = new Bookshelf();
-        shelf.fillUpBookShelf(DefaultBookshelf.BOOKSHELF_MATRIX);
+        shelf.fillUpBookShelf(BOOKSHELF_MATRIX);
         List<Tile> tiles = List.of(CAT, FRAME, GAME);
         final int column = 2;
 

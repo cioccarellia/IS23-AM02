@@ -10,6 +10,8 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jetbrains.annotations.NotNull;
 
+import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
+
 /**
  * Class implementing a basic CLI parser for the startup program
  */
@@ -23,40 +25,40 @@ public class CLIParser {
 
     private void injectArguments(@NotNull ArgumentParser parser) {
         parser.addArgument("-v", "--verbose")
-                .dest(CLIDestinations.VERBOSE)
+                .dest(VERBOSE)
                 .type(Boolean.class)
                 .setConst(true)
                 .setDefault(false)
                 .help("Enable verbose output.");
 
         parser.addArgument("-t", "--target")
-                .dest(CLIDestinations.TARGET)
+                .dest(TARGET)
                 .type(AppLaunchTarget.class)
                 .help("Defines the type of configuration launched.");
 
         parser.addArgument("--server-address")
-                .dest(CLIDestinations.SERVER_IP)
+                .dest(SERVER_IP)
                 .metavar("HOST")
                 .help("The server ip address");
 
         parser.addArgument("--server-port")
-                .dest(CLIDestinations.SERVER_PORT)
+                .dest(SERVER_PORT)
                 .metavar("PORT")
                 .type(Integer.class)
                 .help("The server port");
 
         parser.addArgument("--client-mode")
-                .dest(CLIDestinations.CLIENT_MODE)
+                .dest(CLIENT_MODE)
                 .type(ClientMode.class)
                 .help("Defines the mode for the current client.");
 
         parser.addArgument("--client-username")
-                .dest(CLIDestinations.CLIENT_USERNAME)
+                .dest(CLIENT_USERNAME)
                 .type(String.class)
                 .help("Sets the player username.");
 
         parser.addArgument("--client-protocol")
-                .dest(CLIDestinations.CLIENT_PROTOCOL)
+                .dest(CLIENT_PROTOCOL)
                 .type(ClientProtocol.class)
                 .help("Defines the protocol for the current client.");
     }
@@ -77,9 +79,9 @@ public class CLIParser {
                 return true;
             }
             case CLIENT, SERVER_AND_CLIENT -> {
-                String username = ns.get(CLIDestinations.CLIENT_USERNAME);
-                ClientMode mode = ns.get(CLIDestinations.CLIENT_MODE);
-                ClientProtocol proto = ns.get(CLIDestinations.CLIENT_PROTOCOL);
+                String username = ns.get(CLIENT_USERNAME);
+                ClientMode mode = ns.get(CLIENT_MODE);
+                ClientProtocol proto = ns.get(CLIENT_PROTOCOL);
 
                 return username != null && mode != null && proto != null;
             }

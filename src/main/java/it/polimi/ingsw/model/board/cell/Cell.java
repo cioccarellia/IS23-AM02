@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static it.polimi.ingsw.model.board.cell.CellPattern.NORMAL;
+
 public class Cell {
 
     private final CellPattern pattern;
@@ -36,7 +38,7 @@ public class Cell {
     }
 
     static Cell createDeadCell() {
-        return new Cell(CellPattern.NORMAL, false);
+        return new Cell(NORMAL, false);
     }
 
     public CellPattern getPattern() {

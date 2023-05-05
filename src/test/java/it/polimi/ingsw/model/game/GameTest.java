@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.board.cell.Cell;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_3_PLAYERS;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -14,7 +16,7 @@ public class GameTest implements GameTester {
     @Test
     @DisplayName("Verify player adding positively")
     public void test_game_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -32,7 +34,7 @@ public class GameTest implements GameTester {
     @Test
     @DisplayName("verify starting player and current player initialization #3")
     public void test_onGameStarted_3_positively() {
-        Game game = new Game(GameMode.GAME_MODE_3_PLAYERS);
+        Game game = new Game(GAME_MODE_3_PLAYERS);
 
         final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB", PLAYER_C = "PlayerC";
 
@@ -52,7 +54,7 @@ public class GameTest implements GameTester {
     @Test
     @DisplayName("verify the correct (re)fill of the board, positively #4")
     public void test_onGameStarted_4_positively() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -69,7 +71,7 @@ public class GameTest implements GameTester {
         }
 
         //verify if the board is full
-        assertEquals(0, board.countEmptyCells(GameMode.GAME_MODE_2_PLAYERS));
+        assertEquals(0, board.countEmptyCells(GAME_MODE_2_PLAYERS));
     }
 
 }

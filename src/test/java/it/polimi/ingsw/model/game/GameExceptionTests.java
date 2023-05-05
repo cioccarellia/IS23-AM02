@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameStatus.*;
-import static it.polimi.ingsw.model.player.PlayerNumber.*;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static it.polimi.ingsw.model.game.GameStatus.RUNNING;
+import static it.polimi.ingsw.model.player.PlayerNumber.PLAYER_3;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameExceptionTests implements GameTester {
@@ -16,7 +17,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that starting a game without enough players throws an exception")
     public void test_onGameStarted_throwsException_NoEnoughPlayers() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer("A");
 
@@ -32,7 +33,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that starting a game without enough players throws an exception")
     public void test_onGameStarted_throwsException_TooManyPlayers() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB", PLAYER_C = "PlayerC", PLAYER_D = "PlayerD";
 
@@ -63,7 +64,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that players can not be added after number of players reached")
     public void test_onGameStarted_throwsException_PlayersAddedAfterGameStarted() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer("A");
         game.addPlayer("B");
@@ -71,7 +72,7 @@ public class GameExceptionTests implements GameTester {
 
         Exception exception = assertThrows(IllegalStateException.class, () -> game.addPlayer(PLAYER_C));
 
-        String expectedMessage = "Impossible to add a player: the game is full (having %d players for %s mode)".formatted(2, GameMode.GAME_MODE_2_PLAYERS);
+        String expectedMessage = "Impossible to add a player: the game is full (having %d players for %s mode)".formatted(2, GAME_MODE_2_PLAYERS);
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -80,7 +81,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that players can not be added after the game has started")
     public void test_onGameStarted_throwsException_PlayersAddedNotInInitializingGamePhase() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
         game.onGameStarted();
@@ -96,7 +97,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerSelectionPhase, coordinates are not valid exception")
     public void test_onPlayerSelectionPhase_coordinates_not_valid_exception() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -120,7 +121,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Verify the function of playerHasNoMoreTurns, edge case #1")
     public void test_playerHasNoMoreTurns_edgeCase_1() {
-        Game game = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

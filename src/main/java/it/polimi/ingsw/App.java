@@ -1,6 +1,5 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.launcher.argparser.CLIDestinations;
 import it.polimi.ingsw.launcher.argparser.CLIParser;
 import it.polimi.ingsw.launcher.parameters.*;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -10,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
+import static it.polimi.ingsw.launcher.parameters.AppLaunchTarget.SERVER;
 
 /**
  * Program entry point. Depending on what is requested, either the client,
@@ -27,16 +29,16 @@ public class App {
         Namespace result = parser.parse(args);
         logger.info("Arguments successfully parsed");
 
-        Boolean isVerbose = result.get(CLIDestinations.VERBOSE);
+        Boolean isVerbose = result.get(VERBOSE);
         boolean areArgumentsExhaustive = parser.areArgumentsExhaustive(result);
 
         if (areArgumentsExhaustive) {
             // we read the values and assemble the configuration
-            AppLaunchTarget target = result.get(CLIDestinations.TARGET);
-            String serverIp = result.get(CLIDestinations.SERVER_IP);
-            int serverPort = result.get(CLIDestinations.SERVER_PORT);
-            ClientMode modePreselection = result.get(CLIDestinations.CLIENT_MODE);
-            ClientProtocol protocolPreselection = result.get(CLIDestinations.CLIENT_PROTOCOL);
+            AppLaunchTarget target = result.get(TARGET);
+            String serverIp = result.get(SERVER_IP);
+            int serverPort = result.get(SERVER_PORT);
+            ClientMode modePreselection = result.get(CLIENT_MODE);
+            ClientProtocol protocolPreselection = result.get(CLIENT_PROTOCOL);
 
             var clientConfig = new ClientExhaustiveConfiguration(modePreselection, protocolPreselection);
             var finalConfig = new ExhaustiveLaunchConfiguration(target, serverIp, serverPort, List.of(clientConfig));
@@ -51,10 +53,10 @@ public class App {
 
     /**
      * Launches a CLI interface for retrieving the missing parameters
-     * */
+     */
     private static @NotNull ExhaustiveLaunchConfiguration launchWizardForConfig(Namespace nonExhaustivePresetConfig) {
         return new ExhaustiveLaunchConfiguration(
-                AppLaunchTarget.SERVER,
+                SERVER,
                 "localhost", 8080,
                 List.of()
         );
@@ -62,7 +64,7 @@ public class App {
 
     /**
      * Starts the
-     * */
+     */
     private static void launchConfiguration(ExhaustiveLaunchConfiguration config) {
         switch (config.appLaunchTarget()) {
             case SERVER -> {

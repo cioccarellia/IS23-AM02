@@ -6,11 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.SIX_PAIRS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
 
-    CommonGoalCard sixPairsCGC = CommonGoalCardFunctionContainer.SIX_PAIRS;
+    CommonGoalCard sixPairsCGC = SIX_PAIRS;
 
 
     @Test

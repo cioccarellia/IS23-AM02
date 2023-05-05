@@ -1,13 +1,14 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.GameController;
-import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
 
 import java.net.ServerSocket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+
+import static it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway.NAME;
 
 public class AppServer {
 
@@ -22,7 +23,7 @@ public class AppServer {
             // NO Registry registry = LocateRegistry.getRegistry();
             Registry registry = LocateRegistry.createRegistry(serverPort);
 
-            registry.bind(ServerGateway.NAME, stub);
+            registry.bind(NAME, stub);
 
 
             ServerSocket serverSocket = new ServerSocket(serverPort);

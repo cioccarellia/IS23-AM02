@@ -6,11 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.model.board.Tile.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardTwoDifferentColumnsTest implements ShelfMatrixTester {
 
-    CommonGoalCard twoDiffColumnsCGC = CommonGoalCardFunctionContainer.TWO_DIFF_COLUMNS;
+    CommonGoalCard twoDiffColumnsCGC = TWO_DIFF_COLUMNS;
 
     @Test
     @DisplayName("Verify TWO_DIFF_COLUMNS positively #1")
