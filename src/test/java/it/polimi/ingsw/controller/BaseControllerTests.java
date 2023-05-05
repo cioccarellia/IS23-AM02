@@ -1,7 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.SignUpRequest;
+import it.polimi.ingsw.controller.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.result.failures.GameStartError;
 import it.polimi.ingsw.controller.result.failures.StatusError;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ public class BaseControllerTests {
     public void x() {
         GameController controller = new GameController();
 
-        SingleResult<StatusError> a = controller.gameStartedRequest(GAME_MODE_4_PLAYERS, "alberto", RMI);
+        SingleResult<GameStartError> a = controller.gameStartedRequest(GAME_MODE_4_PLAYERS, "alberto", RMI);
 
         var b = controller.gameConnectionRequest("cookie", SOCKET);
         var c = controller.gameConnectionRequest("giulia", RMI);
@@ -26,27 +27,27 @@ public class BaseControllerTests {
         var err = controller.gameConnectionRequest("__err", SOCKET);
 
         switch (a) {
-            case SingleResult.Success<StatusError> success -> {
+            case SingleResult.Success<GameStartError> success -> {
                 // ok
             }
-            case SingleResult.Failure<StatusError> failure -> fail("Sign up request should have been successful");
+            case SingleResult.Failure<GameStartError> failure -> fail("Sign up request should have been successful");
         }
 
         switch (err) {
-            case SingleResult.Success<SignUpRequest> success -> {
+            case SingleResult.Success<GameConnectionError> success -> {
                 fail("Sign up request should have been unsuccessful");
             }
-            case SingleResult.Failure<SignUpRequest> failure -> {
+            case SingleResult.Failure<GameConnectionError> failure -> {
                 // ok
             }
         }
 
 
-        assertTrue(a instanceof SingleResult.Success<StatusError>);
-        assertTrue(b instanceof SingleResult.Success<SignUpRequest>);
-        assertTrue(c instanceof SingleResult.Success<SignUpRequest>);
-        assertTrue(d instanceof SingleResult.Success<SignUpRequest>);
-        assertTrue(err instanceof SingleResult.Failure<SignUpRequest>);
+        assertTrue(a instanceof SingleResult.Success<GameStartError>);
+        assertTrue(b instanceof SingleResult.Success<GameConnectionError>);
+        assertTrue(c instanceof SingleResult.Success<GameConnectionError>);
+        assertTrue(d instanceof SingleResult.Success<GameConnectionError>);
+        assertTrue(err instanceof SingleResult.Failure<GameConnectionError>);
     }
 
 }

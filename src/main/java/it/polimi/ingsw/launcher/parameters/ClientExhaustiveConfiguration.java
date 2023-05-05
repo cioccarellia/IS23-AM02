@@ -1,7 +1,7 @@
 package it.polimi.ingsw.launcher.parameters;
 
 public record ClientExhaustiveConfiguration(
-        ClientMode mode,
+        ClientUiMode mode,
         ClientProtocol protocol
 ) {
 }

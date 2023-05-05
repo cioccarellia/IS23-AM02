@@ -37,7 +37,7 @@ public class App {
             AppLaunchTarget target = result.get(TARGET);
             String serverIp = result.get(SERVER_IP);
             int serverPort = result.get(SERVER_PORT);
-            ClientMode modePreselection = result.get(CLIENT_MODE);
+            ClientUiMode modePreselection = result.get(CLIENT_MODE);
             ClientProtocol protocolPreselection = result.get(CLIENT_PROTOCOL);
 
             var clientConfig = new ClientExhaustiveConfiguration(modePreselection, protocolPreselection);
@@ -88,7 +88,7 @@ public class App {
 
     }
 
-    private static void startClient(String serverIp, int serverPort, @Nullable ClientMode mode, @Nullable ClientProtocol protocol) {
+    private static void startClient(String serverIp, int serverPort, @Nullable ClientUiMode mode, @Nullable ClientProtocol protocol) {
 
     }
 

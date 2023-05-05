@@ -1,7 +1,16 @@
 package it.polimi.ingsw.controller.client;
 
+import it.polimi.ingsw.controller.ServerStatus;
+import it.polimi.ingsw.controller.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.result.SingleResult;
+import it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.networkProtocol.RMIConnection.ClientGateway;
 import it.polimi.ingsw.ui.UiGateway;
+import javafx.util.Pair;
+
+import java.util.List;
 
 public class ClientController implements ClientGateway {
 
@@ -12,47 +21,47 @@ public class ClientController implements ClientGateway {
     }
 
     @Override
-    public int serverStatusResponse() {
-        return 0;
+    public void serverStatusResponse(ServerStatus status) {
+
     }
 
     @Override
-    public int serverStatusUpdateEvent() {
-        return 0;
+    public void gameStartedEvent() {
+
     }
 
     @Override
-    public int gameStartedEvent() {
-        return 0;
+    public void modelUpdateEvent(Game game) {
+
     }
 
     @Override
-    public int modelUpdateEvent() {
-        return 0;
+    public void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+
     }
 
     @Override
-    public int gamePhaseEvent() {
-        return 0;
+    public void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+
     }
 
     @Override
-    public int gameEndedEvent() {
-        return 0;
+    public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+
     }
 
     @Override
-    public int playerConnectionStatusUpdateEvent() {
-        return 0;
+    public void gameStandbyEvent() {
+
     }
 
     @Override
-    public int gameStandbyEvent() {
-        return 0;
+    public void gameResumedEvent() {
+
     }
 
     @Override
-    public int gameResumedEvent() {
-        return 0;
+    public void gameEndedEvent() {
+
     }
 }

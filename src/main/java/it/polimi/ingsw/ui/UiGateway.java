@@ -2,7 +2,6 @@ package it.polimi.ingsw.ui;
 
 public interface UiGateway {
 
-
     int onGameStarted();
 
     // board + stato
@@ -13,7 +12,6 @@ public interface UiGateway {
 
     // single player's token
     int modelPlayerTokenUpdate();
-
 
     int gameSelection();
 

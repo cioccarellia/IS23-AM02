@@ -2,10 +2,7 @@ package it.polimi.ingsw.networkProtocol.RMIConnection;
 
 import it.polimi.ingsw.controller.ServerStatus;
 import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.result.failures.SignUpRequest;
-import it.polimi.ingsw.controller.result.failures.StatusError;
-import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.result.failures.*;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -22,9 +19,9 @@ public interface ServerGateway extends Remote {
     // Initialization
     ServerStatus serverStatusRequest();
 
-    SingleResult<StatusError> gameStartedRequest(GameMode mode, String username, ClientProtocol protocol);
+    SingleResult<GameStartError> gameStartedRequest(GameMode mode, String username, ClientProtocol protocol);
 
-    SingleResult<SignUpRequest> gameConnectionRequest(String username, ClientProtocol protocol);
+    SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol);
 
     // SingleResult<StatusError> gameTeardownRequest();
 

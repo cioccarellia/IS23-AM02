@@ -1,8 +1,11 @@
 package it.polimi.ingsw;
 
+import ch.qos.logback.core.net.server.Client;
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
+import it.polimi.ingsw.ui.UiGateway;
 import org.jetbrains.annotations.NotNull;
 
 import java.rmi.registry.LocateRegistry;
@@ -11,6 +14,9 @@ import java.rmi.registry.Registry;
 import static it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway.NAME;
 
 public class AppClient {
+
+
+    ClientController controller; // = new ClientController();
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverIp, int serverPort) {
         ClientProtocol proto = config.protocol();

@@ -2,7 +2,7 @@ package it.polimi.ingsw.launcher.argparser;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.launcher.parameters.AppLaunchTarget;
-import it.polimi.ingsw.launcher.parameters.ClientMode;
+import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -49,7 +49,7 @@ public class CLIParser {
 
         parser.addArgument("--client-mode")
                 .dest(CLIENT_MODE)
-                .type(ClientMode.class)
+                .type(ClientUiMode.class)
                 .help("Defines the mode for the current client.");
 
         parser.addArgument("--client-username")
@@ -80,7 +80,7 @@ public class CLIParser {
             }
             case CLIENT, SERVER_AND_CLIENT -> {
                 String username = ns.get(CLIENT_USERNAME);
-                ClientMode mode = ns.get(CLIENT_MODE);
+                ClientUiMode mode = ns.get(CLIENT_MODE);
                 ClientProtocol proto = ns.get(CLIENT_PROTOCOL);
 
                 return username != null && mode != null && proto != null;

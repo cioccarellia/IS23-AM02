@@ -1,6 +1,6 @@
 package it.polimi.ingsw.launcher.parameters;
 
-public enum ClientMode {
+public enum ClientUiMode {
     CLI,
     GUI
 }

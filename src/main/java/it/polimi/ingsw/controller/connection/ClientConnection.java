@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller.connection;
 
+import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+
 /**
  * Class representing a virtual connection with a client app.
  */
@@ -10,13 +12,16 @@ public class ClientConnection {
      */
     private final String username;
 
+    private final ClientProtocol proto;
+
     /**
      * Status of the connection with the client
      */
     private ConnectionStatus status;
 
-    public ClientConnection(String _username, ConnectionStatus _status) {
+    public ClientConnection(String _username, ClientProtocol _proto, ConnectionStatus _status) {
         username = _username;
+        proto = _proto;
         status = _status;
     }
 
@@ -26,6 +31,10 @@ public class ClientConnection {
 
     public ConnectionStatus getStatus() {
         return status;
+    }
+
+    public ClientProtocol getProto() {
+        return proto;
     }
 
     public void setStatus(ConnectionStatus status) {

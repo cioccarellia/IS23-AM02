@@ -1,8 +1,6 @@
 package it.polimi.ingsw.networkProtocol.connectionAdapter;
 
-import it.polimi.ingsw.networkProtocol.socketConnection.socketClient;
-
-public class RMIAdapter implements socketClient {
+public class RMIAdapter {
     public RMIAdapter(String serverAddress, int serverPort) {
         // super(serverAddress, serverPort);
     }

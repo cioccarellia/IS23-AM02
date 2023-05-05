@@ -1,35 +1,40 @@
 package it.polimi.ingsw.networkProtocol.RMIConnection;
 
+import it.polimi.ingsw.controller.ServerStatus;
+import it.polimi.ingsw.controller.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.result.SingleResult;
+import it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.model.game.Game;
+import javafx.util.Pair;
+
 import java.rmi.Remote;
+import java.util.List;
 
 public interface ClientGateway extends Remote {
-
-    //FIXME temporary typization
 
     String NAME = "ClientGateway";
 
     // Initialization
-    int serverStatusResponse();
+    void serverStatusResponse(ServerStatus status);
 
-    int serverStatusUpdateEvent();
-
-    int gameStartedEvent();
+    void gameStartedEvent();
 
 
     // Running
-    int modelUpdateEvent();
+    void modelUpdateEvent(Game game);
 
-    int gamePhaseEvent();
+    void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult);
 
-    int gameEndedEvent();
+    void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult);
 
 
     //Connection - Disconnection
-    int playerConnectionStatusUpdateEvent();
+    void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames);
 
-    int gameStandbyEvent();
+    void gameStandbyEvent();
 
-    int gameResumedEvent();
+    void gameResumedEvent();
 
-    //int gameEndedEvent();
+    void gameEndedEvent();
 }
