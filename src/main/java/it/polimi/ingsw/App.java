@@ -69,17 +69,17 @@ public class App {
     private static void launchConfiguration(ExhaustiveLaunchConfiguration config) {
         switch (config.appLaunchTarget()) {
             case SERVER -> {
-                startServer(config.serverIp(), config.serverPort());
+                startServer(config.serverIHost(), config.serverPort());
             }
             case CLIENT -> {
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIp(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverIHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
             case SERVER_AND_CLIENT -> {
-                startServer(config.serverIp(), config.serverPort());
+                startServer(config.serverIHost(), config.serverPort());
 
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIp(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverIHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
         }
     }

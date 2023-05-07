@@ -6,7 +6,7 @@ import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.networkProtocol.rmi.ClientService;
+import it.polimi.ingsw.net.rmi.ClientService;
 import it.polimi.ingsw.ui.UiGateway;
 import javafx.util.Pair;
 
