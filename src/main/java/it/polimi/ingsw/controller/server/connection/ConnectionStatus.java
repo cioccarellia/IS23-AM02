@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.connection;
+package it.polimi.ingsw.controller.server.connection;
 
 /**
  * Defines the status of the client's connection

@@ -1,18 +1,18 @@
 package it.polimi.ingsw.controller.client;
 
-import it.polimi.ingsw.controller.ServerStatus;
-import it.polimi.ingsw.controller.connection.ConnectionStatus;
-import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.networkProtocol.RMIConnection.ClientGateway;
+import it.polimi.ingsw.networkProtocol.rmi.ClientService;
 import it.polimi.ingsw.ui.UiGateway;
 import javafx.util.Pair;
 
 import java.util.List;
 
-public class ClientController implements ClientGateway {
+public class ClientController implements ClientService {
 
     UiGateway ui;
 

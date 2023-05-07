@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Notifies the game of events happening as a result of the interactions between client and server.
  */
-public interface EventControl {
+public interface ModelService {
 
     /**
      * The game

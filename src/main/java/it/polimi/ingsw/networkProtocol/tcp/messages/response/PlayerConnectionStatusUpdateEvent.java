@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networkProtocol.tcp.messages.response;
 
-import it.polimi.ingsw.controller.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import javafx.util.Pair;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.result.types;
+package it.polimi.ingsw.controller.server.result.types;
 
 import it.polimi.ingsw.model.board.Tile;
 

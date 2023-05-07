@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.result;
+package it.polimi.ingsw.controller.server.result;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

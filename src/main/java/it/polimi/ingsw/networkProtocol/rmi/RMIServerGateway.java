@@ -1,8 +1,12 @@
-package it.polimi.ingsw.networkProtocol.RMIConnection;
+package it.polimi.ingsw.networkProtocol.rmi;
 
-import it.polimi.ingsw.controller.ServerStatus;
-import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.*;
+import it.polimi.ingsw.controller.server.ServerService;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameStartError;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -11,7 +15,7 @@ import it.polimi.ingsw.model.game.GameMode;
 import java.util.List;
 import java.util.Set;
 
-public class RMIServerGateway implements ServerGateway {
+public class RMIServerGateway implements ServerService {
 
     @Override
     public ServerStatus serverStatusRequest() {
@@ -19,7 +23,7 @@ public class RMIServerGateway implements ServerGateway {
     }
 
     @Override
-    public SingleResult<GameStartError> gameStartedRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
         return null;
     }
 

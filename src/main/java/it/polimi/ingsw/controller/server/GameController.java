@@ -1,8 +1,13 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.server;
 
-import it.polimi.ingsw.controller.connection.ClientConnection;
-import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.*;
+import it.polimi.ingsw.controller.server.connection.ClientConnection;
+import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameStartError;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -11,7 +16,7 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
-import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
+import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,16 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static it.polimi.ingsw.controller.ServerStatus.*;
-import static it.polimi.ingsw.controller.connection.ConnectionStatus.DISCONNECTED;
-import static it.polimi.ingsw.controller.connection.ConnectionStatus.OPEN;
-import static it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure.*;
-import static it.polimi.ingsw.controller.result.failures.GameConnectionError.*;
-import static it.polimi.ingsw.controller.result.failures.TileSelectionFailures.*;
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
-import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
-
-public class GameController implements ServerGateway {
+public class GameController implements ServerService {
 
     protected static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
@@ -47,7 +43,7 @@ public class GameController implements ServerGateway {
 
     private int maxPlayerAmount;
 
-    private ServerStatus serverStatus = NO_GAME_STARTED;
+    private ServerStatus serverStatus = ServerStatus.NO_GAME_STARTED;
 
 
     @Override
@@ -56,16 +52,16 @@ public class GameController implements ServerGateway {
     }
 
     @Override
-    public SingleResult<GameStartError> gameStartedRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
-        if (serverStatus == NO_GAME_STARTED) {
+        if (serverStatus == ServerStatus.NO_GAME_STARTED) {
             game = new Game(mode);
             maxPlayerAmount = mode.maxPlayerAmount();
 
-            serverStatus = GAME_INITIALIZING;
+            serverStatus = ServerStatus.GAME_INITIALIZING;
 
-            connections.put(username, new ClientConnection(username, protocol, OPEN));
+            connections.put(username, new ClientConnection(username, protocol, ConnectionStatus.OPEN));
             game.addPlayer(username);
 
             return new SingleResult.Success<>();
@@ -82,48 +78,32 @@ public class GameController implements ServerGateway {
 
         assert connections.size() <= maxPlayerAmount;
 
-        if (serverStatus == GAME_RUNNING) {
-            return new SingleResult.Failure<>(GAME_ALREADY_STARTED);
+        if (serverStatus == ServerStatus.GAME_RUNNING) {
+            return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED);
         }
 
         if (connections.size() == maxPlayerAmount) {
-            return new SingleResult.Failure<>(MAX_PLAYER_REACHED);
+            return new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED);
         }
 
         if (connections.containsKey(username)) {
-            return new SingleResult.Failure<>(USERNAME_ALREADY_IN_USE);
+            return new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE);
         }
 
         if (game.getGameStatus() == GameStatus.ENDED) {
-            return new SingleResult.Failure<>(GAME_ALREADY_ENDED);
+            return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED);
         }
 
 
         // if successful & can start game
         if (maxPlayerAmount == connections.size() + 1) {
-            serverStatus = GAME_RUNNING;
+            serverStatus = ServerStatus.GAME_RUNNING;
         }
 
-        connections.put(username, new ClientConnection(username, protocol, OPEN));
+        connections.put(username, new ClientConnection(username, protocol, ConnectionStatus.OPEN));
         game.addPlayer(username);
 
         return new SingleResult.Success<>();
-    }
-
-
-    // Sets the state of the connection for a client to be open
-    public SingleResult<StatusError> onPlayerConnection(String username) {
-        logger.info("onPlayerConnection(username={})", username);
-
-        connections.get(username).setStatus(OPEN);
-
-        return new SingleResult.Success<>();
-    }
-
-    // Sets the state of the connection for a client to be disconnected
-    public void onPlayerDisconnection(String username) {
-        logger.info("onPlayerDisconnection({})", username);
-        connections.get(username).setStatus(DISCONNECTED);
     }
 
 
@@ -133,7 +113,7 @@ public class GameController implements ServerGateway {
     }
 
     public boolean shouldStandbyGame() {
-        return connections.values().stream().filter(player -> player.getStatus() == DISCONNECTED).count() >= maxPlayerAmount - 1;
+        return connections.values().stream().filter(player -> player.getStatus() == ConnectionStatus.DISCONNECTED).count() >= maxPlayerAmount - 1;
     }
 
 
@@ -142,15 +122,15 @@ public class GameController implements ServerGateway {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
 
         if (isUsernameActivePlayer(username)) {
-            return new SingleResult.Failure<>(UNAUTHORIZED_PLAYER);
+            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
         }
 
-        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != SELECTING) {
-            return new SingleResult.Failure<>(UNAUTHORIZED_ACTION);
+        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.SELECTING) {
+            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION);
         }
 
         if (!game.isSelectionValid(selection)) {
-            return new SingleResult.Failure<>(UNAUTHORIZED_SELECTION);
+            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION);
         }
 
         game.onPlayerSelectionPhase(selection);
@@ -163,27 +143,27 @@ public class GameController implements ServerGateway {
         logger.info("onPlayerBookshelfTileInsertionRequest(username={}, tiles={}, column={})", username, tiles, column);
 
         if (isUsernameActivePlayer(username)) {
-            return new SingleResult.Failure<>(WRONG_PLAYER);
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
         }
 
-        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != INSERTING) {
-            return new SingleResult.Failure<>(WRONG_STATUS);
+        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.INSERTING) {
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS);
         }
 
         if (!game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles)) {
-            return new SingleResult.Failure<>(WRONG_SELECTION);
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION);
         }
 
         if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
-            return new SingleResult.Failure<>(ILLEGAL_COLUMN);
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN);
         }
 
         if (tiles.size() > LogicConfiguration.getInstance().maxSelectionSize()) {
-            return new SingleResult.Failure<>(TOO_MANY_TILES);
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES);
         }
 
         if (!game.getCurrentPlayer().getBookshelf().canFit(column, tiles.size())) {
-            return new SingleResult.Failure<>(NO_FIT);
+            return new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT);
         }
 
         game.onPlayerInsertionPhase(column, tiles);
@@ -201,7 +181,7 @@ public class GameController implements ServerGateway {
     public void keepAlive(String player) {
         logger.info("keepAlive(username={})", player);
         if (connections.containsKey(player)) {
-            connections.get(player).setStatus(OPEN);
+            connections.get(player).setStatus(ConnectionStatus.OPEN);
         } else {
             logger.warn("Wrong keep alive username");
         }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.server.model;
 
 public enum ServerStatus {
     NO_GAME_STARTED,

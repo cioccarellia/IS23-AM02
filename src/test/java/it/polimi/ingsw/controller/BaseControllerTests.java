@@ -1,9 +1,9 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.result.failures.GameStartError;
-import it.polimi.ingsw.controller.result.failures.StatusError;
+import it.polimi.ingsw.controller.server.GameController;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameStartError;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.launcher.parameters.ClientProtocol.RMI;
@@ -18,7 +18,7 @@ public class BaseControllerTests {
     public void x() {
         GameController controller = new GameController();
 
-        SingleResult<GameStartError> a = controller.gameStartedRequest(GAME_MODE_4_PLAYERS, "alberto", RMI);
+        SingleResult<GameStartError> a = controller.gameStartRequest(GAME_MODE_4_PLAYERS, "alberto", RMI);
 
         var b = controller.gameConnectionRequest("cookie", SOCKET);
         var c = controller.gameConnectionRequest("giulia", RMI);

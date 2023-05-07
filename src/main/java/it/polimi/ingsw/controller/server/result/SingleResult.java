@@ -1,6 +1,6 @@
-package it.polimi.ingsw.controller.result;
+package it.polimi.ingsw.controller.server.result;
 
-import it.polimi.ingsw.controller.result.failures.RequestError;
+import it.polimi.ingsw.controller.server.result.failures.RequestError;
 
 /**
  * Sealed class representing the result of an operation executed by a method.

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.result.failures;
+package it.polimi.ingsw.controller.server.result.failures;
 
 public enum GameConnectionError implements RequestError {
     ALREADY_CONNECTED_PLAYER,

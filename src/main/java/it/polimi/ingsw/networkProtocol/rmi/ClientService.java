@@ -1,19 +1,19 @@
-package it.polimi.ingsw.networkProtocol.RMIConnection;
+package it.polimi.ingsw.networkProtocol.rmi;
 
-import it.polimi.ingsw.controller.ServerStatus;
-import it.polimi.ingsw.controller.connection.ConnectionStatus;
-import it.polimi.ingsw.controller.result.SingleResult;
-import it.polimi.ingsw.controller.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
 import javafx.util.Pair;
 
 import java.rmi.Remote;
 import java.util.List;
 
-public interface ClientGateway extends Remote {
+public interface ClientService extends Remote {
 
-    String NAME = "ClientGateway";
+    String NAME = "ClientService";
 
     // Initialization
     void serverStatusResponse(ServerStatus status);

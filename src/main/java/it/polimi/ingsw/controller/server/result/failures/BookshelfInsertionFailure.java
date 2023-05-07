@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.result.failures;
+package it.polimi.ingsw.controller.server.result.failures;
 
 public enum BookshelfInsertionFailure implements RequestError {
     WRONG_SELECTION,

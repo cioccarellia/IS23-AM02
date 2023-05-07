@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
@@ -22,7 +23,7 @@ public class App {
     public static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        logger.info("Starting app with args={}", (Object) args);
+        logger.info("Starting app with args={}", Arrays.asList(args));
 
         CLIParser parser = new CLIParser("myshelfie");
 

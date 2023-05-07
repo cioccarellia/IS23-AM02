@@ -1,17 +1,15 @@
 package it.polimi.ingsw;
 
-import ch.qos.logback.core.net.server.Client;
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.server.ServerService;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
-import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
-import it.polimi.ingsw.ui.UiGateway;
 import org.jetbrains.annotations.NotNull;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import static it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway.NAME;
+import static it.polimi.ingsw.controller.server.ServerService.NAME;
 
 public class AppClient {
 
@@ -36,7 +34,7 @@ public class AppClient {
             Registry registry = LocateRegistry.getRegistry(serverIp, serverPort);
 
             // Looking up the registry for the remote object
-            ServerGateway stub = (ServerGateway) registry.lookup(NAME);
+            ServerService stub = (ServerService) registry.lookup(NAME);
 
             // Calling the remote method using the obtained object
             var status = stub.serverStatusRequest();

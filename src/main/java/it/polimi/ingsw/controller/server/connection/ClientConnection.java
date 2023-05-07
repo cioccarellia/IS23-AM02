@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.connection;
+package it.polimi.ingsw.controller.server.connection;
 
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 

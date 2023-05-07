@@ -1,6 +1,6 @@
 package it.polimi.ingsw.networkProtocol.tcp.messages.response;
 
-import it.polimi.ingsw.controller.ServerStatus;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
 
 public class ServerStatusResponse extends Response {
     private final ServerStatus status;

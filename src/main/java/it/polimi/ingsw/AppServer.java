@@ -1,14 +1,14 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.controller.GameController;
-import it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway;
+import it.polimi.ingsw.controller.server.GameController;
+import it.polimi.ingsw.controller.server.ServerService;
 
 import java.net.ServerSocket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import static it.polimi.ingsw.networkProtocol.RMIConnection.ServerGateway.NAME;
+import static it.polimi.ingsw.controller.server.ServerService.NAME;
 
 public class AppServer {
 
@@ -16,8 +16,11 @@ public class AppServer {
 
     public AppServer(String serverAddress, int serverPort) {
 
+
+
+
         try {
-            ServerGateway stub = (ServerGateway) UnicastRemoteObject.exportObject(controller, serverPort);
+            ServerService stub = (ServerService) UnicastRemoteObject.exportObject(controller, serverPort);
 
             // Bind the remote object's stub in the registry
             // NO Registry registry = LocateRegistry.getRegistry();

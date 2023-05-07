@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.controller.EventControl;
+import it.polimi.ingsw.model.ModelService;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -33,7 +33,7 @@ import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
 /**
  * Model class representing an instance of a game.
  */
-public class Game implements EventControl {
+public class Game implements ModelService {
 
     // Game logger
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
