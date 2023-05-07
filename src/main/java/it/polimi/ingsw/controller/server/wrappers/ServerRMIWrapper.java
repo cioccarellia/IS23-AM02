@@ -19,7 +19,7 @@ import java.util.Set;
 
 /**
  * RMI wrapper
- * */
+ */
 public class ServerRMIWrapper extends UnicastRemoteObject implements ServerService {
 
     private final ServerService server;

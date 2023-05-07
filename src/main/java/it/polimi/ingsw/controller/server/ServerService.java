@@ -24,24 +24,24 @@ public interface ServerService extends Remote {
      * This should be used in the connection (pre-game) phase.
      *
      * @return the current server status
-     * */
+     */
     ServerStatus serverStatusRequest();
 
     /**
      * Requests for the current server to start a game.
      *
-     * @param mode      defines the game mode for the soon-to-be-created game
-     * @param protocol  defines the communication protocol used by the current client with the server.
-     * @param username  defines the username for the current client (which is the first player joining).
-     * */
+     * @param mode     defines the game mode for the soon-to-be-created game
+     * @param protocol defines the communication protocol used by the current client with the server.
+     * @param username defines the username for the current client (which is the first player joining).
+     */
     SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol);
 
     /**
      * Requests for the client to connect to the game and be associated with a player.
      *
-     * @param protocol  defines the communication protocol used by the requesting client with the server.
-     * @param username  defines the username for the requesting client.
-     * */
+     * @param protocol defines the communication protocol used by the requesting client with the server.
+     * @param username defines the username for the requesting client.
+     */
     SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol);
 
     // SingleResult<StatusError> gameTeardownRequest();
@@ -49,18 +49,18 @@ public interface ServerService extends Remote {
 
     /**
      * Submits a turn response, containing the player actions for the selection turn
-     * */
+     */
     SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection);
 
 
     /**
      * Submits a turn response, containing the player actions for the insertion turn
-     * */
+     */
     SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column);
 
 
     /**
      * Sends an acknowledgement call.
-     * */
+     */
     void keepAlive(String player);
 }

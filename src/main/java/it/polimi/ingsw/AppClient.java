@@ -1,6 +1,8 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.gateways.RMIGateway;
+import it.polimi.ingsw.controller.client.gateways.TCPGateway;
 import it.polimi.ingsw.controller.server.ServerService;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
@@ -13,20 +15,22 @@ import static it.polimi.ingsw.controller.server.ServerService.NAME;
 
 public class AppClient {
 
-
     ClientController controller; // = new ClientController();
+
+    ServerService server;
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverIp, int serverPort) {
         ClientProtocol proto = config.protocol();
 
         switch (proto) {
             case RMI -> {
-
+                server = new RMIGateway(serverIp, serverPort);
             }
-            case SOCKET -> {
-
+            case TCP -> {
+                server = new TCPGateway(serverIp, serverPort);
             }
         }
+
 
 
         try {

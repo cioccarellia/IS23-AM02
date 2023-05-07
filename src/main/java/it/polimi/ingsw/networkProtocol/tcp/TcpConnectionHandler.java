@@ -1,8 +1,8 @@
 package it.polimi.ingsw.networkProtocol.tcp;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.networkProtocol.tcp.messages.request.Request;
-import it.polimi.ingsw.networkProtocol.tcp.messages.response.Response;
+import it.polimi.ingsw.controller.server.wrappers.ServerTCPWrapper;
+import it.polimi.ingsw.networkProtocol.tcp.messages.Message;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,47 +10,44 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class TcpConnectionHandler implements Runnable {
+
     private final Socket socket;
+    private final ServerTCPWrapper wrapper;
 
-    public TcpConnectionHandler(Socket socket) {
+    private final Gson gson = new Gson();
+
+    public TcpConnectionHandler(Socket socket, ServerTCPWrapper wrapper) {
         this.socket = socket;
-    }
-
-    private PrintWriter out;
-
-    void receiveMessage(Request clientMessage) {
-
-    }
-
-    void sendResponse(Response response) {
-        Gson gson = new Gson();
-
-        String serializedMessage = gson.toJson(response);
-
+        this.wrapper = wrapper;
     }
 
     public void run() {
-        try {
-            Scanner in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream());
+        try (Scanner in = new Scanner(socket.getInputStream()); PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
-            // Leggo e scrivo nella connessione finche' non ricevo "quit"
-            while (true) {
-                String line = in.nextLine();
-                if (line.equals("quit")) {
-                    break;
-                } else {
-                    out.println("Received: " + line);
-                    out.flush();
-                }
+            while (socket.isBound()) { // fixme
+                // receive serialized message
+                String serializedJsonMessage = in.nextLine();
+
+                // de-serialize message from JSON to Message
+                Message inputMessage = gson.fromJson(serializedJsonMessage, Message.class);
+
+                // sends the message to the controller, processes it, and returns a reply message
+                Message replyMessage = wrapper.receiveAndReturnMessage(inputMessage);
+
+                // serialize in JSON the reply message
+                String serializedReplyMessage = gson.toJson(replyMessage);
+
+                // Send the serialized reply
+                out.print(serializedReplyMessage);
+
+                // todo determine when a socket has been closed and stop communicating
             }
 
-            // Chiudo gli stream e il socket
-            in.close();
-            out.close();
             socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } finally {
+            // fixme
         }
     }
 }

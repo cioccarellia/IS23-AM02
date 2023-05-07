@@ -1,5 +1,7 @@
 package it.polimi.ingsw.networkProtocol.tcp;
 
+import it.polimi.ingsw.controller.server.wrappers.ServerTCPWrapper;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,9 +9,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TcpServer {
-    private int port;
 
-    public TcpServer(int port) {
+    private final ServerTCPWrapper wrapper;
+    private final int port;
+
+    public TcpServer(ServerTCPWrapper wrapper, int port) {
+        this.wrapper = wrapper;
         this.port = port;
     }
 
@@ -29,11 +34,12 @@ public class TcpServer {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                executor.submit(new TcpConnectionHandler(socket));
+                executor.submit(new TcpConnectionHandler(socket, wrapper));
             } catch (IOException e) {
                 break; // Entrerei qui se serverSocket venisse chiuso
             }
         }
+
         executor.shutdown();
     }
 }

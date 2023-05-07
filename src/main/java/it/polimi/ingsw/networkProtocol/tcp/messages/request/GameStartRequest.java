@@ -5,14 +5,14 @@ import it.polimi.ingsw.model.game.GameMode;
 
 public class GameStartRequest extends Request {
 
-    private final String username;
     private final GameMode mode;
+    private final String username;
     private final ClientProtocol protocol;
 
 
-    public GameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
-        this.username = username;
+    public GameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
         this.mode = mode;
+        this.username = username;
         this.protocol = protocol;
     }
 

@@ -7,7 +7,7 @@ import it.polimi.ingsw.controller.server.result.failures.GameStartError;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.launcher.parameters.ClientProtocol.RMI;
-import static it.polimi.ingsw.launcher.parameters.ClientProtocol.SOCKET;
+import static it.polimi.ingsw.launcher.parameters.ClientProtocol.TCP;
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -20,11 +20,11 @@ public class BaseControllerTests {
 
         SingleResult<GameStartError> a = controller.gameStartRequest(GAME_MODE_4_PLAYERS, "alberto", RMI);
 
-        var b = controller.gameConnectionRequest("cookie", SOCKET);
+        var b = controller.gameConnectionRequest("cookie", TCP);
         var c = controller.gameConnectionRequest("giulia", RMI);
-        var d = controller.gameConnectionRequest("marco", SOCKET);
+        var d = controller.gameConnectionRequest("marco", TCP);
 
-        var err = controller.gameConnectionRequest("__err", SOCKET);
+        var err = controller.gameConnectionRequest("__err", TCP);
 
         switch (a) {
             case SingleResult.Success<GameStartError> success -> {
