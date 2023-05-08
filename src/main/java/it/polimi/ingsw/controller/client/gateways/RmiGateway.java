@@ -26,7 +26,7 @@ import java.util.Set;
  * */
 public class RmiGateway extends Gateway {
 
-    protected static final Logger logger = LoggerFactory.getLogger(RmiGateway.class);
+    private static final Logger logger = LoggerFactory.getLogger(RmiGateway.class);
 
     final private ServerService rmiServerStub;
 

@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class GameController implements ServerService {
 
-    protected static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
     /**
      * Keeps a map associating a username (unique identifier for a player)

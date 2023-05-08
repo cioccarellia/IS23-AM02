@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class TcpGateway extends Gateway {
 
-    protected static final Logger logger = LoggerFactory.getLogger(TcpGateway.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcpGateway.class);
 
     final private Socket echoSocket;
     final private PrintWriter out;

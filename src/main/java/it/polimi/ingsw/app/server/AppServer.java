@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 
 public class AppServer {
 
-    protected static final Logger logger = LoggerFactory.getLogger(AppServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppServer.class);
 
     GameController controller = new GameController();
 
     ServerPair pair;
 
-    public AppServer(String serverAddress, int serverPort) {
-        logger.info("Starting AppServer, serverAddress={}, serverPort={}", serverAddress, serverPort);
-        pair = new ServerPair(controller, serverPort, serverPort + 1);
+    public AppServer(String serverAddress, int tcpPort, int rmiPort) {
+        logger.info("Starting AppServer, serverAddress={}, tcpPort={}, rmiPort={}", serverAddress, tcpPort, rmiPort);
+        pair = new ServerPair(controller, tcpPort, rmiPort);
     }
 }

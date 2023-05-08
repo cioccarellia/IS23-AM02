@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class TcpConnectionHandler implements Runnable {
 
-    protected static final Logger logger = LoggerFactory.getLogger(TcpConnectionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcpConnectionHandler.class);
 
     private final Socket socket;
     private final ServerTcpWrapper wrapper;
@@ -25,10 +25,13 @@ public class TcpConnectionHandler implements Runnable {
         this.wrapper = wrapper;
     }
 
+    @Override
     public void run() {
-        try (Scanner in = new Scanner(socket.getInputStream()); PrintWriter out = new PrintWriter(socket.getOutputStream())) {
-
-            while (socket.isBound()) { // fixme
+        try (
+                Scanner in = new Scanner(socket.getInputStream());
+                PrintWriter out = new PrintWriter(socket.getOutputStream())
+        ) {
+            while (true) { // fixme
                 // receive serialized message
                 String serializedJsonMessage = in.nextLine();
 
@@ -47,11 +50,14 @@ public class TcpConnectionHandler implements Runnable {
                 // todo determine when a socket has been closed and stop communicating
             }
 
-            socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } finally {
-            // fixme
+            try {
+                socket.close();
+            } catch (IOException e) {
+                logger.error("Can not close socket");
+            }
         }
     }
 }

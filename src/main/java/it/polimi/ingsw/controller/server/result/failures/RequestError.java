@@ -3,10 +3,12 @@ package it.polimi.ingsw.controller.server.result.failures;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 
+import java.io.Serializable;
+
 /**
  * Marker interface for a class representing a request error, to be
  * implemented as a type parameter for {@link SingleResult.Failure} or
  * {@link TypedResult.Failure}.
  */
-public interface RequestError {
+public interface RequestError extends Serializable {
 }

@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 
 public class ServerPair {
 
-    protected static final Logger logger = LoggerFactory.getLogger(ServerPair.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerPair.class);
 
     private final ServerTcpWrapper tcp;
     private final ServerRmiWrapper rmi;

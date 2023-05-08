@@ -3,6 +3,8 @@ package it.polimi.ingsw.controller.server.result;
 import it.polimi.ingsw.controller.server.result.failures.RequestError;
 import it.polimi.ingsw.controller.server.result.types.RequestType;
 
+import java.io.Serializable;
+
 /**
  * Sealed class representing the result of an operation executed by a method.
  * <p>
@@ -25,16 +27,16 @@ import it.polimi.ingsw.controller.server.result.types.RequestType;
  * and that a specific error type is returned.</li>
  * </ul>
  */
-sealed public interface TypedResult<T extends RequestType, R extends RequestError> {
+sealed public interface TypedResult<T extends RequestType, R extends RequestError> extends Serializable {
     /**
      * Represents a single, stateful successful result.
      */
-    record Success<T extends RequestType, R extends RequestError>(T value) implements TypedResult<T, R> {
+    record Success<T extends RequestType, R extends RequestError>(T value) implements TypedResult<T, R>, Serializable {
     }
 
     /**
      * Represents a single, stateful failed result.
      */
-    record Failure<T extends RequestType, R extends RequestError>(R error) implements TypedResult<T, R> {
+    record Failure<T extends RequestType, R extends RequestError>(R error) implements TypedResult<T, R>, Serializable {
     }
 }

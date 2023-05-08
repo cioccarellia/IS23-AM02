@@ -11,7 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiServer {
 
-    protected static final Logger logger = LoggerFactory.getLogger(RmiServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(RmiServer.class);
 
     final private ServerRmiWrapper wrapper;
     final private int serverPort;

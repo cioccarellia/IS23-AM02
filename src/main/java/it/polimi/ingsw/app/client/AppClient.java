@@ -3,9 +3,12 @@ package it.polimi.ingsw.app.client;
 import it.polimi.ingsw.app.server.AppServer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.Gateway;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.GameStartError;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
+import it.polimi.ingsw.model.game.GameMode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,7 @@ import java.rmi.RemoteException;
 
 public class AppClient {
 
-    protected static final Logger logger = LoggerFactory.getLogger(AppClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppClient.class);
 
     ClientController controller; // = new ClientController();
     Gateway gateway;
@@ -28,19 +31,39 @@ public class AppClient {
 
         try {
             var x = gateway.serverStatusRequest();
-            System.out.println(x);
+            logger.info("Requested serverStatusRequest, got {}", x.toString());
+
+            SingleResult<GameStartError> y = gateway.gameStartRequest(GameMode.GAME_MODE_3_PLAYERS, "s", proto);
+
+            switch (y) {
+                case SingleResult.Success<GameStartError> s -> {
+                    logger.info("Requested gameStartRequest, got successful {}", s);
+                }
+                case SingleResult.Failure<GameStartError> s -> {
+                    logger.error("Requested gameStartRequest, got failure {}, error={}", s, s.error());
+                }
+            }
+
+            SingleResult<GameStartError> z = gateway.gameStartRequest(GameMode.GAME_MODE_3_PLAYERS, "k", proto);
+
+            switch (z) {
+                case SingleResult.Success<GameStartError> s -> {
+                    logger.info("Requested gameStartRequest, got successful {}", s);
+                }
+                case SingleResult.Failure<GameStartError> s -> {
+                    logger.error("Requested gameStartRequest, got failure {}, error={}", s, s.error());
+                }
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) {
-        AppServer s = new AppServer("localhost", 8080);
+        int tcpPort = 12000, rmiPort = 13000;
+        AppServer s = new AppServer("localhost", tcpPort, rmiPort);
 
-        AppClient c1 = new AppClient(new ClientExhaustiveConfiguration(ClientUiMode.CLI, ClientProtocol.RMI), "localhost", 8080);
-
-
-        AppClient c2 = new AppClient(new ClientExhaustiveConfiguration(ClientUiMode.CLI, ClientProtocol.TCP), "localhost", 8080);
-
+        AppClient c1 = new AppClient(new ClientExhaustiveConfiguration(ClientUiMode.CLI, ClientProtocol.RMI), "localhost", rmiPort);
+        AppClient c2 = new AppClient(new ClientExhaustiveConfiguration(ClientUiMode.CLI, ClientProtocol.TCP), "localhost", tcpPort);
     }
 }

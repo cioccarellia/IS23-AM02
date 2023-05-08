@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * */
 public class TcpServer implements Runnable {
 
-    protected static final Logger logger = LoggerFactory.getLogger(TcpServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcpServer.class);
 
     /**
      *
@@ -30,7 +30,7 @@ public class TcpServer implements Runnable {
         this.wrapper = wrapper;
         this.port = port;
 
-        executorService = Executors.newCachedThreadPool();
+        executorService = Executors.newFixedThreadPool(4);
     }
 
     public void start() {
@@ -67,14 +67,14 @@ public class TcpServer implements Runnable {
 
         logger.info("TCP server ready");
 
-        while (true) {
+        while (!executorService.isShutdown()) {
             try {
                 logger.info("Awaiting for new TCP connection");
                 Socket socket = serverSocket.accept();
 
                 logger.info("Accepted TCP connection, starting TcpConnectionHandler for socket={}", socket.toString());
 
-                executorService.submit(new TcpConnectionHandler(socket, wrapper));
+                executorService.execute(new TcpConnectionHandler(socket, wrapper));
             } catch (IOException e) {
                 logger.error("Exception while awaiting/accepting TCP connections", e);
                 break;
