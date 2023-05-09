@@ -55,6 +55,7 @@ public class AppClient {
                 }
             }
         } catch (RemoteException e) {
+            logger.error("Got RemoteException", e);
             throw new RuntimeException(e);
         }
     }

@@ -4,14 +4,7 @@ public interface UiGateway {
 
     int onGameStarted();
 
-    // board + stato
-    int modelBoardUpdate();
-
-    // single player's bookshelf
-    int modelPlayerBookshelfUpdate();
-
-    // single player's token
-    int modelPlayerTokenUpdate();
+    int modelUpdate();
 
     int gameSelection();
 

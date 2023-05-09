@@ -33,6 +33,7 @@ public class ServerTcpWrapper extends ServerWrapper {
     }
 
     public Message receiveAndReturnMessage(final Message incomingMessage) {
+        // visitor pattern
         try {
             switch (incomingMessage) {
                 case ServerStatusRequest serverStatusRequest -> {

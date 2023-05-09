@@ -37,6 +37,7 @@ public class Game implements ModelService {
 
     // Game logger
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
+
     /**
      * Basic game related data
      */

@@ -64,8 +64,10 @@ public class GameController implements ServerService {
             connections.put(username, new ClientConnection(username, protocol, ConnectionStatus.OPEN));
             game.addPlayer(username);
 
+            logger.info("returning success from gameStartRequest()");
             return new SingleResult.Success<>();
         } else {
+            logger.warn("returning failure from gameStartRequest()");
             return new SingleResult.Failure<>(GameStartError.GAME_ALREADY_STARTED);
         }
     }
