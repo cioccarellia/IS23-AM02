@@ -26,7 +26,7 @@
         <javalang.version>2.6</javalang.version>
 
 
-        <javafx.version>17.0.6</javafx.version>
+        <javafx.version>19.0.2.1</javafx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     </properties>
 

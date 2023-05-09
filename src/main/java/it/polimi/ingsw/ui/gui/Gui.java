@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 public class Gui extends Application {
 
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
         String file = "file:///Path-To-Your-Image/javafx-logo.png";
@@ -49,13 +53,6 @@ public class Gui extends Application {
         primaryStage.setTitle("Setting the Cursor for a Scene");
         // Display the Stage
         primaryStage.show();
-    }
-
-
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }
