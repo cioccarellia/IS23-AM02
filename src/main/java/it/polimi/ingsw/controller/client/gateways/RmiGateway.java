@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * Client side class used as communication interface to talk to the server
- * */
+ */
 public class RmiGateway extends Gateway {
 
     private static final Logger logger = LoggerFactory.getLogger(RmiGateway.class);

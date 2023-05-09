@@ -56,11 +56,7 @@ public class App {
      * Launches a CLI interface for retrieving the missing parameters
      */
     private static @NotNull ExhaustiveLaunchConfiguration launchWizardForConfig(Namespace nonExhaustivePresetConfig) {
-        return new ExhaustiveLaunchConfiguration(
-                SERVER,
-                "localhost", 8080,
-                List.of()
-        );
+        return new ExhaustiveLaunchConfiguration(SERVER, "localhost", 8080, List.of());
     }
 
     /**
@@ -69,17 +65,17 @@ public class App {
     private static void launchConfiguration(ExhaustiveLaunchConfiguration config) {
         switch (config.appLaunchTarget()) {
             case SERVER -> {
-                startServer(config.serverIHost(), config.serverPort());
+                startServer(config.serverIpHost(), config.serverPort());
             }
             case CLIENT -> {
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverIpHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
             case SERVER_AND_CLIENT -> {
-                startServer(config.serverIHost(), config.serverPort());
+                startServer(config.serverIpHost(), config.serverPort());
 
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverIpHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
         }
     }

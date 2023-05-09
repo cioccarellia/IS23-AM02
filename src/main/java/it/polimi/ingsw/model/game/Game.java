@@ -235,7 +235,7 @@ public class Game implements ModelService {
      * Insert selected Tiles inside bookshelf after got sure there's empty space in a given column
      *
      * @param column the column in which the player wants to add the tiles
-     * @param tiles the tiles the players wants to insert in their bookshelf
+     * @param tiles  the tiles the players wants to insert in their bookshelf
      */
     @Override
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {

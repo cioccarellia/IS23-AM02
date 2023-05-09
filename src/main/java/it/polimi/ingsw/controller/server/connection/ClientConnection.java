@@ -33,12 +33,12 @@ public class ClientConnection {
         return status;
     }
 
-    public ClientProtocol getProto() {
-        return proto;
-    }
-
     public void setStatus(ConnectionStatus status) {
         this.status = status;
+    }
+
+    public ClientProtocol getProto() {
+        return proto;
     }
 
 }

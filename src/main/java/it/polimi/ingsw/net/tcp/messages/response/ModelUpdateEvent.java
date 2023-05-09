@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.game.Game;
 public class ModelUpdateEvent extends Response {
     final private Game game;
 
-    public ModelUpdateEvent(Game game){
+    public ModelUpdateEvent(Game game) {
         this.game = game;
     }
 

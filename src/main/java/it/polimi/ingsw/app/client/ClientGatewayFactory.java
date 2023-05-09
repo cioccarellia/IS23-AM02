@@ -7,12 +7,12 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 
 /**
  * Handles the creation of the proper gateway class for the protocl in use
- * */
+ */
 public class ClientGatewayFactory {
 
     /**
      * Creates a {@link Gateway} instance in accordance with the given protocol.
-     * */
+     */
     public static Gateway create(ClientProtocol proto, String serverHost, int serverPort) {
         switch (proto) {
             case RMI -> {

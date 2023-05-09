@@ -5,9 +5,10 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 
 /**
  * A server wrapper is a
- * */
+ */
 public abstract class ServerWrapper {
 
     abstract public ServerService serverService();
+
     abstract public ClientProtocol protocol();
 }

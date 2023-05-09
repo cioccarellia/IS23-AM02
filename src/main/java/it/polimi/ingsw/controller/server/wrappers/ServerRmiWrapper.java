@@ -23,6 +23,10 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
 
     private final ServerService server;
 
+    public ServerRmiWrapper(ServerService server) throws RemoteException {
+        this.server = server;
+    }
+
     @Override
     public ServerService serverService() {
         return server;
@@ -31,10 +35,6 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public ClientProtocol protocol() {
         return ClientProtocol.RMI;
-    }
-
-    public ServerRmiWrapper(ServerService server) throws RemoteException {
-        this.server = server;
     }
 
     @Override

@@ -2,8 +2,8 @@ package it.polimi.ingsw.launcher.argparser;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.launcher.parameters.AppLaunchTarget;
-import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
