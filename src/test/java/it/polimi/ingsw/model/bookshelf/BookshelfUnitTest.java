@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model.bookshelf;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.board.cell.Cell;
+import it.polimi.ingsw.utils.json.Parsers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,10 +33,9 @@ public class BookshelfUnitTest {
 
         bookshelf.insert(0, Arrays.asList(GAME, FRAME, PLANT));
 
-        Gson gson = new GsonBuilder().create();
-        String jsonSerializedObject = gson.toJson(bookshelf);
+        String jsonSerializedObject = Parsers.defaultJson().toJson(bookshelf);
 
-        Bookshelf deserialized = gson.fromJson(jsonSerializedObject, Bookshelf.class);
+        Bookshelf deserialized = Parsers.defaultJson().fromJson(jsonSerializedObject, Bookshelf.class);
     }
 
 
@@ -46,10 +44,8 @@ public class BookshelfUnitTest {
     public void test_serialization_gson_2() {
         Cell cell = new Cell(THREE_DOTS, true);
 
-        Gson gson = new GsonBuilder().create();
-        String jsonCell = gson.toJson(cell);
-
-        Bookshelf deserialized = gson.fromJson(jsonCell, Bookshelf.class);
+        String jsonCell = Parsers.defaultJson().toJson(cell);
+        Bookshelf deserialized = Parsers.defaultJson().fromJson(jsonCell, Bookshelf.class);
     }
 
 }

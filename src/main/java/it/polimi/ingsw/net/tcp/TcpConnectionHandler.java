@@ -1,8 +1,8 @@
 package it.polimi.ingsw.net.tcp;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.server.wrappers.ServerTcpWrapper;
 import it.polimi.ingsw.net.tcp.messages.Message;
+import it.polimi.ingsw.utils.json.Parsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +17,6 @@ public class TcpConnectionHandler implements Runnable {
 
     private final Socket socket;
     private final ServerTcpWrapper wrapper;
-
-    private final Gson gson = new Gson();
 
     public TcpConnectionHandler(Socket socket, ServerTcpWrapper wrapper) {
         this.socket = socket;
@@ -36,13 +34,13 @@ public class TcpConnectionHandler implements Runnable {
                 String serializedJsonMessage = in.nextLine();
 
                 // de-serialize message from JSON to Message
-                Message inputMessage = gson.fromJson(serializedJsonMessage, Message.class);
+                Message inputMessage = Parsers.tcpMarshaledJson().fromJson(serializedJsonMessage, Message.class);
 
                 // sends the message to the controller, processes it, and returns a reply message
                 Message replyMessage = wrapper.receiveAndReturnMessage(inputMessage);
 
                 // serialize in JSON the reply message
-                String serializedReplyMessage = gson.toJson(replyMessage);
+                String serializedReplyMessage = Parsers.tcpMarshaledJson().toJson(replyMessage);
 
                 // Send the serialized reply
                 out.print(serializedReplyMessage);

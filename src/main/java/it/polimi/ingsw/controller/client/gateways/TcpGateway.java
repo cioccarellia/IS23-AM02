@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller.client.gateways;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
@@ -14,6 +13,7 @@ import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.net.tcp.messages.Message;
 import it.polimi.ingsw.net.tcp.messages.request.*;
 import it.polimi.ingsw.net.tcp.messages.request.replies.*;
+import it.polimi.ingsw.utils.json.Parsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +33,6 @@ public class TcpGateway extends Gateway {
     final private Socket echoSocket;
     final private PrintWriter out;
     final private BufferedReader in;
-
-    private final Gson gson = new Gson();
 
     public TcpGateway(String serverIp, int serverPort) {
         try {
@@ -57,7 +55,7 @@ public class TcpGateway extends Gateway {
 
     private <T extends Message> T sendMessageAndAwaitReply(Message request, Class<T> clazz) {
         // serializes to JSON the message content
-        String serializedJsonRequest = gson.toJson(request);
+        String serializedJsonRequest = Parsers.tcpMarshaledJson().toJson(request);
 
         // sends the message bytes on TCP
         out.print(serializedJsonRequest);
@@ -73,7 +71,7 @@ public class TcpGateway extends Gateway {
         }
 
         // De-serializes response back into its expected response type
-        T messageResponse = gson.fromJson(serializedResponse, clazz);
+        T messageResponse = Parsers.tcpMarshaledJson().fromJson(serializedResponse, clazz);
 
         // returns
         return messageResponse;

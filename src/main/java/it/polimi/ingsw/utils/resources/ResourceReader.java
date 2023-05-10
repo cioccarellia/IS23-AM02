@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.resources;
 
-import it.polimi.ingsw.utils.json.JsonParser;
+import it.polimi.ingsw.utils.json.Parsers;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -20,7 +20,6 @@ public class ResourceReader {
 
     public static @NotNull String readAndMapToString(String filename) {
         try (InputStream file = readAsResource(filename)) {
-
             return new String(file.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -29,6 +28,6 @@ public class ResourceReader {
 
     public static @NotNull <T> T readAndDeserialize(String filename, Class<T> kclass) {
         String content = readAndMapToString(filename);
-        return JsonParser.from(content, kclass);
+        return Parsers.defaultJson().fromJson(content, kclass);
     }
 }
