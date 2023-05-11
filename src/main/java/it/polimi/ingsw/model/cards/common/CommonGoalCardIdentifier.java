@@ -16,5 +16,5 @@ public enum CommonGoalCardIdentifier {
     THREE_MAX3DIFF_COLUMNS,
     X_TILES,
     EIGHT_TILES,
-    STAIRS
+    STAIRS 
 }
