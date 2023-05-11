@@ -184,6 +184,7 @@ public class Game implements ModelService {
     public Board getBoard() {
         return board;
     }
+
     public Tile[][] getGameMatrix() {
         return board.getTileMatrix();
     }

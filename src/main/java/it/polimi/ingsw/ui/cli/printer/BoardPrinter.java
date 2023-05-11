@@ -1,6 +1,5 @@
 package it.polimi.ingsw.ui.cli.printer;
 
-import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;

@@ -5,7 +5,6 @@ import it.polimi.ingsw.ui.cli.Console;
 import it.polimi.ingsw.ui.cli.printer.TilePrinter;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,11 +34,9 @@ public class PlayerTilesOrderInsertionParser {
             Console.out("\n> ");
             Console.out("Give me your insertion order (the first one is the first to go in the bookshelf).");
 
-            String input = Console.in(); // A,C,B
+            String input = Console.in();
 
-            // check that the
-
-            // checking that the given text matches the necessary
+            // checking that the given text matches the necessary requirements
             String[] tokens = input.split(",");
 
             if (tokens.length != tiles.size()) {
@@ -51,9 +48,9 @@ public class PlayerTilesOrderInsertionParser {
                 tokens[i] = tokens[i].trim();
             }
             List<Tile> orderedTiles = new ArrayList<>();
-            for (int i = 0; i < tokens.length; i++) {
-                if (isStringValid(tokens[i])) {
-                    switch (tokens[i]) {
+            for (String token : tokens) {
+                if (isStringValid(token)) {
+                    switch (token) {
                         case "B" -> orderedTiles.add(BOOK);
                         case "C" -> orderedTiles.add(CAT);
                         case "G" -> orderedTiles.add(GAME);
@@ -64,11 +61,9 @@ public class PlayerTilesOrderInsertionParser {
                 }
             }
             if (orderedTiles.containsAll(tiles) && tiles.containsAll(orderedTiles)) {
-                Console.out("Thank you for ordering your tiles.")
                 return orderedTiles;
             } else {
                 Console.out("Not valid, you need to order the selected tiles from before.");
-                continue;
             }
         }
     }

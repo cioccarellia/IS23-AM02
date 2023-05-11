@@ -1,8 +1,6 @@
 package it.polimi.ingsw.ui.cli.printer;
 
-import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
-import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.cli.Console;
 
@@ -18,9 +16,11 @@ public class BookshelfPrinter {
         Console.out(" 0  1  2  3  4\n");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                
+
             }
         }
+
+        return null; //
     }
 
 }
