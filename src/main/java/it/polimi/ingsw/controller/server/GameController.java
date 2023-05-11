@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
+import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.connection.ClientConnection;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
@@ -17,10 +18,12 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
+import it.polimi.ingsw.net.rmi.ClientService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,7 @@ public class GameController implements ServerService {
      * Keeps a map associating a username (unique identifier for a player)
      * to the specific details of its connection to the server.
      */
-    private final Map<String, ClientConnection> connections = new HashMap<>();
+    private final ClientConnectionsManager connectionsManager;
 
     /**
      * Game instance
@@ -45,6 +48,14 @@ public class GameController implements ServerService {
 
     private ServerStatus serverStatus = ServerStatus.NO_GAME_STARTED;
 
+    public GameController(ClientConnectionsManager connectionsManager) {
+        this.connectionsManager = connectionsManager;
+    }
+
+    @Override
+    public void synchronizeConnectionLayer(ClientService service) throws RemoteException {
+
+    }
 
     @Override
     public ServerStatus serverStatusRequest() {

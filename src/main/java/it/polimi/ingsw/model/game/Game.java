@@ -181,6 +181,9 @@ public class Game implements ModelService {
         return commonGoalCardStatuses;
     }
 
+    public Board getBoard() {
+        return board;
+    }
     public Tile[][] getGameMatrix() {
         return board.getTileMatrix();
     }

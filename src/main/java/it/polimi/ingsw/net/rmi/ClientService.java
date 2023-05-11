@@ -29,7 +29,7 @@ public interface ClientService extends Remote {
     void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult);
 
 
-    //Connection - Disconnection
+    // Connection - Disconnection
     void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames);
 
     void gameStandbyEvent();

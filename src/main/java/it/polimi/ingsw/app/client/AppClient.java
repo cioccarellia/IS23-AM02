@@ -3,17 +3,12 @@ package it.polimi.ingsw.app.client;
 import it.polimi.ingsw.app.server.AppServer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.Gateway;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
-import it.polimi.ingsw.model.game.GameMode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.rmi.RemoteException;
 
 public class AppClient {
 
@@ -29,6 +24,9 @@ public class AppClient {
 
         gateway = ClientGatewayFactory.create(proto, serverHost, serverPort);
 
+
+
+        /*
         try {
             var x = gateway.serverStatusRequest();
             logger.info("Requested serverStatusRequest, got {}", x.toString());
@@ -57,7 +55,7 @@ public class AppClient {
         } catch (RemoteException e) {
             logger.error("Got RemoteException", e);
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     public static void main(String[] args) {

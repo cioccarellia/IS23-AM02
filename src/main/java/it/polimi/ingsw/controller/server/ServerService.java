@@ -10,6 +10,7 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.net.rmi.ClientService;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -19,6 +20,11 @@ import java.util.Set;
 public interface ServerService extends Remote {
 
     String NAME = "ServerService";
+
+    /**
+     * Sends a synchronization message to correctly configure the connection.
+     */
+    void synchronizeConnectionLayer(ClientService service) throws RemoteException;
 
     /**
      * Requests an updated value for the current {@link ServerStatus}.

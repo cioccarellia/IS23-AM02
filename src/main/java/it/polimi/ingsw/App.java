@@ -2,14 +2,13 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.launcher.argparser.CLIParser;
 import it.polimi.ingsw.launcher.parameters.*;
-import it.polimi.ingsw.ui.gui.Gui;
+import it.polimi.ingsw.ui.gui.GuiApp;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class App {
             launchConfiguration(finalConfig);
         }
 
-        Gui.main(args);
+        GuiApp.main(args);
     }
 
     /**

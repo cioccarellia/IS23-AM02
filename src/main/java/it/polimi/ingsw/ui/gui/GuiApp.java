@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ui.gui;
 
 
+import it.polimi.ingsw.ui.UiGateway;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
@@ -8,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class Gui extends Application {
+public abstract class GuiApp extends Application implements UiGateway {
 
 
     public static void main(String[] args) {

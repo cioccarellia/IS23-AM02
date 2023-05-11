@@ -21,7 +21,7 @@ public class PlayerSession {
     private final Bookshelf bookshelf = new Bookshelf();
     /**
      * Identifiers of all the {@link it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier}s that
-     * have been acquired by the user during the game (i.e. for which the user has received any common goal card tokens).
+     * have been acquired by the user during the game (i.e. for which the user has received any common goal card token).
      */
     private final List<CommonGoalCardIdentifier> achievedCommonGoalCards = new ArrayList<>();
     public boolean noMoreTurns = false;
