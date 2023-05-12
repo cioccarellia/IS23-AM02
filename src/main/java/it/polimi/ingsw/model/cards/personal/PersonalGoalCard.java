@@ -12,4 +12,6 @@ public class PersonalGoalCard {
     public Tile[][] getShelfPointMatrix() {
         return shelfPointsMatrix;
     }
+
+
 }
