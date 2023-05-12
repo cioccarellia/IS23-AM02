@@ -2,30 +2,31 @@ package it.polimi.ingsw.app.client;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.GameStartError;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+import it.polimi.ingsw.model.game.GameMode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.rmi.RemoteException;
 
 public class AppClient {
 
     private static final Logger logger = LoggerFactory.getLogger(AppClient.class);
 
     private ClientController controller; // = new ClientController();
-    private final ClientGateway clientGateway;
+    private final ClientGateway gateway;
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverHost, int serverPort) {
         logger.info("Starting AppClient, config={}, serverHost={}", config, serverHost);
 
         ClientProtocol proto = config.protocol();
-
-        clientGateway = ClientGatewayFactory.create(proto, serverHost, serverPort);
-
+        gateway = ClientGatewayFactory.create(proto, serverHost, serverPort);
 
 
-
-        /*
         try {
             var x = gateway.serverStatusRequest();
             logger.info("Requested serverStatusRequest, got {}", x.toString());
@@ -54,7 +55,7 @@ public class AppClient {
         } catch (RemoteException e) {
             logger.error("Got RemoteException", e);
             throw new RuntimeException(e);
-        }*/
+        }
     }
 
     public ClientController getController() {
@@ -62,6 +63,6 @@ public class AppClient {
     }
 
     public ClientGateway getClientGateway() {
-        return clientGateway;
+        return gateway;
     }
 }

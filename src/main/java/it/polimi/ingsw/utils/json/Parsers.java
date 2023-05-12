@@ -12,6 +12,7 @@ public class Parsers {
     private static final Gson marshaledGson = new GsonBuilder()
             .registerTypeAdapter(Message.class, new PropertyBasedInterfaceMarshal())
             .create();
+
     private final static JsonParser marshaledJsonParser = new JsonParser(marshaledGson);
 
 

@@ -25,36 +25,49 @@ public class TcpConnectionHandler implements Runnable {
 
     @Override
     public void run() {
+        logger.info("Starting TcpConnectionHandler for socket={}", socket);
         try (
                 Scanner in = new Scanner(socket.getInputStream());
                 PrintWriter out = new PrintWriter(socket.getOutputStream())
         ) {
-            while (true) { // fixme
-                // receive serialized message
-                String serializedJsonMessage = in.nextLine();
+            logger.info("Actively monitoring socket={}", socket);
+            while (socket.isConnected()) { // fixme
+                if (in.hasNextLine()) {
+                    logger.info("Waiting for new socket line, socket={}", socket);
+                    // receive serialized message
+                    String serializedJsonMessage = in.nextLine();
 
-                // de-serialize message from JSON to Message
-                Message inputMessage = Parsers.tcpMarshaledJson().fromJson(serializedJsonMessage, Message.class);
+                    logger.info("Received message={}", serializedJsonMessage);
 
-                // sends the message to the controller, processes it, and returns a reply message
-                Message replyMessage = wrapper.receiveAndReturnMessage(inputMessage);
+                    // de-serialize message from JSON to Message
+                    Message inputMessage = Parsers.tcpMarshaledJson().fromJson(serializedJsonMessage, Message.class);
 
-                // serialize in JSON the reply message
-                String serializedReplyMessage = Parsers.tcpMarshaledJson().toJson(replyMessage);
+                    logger.info("Deserialized into message={}", inputMessage);
+                    logger.info("Forwarding message to TCP server");
 
-                // Send the serialized reply
-                out.print(serializedReplyMessage);
+                    // sends the message to the controller, processes it, and returns a reply message
+                    Message replyMessage = wrapper.receiveAndReturnMessage(inputMessage);
 
-                // todo determine when a socket has been closed and stop communicating
+                    logger.info("Got reply message {}", replyMessage);
+
+                    // serialize in JSON the reply message
+                    String serializedReplyMessage = Parsers.tcpMarshaledJson().toJson(replyMessage);
+
+                    logger.info("Serialized message {}", serializedReplyMessage);
+
+                    // Send the serialized reply
+                    out.print(serializedReplyMessage);
+
+                    // todo determine when a socket has been closed and stop communicating
+                }
             }
-
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.error("Error handling TCP connection: {}", e.getMessage());
         } finally {
             try {
                 socket.close();
             } catch (IOException e) {
-                logger.error("Can not close socket");
+                logger.error("Error closing socket: socket={}, message={}", socket, e.getMessage());
             }
         }
     }
