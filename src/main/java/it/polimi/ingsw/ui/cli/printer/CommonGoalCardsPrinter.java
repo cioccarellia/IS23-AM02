@@ -3,7 +3,7 @@ package it.polimi.ingsw.ui.cli.printer;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 
 public class CommonGoalCardsPrinter {
-    private static String print(CommonGoalCard card) {
+    public static String print(CommonGoalCard card) {
         switch (card.getId()) {
 
             case SIX_PAIRS -> {
