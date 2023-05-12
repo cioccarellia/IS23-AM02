@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller.server.connection;
 
+import it.polimi.ingsw.controller.server.connection.stash.RmiStash;
+import it.polimi.ingsw.controller.server.connection.stash.TcpStash;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 
 /**
@@ -14,7 +16,8 @@ public class ClientConnection {
 
     private final ClientProtocol proto;
 
-    private final Stash stash = new Stash();
+    private final RmiStash rmiStash = new RmiStash();
+    private final TcpStash tcpStash = new TcpStash();
 
     /**
      * Status of the connection with the client
@@ -43,8 +46,11 @@ public class ClientConnection {
         return proto;
     }
 
-    public Stash getStash() {
-        return stash;
+    public RmiStash getRmiStash() {
+        return rmiStash;
+    }
+    public RmiStash getTcpStash() {
+        return rmiStash;
     }
 
 }

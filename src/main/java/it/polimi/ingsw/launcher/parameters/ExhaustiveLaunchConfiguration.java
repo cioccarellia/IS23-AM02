@@ -5,7 +5,10 @@ import java.util.List;
 public record ExhaustiveLaunchConfiguration(
         AppLaunchTarget appLaunchTarget,
         String serverHost,
-        int serverPort,
+        int serverTcpPort,
+        int serverRmiPort,
+
+        // multi-client launch support
         List<ClientExhaustiveConfiguration> clientConfigurations
 ) {
 }

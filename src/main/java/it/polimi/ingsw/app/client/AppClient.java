@@ -1,11 +1,9 @@
 package it.polimi.ingsw.app.client;
 
-import it.polimi.ingsw.app.server.AppServer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
-import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +12,8 @@ public class AppClient {
 
     private static final Logger logger = LoggerFactory.getLogger(AppClient.class);
 
-    ClientController controller; // = new ClientController();
-    ClientGateway clientGateway;
+    private ClientController controller; // = new ClientController();
+    private final ClientGateway clientGateway;
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverHost, int serverPort) {
         logger.info("Starting AppClient, config={}, serverHost={}", config, serverHost);
@@ -23,6 +21,7 @@ public class AppClient {
         ClientProtocol proto = config.protocol();
 
         clientGateway = ClientGatewayFactory.create(proto, serverHost, serverPort);
+
 
 
 
@@ -58,11 +57,11 @@ public class AppClient {
         }*/
     }
 
-    public static void main(String[] args) {
-        int tcpPort = 12000, rmiPort = 13000;
-        AppServer s = new AppServer("localhost", tcpPort, rmiPort);
+    public ClientController getController() {
+        return controller;
+    }
 
-        AppClient c1 = new AppClient(new ClientExhaustiveConfiguration(ClientUiMode.CLI, ClientProtocol.RMI), "localhost", rmiPort);
-        AppClient c2 = new AppClient(new ClientExhaustiveConfiguration(ClientUiMode.CLI, ClientProtocol.TCP), "localhost", tcpPort);
+    public ClientGateway getClientGateway() {
+        return clientGateway;
     }
 }

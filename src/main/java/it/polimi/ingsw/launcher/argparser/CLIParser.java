@@ -9,6 +9,8 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 
@@ -16,6 +18,8 @@ import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
  * Class implementing a basic CLI parser for the startup program
  */
 public class CLIParser {
+
+    public static final Logger logger = LoggerFactory.getLogger(CLIParser.class);
 
     private final String programName;
 
@@ -41,21 +45,22 @@ public class CLIParser {
                 .metavar("HOST")
                 .help("The server ip address");
 
-        parser.addArgument("--server-port")
-                .dest(SERVER_PORT)
-                .metavar("PORT")
+        parser.addArgument("--server-tcp-port")
+                .dest(SERVER_TCP_PORT)
+                .metavar("TCP PORT")
                 .type(Integer.class)
-                .help("The server port");
+                .help("The server port for TCP server");
+
+        parser.addArgument("--server-rmi-port")
+                .dest(SERVER_RMI_PORT)
+                .metavar("RMI PORT")
+                .type(Integer.class)
+                .help("The server port for RMI server");
 
         parser.addArgument("--client-mode")
                 .dest(CLIENT_MODE)
                 .type(ClientUiMode.class)
                 .help("Defines the mode for the current client.");
-
-        parser.addArgument("--client-username")
-                .dest(CLIENT_USERNAME)
-                .type(String.class)
-                .help("Sets the player username.");
 
         parser.addArgument("--client-protocol")
                 .dest(CLIENT_PROTOCOL)
@@ -67,23 +72,47 @@ public class CLIParser {
     /**
      * Returns whether the given arguments are exhaustive and can allow for an immediate start
      */
-    public boolean areArgumentsExhaustive(Namespace ns) {
-        AppLaunchTarget config = ns.get("config");
+    public boolean areArgumentsExhaustive(@NotNull Namespace ns) {
+        AppLaunchTarget config = ns.get(TARGET);
+        if (config == null) {
+            return false;
+        }
 
-        if (config == null || ns.get("ip_and_port") == null) {
+        int serverTcpPort, serverRmiPort;
+
+        try {
+            serverTcpPort = ns.get(SERVER_TCP_PORT);
+            serverRmiPort = ns.get(SERVER_RMI_PORT);
+        } catch (NullPointerException npe) {
+            // no ports given, can't start anything
+            return false;
+        }
+
+        if (serverRmiPort <= 0 || serverTcpPort <= 0) {
+            // verify ports are valid
+            return false;
+        } else if (serverRmiPort < 1024 || serverTcpPort < 1024) {
+            // verify ports are not too low
+
+            return false;
+        } else if (serverRmiPort > 65535 || serverTcpPort > 65535) {
+            // verify ports are not too high
+
             return false;
         }
 
         switch (config) {
             case SERVER -> {
+                // we only need ports to boot the server
                 return true;
             }
             case CLIENT, SERVER_AND_CLIENT -> {
-                String username = ns.get(CLIENT_USERNAME);
+                // we also need client-specific configuration
                 ClientUiMode mode = ns.get(CLIENT_MODE);
                 ClientProtocol proto = ns.get(CLIENT_PROTOCOL);
+                String serverHost = ns.get(SERVER_IP);
 
-                return username != null && mode != null && proto != null;
+                return serverHost != null && !serverHost.isBlank() && mode != null && proto != null;
             }
             default -> throw new IllegalStateException("Unexpected value: " + config);
         }

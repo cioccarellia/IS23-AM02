@@ -52,6 +52,9 @@ public class TcpServer implements Runnable {
         executorService.shutdown();
     }
 
+    /**
+     * Context-blocking thread
+     * */
     @Override
     public void run() {
         logger.info("Starting TCP server thread");
@@ -60,25 +63,31 @@ public class TcpServer implements Runnable {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            logger.error("Failed to create the socket", e);
+            logger.error("Failed to create the socket [port={}]", port, e);
             System.err.println(e.getMessage()); // Porta non disponibile
             return;
         }
 
-        logger.info("TCP server ready");
+        logger.info("Server socket created successfully. TCP server ready [serverSocket={}]", serverSocket);
 
         while (!executorService.isShutdown()) {
             try {
-                logger.info("Awaiting for new TCP connection");
+                logger.info("TcpServer going on sleep, awaiting for new TCP connection [on port {}]", port);
                 Socket socket = serverSocket.accept();
 
-                logger.info("Accepted TCP connection, starting TcpConnectionHandler for socket={}", socket.toString());
+                logger.info("Accepted new TCP connection, starting TcpConnectionHandler for socket={}", socket.toString());
 
                 executorService.execute(new TcpConnectionHandler(socket, wrapper));
             } catch (IOException e) {
                 logger.error("Exception while awaiting/accepting TCP connections", e);
                 break;
             }
+        }
+
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         logger.warn("Reached the end of TCP thread");

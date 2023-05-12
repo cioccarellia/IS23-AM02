@@ -37,17 +37,25 @@ public class TcpClientGateway extends ClientGateway {
     final private BufferedReader in;
 
 
-    public TcpClientGateway(String serverIp, int serverTcpPort) {
+    public TcpClientGateway(String serverHost, int serverTcpPort) {
         try {
-            echoSocket = new Socket(serverIp, serverTcpPort);
+            echoSocket = new Socket(serverHost, serverTcpPort);
+        } catch (UnknownHostException e) {
+            logger.error("Unknown host serverHost={}", serverHost);
+            throw new IllegalArgumentException("Wrong serverHost/port combination", e);
+        } catch (IOException e) {
+            logger.error("Can not acquire I/O to start client gateway, probably TcpServer not yet started [tried connecting to serverHost={}, serverPort={}]", serverHost, serverTcpPort);
+            throw new IllegalArgumentException("Impossible to acquire I/O for connection to server", e);
+        }
+
+        logger.info("Started socket for TcpClientGateway, socket={}", echoSocket);
+
+        try {
             out = new PrintWriter(echoSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + serverIp);
-            logger.error("unknown host serverIp={}", serverIp);
-            throw new IllegalArgumentException("Wrong serverIHost/port combination");
         } catch (IOException e) {
-            throw new IllegalArgumentException("Impossible to acquire I/O for connection to server");
+            logger.error("I/O error while acquiring socket", e);
+            throw new RuntimeException(e);
         }
     }
 

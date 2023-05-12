@@ -15,6 +15,8 @@ import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.net.rmi.ClientService;
 
 import java.rmi.RemoteException;
+import java.rmi.server.RemoteServer;
+import java.rmi.server.ServerNotActiveException;
 import java.util.List;
 import java.util.Set;
 
@@ -43,10 +45,32 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     }
 
 
+    /**
+     * Returns the current thread's client's (underlying TCP socket's) hostname.
+     * It is a unique identifier for clients (on LAN, without NAT/Proxies)
+     * */
+    private String getCurrentClientHostname() {
+        try {
+            return RemoteServer.getClientHost();
+        } catch (ServerNotActiveException e) {
+            throw new IllegalStateException("Server is not alive", e);
+        }
+    }
+
+    /**
+     * Authentication function, verifying that the remote caller can only perform authenticated actions
+     * (so tasks that are game-specific)
+     * */
+    private boolean verifyAuthorization(String username) {
+        String remoteClientActualHostname = getCurrentClientHostname();
+        String correctClientHostname = connectionsManager.get(username).getRmiStash().getHostname();
+        return remoteClientActualHostname.equals(correctClientHostname);
+    }
+
+
     @Override
     public void synchronizeConnectionLayer(String username, ClientService service) {
         try {
-            connectionsManager.get(username).getStash().setClientService(service);
             server.synchronizeConnectionLayer(username, service);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
