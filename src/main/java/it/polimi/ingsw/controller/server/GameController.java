@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
-import it.polimi.ingsw.controller.server.connection.ClientConnection;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
@@ -51,7 +50,7 @@ public class GameController implements ServerService {
     }
 
     @Override
-    public void synchronizeConnectionLayer(ClientService service) throws RemoteException {
+    public void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException {
 
     }
 
@@ -70,7 +69,7 @@ public class GameController implements ServerService {
 
             serverStatus = ServerStatus.GAME_INITIALIZING;
 
-            connections.put(username, new ClientConnection(username, protocol, ConnectionStatus.OPEN));
+            connectionsManager.add(username, protocol, ConnectionStatus.OPEN);
             game.addPlayer(username);
 
             logger.info("returning success from gameStartRequest()");
@@ -87,17 +86,17 @@ public class GameController implements ServerService {
     public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
         logger.info("gameConnectionRequest(username={}, protocol={})", username, protocol);
 
-        assert connections.size() <= maxPlayerAmount;
+        assert connectionsManager.size() <= maxPlayerAmount;
 
         if (serverStatus == ServerStatus.GAME_RUNNING) {
             return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED);
         }
 
-        if (connections.size() == maxPlayerAmount) {
+        if (connectionsManager.size() == maxPlayerAmount) {
             return new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED);
         }
 
-        if (connections.containsKey(username)) {
+        if (connectionsManager.containsUsername(username)) {
             return new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE);
         }
 
@@ -107,11 +106,11 @@ public class GameController implements ServerService {
 
 
         // if successful & can start game
-        if (maxPlayerAmount == connections.size() + 1) {
+        if (maxPlayerAmount == connectionsManager.size() + 1) {
             serverStatus = ServerStatus.GAME_RUNNING;
         }
 
-        connections.put(username, new ClientConnection(username, protocol, ConnectionStatus.OPEN));
+        connectionsManager.add(username, protocol, ConnectionStatus.OPEN);
         game.addPlayer(username);
 
         return new SingleResult.Success<>();
@@ -124,7 +123,7 @@ public class GameController implements ServerService {
     }
 
     public boolean shouldStandbyGame() {
-        return connections.values().stream().filter(player -> player.getStatus() == ConnectionStatus.DISCONNECTED).count() >= maxPlayerAmount - 1;
+        return connectionsManager.values().stream().filter(player -> player.getStatus() == ConnectionStatus.DISCONNECTED).count() >= maxPlayerAmount - 1;
     }
 
 
@@ -189,10 +188,10 @@ public class GameController implements ServerService {
     }
 
     @Override
-    public void keepAlive(String player) {
-        logger.info("keepAlive(username={})", player);
-        if (connections.containsKey(player)) {
-            connections.get(player).setStatus(ConnectionStatus.OPEN);
+    public void keepAlive(String username) {
+        logger.info("keepAlive(username={})", username);
+        if (connectionsManager.containsUsername(username)) {
+            connectionsManager.setConnectionStatus(username, ConnectionStatus.OPEN);
         } else {
             logger.warn("Wrong keep alive username");
         }

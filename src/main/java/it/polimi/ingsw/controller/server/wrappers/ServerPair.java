@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.server.wrappers;
 
+import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.GameController;
 import it.polimi.ingsw.net.rmi.RmiServer;
 import it.polimi.ingsw.net.tcp.TcpServer;
@@ -18,11 +19,11 @@ public class ServerPair {
     private final RmiServer rmiServer;
     private final TcpServer tcpServer;
 
-    public ServerPair(GameController controller, int tcpPort, int rmiPort) {
+    public ServerPair(GameController controller, ClientConnectionsManager manager, int tcpPort, int rmiPort) {
         this.tcp = new ServerTcpWrapper(controller);
 
         try {
-            this.rmi = new ServerRmiWrapper(controller);
+            this.rmi = new ServerRmiWrapper(controller, manager);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

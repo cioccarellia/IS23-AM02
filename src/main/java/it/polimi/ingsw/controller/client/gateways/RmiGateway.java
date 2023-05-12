@@ -42,6 +42,9 @@ public class RmiGateway extends Gateway {
     }
 
 
+
+
+
     @Override
     public ServerStatus serverStatusRequest() {
         try {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.server.wrappers;
 
+import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.ServerService;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
@@ -24,15 +25,11 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
 
     private final ServerService server;
 
-    private final
+    private final ClientConnectionsManager connectionsManager;
 
-    public ServerRmiWrapper(ServerService server) throws RemoteException {
+    public ServerRmiWrapper(ServerService server, ClientConnectionsManager connectionsManager) throws RemoteException {
         this.server = server;
-    }
-
-    @Override
-    public void synchronizeConnectionLayer(ClientService service) {
-        server.synchronizeConnectionLayer(service);
+        this.connectionsManager = connectionsManager;
     }
 
     @Override
@@ -43,6 +40,17 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public ClientProtocol protocol() {
         return ClientProtocol.RMI;
+    }
+
+
+    @Override
+    public void synchronizeConnectionLayer(String username, ClientService service) {
+        try {
+            connectionsManager.get(username).getStash().setClientService(service);
+            server.synchronizeConnectionLayer(username, service);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

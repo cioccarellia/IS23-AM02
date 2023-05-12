@@ -14,6 +14,8 @@ public class ClientConnection {
 
     private final ClientProtocol proto;
 
+    private final Stash stash = new Stash();
+
     /**
      * Status of the connection with the client
      */
@@ -39,6 +41,10 @@ public class ClientConnection {
 
     public ClientProtocol getProto() {
         return proto;
+    }
+
+    public Stash getStash() {
+        return stash;
     }
 
 }

@@ -24,7 +24,7 @@ public interface ServerService extends Remote {
     /**
      * Sends a synchronization message to correctly configure the connection.
      */
-    void synchronizeConnectionLayer(ClientService service) throws RemoteException;
+    void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException;
 
     /**
      * Requests an updated value for the current {@link ServerStatus}.
