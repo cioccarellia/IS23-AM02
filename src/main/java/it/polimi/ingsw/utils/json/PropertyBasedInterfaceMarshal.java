@@ -11,6 +11,7 @@ public class PropertyBasedInterfaceMarshal implements JsonSerializer<Object>, Js
     @Override
     public Object deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject obj = element.getAsJsonObject();
+
         String className = obj.get(CLASS_META_KEY).getAsString();
         try {
             Class<?> clazz = Class.forName(className);

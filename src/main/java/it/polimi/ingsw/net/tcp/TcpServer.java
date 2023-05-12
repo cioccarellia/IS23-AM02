@@ -24,7 +24,7 @@ public class TcpServer implements Runnable {
     private final int port;
 
     private final ExecutorService executorService;
-    private volatile boolean running;
+    private boolean running;
 
     public TcpServer(ServerTcpWrapper wrapper, int port) {
         this.wrapper = wrapper;

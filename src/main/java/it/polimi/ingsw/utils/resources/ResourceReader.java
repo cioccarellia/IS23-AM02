@@ -28,6 +28,6 @@ public class ResourceReader {
 
     public static @NotNull <T> T readAndDeserialize(String filename, Class<T> kclass) {
         String content = readAndMapToString(filename);
-        return Parsers.defaultJson().fromJson(content, kclass);
+        return Parsers.defaultGson().fromJson(content, kclass);
     }
 }

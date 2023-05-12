@@ -40,7 +40,7 @@ public class TcpConnectionHandler implements Runnable {
                     logger.info("Received message={}", serializedJsonMessage);
 
                     // de-serialize message from JSON to Message
-                    Message inputMessage = Parsers.tcpMarshaledJson().fromJson(serializedJsonMessage, Message.class);
+                    Message inputMessage = Parsers.marshaledGson().fromJson(serializedJsonMessage, Message.class);
 
                     logger.info("Deserialized into message={}", inputMessage);
                     logger.info("Forwarding message to TCP server");
@@ -51,12 +51,13 @@ public class TcpConnectionHandler implements Runnable {
                     logger.info("Got reply message {}", replyMessage);
 
                     // serialize in JSON the reply message
-                    String serializedReplyMessage = Parsers.tcpMarshaledJson().toJson(replyMessage);
+                    String serializedReplyMessage = Parsers.marshaledGson().toJson(replyMessage);
 
                     logger.info("Serialized message {}", serializedReplyMessage);
 
                     // Send the serialized reply
-                    out.print(serializedReplyMessage);
+                    out.println(serializedReplyMessage);
+                    out.flush();
 
                     // todo determine when a socket has been closed and stop communicating
                 }

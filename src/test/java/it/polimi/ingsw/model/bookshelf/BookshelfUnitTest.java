@@ -33,9 +33,9 @@ public class BookshelfUnitTest {
 
         bookshelf.insert(0, Arrays.asList(GAME, FRAME, PLANT));
 
-        String jsonSerializedObject = Parsers.defaultJson().toJson(bookshelf);
+        String jsonSerializedObject = Parsers.defaultGson().toJson(bookshelf);
 
-        Bookshelf deserialized = Parsers.defaultJson().fromJson(jsonSerializedObject, Bookshelf.class);
+        Bookshelf deserialized = Parsers.defaultGson().fromJson(jsonSerializedObject, Bookshelf.class);
     }
 
 
@@ -44,8 +44,8 @@ public class BookshelfUnitTest {
     public void test_serialization_gson_2() {
         Cell cell = new Cell(THREE_DOTS, true);
 
-        String jsonCell = Parsers.defaultJson().toJson(cell);
-        Bookshelf deserialized = Parsers.defaultJson().fromJson(jsonCell, Bookshelf.class);
+        String jsonCell = Parsers.defaultGson().toJson(cell);
+        Bookshelf deserialized = Parsers.defaultGson().fromJson(jsonCell, Bookshelf.class);
     }
 
 }

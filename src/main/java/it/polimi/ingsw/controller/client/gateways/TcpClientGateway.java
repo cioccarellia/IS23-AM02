@@ -15,6 +15,7 @@ import it.polimi.ingsw.net.tcp.messages.Message;
 import it.polimi.ingsw.net.tcp.messages.request.*;
 import it.polimi.ingsw.net.tcp.messages.request.replies.*;
 import it.polimi.ingsw.utils.json.Parsers;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,12 +73,13 @@ public class TcpClientGateway extends ClientGateway {
         keepAlive(username);
     }
 
-    private <T extends Message> T sendMessageAndAwaitReply(Message request, Class<T> clazz) {
+    @Nullable private <T extends Message> T sendMessageAndAwaitReply(Message request, Class<T> clazz) {
         // serializes to JSON the message content
-        String serializedJsonRequest = Parsers.tcpMarshaledJson().toJson(request);
+        String serializedJsonRequest = Parsers.marshaledGson().toJson(request, clazz);
 
         // sends the message bytes on TCP
-        out.print(serializedJsonRequest);
+        out.println(serializedJsonRequest);
+        out.flush();
 
 
         String serializedResponse;
@@ -89,8 +91,12 @@ public class TcpClientGateway extends ClientGateway {
             throw new RuntimeException(e);
         }
 
+        if (serializedResponse == null) {
+            return null;
+        }
+
         // De-serializes response back into its expected response type
-        T messageResponse = Parsers.tcpMarshaledJson().fromJson(serializedResponse, clazz);
+        T messageResponse = Parsers.marshaledGson().fromJson(serializedResponse, clazz);
 
         // returns
         return messageResponse;
