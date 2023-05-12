@@ -11,6 +11,7 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.net.rmi.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,26 +25,33 @@ import java.util.Set;
 /**
  * Client side class used as communication interface to talk to the server
  */
-public class RmiGateway extends Gateway {
+public class RmiClientGateway extends ClientGateway {
 
-    private static final Logger logger = LoggerFactory.getLogger(RmiGateway.class);
+    private static final Logger logger = LoggerFactory.getLogger(RmiClientGateway.class);
 
     final private ServerService rmiServerStub;
 
-    public RmiGateway(String serverHost, int serverPort) {
+    public RmiClientGateway(String serverHost, int serverRmiPort) {
         Registry registry;
 
         try {
-            registry = LocateRegistry.getRegistry(serverHost, serverPort);
+            registry = LocateRegistry.getRegistry(serverHost, serverRmiPort);
             rmiServerStub = (ServerService) registry.lookup(ServerService.NAME);
         } catch (RemoteException | NotBoundException e) {
+            logger.error("error while looking up the registry info for ServerService, serverHost={}, rmiPort={}", serverHost, serverRmiPort);
             throw new RuntimeException(e);
         }
     }
 
 
-
-
+    @Override
+    public void synchronizeConnectionLayer(String username, ClientService service) {
+        try {
+            rmiServerStub.synchronizeConnectionLayer(username, service);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public ServerStatus serverStatusRequest() {

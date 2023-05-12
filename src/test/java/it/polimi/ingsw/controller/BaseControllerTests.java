@@ -16,6 +16,7 @@ public class BaseControllerTests {
 
     @Test
     public void x() {
+
         GameController controller = new GameController();
 
         SingleResult<GameStartError> a = controller.gameStartRequest(GAME_MODE_4_PLAYERS, "alberto", RMI);

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.app.client;
 
-import it.polimi.ingsw.controller.client.gateways.Gateway;
-import it.polimi.ingsw.controller.client.gateways.RmiGateway;
-import it.polimi.ingsw.controller.client.gateways.TcpGateway;
+import it.polimi.ingsw.controller.client.gateways.ClientGateway;
+import it.polimi.ingsw.controller.client.gateways.RmiClientGateway;
+import it.polimi.ingsw.controller.client.gateways.TcpClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 
 /**
@@ -11,15 +11,15 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 public class ClientGatewayFactory {
 
     /**
-     * Creates a {@link Gateway} instance in accordance with the given protocol.
+     * Creates a {@link ClientGateway} instance in accordance with the given protocol.
      */
-    public static Gateway create(ClientProtocol proto, String serverHost, int serverPort) {
+    public static ClientGateway create(ClientProtocol proto, String serverHost, int serverPort) {
         switch (proto) {
             case RMI -> {
-                return new RmiGateway(serverHost, serverPort);
+                return new RmiClientGateway(serverHost, serverPort);
             }
             case TCP -> {
-                return new TcpGateway(serverHost, serverPort);
+                return new TcpClientGateway(serverHost, serverPort);
             }
             default -> throw new IllegalStateException("Unexpected value: " + proto);
         }

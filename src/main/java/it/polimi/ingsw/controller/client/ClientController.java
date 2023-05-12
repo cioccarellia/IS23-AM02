@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.client;
 
-import it.polimi.ingsw.controller.client.gateways.Gateway;
+import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
@@ -21,12 +21,11 @@ import java.util.Set;
 public class ClientController implements ClientService, ViewEventHandler {
 
     UiGateway ui;
-    Gateway gateway;
+    ClientGateway clientGateway;
 
-    public ClientController(Gateway gateway, UiGateway ui) {
+    public ClientController(ClientGateway clientGateway, UiGateway ui) {
         this.ui = ui;
-        this.gateway = gateway;
-
+        this.clientGateway = clientGateway;
 
     }
 

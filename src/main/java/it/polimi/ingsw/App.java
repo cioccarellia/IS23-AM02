@@ -37,13 +37,13 @@ public class App {
         if (areArgumentsExhaustive) {
             // we read the values and assemble the configuration
             AppLaunchTarget target = result.get(TARGET);
-            String serverIp = result.get(SERVER_IP);
+            String serverHost = result.get(SERVER_IP);
             int serverPort = result.get(SERVER_PORT);
             ClientUiMode modePreselection = result.get(CLIENT_MODE);
             ClientProtocol protocolPreselection = result.get(CLIENT_PROTOCOL);
 
             var clientConfig = new ClientExhaustiveConfiguration(modePreselection, protocolPreselection);
-            var finalConfig = new ExhaustiveLaunchConfiguration(target, serverIp, serverPort, List.of(clientConfig));
+            var finalConfig = new ExhaustiveLaunchConfiguration(target, serverHost, serverPort, List.of(clientConfig));
 
             launchConfiguration(finalConfig);
         } else {
@@ -68,27 +68,27 @@ public class App {
     private static void launchConfiguration(ExhaustiveLaunchConfiguration config) {
         switch (config.appLaunchTarget()) {
             case SERVER -> {
-                startServer(config.serverIpHost(), config.serverPort());
+                startServer(config.serverHost(), config.serverPort());
             }
             case CLIENT -> {
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIpHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
             case SERVER_AND_CLIENT -> {
-                startServer(config.serverIpHost(), config.serverPort());
+                startServer(config.serverHost(), config.serverPort());
 
                 ClientExhaustiveConfiguration clientConfig = config.clientConfigurations().get(0);
-                startClient(config.serverIpHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
+                startClient(config.serverHost(), config.serverPort(), clientConfig.mode(), clientConfig.protocol());
             }
         }
     }
 
 
-    private static void startServer(String serverIp, int serverPort) {
+    private static void startServer(String serverHost, int serverPort) {
 
     }
 
-    private static void startClient(String serverIp, int serverPort, @Nullable ClientUiMode mode, @Nullable ClientProtocol protocol) {
+    private static void startClient(String serverHost, int serverPort, @Nullable ClientUiMode mode, @Nullable ClientProtocol protocol) {
 
     }
 

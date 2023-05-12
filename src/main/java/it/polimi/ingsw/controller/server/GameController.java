@@ -45,6 +45,10 @@ public class GameController implements ServerService {
 
     private ServerStatus serverStatus = ServerStatus.NO_GAME_STARTED;
 
+    public GameController() {
+        this.connectionsManager = new ClientConnectionsManager();
+    }
+
     public GameController(ClientConnectionsManager connectionsManager) {
         this.connectionsManager = connectionsManager;
     }

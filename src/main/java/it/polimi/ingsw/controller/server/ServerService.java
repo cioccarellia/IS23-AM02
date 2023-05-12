@@ -17,6 +17,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * High level protocol for client-to-server communication (response and reply)
+ * */
 public interface ServerService extends Remote {
 
     String NAME = "ServerService";

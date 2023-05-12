@@ -10,6 +10,7 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.net.rmi.ClientService;
 import it.polimi.ingsw.net.tcp.messages.Message;
 import it.polimi.ingsw.net.tcp.messages.request.*;
 import it.polimi.ingsw.net.tcp.messages.request.replies.*;
@@ -23,24 +24,27 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
-public class TcpGateway extends Gateway {
+public class TcpClientGateway extends ClientGateway {
 
-    private static final Logger logger = LoggerFactory.getLogger(TcpGateway.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcpClientGateway.class);
 
     final private Socket echoSocket;
     final private PrintWriter out;
     final private BufferedReader in;
 
-    public TcpGateway(String serverIp, int serverPort) {
+
+    public TcpClientGateway(String serverIp, int serverTcpPort) {
         try {
-            echoSocket = new Socket(serverIp, serverPort);
+            echoSocket = new Socket(serverIp, serverTcpPort);
             out = new PrintWriter(echoSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + serverIp);
+            logger.error("unknown host serverIp={}", serverIp);
             throw new IllegalArgumentException("Wrong serverIHost/port combination");
         } catch (IOException e) {
             throw new IllegalArgumentException("Impossible to acquire I/O for connection to server");
@@ -51,6 +55,13 @@ public class TcpGateway extends Gateway {
         in.close();
         out.close();
         echoSocket.close();
+    }
+
+
+    @Override
+    public void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException {
+        // INOP, TCP does not need initial
+        keepAlive(username);
     }
 
     private <T extends Message> T sendMessageAndAwaitReply(Message request, Class<T> clazz) {
@@ -76,7 +87,6 @@ public class TcpGateway extends Gateway {
         // returns
         return messageResponse;
     }
-
 
     @Override
     public ServerStatus serverStatusRequest() {
