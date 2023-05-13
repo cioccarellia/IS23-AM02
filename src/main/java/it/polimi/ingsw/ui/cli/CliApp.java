@@ -1,8 +1,11 @@
 package it.polimi.ingsw.ui.cli;
 
+import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
@@ -40,8 +43,9 @@ public class CliApp implements UiGateway {
 
         BoardPrinter.print(model.getBoard());
 
-        Console.out("Common goal cards: \n" + model.getCommonGoalCardsStatus().get(0) +
-                model.getCommonGoalCardsStatus().get(1));
+        // da sistemare
+        //Console.out("Common goal cards: \n" + model.getCommonGoalCardsStatus().get(0) +
+        //        model.getCommonGoalCardsStatus().get(1));
 
 
 
@@ -65,13 +69,15 @@ public class CliApp implements UiGateway {
         Console.out(model.getCurrentPlayer().getUsername());
         Console.out("\n");
 
-        PlayersListPrinter.print(model);
+        //da sistemare
+        //PlayersListPrinter.print(model);
 
     }
 
 
     @Override
     public void gameSelection() {
+
         Set<Coordinate> validCoordinates = CoordinatesParser.scan();
         model.onPlayerSelectionPhase(validCoordinates);
 
@@ -96,4 +102,5 @@ public class CliApp implements UiGateway {
                 "Here's the player's ranking with their points:");
         model.onGameEnded();
     }
+
 }

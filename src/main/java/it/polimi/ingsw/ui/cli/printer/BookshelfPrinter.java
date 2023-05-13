@@ -32,11 +32,11 @@ public class BookshelfPrinter {
         Tile[][] matrix = new Tile[rows][cols];
         Arrays.deepEquals(matrix, bookshelf.getShelfMatrix());
 
-        Console.out(" 0  1  2  3  4\n");
+        Console.out("X 0  1  2  3  4\n");
         for (int i = 0; i < rows; i++) {
 
             Console.out(verticalGuideNumber);
-            Console.out(" ");
+            Console.out("  ");
 
             for (int j = 0; j < cols; j++) {
 
@@ -63,7 +63,6 @@ public class BookshelfPrinter {
         var bookshelf = new Bookshelf();
 
         bookshelf.fillUpBookShelf(BOOKSHELF_MATRIX);
-
         print(bookshelf);
 
         System.out.flush();
