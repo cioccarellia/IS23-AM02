@@ -9,10 +9,11 @@ import java.util.Stack;
 public class CommonGoalCardsPrinter {
 
     public static void printTokens(Stack<Token> tokens){
+        Console.out("Remaining tokens:");
         tokens.forEach(token -> {
             Console.out(" " + token.getPoints());
         });
-        Console.out("\n> ");
+        Console.out("\n");
     }
 
     public static void print(CommonGoalCardStatus card) {
@@ -57,11 +58,11 @@ public class CommonGoalCardsPrinter {
             }
             case THREE_MAX3DIFF_COLUMNS -> {
                 Console.out("\nThree columns each formed by 6 tiles of maximum three different types.\n" +
-                        "One column can show the same or a different combination of another column.\n ");
+                        "One column can show the same or a different combination of another column.\n");
                 printTokens(card.getCardTokens());
             }
             case X_TILES -> {
-                Console.out("\nFive tiles of the same type forming an X\n");
+                Console.out("\nFive tiles of the same type forming an X.\n");
                 printTokens(card.getCardTokens());
             }
             case EIGHT_TILES -> {
@@ -72,7 +73,7 @@ public class CommonGoalCardsPrinter {
             case STAIRS -> {
                 Console.out("\nFive columns of increasing or decreasing height.\nStarting from the first column" +
                         " on the left or on the right, each next column must be made of exactly one more tile.\n" +
-                        "Tiles can be of any type. \n");
+                        "Tiles can be of any type.\n");
                 printTokens(card.getCardTokens());
             }
             default -> {

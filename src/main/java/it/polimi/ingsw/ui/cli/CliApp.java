@@ -14,6 +14,7 @@ import it.polimi.ingsw.ui.cli.parser.CoordinatesParser;
 import it.polimi.ingsw.ui.cli.parser.PlayerTilesOrderInsertionParser;
 import it.polimi.ingsw.ui.cli.printer.BoardPrinter;
 import it.polimi.ingsw.ui.cli.printer.BookshelfPrinter;
+import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
 import it.polimi.ingsw.ui.cli.printer.PlayersListPrinter;
 
 import java.util.List;
@@ -43,11 +44,11 @@ public class CliApp implements UiGateway {
 
         BoardPrinter.print(model.getBoard());
 
-        // da sistemare
-        //Console.out("Common goal cards: \n" + model.getCommonGoalCardsStatus().get(0) +
-        //        model.getCommonGoalCardsStatus().get(1));
-
-
+        Console.out("First common goal card:");
+        CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(0));
+        Console.out("\n");
+        Console.out("Second common goal card:");
+        CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
 
         BookshelfPrinter bookshelfPrinter = new BookshelfPrinter();
 
@@ -56,21 +57,16 @@ public class CliApp implements UiGateway {
             Console.out("\nBookshelf for player " +
                     model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
 
-            Console.out(bookshelfPrinter.print(model
-                    .getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
-                            .getUsername()).getBookshelf())
-            );
+            bookshelfPrinter.print(model.getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
+                            .getUsername()).getBookshelf());
         }
 
         Console.out("\nThe first player is: " +
                 model.getSessions().getByNumber(model.getStartingPlayerNumber()).getUsername() + "\n");
 
-        Console.out("The current player is: ");
-        Console.out(model.getCurrentPlayer().getUsername());
+        Console.out("\nThe current player is: " + model.getCurrentPlayer().getUsername() + "\n");
         Console.out("\n");
-
-        //da sistemare
-        //PlayersListPrinter.print(model);
+        PlayersListPrinter.print(model);
 
     }
 

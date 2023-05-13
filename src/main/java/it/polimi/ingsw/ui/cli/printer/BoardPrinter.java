@@ -42,6 +42,8 @@ public class BoardPrinter {
             verticalGuideNumber++;
         }
 
+        Console.out("\n");
+
         return builder.toString();
     }
 
