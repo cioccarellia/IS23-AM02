@@ -8,10 +8,7 @@ import it.polimi.ingsw.utils.model.TurnHelper;
  * It also finds the next player and previous player through a TurnHelper method
  */
 public enum PlayerNumber {
-    PLAYER_1,
-    PLAYER_2,
-    PLAYER_3,
-    PLAYER_4;
+    PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4;
 
     static public PlayerNumber fromInt(int playerCount) {
         return switch (playerCount) {
@@ -31,13 +28,23 @@ public enum PlayerNumber {
         return TurnHelper.getPreviousPlayerNumber(this, mode);
     }
 
-    public PlayerNumber next(PlayerNumber currentPlayer){
-        switch (currentPlayer){
-            case PLAYER_1 -> {return PLAYER_2;}
-            case PLAYER_2 -> {return PLAYER_3;}
-            case PLAYER_3 -> {return PLAYER_4;}
-            case PLAYER_4 -> {return PLAYER_1;}
-            default -> {return null;}
+    public PlayerNumber next(PlayerNumber currentPlayer) {
+        switch (currentPlayer) {
+            case PLAYER_1 -> {
+                return PLAYER_2;
+            }
+            case PLAYER_2 -> {
+                return PLAYER_3;
+            }
+            case PLAYER_3 -> {
+                return PLAYER_4;
+            }
+            case PLAYER_4 -> {
+                return PLAYER_1;
+            }
+            default -> {
+                return null;
+            }
         }
     }
 }

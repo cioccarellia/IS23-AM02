@@ -49,10 +49,12 @@ public class CliApp implements UiGateway {
 
         for (int i = 0, player = 1; i < model.getGameMode().maxPlayerAmount(); i++, player++) {
 
-            Console.out("\nBookshelf for player " + model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
+            Console.out("\nBookshelf for player " +
+                    model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
 
             Console.out(bookshelfPrinter.print(model
-                    .getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername()).getBookshelf())
+                    .getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
+                            .getUsername()).getBookshelf())
             );
         }
 
@@ -80,7 +82,8 @@ public class CliApp implements UiGateway {
     public void gameInsertion() {
         int column = ColumnParser.scan();
 
-        List<Tile> orderedTiles = PlayerTilesOrderInsertionParser.scan(model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles());
+        List<Tile> orderedTiles = PlayerTilesOrderInsertionParser
+                .scan(model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles());
         model.onPlayerInsertionPhase(column, orderedTiles);
 
         model.onPlayerCheckingPhase();

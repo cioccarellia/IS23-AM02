@@ -336,8 +336,8 @@ public class Game implements ModelService {
             points += sessions.getNumberMap().get(i).calculateCurrentPoints();
             points += sessions.getNumberMap().get(i).calculatePersonalGoalCardPoints(getCurrentPlayer());
 
-            GroupFinder bookshelf = new GroupFinder(getCurrentPlayer().getBookshelf().getShelfMatrix());
-            List<Group> groups = bookshelf.computeGroupPartition();
+            GroupFinder groupFinder = new GroupFinder(getCurrentPlayer().getBookshelf().getShelfMatrix());
+            List<Group> groups = groupFinder.computeGroupPartition();
             List<Integer> groupsSize = groups.stream().map(group -> groups.size()).toList();
 
             for (int j = 0; j < groups.size(); j++) {
