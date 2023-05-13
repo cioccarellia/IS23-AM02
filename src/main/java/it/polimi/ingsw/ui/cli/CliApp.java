@@ -1,17 +1,25 @@
 package it.polimi.ingsw.ui.cli;
 
-import it.polimi.ingsw.model.cards.common.CommonGoalCard;
+import it.polimi.ingsw.model.board.Coordinate;
+import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
+import it.polimi.ingsw.ui.cli.parser.ColumnParser;
+import it.polimi.ingsw.ui.cli.parser.CoordinatesParser;
+import it.polimi.ingsw.ui.cli.parser.PlayerTilesOrderInsertionParser;
 import it.polimi.ingsw.ui.cli.printer.BoardPrinter;
 import it.polimi.ingsw.ui.cli.printer.BookshelfPrinter;
-import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
+import it.polimi.ingsw.ui.cli.printer.PlayersListPrinter;
+
+import java.util.List;
+import java.util.Set;
 
 public class CliApp implements UiGateway {
 
-    private Game model;
     final private ViewEventHandler handler;
+    private Game model;
     private boolean hasReceivedInitialModel = false;
 
     public CliApp(ViewEventHandler handler) {
@@ -19,49 +27,70 @@ public class CliApp implements UiGateway {
     }
 
     @Override
-    public int onGameStarted() {
-        return 0;
+    public void onGameStarted() {
     }
 
-
     @Override
-    public int modelUpdate(Game game) {
+    public void modelUpdate(Game game) {
         model = game;
-        return 0;
     }
 
-
-    private void printGameModel() {
+    public void printGameModel() {
         Console.out("Board: \n");
+
         BoardPrinter.print(model.getBoard());
-        Console.out("Common goal cards: \n");
-        //CommonGoalCardsPrinter.print(model.getCommonGoalCards().get(0).toString());
-        //CommonGoalCardsPrinter.print(model.getCommonGoalCards().get(1).toString());
-        Console.out("Bookshelf player 1: \n");
 
-        Console.out("Bookshelf player 2: \n");
+        Console.out("Common goal cards: \n" + model.getCommonGoalCardsStatus().get(0) +
+                model.getCommonGoalCardsStatus().get(1));
 
-        Console.out("Bookshelf player 3: \n");
 
-        Console.out("Bookshelf player 4: \n");
+
+        BookshelfPrinter bookshelfPrinter = new BookshelfPrinter();
+
+        for (int i = 0, player = 1; i < model.getGameMode().maxPlayerAmount(); i++, player++) {
+
+            Console.out("\nBookshelf for player " + model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
+
+            Console.out(bookshelfPrinter.print(model
+                    .getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername()).getBookshelf())
+            );
+        }
+
+        Console.out("\nThe first player is: " +
+                model.getSessions().getByNumber(model.getStartingPlayerNumber()).getUsername() + "\n");
+
+        Console.out("The current player is: ");
+        Console.out(model.getCurrentPlayer().getUsername());
+        Console.out("\n");
+
+        PlayersListPrinter.print(model);
 
     }
 
 
     @Override
-    public int gameSelection() {
-        return 0;
+    public void gameSelection() {
+        Set<Coordinate> validCoordinates = CoordinatesParser.scan();
+        model.onPlayerSelectionPhase(validCoordinates);
+
     }
 
 
     @Override
-    public int gameInsertion() {
-        return 0;
+    public void gameInsertion() {
+        int column = ColumnParser.scan();
+
+        List<Tile> orderedTiles = PlayerTilesOrderInsertionParser.scan(model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles());
+        model.onPlayerInsertionPhase(column, orderedTiles);
+
+        model.onPlayerCheckingPhase();
     }
 
 
     @Override
-    public int onGameEnded() {
-        return 0;
+    public void onGameEnded() {
+        Console.out("The game has ended. Congratulations to the winner!\n" +
+                "Here's the player's ranking with their points:");
+        model.onGameEnded();
     }
 }

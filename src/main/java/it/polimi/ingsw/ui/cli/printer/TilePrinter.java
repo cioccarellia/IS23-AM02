@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.board.Tile;
 
 public class TilePrinter {
 
-
     public static String print(Tile t) {
         return switch (t) {
             case BOOK -> Chalk.on("B").bgWhite().blue().toString();

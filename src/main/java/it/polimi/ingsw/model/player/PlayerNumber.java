@@ -31,4 +31,13 @@ public enum PlayerNumber {
         return TurnHelper.getPreviousPlayerNumber(this, mode);
     }
 
+    public PlayerNumber next(PlayerNumber currentPlayer){
+        switch (currentPlayer){
+            case PLAYER_1 -> {return PLAYER_2;}
+            case PLAYER_2 -> {return PLAYER_3;}
+            case PLAYER_3 -> {return PLAYER_4;}
+            case PLAYER_4 -> {return PLAYER_1;}
+            default -> {return null;}
+        }
+    }
 }

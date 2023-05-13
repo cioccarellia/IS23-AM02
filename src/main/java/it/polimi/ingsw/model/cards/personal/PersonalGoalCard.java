@@ -13,5 +13,4 @@ public class PersonalGoalCard {
         return shelfPointsMatrix;
     }
 
-
 }

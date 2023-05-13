@@ -50,6 +50,10 @@ public class CommonGoalCardStatus {
         return commonGoalCard;
     }
 
+    public Stack<Token> getCardTokens(){
+        return tokenStack;
+    }
+
     /**
      * Whether the current status still has possible tokens to be acquired
      */

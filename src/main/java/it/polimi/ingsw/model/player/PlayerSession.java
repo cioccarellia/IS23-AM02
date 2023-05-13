@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.player;
 
+import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
@@ -14,6 +16,9 @@ import java.util.List;
  * Represent the game session for a given user.
  */
 public class PlayerSession {
+
+    private final static int rows = BookshelfConfiguration.getInstance().rows();
+    private final static int cols = BookshelfConfiguration.getInstance().cols();
 
     private final String username;
     private final PlayerNumber playerNumber;
@@ -72,10 +77,41 @@ public class PlayerSession {
     /**
      * Calculates all the points associated to a specific token given by Token Enumeration
      */
-    public int calculateCurrentPoint() {
+    public int calculateCurrentPoints() {
         return acquiredTokens.stream().mapToInt(Token::getPoints).sum();
     }
 
+    public int calculatePersonalGoalCardPoints(PlayerSession player) {
+        int counter = 0;
+        Tile[][] bookshelf = player.getBookshelf().getShelfMatrix();
+        Tile[][] personalGoalCard = player.getPersonalGoalCard().getShelfPointMatrix();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (personalGoalCard[i][j] == bookshelf[i][j]) {
+                    counter++;
+                }
+            }
+        }
+
+        switch (counter) {
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 4;
+            case 4:
+                return 6;
+            case 5:
+                return 9;
+            case 6:
+                return 12;
+        }
+        throw new IllegalArgumentException("Expected a number between 0 and 6.");
+    }
 
     public PlayerTileSelection getPlayerTileSelection() {
         return playerTileSelection;

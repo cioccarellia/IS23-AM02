@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ui.cli.printer;
 
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
-import it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;

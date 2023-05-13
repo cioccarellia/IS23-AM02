@@ -22,7 +22,7 @@ public class PlayerTilesOrderInsertionParser {
         return isSizeCorrect && isCharacterAcceptable;
     }
 
-    public static List<Tile> scan(Set<Tile> tiles) {
+    public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
             Console.out("You have selected:");
             // printing tiles and prompting the user to sort them
@@ -69,7 +69,7 @@ public class PlayerTilesOrderInsertionParser {
     }
 
     public static void main(String[] args) {
-        scan(Set.of(Tile.GAME, Tile.FRAME, Tile.CAT));
+        scan(List.of(Tile.GAME, Tile.FRAME, Tile.CAT));
     }
 
 }

@@ -159,11 +159,12 @@ public class CommonGoalCardFunctionContainer {
                     case FRAME -> countFrameTile = 1;
                 }
 
-                boolean isSumUnder3 = (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile <= 3);
+                boolean isSumUnder3 = (countBookTile + countCatTile + countGameTile + countTrophyTile + countPlantTile + countFrameTile) <= 3;
 
                 if (j == 4 && isSumUnder3)
                     countDifferentLines++;
             }
+
 
         }
         return countDifferentLines >= 4;

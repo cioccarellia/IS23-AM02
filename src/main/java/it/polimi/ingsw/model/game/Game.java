@@ -1,11 +1,14 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.groupfinder.Group;
+import it.polimi.ingsw.groupfinder.GroupFinder;
 import it.polimi.ingsw.model.ModelService;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
@@ -43,31 +46,26 @@ public class Game implements ModelService {
      */
     private final GameMode mode;
     private final Board board = new Board();
-
     /**
      * Maps a player to its {@link PlayerSession}
      */
     private final SessionManager sessions;
-
     /**
      * Random, stateful extractors for the game
      */
     private final TileExtractor tileExtractor = new TileExtractor();
     private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
     private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
-
     /**
      * Holder class for the common goal cards
      * Holds the current statuses for the common goal cards.
      */
     private final List<CommonGoalCardStatus> commonGoalCardStatuses = new ArrayList<>();
-
     /**
      * External game configuration parameters
      */
     private final LogicConfiguration config = LogicConfiguration.getInstance();
     private GameStatus status = INITIALIZATION;
-
     /**
      * Markers for the current state of the game (needed for turn logic)
      */
@@ -114,6 +112,14 @@ public class Game implements ModelService {
         return sessions.getByUsername(username);
     }
 
+    public SessionManager getSessions() {
+        return sessions;
+    }
+
+    public List<CommonGoalCardStatus> getCommonGoalCardsStatus() {
+        return commonGoalCardStatuses;
+    }
+
 
     @Override
     public void onGameStarted() {
@@ -158,6 +164,10 @@ public class Game implements ModelService {
 
     public void setGameStatus(GameStatus status) {
         this.status = status;
+    }
+
+    public GameMode getGameMode() {
+        return mode;
     }
 
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
@@ -319,8 +329,37 @@ public class Game implements ModelService {
     }
 
     @Override
-    public void onGameEnded() {
+    public List<Pair<PlayerNumber, Integer>> onGameEnded() {
+        List<Pair<PlayerNumber, Integer>> playersScore = new ArrayList<>();
 
+        for (int i = 0, points = 0; i < sessions.getNumberMap().keySet().size(); i++, points = 0) {
+            points += sessions.getNumberMap().get(i).calculateCurrentPoints();
+            points += sessions.getNumberMap().get(i).calculatePersonalGoalCardPoints(getCurrentPlayer());
+
+            GroupFinder bookshelf = new GroupFinder(getCurrentPlayer().getBookshelf().getShelfMatrix());
+            List<Group> groups = bookshelf.computeGroupPartition();
+            List<Integer> groupsSize = groups.stream().map(group -> groups.size()).toList();
+
+            for (int j = 0; j < groups.size(); j++) {
+                switch (groupsSize.get(i)) {
+                    case 0, 1, 2:
+                        points += 0;
+                    case 3:
+                        points += 2;
+                    case 4:
+                        points += 3;
+                    case 5:
+                        points += 5;
+                    case 6:
+                        points += 8;
+                    default:
+                        points += 8;
+                }
+            }
+
+            playersScore.add(new Pair<>(sessions.getNumberMap().get(i).getPlayerNumber(), points));
+        }
+        return playersScore;
     }
 
     public PlayerSession getSessionFor(String username) {

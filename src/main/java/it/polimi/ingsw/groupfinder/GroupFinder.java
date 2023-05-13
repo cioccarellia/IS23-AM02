@@ -55,13 +55,22 @@ public class GroupFinder {
      * @implNote a {@link Set} isn't used because a certain group may appear more than once
      */
     public List<Group> computeGroupPartition() {
+        return computeGroupPartition(matrix);
+    }
+
+    /**
+     * Returns the list of groups for the player's matrix.
+     *
+     * @implNote a {@link Set} isn't used because a certain group may appear more than once
+     */
+    public List<Group> computeGroupPartition(Tile[][] bookshelf) {
         markers = new boolean[rows][cols];
         List<Group> results = new ArrayList<>();
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 boolean marker = markers[i][j];
-                Tile value = matrix[i][j];
+                Tile value = bookshelf[i][j];
 
                 if (marker || value == null) {
                     continue;

@@ -13,6 +13,7 @@ public class TurnHelper {
             case GAME_MODE_2_PLAYERS -> {
                 return switch (currentNumber) {
                     case PLAYER_1 -> PLAYER_2;
+
                     default -> PLAYER_1;
                 };
             }

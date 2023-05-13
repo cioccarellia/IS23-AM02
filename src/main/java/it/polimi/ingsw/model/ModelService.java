@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.player.PlayerNumber;
+import javafx.util.Pair;
 
 import java.util.List;
 import java.util.Set;
@@ -24,5 +26,5 @@ public interface ModelService {
 
     void onNextTurn(String nextUsername);
 
-    void onGameEnded();
+    List<Pair<PlayerNumber, Integer>> onGameEnded();
 }

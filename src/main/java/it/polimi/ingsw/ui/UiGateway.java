@@ -4,14 +4,14 @@ import it.polimi.ingsw.model.game.Game;
 
 public interface UiGateway {
 
-    int onGameStarted();
+    void onGameStarted();
 
-    int modelUpdate(Game game);
+    void modelUpdate(Game game);
 
-    int gameSelection();
+    void gameSelection();
 
-    int gameInsertion();
+    void gameInsertion();
 
-    int onGameEnded();
+    void onGameEnded();
 
 }
