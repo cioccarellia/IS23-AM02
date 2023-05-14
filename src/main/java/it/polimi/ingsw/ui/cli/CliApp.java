@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ui.cli;
 
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.server.GameController;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
@@ -16,6 +17,7 @@ import it.polimi.ingsw.ui.cli.printer.BoardPrinter;
 import it.polimi.ingsw.ui.cli.printer.BookshelfPrinter;
 import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
 import it.polimi.ingsw.ui.cli.printer.PlayersListPrinter;
+import it.polimi.ingsw.utils.model.TurnHelper;
 
 import java.util.List;
 import java.util.Set;
@@ -23,8 +25,8 @@ import java.util.Set;
 public class CliApp implements UiGateway {
 
     private ViewEventHandler handler;
-    private Game model;
-    private boolean hasReceivedInitialModel = false;
+    public Game model;
+    private final boolean hasReceivedInitialModel = false;
 
     public CliApp() {
     }
@@ -36,7 +38,10 @@ public class CliApp implements UiGateway {
     }
 
     @Override
-    public void modelUpdate(Game game) {model = game;}
+    public void modelUpdate(Game game)
+    {
+        this.model = game;
+    }
 
     public void printGameModel() {
         Console.out("Board: \n");
@@ -104,6 +109,9 @@ public class CliApp implements UiGateway {
     public static void main(String[] args) {
         var app = new CliApp();
         var game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+        var turn = new TurnHelper();
+        PlayerNumber playerNumber;
+        var controller = new GameController();
 
         game.addPlayer("Alberto");
         game.addPlayer("Cookie");
@@ -117,10 +125,16 @@ public class CliApp implements UiGateway {
         while (game.getGameStatus() != GameStatus.ENDED) {
 
             app.gameSelection();
+            app.modelUpdate(game);
             app.gameInsertion();
+            app.modelUpdate(game);
             //TODO implement a better turn manager
-            game.onNextTurn(game.getCurrentPlayer().getPlayerNumber().next(game.getGameMode()).name());
-
+            //game.onNextTurn(game.getCurrentPlayer().getPlayerNumber().next(game.getGameMode()).name());
+            /*playerNumber = turn.getNextPlayerNumber(game.getCurrentPlayer(),game.getGameMode());
+            game.getCurrentPlayer().getPlayerNumber() = playerNumber; */
+            game.getCurrentPlayer().getPlayerNumber().next(game.getCurrentPlayer().getPlayerNumber());
+            //TODO model update doesn't work
+            app.modelUpdate(game);
         }
 
         app.onGameEnded();
