@@ -23,7 +23,8 @@ public class PlayerTilesOrderInsertionParser {
 
     public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
-            Console.out("You have selected:");
+            Console.out("\n You have selected: \n");
+            Console.out("Format: Tile1,Tile2...\n");
             // printing tiles and prompting the user to sort them
             tiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
@@ -39,7 +40,7 @@ public class PlayerTilesOrderInsertionParser {
             String[] tokens = input.split(",");
 
             if (tokens.length != tiles.size()) {
-                Console.out("Not valid, you need to order the selected tiles from before.");
+                Console.out("\n Not valid, you need to order the selected tiles from before. \n ");
                 continue;
             }
 
@@ -62,7 +63,7 @@ public class PlayerTilesOrderInsertionParser {
             if (orderedTiles.containsAll(tiles) && tiles.containsAll(orderedTiles)) {
                 return orderedTiles;
             } else {
-                Console.out("Not valid, you need to order the selected tiles from before.");
+                Console.out("\n Not valid, you need to order the selected tiles from before.\n ");
             }
         }
     }

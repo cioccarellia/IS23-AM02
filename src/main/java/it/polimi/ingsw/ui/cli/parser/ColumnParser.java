@@ -8,12 +8,12 @@ public class ColumnParser {
 
     public static int scan() {
         while (true) {
-            Console.out("In which column would you like to insert the selected tiles?");
+            Console.out("\n In which column would you like to insert the selected tiles?\n ");
 
             int column = Integer.parseInt(Console.in());
 
             if (column < 0 && column > cols) {
-                Console.out("The column you selected is out of bounds, choose a number between 0 and 4.");
+                Console.out("\n The column you selected is out of bounds, choose a number between 0 and 4.\n ");
             } else {
                 return column;
             }

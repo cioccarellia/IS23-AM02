@@ -21,7 +21,7 @@ public class CliTests {
     @Test
     @DisplayName("Verify the correct function of PrintGameModel method, positively")
     public void printGameModelTest_Positively() {
-        CliApp cliApp = new CliApp((ViewEventHandler) eventHandler);
+        CliApp cliApp = new CliApp();
 
         Game game = new Game(GAME_MODE_2_PLAYERS);
         game.addPlayer("alberto");
@@ -33,49 +33,18 @@ public class CliTests {
     }
 
     @Test
-    @DisplayName("Verify the correct function of gameSelection method, positively")
-    @Disabled
-    public void gameSelectionTest_Positively() throws UnsupportedEncodingException {
-
-        CliApp cliApp = new CliApp((ViewEventHandler) eventHandler);
+    @DisplayName("Verify the correct function of onGameStarted method, positively")
+    public void onGameStartedTest_Positively(){
+        CliApp cliApp = new CliApp();
 
         Game game = new Game(GAME_MODE_4_PLAYERS);
 
-        game.addPlayer("alberto");
-        game.addPlayer("marco");
-        game.addPlayer("andrea");
-        game.addPlayer("giulia");
-        game.onGameStarted();
-
+        game.addPlayer("Alberto");
+        game.addPlayer("Marco");
+        game.addPlayer("Cookie");
+        game.addPlayer("Giulia");
         cliApp.modelUpdate(game);
-
-        cliApp.printGameModel();
-        //TODO capire come passare CoordinateParser.scan() i dati in input che dovrebbe passargli l'utente
-        cliApp.gameSelection();
+        cliApp.onGameStarted();
     }
-
-
-    @Test
-    @DisplayName("Verify the correct function of gameInsertion method, positively")
-    @Disabled
-    public void gameInsertionTest_Positively() {
-        CliApp cliApp = new CliApp((ViewEventHandler) eventHandler);
-
-        Game game = new Game(GAME_MODE_4_PLAYERS);
-
-        game.addPlayer("alberto");
-        game.addPlayer("marco");
-        game.addPlayer("andrea");
-        game.addPlayer("giulia");
-        game.onGameStarted();
-
-        cliApp.modelUpdate(game);
-
-        cliApp.printGameModel();
-
-        //TODO capire come passare CoordinateParser.scan() i dati in input che dovrebbe passargli l'utente
-        cliApp.gameSelection();
-        //TODO stesso problema, ma con ColumnParser.scan() e PlayerTilesOrderInsertionParser.scan()
-        cliApp.gameInsertion();
-    }
+    
 }

@@ -111,6 +111,9 @@ public class Game implements ModelService {
         return sessions.getByUsername(username);
     }
 
+    public int getPlayerNumber() {
+        return sessions.size();
+    }
     public SessionManager getSessions() {
         return sessions;
     }

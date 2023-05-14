@@ -1,8 +1,11 @@
 package it.polimi.ingsw.ui.cli;
 
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
@@ -19,21 +22,23 @@ import java.util.Set;
 
 public class CliApp implements UiGateway {
 
-    final private ViewEventHandler handler;
+    private ViewEventHandler handler;
     private Game model;
     private boolean hasReceivedInitialModel = false;
 
-    public CliApp(ViewEventHandler handler) {
-        this.handler = handler;
+    public CliApp() {
     }
 
     @Override
     public void onGameStarted() {
+        model.onGameStarted();
+        Console.out("Game started, Good Luck!\n");
     }
 
     @Override
     public void modelUpdate(Game game) {
         model = game;
+        //printGameModel();
     }
 
     public void printGameModel() {
@@ -42,13 +47,14 @@ public class CliApp implements UiGateway {
         BoardPrinter.print(model.getBoard());
 
         Console.out("First common goal card:\n");
+
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(0));
         Console.out("\n");
+
         Console.out("Second common goal card:\n");
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
 
-
-        for (int i = 0, player = 1; i < model.getGameMode().maxPlayerAmount(); i++, player++) {
+        for (int i = 0, player = 1; i < model.getPlayerNumber(); i++, player++) {
 
             Console.out("\nBookshelf for player " +
                     model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
@@ -69,7 +75,7 @@ public class CliApp implements UiGateway {
 
     @Override
     public void gameSelection() {
-
+        printGameModel();
         Set<Coordinate> validCoordinates = CoordinatesParser.scan();
         model.onPlayerSelectionPhase(validCoordinates);
 
@@ -93,6 +99,38 @@ public class CliApp implements UiGateway {
         Console.out("The game has ended. Congratulations to the winner!\n" +
                 "Here's the player's ranking with their points:");
         model.onGameEnded();
+    }
+
+    public void setHandler(ViewEventHandler handler) {
+        this.handler = handler;
+    }
+
+
+    public static void main(String[] args) {
+        var app = new CliApp();
+        var game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+
+        game.addPlayer("Alberto");
+        game.addPlayer("Cookie");
+        game.addPlayer("Giulia");
+        game.addPlayer("Marco");
+
+        app.modelUpdate(game);
+        app.onGameStarted();
+        app.printGameModel();
+
+
+        while(game.getGameStatus() != GameStatus.ENDED)
+        {
+            app.gameSelection();
+            app.gameInsertion();
+            app.modelUpdate(game);
+            app.printGameModel();
+            game.getCurrentPlayer().getPlayerNumber().next(game.getGameMode());
+        }
+
+        app.onGameEnded();
+
     }
 
 }
