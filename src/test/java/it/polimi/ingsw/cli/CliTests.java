@@ -46,5 +46,5 @@ public class CliTests {
         cliApp.modelUpdate(game);
         cliApp.onGameStarted();
     }
-    
+
 }

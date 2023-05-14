@@ -36,10 +36,7 @@ public class CliApp implements UiGateway {
     }
 
     @Override
-    public void modelUpdate(Game game) {
-        model = game;
-        //printGameModel();
-    }
+    public void modelUpdate(Game game) {model = game;}
 
     public void printGameModel() {
         Console.out("Board: \n");
@@ -60,7 +57,7 @@ public class CliApp implements UiGateway {
                     model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
 
             BookshelfPrinter.print(model.getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
-                            .getUsername()).getBookshelf());
+                    .getUsername()).getBookshelf());
         }
 
         Console.out("\nThe first player is: " +
@@ -101,9 +98,7 @@ public class CliApp implements UiGateway {
         model.onGameEnded();
     }
 
-    public void setHandler(ViewEventHandler handler) {
-        this.handler = handler;
-    }
+    public void setHandler(ViewEventHandler handler) {this.handler = handler;}
 
 
     public static void main(String[] args) {
@@ -117,16 +112,15 @@ public class CliApp implements UiGateway {
 
         app.modelUpdate(game);
         app.onGameStarted();
-        app.printGameModel();
 
 
-        while(game.getGameStatus() != GameStatus.ENDED)
-        {
+        while (game.getGameStatus() != GameStatus.ENDED) {
+
             app.gameSelection();
             app.gameInsertion();
-            app.modelUpdate(game);
-            app.printGameModel();
-            game.getCurrentPlayer().getPlayerNumber().next(game.getGameMode());
+            //TODO implement a better turn manager
+            game.onNextTurn(game.getCurrentPlayer().getPlayerNumber().next(game.getGameMode()).name());
+
         }
 
         app.onGameEnded();
