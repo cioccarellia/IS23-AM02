@@ -47,7 +47,7 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
     @Test
     @DisplayName("Checks that calling onPlayerSelectionPhase(coordinates) actually saves the selection on" +
             "the user session upon successful execution")
-    public void test_onPlayerSelectionPhase_assertSelectionSavesCoordinatesinUserSession() {
+    public void test_onPlayerSelectionPhase_assertSelectionSavesCoordinatesInUserSession() {
         Game game = new Game(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);

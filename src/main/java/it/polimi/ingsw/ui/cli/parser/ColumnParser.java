@@ -13,7 +13,7 @@ public class ColumnParser {
             int column = Integer.parseInt(Console.in());
 
             if (column < 0 && column > cols) {
-                Console.out("The column you selected is out of bounds, choose a number between 0 and 4");
+                Console.out("The column you selected is out of bounds, choose a number between 0 and 4.");
             } else {
                 return column;
             }

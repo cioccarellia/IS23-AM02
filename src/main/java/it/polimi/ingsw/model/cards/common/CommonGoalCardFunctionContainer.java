@@ -164,8 +164,6 @@ public class CommonGoalCardFunctionContainer {
                 if (j == 4 && isSumUnder3)
                     countDifferentLines++;
             }
-
-
         }
         return countDifferentLines >= 4;
     }

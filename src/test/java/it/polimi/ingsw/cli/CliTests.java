@@ -14,7 +14,7 @@ import java.io.*;
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
 
-public class cliTests {
+public class CliTests {
 
     private EventHandler eventHandler;
 

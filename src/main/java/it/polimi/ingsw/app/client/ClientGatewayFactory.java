@@ -6,7 +6,7 @@ import it.polimi.ingsw.controller.client.gateways.TcpClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 
 /**
- * Handles the creation of the proper gateway class for the protocl in use
+ * Handles the creation of the proper gateway class for the protocol in use
  */
 public class ClientGatewayFactory {
 

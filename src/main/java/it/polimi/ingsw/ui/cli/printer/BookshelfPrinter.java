@@ -25,8 +25,7 @@ public class BookshelfPrinter {
 
     };
 
-    public static String print(Bookshelf bookshelf) {
-        StringBuilder builder = new StringBuilder();
+    public static void print(Bookshelf bookshelf) {
         int verticalGuideNumber = 0;
 
         Tile[][] matrix = new Tile[rows][cols];
@@ -55,8 +54,6 @@ public class BookshelfPrinter {
             Console.out("\n");
             verticalGuideNumber++;
         }
-
-        return builder.toString();
     }
 
     public static void main(String[] args) {

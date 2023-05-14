@@ -1,11 +1,8 @@
 package it.polimi.ingsw.ui.cli;
 
-import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
@@ -44,20 +41,19 @@ public class CliApp implements UiGateway {
 
         BoardPrinter.print(model.getBoard());
 
-        Console.out("First common goal card:");
+        Console.out("First common goal card:\n");
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(0));
         Console.out("\n");
-        Console.out("Second common goal card:");
+        Console.out("Second common goal card:\n");
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
 
-        BookshelfPrinter bookshelfPrinter = new BookshelfPrinter();
 
         for (int i = 0, player = 1; i < model.getGameMode().maxPlayerAmount(); i++, player++) {
 
             Console.out("\nBookshelf for player " +
                     model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
 
-            bookshelfPrinter.print(model.getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
+            BookshelfPrinter.print(model.getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
                             .getUsername()).getBookshelf());
         }
 

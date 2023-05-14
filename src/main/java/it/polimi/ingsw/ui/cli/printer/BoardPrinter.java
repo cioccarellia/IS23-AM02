@@ -13,8 +13,7 @@ import java.util.Optional;
 public class BoardPrinter {
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
-    public static String print(Board board) {
-        StringBuilder builder = new StringBuilder();
+    public static void print(Board board) {
         int verticalGuideNumber = 0;
 
         Console.out("   0  1  2  3  4  5  6  7  8 \n");
@@ -43,8 +42,6 @@ public class BoardPrinter {
         }
 
         Console.out("\n");
-
-        return builder.toString();
     }
 
 

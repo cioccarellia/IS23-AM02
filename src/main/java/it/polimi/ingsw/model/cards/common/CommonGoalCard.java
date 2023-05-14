@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
-import it.polimi.ingsw.model.game.goal.Token;
 
-import java.util.Stack;
 import java.util.function.Predicate;
 
 /**

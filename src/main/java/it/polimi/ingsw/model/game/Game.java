@@ -342,7 +342,7 @@ public class Game implements ModelService {
             for (int j = 0; j < groups.size(); j++) {
                 switch (groupsSize.get(i)) {
                     case 0, 1, 2:
-                        points += 0;
+                        continue;
                     case 3:
                         points += 2;
                     case 4:
