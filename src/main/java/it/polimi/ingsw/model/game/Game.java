@@ -149,9 +149,6 @@ public class Game implements ModelService {
         // (re)fill board
         onRefill();
 
-        //personal goal card initialization
-        //TODO implementing personal goal card initialization
-
         // Set first state
         getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }

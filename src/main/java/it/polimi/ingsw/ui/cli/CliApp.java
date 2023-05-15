@@ -64,7 +64,7 @@ public class CliApp implements UiGateway {
         Console.out("Second common goal card:\n");
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
 
-        Console.out("Personal goal card:\n");
+        Console.out("\nPersonal goal card:\n");
         PersonalGoalCardPrinter.print(model.getCurrentPlayer().getPersonalGoalCard());
         Console.out("\n");
 

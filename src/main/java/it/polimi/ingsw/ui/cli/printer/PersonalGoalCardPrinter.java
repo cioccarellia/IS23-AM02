@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.cli.printer;
 
+import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.cli.Console;
@@ -16,17 +17,26 @@ public class PersonalGoalCardPrinter {
     private static final int cols = BookshelfConfiguration.getInstance().cols();
     public static void print(PersonalGoalCard personalGoalCard){
         int verticalGuideNumber = 0;
+        Tile tile=null;
 
-        Console.out("X 0  1  2  3  4\n");
+        Console.out("X   0  1  2  3  4\n");
+
         for(int i=0; i<rows;i++){
+
             Console.out(verticalGuideNumber);
             Console.out("  ");
+
             for(int j=0;j<cols;j++){
-                String tileText = TilePrinter.print(personalGoalCard.getShelfPointMatrix()[i][j]);
+
+                tile=personalGoalCard.getShelfPointMatrix()[i][j];
+                String tileText = TilePrinter.print(tile);
                 Console.out(" " + tileText + " ");
+
             }
+
             Console.out("\n");
             verticalGuideNumber++;
+
         }
 
 
