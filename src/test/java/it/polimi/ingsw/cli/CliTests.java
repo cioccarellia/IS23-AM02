@@ -34,7 +34,7 @@ public class CliTests {
 
     @Test
     @DisplayName("Verify the correct function of onGameStarted method, positively")
-    public void onGameStartedTest_Positively(){
+    public void onGameStartedTest_Positively() {
         CliApp cliApp = new CliApp();
 
         Game game = new Game(GAME_MODE_4_PLAYERS);

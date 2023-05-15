@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.GameController;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
@@ -13,10 +14,7 @@ import it.polimi.ingsw.ui.ViewEventHandler;
 import it.polimi.ingsw.ui.cli.parser.ColumnParser;
 import it.polimi.ingsw.ui.cli.parser.CoordinatesParser;
 import it.polimi.ingsw.ui.cli.parser.PlayerTilesOrderInsertionParser;
-import it.polimi.ingsw.ui.cli.printer.BoardPrinter;
-import it.polimi.ingsw.ui.cli.printer.BookshelfPrinter;
-import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
-import it.polimi.ingsw.ui.cli.printer.PlayersListPrinter;
+import it.polimi.ingsw.ui.cli.printer.*;
 import it.polimi.ingsw.utils.model.TurnHelper;
 
 import java.util.List;
@@ -31,18 +29,28 @@ public class CliApp implements UiGateway {
     public CliApp() {
     }
 
+    /**
+     * call model's onGameStarted and notify user that the game is running
+     */
     @Override
     public void onGameStarted() {
         model.onGameStarted();
         Console.out("Game started, Good Luck!\n");
     }
 
+    /**
+     * Update model's istance in order to show users an updated model every turn
+     * @param game
+     */
     @Override
-    public void modelUpdate(Game game)
-    {
+    public void modelUpdate(Game game) {
         this.model = game;
     }
 
+    /**
+     * show user's Bookshelves, updated Board, Common goal cards and Tokens, First Player and Current Player, Private
+     * goal card
+     */
     public void printGameModel() {
         Console.out("Board: \n");
 
@@ -55,6 +63,10 @@ public class CliApp implements UiGateway {
 
         Console.out("Second common goal card:\n");
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
+
+        Console.out("Personal goal card:\n");
+        PersonalGoalCardPrinter.print(model.getCurrentPlayer().getPersonalGoalCard());
+        Console.out("\n");
 
         for (int i = 0, player = 1; i < model.getPlayerNumber(); i++, player++) {
 
@@ -74,7 +86,9 @@ public class CliApp implements UiGateway {
 
     }
 
-
+    /**
+     * call model's onPlayerSelectionPhase in order to make current player selecting up to three tiles
+     */
     @Override
     public void gameSelection() {
         printGameModel();
@@ -83,7 +97,9 @@ public class CliApp implements UiGateway {
 
     }
 
-
+    /**
+     * Insert selected tiles inside current player's own Bookshelf
+     */
     @Override
     public void gameInsertion() {
         int column = ColumnParser.scan();
@@ -95,7 +111,9 @@ public class CliApp implements UiGateway {
         model.onPlayerCheckingPhase();
     }
 
-
+    /**
+     * show score classification and announce the winner
+     */
     @Override
     public void onGameEnded() {
         Console.out("The game has ended. Congratulations to the winner!\n" +
@@ -103,7 +121,9 @@ public class CliApp implements UiGateway {
         model.onGameEnded();
     }
 
-    public void setHandler(ViewEventHandler handler) {this.handler = handler;}
+    public void setHandler(ViewEventHandler handler) {
+        this.handler = handler;
+    }
 
 
     public static void main(String[] args) {
@@ -128,11 +148,8 @@ public class CliApp implements UiGateway {
             app.modelUpdate(game);
             app.gameInsertion();
             app.modelUpdate(game);
-            //TODO implement a better turn manager
-            //game.onNextTurn(game.getCurrentPlayer().getPlayerNumber().next(game.getGameMode()).name());
-            /*playerNumber = turn.getNextPlayerNumber(game.getCurrentPlayer(),game.getGameMode());
-            game.getCurrentPlayer().getPlayerNumber() = playerNumber; */
-            game.getCurrentPlayer().getPlayerNumber().next(game.getCurrentPlayer().getPlayerNumber());
+
+            turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode());
             //TODO model update doesn't work
             app.modelUpdate(game);
         }
