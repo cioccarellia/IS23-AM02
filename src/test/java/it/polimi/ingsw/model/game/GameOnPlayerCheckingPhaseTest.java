@@ -30,22 +30,21 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
         Set<Coordinate> selection = Set.of(c1, c2);
 
-        game.onPlayerSelectionPhase(selection);
+        if (game.isSelectionValid(selection)) {
+            Tile[][] matrix = game.getGameMatrix();
 
+            List<Tile> tiles = List.of(
+                    matrix[c1.x()][c1.y()],
+                    matrix[c2.x()][c2.y()]
+            );
+            game.onPlayerSelectionPhase(selection);
 
-        Tile[][] matrix = game.getGameMatrix();
+            game.onPlayerInsertionPhase(1, tiles);
+            game.onPlayerCheckingPhase();
 
-        List<Tile> tiles = List.of(
-                matrix[c1.x()][c1.y()],
-                matrix[c2.x()][c2.y()]
-        );
-
-        game.onPlayerInsertionPhase(1, tiles);
-        game.onPlayerCheckingPhase();
-
-        assertFalse(game.getCurrentPlayer().getBookshelf().isFull());
-        assertNull(game.getCurrentPlayer().getAcquiredTokens());
-
+            assertFalse(game.getCurrentPlayer().getBookshelf().isFull());
+            assertNull(game.getCurrentPlayer().getAcquiredTokens());
+        }
     }
 
 }

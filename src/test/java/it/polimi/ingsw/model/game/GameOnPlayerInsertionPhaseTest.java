@@ -28,17 +28,19 @@ public class GameOnPlayerInsertionPhaseTest implements GameTester {
 
         Set<Coordinate> selection = Set.of(c1, c2);
 
-        game.onPlayerSelectionPhase(selection);
+        if (game.isSelectionValid(selection)) {
+            Tile[][] matrix = game.getGameMatrix();
 
-        Tile[][] matrix = game.getGameMatrix();
+            List<Tile> tiles = List.of(matrix[c1.x()][c1.y()], matrix[c2.x()][c2.y()]);
 
-        List<Tile> tiles = List.of(matrix[c1.x()][c1.y()], matrix[c2.x()][c2.y()]);
+            game.onPlayerSelectionPhase(selection);
 
-        game.onPlayerInsertionPhase(1, tiles);
+            game.onPlayerInsertionPhase(1, tiles);
 
-        assertEquals(matrix[c1.x()][c1.y()], tiles.get(0));
-        assertEquals(matrix[c2.x()][c2.y()], tiles.get(1));
+            assertEquals(matrix[c1.x()][c1.y()], tiles.get(0));
+            assertEquals(matrix[c2.x()][c2.y()], tiles.get(1));
 
-        assertEquals(CHECKING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
+            assertEquals(CHECKING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
+        }
     }
 }

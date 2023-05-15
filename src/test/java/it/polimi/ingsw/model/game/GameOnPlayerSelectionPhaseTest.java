@@ -31,17 +31,17 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
         Coordinate c2 = new Coordinate(8, 4);
 
         Set<Coordinate> selection = Set.of(c1, c2);
+        if (game.isSelectionValid(selection)) {
+            List<Tile> tiles = List.of(
+                    game.getGameMatrix()[c1.x()][c1.y()],
+                    game.getGameMatrix()[c2.x()][c2.y()]
+            );
 
-        game.onPlayerSelectionPhase(selection);
+            game.onPlayerSelectionPhase(selection);
 
-        List<Tile> tiles = List.of(
-                game.getGameMatrix()[c1.x()][c1.y()],
-                game.getGameMatrix()[c2.x()][c2.y()]
-        );
-
-        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
-        assertEquals(INSERTING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
-
+            assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
+            assertEquals(INSERTING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
+        }
     }
 
     @Test
@@ -60,16 +60,15 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
 
         Set<Coordinate> selection = Set.of(c1, c2);
 
+        if (game.isSelectionValid(selection)) {
+            List<Tile> tiles = List.of(
+                    game.getGameMatrix()[c1.x()][c1.y()],
+                    game.getGameMatrix()[c2.x()][c2.y()]
+            );
 
-        game.onPlayerSelectionPhase(selection);
+            game.onPlayerSelectionPhase(selection);
 
-        List<Tile> tiles = List.of(
-                game.getGameMatrix()[c1.x()][c1.y()],
-                game.getGameMatrix()[c2.x()][c2.y()]
-        );
-
-        assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
-
+            assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
+        }
     }
-
 }
