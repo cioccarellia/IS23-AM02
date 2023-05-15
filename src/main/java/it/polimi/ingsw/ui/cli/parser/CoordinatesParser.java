@@ -14,17 +14,25 @@ public class CoordinatesParser {
     public static Set<Coordinate> scan() {
 
         while (true) {
-            Console.out("\nGive me the coordinates of the tiles you want (at least one, at most three)," +
-                    "in the format: x1, y1, x2, y2, ... (x are rows, y are columns)\n ");
+            Console.out("""
+                    Give me the coordinates of the tiles you want (at least one, at most three),
+                    in the format: x1, y1, x2, y2, ... (x are rows, y are columns)
+                    """);
 
             String input = Console.in();
 
             String[] tokens = input.split(",");
 
             if (tokens.length < 2 || tokens.length > 6 || tokens.length % 2 != 0) {
-                Console.out("\nYou need to select at least one tile and at most three;" +
-                        "also, you need both the x-coordinate and the y-coordinate1n\n");
+                Console.out("""
+                        You need to select at least one tile and at most three;
+                        also, you need both the x-coordinate and the y-coordinate1n
+                        """);
                 continue;
+            }
+
+            for (int i = 0; i < tokens.length; i++) {
+                tokens[i] = tokens[i].trim();
             }
 
             Set<Coordinate> validCoordinates = new HashSet<>();
@@ -36,8 +44,10 @@ public class CoordinatesParser {
                     Coordinate coords = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
                     validCoordinates.add(coords);
                 } else {
-                    Console.out("\nSome of these coordinates are out of bounds, you need to select numbers" +
-                            "from 0 to 9.\n");
+                    Console.out("""
+                            Some of these coordinates are out of bounds, you need to select numbers
+                            from 0 to 9.
+                            """);
                     break;
                 }
             }

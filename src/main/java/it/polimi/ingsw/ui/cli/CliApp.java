@@ -1,10 +1,8 @@
 package it.polimi.ingsw.ui.cli;
 
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.GameController;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
@@ -22,24 +20,57 @@ import java.util.Set;
 
 public class CliApp implements UiGateway {
 
-    private ViewEventHandler handler;
-    public Game model;
     private final boolean hasReceivedInitialModel = false;
+    public Game model;
+    private ViewEventHandler handler;
 
     public CliApp() {
     }
 
+    public static void main(String[] args) {
+        CliApp app = new CliApp();
+        Game game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+        TurnHelper turn = new TurnHelper();
+        PlayerNumber playerNumber;
+        GameController controller = new GameController();
+
+        game.addPlayer("Alberto");
+        game.addPlayer("Cookie");
+        game.addPlayer("Giulia");
+        game.addPlayer("Marco");
+
+        app.modelUpdate(game);
+        app.onGameStarted();
+
+
+        while (game.getGameStatus() != GameStatus.ENDED) {
+
+            app.gameSelection();
+            app.modelUpdate(game);
+            app.gameInsertion();
+            app.modelUpdate(game);
+
+            turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode());
+            //TODO getNextPlayerNumber doesn't work
+            app.modelUpdate(game);
+        }
+
+        app.onGameEnded();
+
+    }
+
     /**
-     * call model's onGameStarted and notify user that the game is running
+     * Calls model's onGameStarted and notify user that the game is running
      */
     @Override
     public void onGameStarted() {
         model.onGameStarted();
-        Console.out("Game started, Good Luck!\n");
+        Console.out("Game has started, Good Luck!\n");
     }
 
     /**
-     * Update model's istance in order to show users an updated model every turn
+     * Updates model's instance in order to show users an updated model every turn
+     *
      * @param game
      */
     @Override
@@ -48,7 +79,7 @@ public class CliApp implements UiGateway {
     }
 
     /**
-     * show user's Bookshelves, updated Board, Common goal cards and Tokens, First Player and Current Player, Private
+     * Shows users' Bookshelves, updates Board, Common goal cards and Tokens, First Player and Current Player, Private
      * goal card
      */
     public void printGameModel() {
@@ -65,13 +96,14 @@ public class CliApp implements UiGateway {
         CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
 
         Console.out("\nPersonal goal card:\n");
+        //TODO we need to print the player's card for whom is asking for their private goal card, not the current player. Others can't see other player's card
         PersonalGoalCardPrinter.print(model.getCurrentPlayer().getPersonalGoalCard());
         Console.out("\n");
 
         for (int i = 0, player = 1; i < model.getPlayerNumber(); i++, player++) {
-
+            //TODO when we fix nextPlayer we can use that to change player and substitute int player with it
             Console.out("\nBookshelf for player " +
-                    model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ": \n");
+                    model.getSessions().getByNumber(PlayerNumber.fromInt(player)).getUsername() + ":\n");
 
             BookshelfPrinter.print(model.getPlayerSession(model.getSessions().getByNumber(PlayerNumber.fromInt(player))
                     .getUsername()).getBookshelf());
@@ -116,46 +148,15 @@ public class CliApp implements UiGateway {
      */
     @Override
     public void onGameEnded() {
-        Console.out("The game has ended. Congratulations to the winner!\n" +
-                "Here's the player's ranking with their points:");
+        Console.out("""
+                The game has ended. Congratulations to the winner!
+                Here's the player's ranking with their points:
+                """);
         model.onGameEnded();
     }
 
     public void setHandler(ViewEventHandler handler) {
         this.handler = handler;
-    }
-
-
-    public static void main(String[] args) {
-        var app = new CliApp();
-        var game = new Game(GameMode.GAME_MODE_4_PLAYERS);
-        var turn = new TurnHelper();
-        PlayerNumber playerNumber;
-        var controller = new GameController();
-
-        game.addPlayer("Alberto");
-        game.addPlayer("Cookie");
-        game.addPlayer("Giulia");
-        game.addPlayer("Marco");
-
-        app.modelUpdate(game);
-        app.onGameStarted();
-
-
-        while (game.getGameStatus() != GameStatus.ENDED) {
-
-            app.gameSelection();
-            app.modelUpdate(game);
-            app.gameInsertion();
-            app.modelUpdate(game);
-
-            turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode());
-            //TODO model update doesn't work
-            app.modelUpdate(game);
-        }
-
-        app.onGameEnded();
-
     }
 
 }

@@ -13,7 +13,6 @@ public class TilePrinter {
             case TROPHY -> Chalk.on("T").bgCyan().black().toString();
             case PLANT -> Chalk.on("P").bgRed().black().toString();
             case FRAME -> Chalk.on("F").bgBlue().white().toString();
-            case null -> Chalk.on(" ").bgBlack().white().toString();
         };
     }
 

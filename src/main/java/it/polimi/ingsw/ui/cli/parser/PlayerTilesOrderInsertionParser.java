@@ -40,13 +40,14 @@ public class PlayerTilesOrderInsertionParser {
             String[] tokens = input.split(",");
 
             if (tokens.length != tiles.size()) {
-                Console.out("\nNot valid, you need to order the selected tiles from before. \n");
+                Console.out("\nNot valid, you need to order the selected tiles from before.\n");
                 continue;
             }
 
             for (int i = 0; i < tokens.length; i++) {
                 tokens[i] = tokens[i].trim();
             }
+
             List<Tile> orderedTiles = new ArrayList<>();
             for (String token : tokens) {
                 if (isStringValid(token)) {
