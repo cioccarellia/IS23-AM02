@@ -17,4 +17,8 @@ public class Console {
     public static void flush(){
         System.out.flush();
     }
+
+    public static void printnl(){
+        System.out.println();
+    }
 }

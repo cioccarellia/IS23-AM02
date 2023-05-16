@@ -98,4 +98,8 @@ public class SessionManager {
         );
     }
 
+    public List<PlayerSession> playerSessions() {
+        return map.values().stream().toList();
+    }
+
 }

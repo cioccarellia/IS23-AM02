@@ -101,31 +101,7 @@ public class CliApp implements UiGateway {
 
         PlayerNumber player = model.getCurrentPlayer().getPlayerNumber();
 
-        for (int i = 0; i < model.getPlayerNumber(); i++) {
-            Console.out("\nBookshelf for player: " +
-                    model.getSessions().getByNumber(player).getUsername() + ":\n");
-
-            BookshelfPrinter.print(model.getPlayerSession(model.getSessions().getByNumber(player)
-                    .getUsername()).getBookshelf());
-
-            player = getNextPlayerNumber(player, model.getGameMode());
-        }
-
-        int dim = model.getSessions().size();
-        ArrayList<Bookshelf> bookshelves = new ArrayList<>();
-
-
-        // tentativo di mettere le 4 bookshelf tutte sulle stesse righe
-        /*for (int i = 0; i < model.getSessions().size(); i++) {
-            Console.out("Bookshelf for player " +
-                    model.getSessions().getByNumber(player).getUsername() + ":");
-            Console.out("        ");
-
-            bookshelves.add(i, model.getCurrentPlayer().getBookshelf());
-            player = getNextPlayerNumber(player, model.getGameMode());
-        }
-
-       // BookshelfsPrinter.print(bookshelves,dim);*/
+        BookshelvesPrinter.print(model);
 
         Console.out("\nThe first player is: " +
                 model.getSessions().getByNumber(model.getStartingPlayerNumber()).getUsername() + "\n");
