@@ -2,9 +2,8 @@ package it.polimi.ingsw.net.tcp.messages.request.replies;
 
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
-import it.polimi.ingsw.net.tcp.messages.response.Response;
 
-public class GameSelectionTurnRequestReply extends Response {
+public class GameSelectionTurnRequestReply extends Reply {
 
     private final SingleResult<TileSelectionFailures> turnResult;
 

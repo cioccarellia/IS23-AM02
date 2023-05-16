@@ -60,7 +60,7 @@ public class ServerTcpWrapper extends ServerWrapper {
 
                     return new GameInsertionTurnRequestReply(result);
                 }
-                case KeepAliveRequest r -> {
+                case KeepAlive r -> {
                     controller.keepAlive(r.getUsername());
                     return new KeepAliveReply();
                 }

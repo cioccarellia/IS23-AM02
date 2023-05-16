@@ -1,10 +1,10 @@
 package it.polimi.ingsw.net.tcp.messages.request;
 
-public class KeepAliveRequest extends Request {
+public class KeepAlive extends Request {
 
     private final String username;
 
-    public KeepAliveRequest(String username) {
+    public KeepAlive(String username) {
         this.username = username;
     }
 

@@ -73,9 +73,9 @@ public class TcpClientGateway extends ClientGateway {
         keepAlive(username);
     }
 
-    @Nullable private <T extends Message> T sendMessageAndAwaitReply(Message request, Class<T> clazz) {
+    @Nullable private <I extends Request, O extends Reply> O sendMessageAndAwaitReply(Message request, Class<I> inputType, Class<O> outputType) {
         // serializes to JSON the message content
-        String serializedJsonRequest = Parsers.marshaledGson().toJson(request, clazz);
+        String serializedJsonRequest = Parsers.marshaledGson().toJson(request, inputType);
 
         // sends the message bytes on TCP
         out.println(serializedJsonRequest);
@@ -86,7 +86,9 @@ public class TcpClientGateway extends ClientGateway {
 
         try {
             // fixme reads response from network
-            serializedResponse = in.readLine();
+            while ((serializedResponse = in.readLine()) == null) {
+                serializedResponse = in.readLine();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,7 +98,7 @@ public class TcpClientGateway extends ClientGateway {
         }
 
         // De-serializes response back into its expected response type
-        T messageResponse = Parsers.marshaledGson().fromJson(serializedResponse, clazz);
+        O messageResponse = Parsers.marshaledGson().fromJson(serializedResponse, outputType);
 
         // returns
         return messageResponse;
@@ -106,16 +108,16 @@ public class TcpClientGateway extends ClientGateway {
     public ServerStatus serverStatusRequest() {
         ServerStatusRequest message = new ServerStatusRequest();
 
-        ServerStatusRequestReply reply = sendMessageAndAwaitReply(message, ServerStatusRequestReply.class);
+        ServerStatusRequestReply reply = sendMessageAndAwaitReply(message, ServerStatusRequest.class, ServerStatusRequestReply.class);
 
-        return reply.getStatus();
+        return reply == null ? null : reply.getStatus();
     }
 
     @Override
     public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
         GameStartRequest message = new GameStartRequest(mode, username, protocol);
 
-        GameStartRequestReply reply = sendMessageAndAwaitReply(message, GameStartRequestReply.class);
+        GameStartRequestReply reply = sendMessageAndAwaitReply(message, GameStartRequest.class, GameStartRequestReply.class);
 
         return reply.getStatus();
     }
@@ -124,7 +126,7 @@ public class TcpClientGateway extends ClientGateway {
     public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
         GameConnectionRequest message = new GameConnectionRequest(username, protocol);
 
-        GameConnectionRequestReply reply = sendMessageAndAwaitReply(message, GameConnectionRequestReply.class);
+        GameConnectionRequestReply reply = sendMessageAndAwaitReply(message, GameConnectionRequest.class, GameConnectionRequestReply.class);
 
         return reply.getStatus();
     }
@@ -133,7 +135,7 @@ public class TcpClientGateway extends ClientGateway {
     public SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         GameSelectionTurnRequest message = new GameSelectionTurnRequest(username, selection);
 
-        GameSelectionTurnRequestReply reply = sendMessageAndAwaitReply(message, GameSelectionTurnRequestReply.class);
+        GameSelectionTurnRequestReply reply = sendMessageAndAwaitReply(message, GameSelectionTurnRequest.class, GameSelectionTurnRequestReply.class);
 
         return reply.getTurnResult();
     }
@@ -142,15 +144,15 @@ public class TcpClientGateway extends ClientGateway {
     public SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
-        GameInsertionTurnRequestReply reply = sendMessageAndAwaitReply(message, GameInsertionTurnRequestReply.class);
+        GameInsertionTurnRequestReply reply = sendMessageAndAwaitReply(message, GameInsertionTurnRequest.class, GameInsertionTurnRequestReply.class);
 
         return reply.getTurnResult();
     }
 
     @Override
     public void keepAlive(String player) {
-        KeepAliveRequest keepAliveMessage = new KeepAliveRequest(player);
+        KeepAlive keepAliveMessage = new KeepAlive(player);
 
-        KeepAliveReply reply = sendMessageAndAwaitReply(keepAliveMessage, KeepAliveReply.class);
+        KeepAliveReply reply = sendMessageAndAwaitReply(keepAliveMessage, KeepAlive.class, KeepAliveReply.class);
     }
 }

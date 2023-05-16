@@ -2,9 +2,8 @@ package it.polimi.ingsw.net.tcp.messages.request.replies;
 
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.net.tcp.messages.response.Response;
 
-public class GameConnectionRequestReply extends Response {
+public class GameConnectionRequestReply extends Reply {
 
     final private SingleResult<GameConnectionError> status;
 
