@@ -22,29 +22,29 @@
     <children>
         <ImageView fitHeight="815.0" fitWidth="1025.0" layoutX="-6.0" layoutY="-7.0" pickOnBounds="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/misc/sfondo%20parquet.jpg" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/misc/wood_background.jpg" />
             </image>
         </ImageView>
         <ImageView fitHeight="448.0" fitWidth="554.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/livingroom.png" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/living_room.png" />
             </image>
         </ImageView>
         <Separator layoutX="448.0" orientation="VERTICAL" prefHeight="800.0" />
         <Separator layoutY="447.0" prefWidth="1000.0" />
         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="636.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/Publisher%20material/Title%202000x618px.png" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/publisher_material/title_2000x618px.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="347.0" fitWidth="436.0" layoutX="477.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/bookshelf.png" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png" />
             </image>
         </ImageView>
         <ImageView id="personalGoalCard" fitHeight="193.0" fitWidth="151.0" layoutX="836.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/personal%20goal%20cards/Personal_Goals.png" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/personal_goal_cards/personal_goal_card_1.png" />
             </image>
         </ImageView>
         <CheckBox id="followActiveButton" layoutX="913.0" layoutY="771.0" mnemonicParsing="false" text="Follow Active" />
@@ -56,7 +56,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/bookshelf_orth.png" />
+                                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -118,7 +118,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/bookshelf_orth.png" />
+                                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -180,7 +180,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/bookshelf_orth.png" />
+                                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -242,7 +242,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/bookshelf_orth.png" />
+                                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -307,12 +307,12 @@
         </Button>
         <ImageView id="secondCommonGoalCard" fitHeight="100.0" fitWidth="130.0" layoutX="856.0" layoutY="561.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/common%20goal%20cards/1.jpg" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/common_goal_cards/eight_tiles.jpg" />
             </image>
         </ImageView>
         <ImageView id="firstCommonGoalCard" fitHeight="119.0" fitWidth="130.0" layoutX="856.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/common%20goal%20cards/2.jpg" />
+                <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/common_goal_cards/four_group_four.jpg" />
             </image>
         </ImageView>
         <GridPane layoutX="17.0" layoutY="18.0" prefHeight="409.0" prefWidth="412.0">
@@ -341,7 +341,7 @@
             <children>
                 <ImageView id="boardTile03" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                     <image>
-                        <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/item%20tiles/Cornici1.1.png" />
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tiles/frame1.1.png" />
                     </image>
                 </ImageView>
                 <ImageView id="boardTile04" fitHeight="49.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
@@ -453,6 +453,63 @@
                 <MenuItem mnemonicParsing="false" text="Player3" />
             </items>
         </MenuButton>
-        //INSERT TOKENS------------------------------------------------
+        <Pane layoutX="358.0" layoutY="311.0" prefHeight="50.0" prefWidth="54.0" rotate="10.0">
+            <children>
+                <ImageView id="endGameToken" fitHeight="51.0" fitWidth="50.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/first_full_bookshelf_token.jpg" />
+                    </image>
+                </ImageView>
+            </children>
+        </Pane>
+        <Pane layoutX="931.0" layoutY="579.0" prefHeight="42.0" prefWidth="42.0" rotate="-10.0">
+            <children>
+                <ImageView id="2SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_2.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView id="4SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_4.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView id="6SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_6.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView id="8SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_8.jpg" />
+                    </image>
+                </ImageView>
+            </children>
+        </Pane>
+        <Pane layoutX="929.0" layoutY="478.0" prefHeight="42.0" prefWidth="42.0" rotate="-10.0">
+            <children>
+                <ImageView id="2FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_2.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView id="4FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_4.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView id="6FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_6.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView id="8FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/tokens/scoring_8.jpg" />
+                    </image>
+                </ImageView>
+            </children>
+        </Pane>
+
     </children>
 </Pane>
