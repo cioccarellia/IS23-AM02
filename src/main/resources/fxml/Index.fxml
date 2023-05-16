@@ -245,7 +245,55 @@
                                         <Image url="@../../../../../../Downloads/MyShelfie_risorse/17_MyShelfie_BGA/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
-                                //------------INSERT GRID PANEL
+                                <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints maxHeight="199.5" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="194.5" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="36.5" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="42.5" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <ImageView id="Player4Tile23" fitHeight="34.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                        <ImageView id="Player4Tile01" fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                                        <ImageView id="Player4Tile02" fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                                        <ImageView id="Player4Tile03" fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                                        <ImageView id="Player4Tile04" fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                                        <ImageView id="Player4Tile10" fitHeight="37.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                                        <ImageView id="Player4Tile11" fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <ImageView id="Player4Tile12" fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <ImageView id="Player4Tile13" fitHeight="34.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                        <ImageView id="Player4Tile14" fitHeight="37.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                        <ImageView id="Player4Tile20" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+                                        <ImageView id="Player4Tile21" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <ImageView id="Player4Tile54" fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                                        <ImageView id="Player4Tile22" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                        <ImageView id="Player4Tile24" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                                        <ImageView id="Player4Tile30" fitHeight="36.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
+                                        <ImageView id="Player4Tile31" fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                        <ImageView id="Player4Tile32" fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                        <ImageView id="Player4Tile33" fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                        <ImageView id="Player4Tile34" fitHeight="34.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                                        <ImageView id="Player4Tile40" fitHeight="36.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+                                        <ImageView id="Player4Tile41" fitHeight="36.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                        <ImageView id="Player4Tile42" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                        <ImageView id="Player4Tile43" fitHeight="37.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                        <ImageView id="Player4Tile44" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                        <ImageView id="Player4Tile50" fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
+                                        <ImageView id="Player4Tile51" fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                        <ImageView id="Player4Tile52" fitHeight="37.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                        <ImageView id="Player4Tile53" fitHeight="37.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                        <ImageView id="Player4Tile00" fitHeight="42.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                </GridPane>
                             </children>
                         </AnchorPane>
                     </content>
