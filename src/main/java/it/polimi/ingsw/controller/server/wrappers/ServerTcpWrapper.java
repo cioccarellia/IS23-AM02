@@ -43,7 +43,12 @@ public class ServerTcpWrapper extends ServerWrapper {
                 case GameStartRequest s -> {
                     SingleResult<GameStartError> result = controller.gameStartRequest(s.getMode(), s.getUsername(), s.getProtocol());
 
-                    return new GameStartRequestReply(result);
+                    GameStartError eventualError = switch (result) {
+                        case SingleResult.Failure<GameStartError> failure -> failure.error();
+                        case SingleResult.Success<GameStartError> success -> null;
+                    };
+
+                    return new GameStartRequestReply(eventualError);
                 }
                 case GameConnectionRequest s -> {
                     SingleResult<GameConnectionError> result = controller.gameConnectionRequest(s.getUsername(), s.getProtocol());

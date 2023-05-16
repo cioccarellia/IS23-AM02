@@ -1,17 +1,23 @@
 package it.polimi.ingsw.net.tcp.messages.request.replies;
 
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.GameStartError;
 
 public class GameStartRequestReply extends Reply {
 
-    private final SingleResult<GameStartError> status;
+    private final GameStartError status;
 
-    public GameStartRequestReply(SingleResult<GameStartError> status) {
+    public GameStartRequestReply(GameStartError status) {
         this.status = status;
     }
 
-    public SingleResult<GameStartError> getStatus() {
+    public GameStartError getStatus() {
         return status;
+    }
+
+    @Override
+    public String toString() {
+        return "GameStartRequestReply{" +
+                "status=" + status +
+                '}';
     }
 }

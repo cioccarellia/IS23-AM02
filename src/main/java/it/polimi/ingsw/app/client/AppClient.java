@@ -28,7 +28,7 @@ public class AppClient {
 
         try {
             var x = gateway.serverStatusRequest();
-            logger.info("Requested serverStatusRequest, got {}", x.toString());
+            logger.info("\n\n\n\n\nRequested serverStatusRequest, got {}", x.toString());
 
             SingleResult<GameStartError> y = gateway.gameStartRequest(GameMode.GAME_MODE_3_PLAYERS, "s", proto);
 

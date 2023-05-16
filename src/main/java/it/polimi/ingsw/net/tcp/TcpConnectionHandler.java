@@ -37,23 +37,23 @@ public class TcpConnectionHandler implements Runnable {
                     // receive serialized message
                     String serializedJsonMessage = in.nextLine();
 
-                    logger.info("Received message={}", serializedJsonMessage);
+                    logger.info("Received request={}", serializedJsonMessage);
 
                     // de-serialize message from JSON to Message
                     Message inputMessage = Parsers.marshaledGson().fromJson(serializedJsonMessage, Message.class);
 
-                    logger.info("Deserialized into message={}", inputMessage);
-                    logger.info("Forwarding message to TCP server");
+                    logger.info("Deserialized request into message={}", inputMessage);
+
 
                     // sends the message to the controller, processes it, and returns a reply message
                     Message replyMessage = wrapper.receiveAndReturnMessage(inputMessage);
 
-                    logger.info("Got reply message {}", replyMessage);
+                    logger.info("Sending reply message {}", replyMessage);
 
                     // serialize in JSON the reply message
                     String serializedReplyMessage = Parsers.marshaledGson().toJson(replyMessage);
 
-                    logger.info("Serialized message {}", serializedReplyMessage);
+                    logger.info("Serialized reply {}", serializedReplyMessage);
 
                     // Send the serialized reply
                     out.println(serializedReplyMessage);

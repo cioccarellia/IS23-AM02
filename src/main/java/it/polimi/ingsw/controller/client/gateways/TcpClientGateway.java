@@ -86,15 +86,16 @@ public class TcpClientGateway extends ClientGateway {
 
         try {
             while (true) {
-                //noinspection BlockingMethodInNonBlockingContext
-                if ((serializedReply = socketIn.readLine()) == null) {
+
+                if ((serializedReply = socketIn.readLine()) != null) {
                     try {
                         messageResponse = Parsers.marshaledGson().fromJson(serializedReply, outputType);
                         break;
                     } catch (JsonParseException e) {
                         logger.error("Parsing exception", e);
                     } catch (RuntimeException rex) {
-                        logger.error("RuntimeException while deserializing class {} -> {}", inputType, outputType);
+                        logger.error("RuntimeException while deserializing class (json={}): {} -> {}", serializedReply, inputType, outputType);
+                        logger.error("RuntimeException", rex);
                     }
                 }
             }
@@ -123,7 +124,7 @@ public class TcpClientGateway extends ClientGateway {
 
         GameStartRequestReply reply = sendRequestAndAwaitReply(message, GameStartRequest.class, GameStartRequestReply.class);
 
-        return reply != null ? reply.getStatus() : null;
+        return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
     }
 
     @Override

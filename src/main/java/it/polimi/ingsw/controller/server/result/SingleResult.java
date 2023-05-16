@@ -22,16 +22,40 @@ import java.io.Serializable;
  * and that a specific error type is returned.</li>
  * </ul>
  */
-sealed public interface SingleResult<R extends RequestError> extends Serializable {
+sealed abstract public class SingleResult<T extends RequestError & Serializable> implements Serializable {
+    @Override
+    public String toString() {
+        return "SingleResult{}";
+    }
+
     /**
      * Represents a single, stateless successful result.
      */
-    record Success<R extends RequestError>() implements SingleResult<R>, Serializable {
+    public static final class Success<F extends RequestError & Serializable> extends SingleResult<F> implements Serializable {
+        @Override
+        public String toString() {
+            return "Success{}";
+        }
     }
 
     /**
      * Represents a single, stateful failed result.
      */
-    record Failure<R extends RequestError>(R error) implements SingleResult<R>, Serializable {
+    public static final class Failure<F extends RequestError & Serializable> extends SingleResult<F> implements Serializable {
+        private final F error;
+        public Failure(F error) {
+            this.error = error;
+        }
+
+        public F error() {
+            return error;
+        }
+
+        @Override
+        public String toString() {
+            return "Failure{" +
+                    "error=" + error +
+                    '}';
+        }
     }
 }
