@@ -18,6 +18,10 @@ public class CoordinatesParser {
     private static final LogicConfiguration config = LogicConfiguration.getInstance();
 
 
+    /**
+     * @param game the game that is being played
+     * @return the set of coordinates selected by the player, already checked for validity
+     */
     public static Set<Coordinate> scan(Game game) {
 
         while (true) {
@@ -63,13 +67,17 @@ public class CoordinatesParser {
                 return validCoordinates;
             } else {
                 Console.out("""
-                            The coordinates are not valid.
-                            """);
+                        The coordinates are not valid.
+                        """);
                 continue;
             }
         }
     }
 
+    /**
+     * @param s number we need to check, in String format
+     * @return if the number is within board bounds
+     */
     private static boolean isValidNumber(String s) {
         try {
             final int number = Integer.parseInt(s);
@@ -79,6 +87,12 @@ public class CoordinatesParser {
         }
     }
 
+    /**
+     * @param coordinates the coordinates the player selected
+     * @param game        the game that is being played
+     * @return if the selected coordinates are valid, checking if they all contain a tile, if the amount is within game
+     * rules, if they all have at least one free edge and if they are in a straight line
+     */
     public static boolean isSelectionValid(@NotNull Set<Coordinate> coordinates, Game game) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates, game);
         boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
@@ -88,6 +102,11 @@ public class CoordinatesParser {
         return areCoordinatesReferencingValidTiles && isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
     }
 
+    /**
+     * @param coordinates the coordinates the player selected
+     * @param game        the game that is being played
+     * @return if the cells at the given coordinates all contain a tile
+     */
     private static boolean areAllCoordinatesPresent(@NotNull Collection<Coordinate> coordinates, Game game) {
         return coordinates.stream().allMatch(it -> game.getBoard().getTileAt(it).isPresent());
     }

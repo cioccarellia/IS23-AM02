@@ -1,60 +1,26 @@
 package it.polimi.ingsw.ui.gui;
 
 
+import it.polimi.ingsw.controller.server.GameController;
 import it.polimi.ingsw.ui.UiGateway;
 import javafx.application.Application;
-import javafx.scene.Cursor;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 
 public abstract class GuiApp extends Application implements UiGateway {
 
+
+    @FXML
+    GameController controller = new GameController();
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        String file = "file:///Path-To-Your-Image/javafx-logo.png";
-        Image image = new Image(file);
+    /*public void Join(ActionEvent actionEvent) {
+        controller.gameConnectionRequest();
+    }*/
 
-        // Create the Cursor
-        Cursor myCur = Cursor.cursor(file);
-
-        // Create the ImageView
-        ImageView imageView = new ImageView();
-
-        // Add the Image to the ImageView
-        imageView.setImage(image);
-
-        // Create the VBox
-        VBox root = new VBox();
-
-        // Set the width and height of the VBox
-        root.setMinWidth(300);
-        root.setMinHeight(200);
-
-        // Add the ImageView to the VBox
-        root.getChildren().add(imageView);
-
-        // Set the Style-properties of the VBox
-        root.setStyle("-fx-padding: 10;" +
-                "-fx-border-style: solid inside;" +
-                "-fx-border-width: 2;" +
-                "-fx-border-insets: 5;" +
-                "-fx-border-radius: 5;" +
-                "-fx-border-color: blue;");
-
-        // Create the Scene
-        Scene scene = new Scene();
-        // Set the Title of the Stage
-        primaryStage.setTitle("Setting the Cursor for a Scene");
-        // Display the Stage
-        primaryStage.show();
-    }
-
+    ;
 }
 

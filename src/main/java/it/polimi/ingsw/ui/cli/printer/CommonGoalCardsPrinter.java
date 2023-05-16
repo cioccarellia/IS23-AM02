@@ -8,12 +8,20 @@ import java.util.Stack;
 
 public class CommonGoalCardsPrinter {
 
+    /**
+     * Prints the (remaining) tokens from a given common goal card
+     *
+     * @param tokens tokens from the common goal card
+     */
     public static void printTokens(Stack<Token> tokens) {
         Console.out("Remaining tokens:");
         tokens.forEach(token -> Console.out(" " + token.getPoints()));
         Console.out("\n");
     }
 
+    /**
+     * @param card status of a common goal card, within the game that is being played
+     */
     public static void print(CommonGoalCardStatus card) {
 
         switch (card.getCommonGoalCard().getId()) {

@@ -14,6 +14,10 @@ public class PlayerTilesOrderInsertionParser {
 
     final private static List<String> acceptableCharacters = List.of("B", "C", "G", "P", "T", "F");
 
+    /**
+     * @param s tile character that needs checking
+     * @return if the player selected a tile within the given tile characters
+     */
     private static boolean isStringValid(@NotNull String s) {
         boolean isSizeCorrect = s.length() == 1;
         boolean isCharacterAcceptable = acceptableCharacters.contains(s);
@@ -21,6 +25,10 @@ public class PlayerTilesOrderInsertionParser {
         return isSizeCorrect && isCharacterAcceptable;
     }
 
+    /**
+     * @param tiles the tiles the player selected, not yet ordered
+     * @return returns the ordered tiles
+     */
     public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
             Console.out("\nYou have selected: \n");

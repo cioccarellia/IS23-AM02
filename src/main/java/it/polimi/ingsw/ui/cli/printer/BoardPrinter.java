@@ -13,6 +13,11 @@ import java.util.Optional;
 public class BoardPrinter {
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
+    /**
+     * Prints the board.
+     *
+     * @param board board that needs printing
+     */
     public static void print(Board board) {
         int verticalGuideNumber = 0;
 

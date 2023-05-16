@@ -8,6 +8,11 @@ public class PersonalGoalCardPrinter {
     private static final int rows = BookshelfConfiguration.getInstance().rows();
     private static final int cols = BookshelfConfiguration.getInstance().cols();
 
+    /**
+     * Prints the given personal goal card.
+     *
+     * @param personalGoalCard personal goal card that needs printing
+     */
     public static void print(PersonalGoalCard personalGoalCard) {
         int verticalGuideNumber = 0;
 

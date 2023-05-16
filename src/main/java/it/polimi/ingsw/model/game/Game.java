@@ -27,10 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.game.GameStatus.*;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.*;
+import static java.util.Comparator.comparing;
 
 /**
  * Model class representing an instance of a game.
@@ -343,34 +345,43 @@ public class Game implements ModelService {
     public List<Pair<PlayerNumber, Integer>> onGameEnded() {
         List<Pair<PlayerNumber, Integer>> playersScore = new ArrayList<>();
 
-        for (int i = 0, points = 0; i < sessions.getNumberMap().keySet().size(); i++, points = 0) {
-            points += sessions.getNumberMap().get(i).calculateCurrentPoints();
-            points += sessions.getNumberMap().get(i).calculatePersonalGoalCardPoints(getCurrentPlayer());
+        List<PlayerSession> players = sessions.getNumberMap().values().stream().toList();
+        for (int i = 0; i < players.size(); i++) {
+            int points = 0;
+            points += players.get(i).calculateCurrentPoints();
+            points += players.get(i).calculatePersonalGoalCardPoints(getCurrentPlayer());
 
             GroupFinder groupFinder = new GroupFinder(getCurrentPlayer().getBookshelf().getShelfMatrix());
             List<Group> groups = groupFinder.computeGroupPartition();
             List<Integer> groupsSize = groups.stream().map(group -> groups.size()).toList();
 
             for (int j = 0; j < groups.size(); j++) {
+                assert groupsSize.get(i) >= 0;
                 switch (groupsSize.get(i)) {
                     case 0, 1, 2:
-                        continue;
+                        break;
                     case 3:
                         points += 2;
+                        break;
                     case 4:
                         points += 3;
+                        break;
                     case 5:
                         points += 5;
+                        break;
                     case 6:
                         points += 8;
+                        break;
                     default:
                         points += 8;
+                        break;
                 }
             }
 
-            playersScore.add(new Pair<>(sessions.getNumberMap().get(i).getPlayerNumber(), points));
+            playersScore.add(new Pair<>(players.get(i).getPlayerNumber(), points));
         }
-        return playersScore;
+
+        return playersScore.stream().sorted(comparing(Pair::getValue)).collect(Collectors.toList());
     }
 
     public PlayerSession getSessionFor(String username) {
