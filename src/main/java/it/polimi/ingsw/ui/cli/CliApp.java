@@ -2,6 +2,7 @@ package it.polimi.ingsw.ui.cli;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
@@ -109,6 +110,22 @@ public class CliApp implements UiGateway {
 
             player = getNextPlayerNumber(player, model.getGameMode());
         }
+
+        int dim = model.getSessions().size();
+        ArrayList<Bookshelf> bookshelves = new ArrayList<>();
+
+
+        // tentativo di mettere le 4 bookshelf tutte sulle stesse righe
+        /*for (int i = 0; i < model.getSessions().size(); i++) {
+            Console.out("Bookshelf for player " +
+                    model.getSessions().getByNumber(player).getUsername() + ":");
+            Console.out("        ");
+
+            bookshelves.add(i, model.getCurrentPlayer().getBookshelf());
+            player = getNextPlayerNumber(player, model.getGameMode());
+        }
+
+       // BookshelfsPrinter.print(bookshelves,dim);*/
 
         Console.out("\nThe first player is: " +
                 model.getSessions().getByNumber(model.getStartingPlayerNumber()).getUsername() + "\n");
