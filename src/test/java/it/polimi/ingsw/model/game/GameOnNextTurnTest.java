@@ -15,24 +15,24 @@ public class GameOnNextTurnTest implements GameTester {
     @DisplayName("Verify the function of onNextTurn, positively ")
     public void test_onNextTurn_positively() {
         Game testingGame = new Game(GAME_MODE_2_PLAYERS);
-        testingGame.addPlayer(PLAYER_A);
-        testingGame.addPlayer(PLAYER_B);
+        testingGame.addPlayer("Player_A");
+        testingGame.addPlayer("Player_B");
 
-        testingGame.onNextTurn(PLAYER_B);
+        testingGame.onNextTurn("Player_B");
 
-        assertEquals(SELECTING, testingGame.getSessionFor(PLAYER_B).getPlayerCurrentGamePhase());
+        assertEquals(SELECTING, testingGame.getSessionFor("Player_B").getPlayerCurrentGamePhase());
     }
 
     @Test
     @DisplayName("Verify the function of onNextTurn, negatively ")
     public void test_onNextTurn_negatively() {
         Game testingGame = new Game(GAME_MODE_2_PLAYERS);
-        testingGame.addPlayer(PLAYER_A);
-        testingGame.addPlayer(PLAYER_B);
+        testingGame.addPlayer("Player_A");
+        testingGame.addPlayer("Player_B");
 
-        testingGame.onNextTurn(PLAYER_B);
+        testingGame.onNextTurn("Player_B");
 
-        boolean isPlayerGamePhaseIdle = testingGame.getSessionFor(PLAYER_B)
+        boolean isPlayerGamePhaseIdle = testingGame.getSessionFor("Player_B")
                 .getPlayerCurrentGamePhase()
                 .equals(IDLE);
 

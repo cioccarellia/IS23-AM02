@@ -50,8 +50,8 @@ public class CliApp implements UiGateway {
             app.modelUpdate(game);
             app.gameInsertion();
             app.modelUpdate(game);
-
-            game.onNextTurn(turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode()));
+            PlayerNumber nextPlayer = turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode());
+            game.onNextTurn(game.getSessions().getByNumber(nextPlayer).getUsername());
             app.modelUpdate(game);
 
         }

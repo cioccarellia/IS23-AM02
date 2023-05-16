@@ -207,12 +207,12 @@ public class GameController implements ServerService {
         }
     }
 
-    public void onNextTurn(PlayerNumber nextPlayerNumber) {
+    public void onNextTurn(String nextPlayerUsername) {
         // assume the username is correct
-        assert sessions.isPresent(nextPlayerNumber);
-        PlayerNumber currentPlayerNumber = game.getCurrentPlayer().getPlayerNumber();
+        assert sessions.isPresent(nextPlayerUsername);
+        PlayerNumber currentPlayerUsername = game.getCurrentPlayer().getPlayerNumber();
 
-        currentPlayerNumber = sessions.getByNumber(nextPlayerNumber).getPlayerNumber();
+        currentPlayerUsername = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
         game.getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 }

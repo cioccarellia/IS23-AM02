@@ -331,11 +331,11 @@ public class Game implements ModelService {
      * Updates currentPlayer from current player to next player
      */
     @Override
-    public void onNextTurn(PlayerNumber nextPlayerNumber) {
+    public void onNextTurn(String nextPlayerUsername) {
         // assume the username is correct
-        assert sessions.isPresent(nextPlayerNumber);
+        assert sessions.isPresent(nextPlayerUsername);
 
-        currentPlayerNumber = sessions.getByNumber(nextPlayerNumber).getPlayerNumber();
+        currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
         getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 
