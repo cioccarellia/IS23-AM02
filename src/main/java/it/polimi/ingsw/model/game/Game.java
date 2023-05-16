@@ -245,7 +245,9 @@ public class Game implements ModelService {
         var tileSelection = new PlayerTileSelection(coordinatesAndValues);
 
         // update model accordingly
-        coordinates.stream().forEach(coordinate -> {board.removeTileAt(coordinate);});
+        coordinates.stream().forEach(coordinate -> {
+            board.removeTileAt(coordinate);
+        });
 
         getCurrentPlayer().setPlayerTileSelection(tileSelection);
         getCurrentPlayer().setPlayerCurrentGamePhase(INSERTING);
@@ -317,6 +319,10 @@ public class Game implements ModelService {
             }
         }
 
+        if (board.needsRefilling()) {
+            onRefill();
+        }
+
         getCurrentPlayer().setPlayerCurrentGamePhase(IDLE);
     }
 
@@ -325,11 +331,11 @@ public class Game implements ModelService {
      * Updates currentPlayer from current player to next player
      */
     @Override
-    public void onNextTurn(String nextPlayerUsername) {
+    public void onNextTurn(PlayerNumber nextPlayerNumber) {
         // assume the username is correct
-        assert sessions.isPresent(nextPlayerUsername);
+        assert sessions.isPresent(nextPlayerNumber);
 
-        currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
+        currentPlayerNumber = sessions.getByNumber(nextPlayerNumber).getPlayerNumber();
         getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 

@@ -124,6 +124,19 @@ public class Board {
         return Arrays.stream(BoardUtils.Edge.values()).mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0).sum();
     }
 
+    public boolean needsRefilling() {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                if (getTileMatrix() == null) {
+                    continue;
+                }
+                if (countFreeEdges(new Coordinate(i, j)) < 4)
+                    return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * @param c are the coordinates of the cell we have to analyse
      * @return returns 1 if it has free edges, 0 if it doesn't

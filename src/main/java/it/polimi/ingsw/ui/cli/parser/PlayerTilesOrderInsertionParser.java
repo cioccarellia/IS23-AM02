@@ -32,7 +32,9 @@ public class PlayerTilesOrderInsertionParser {
 
             Console.out("\n> ");
             Console.out("Give me your insertion order (the first one is the first to go in the bookshelf).\n");
-            Console.out("Format: Tile1,Tile2...\n");
+            Console.out("Format: Tile1, Tile2...\n");
+            Console.flush();
+
 
             String input = Console.in();
 
@@ -41,6 +43,7 @@ public class PlayerTilesOrderInsertionParser {
 
             if (tokens.length != tiles.size()) {
                 Console.out("\nNot valid, you need to order the selected tiles from before.\n");
+                Console.flush();
                 continue;
             }
 

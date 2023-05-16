@@ -16,6 +16,8 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
+import it.polimi.ingsw.model.game.session.SessionManager;
+import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.net.rmi.ClientService;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
+
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 
 public class GameController implements ServerService {
 
@@ -45,9 +49,10 @@ public class GameController implements ServerService {
 
     private ServerStatus serverStatus = ServerStatus.NO_GAME_STARTED;
 
+    private SessionManager sessions;
+
     public GameController() {
-        this.connectionsManager = new ClientConnectionsManager();
-    }
+        this.connectionsManager = new ClientConnectionsManager();}
 
     public GameController(ClientConnectionsManager connectionsManager) {
         this.connectionsManager = connectionsManager;
@@ -69,6 +74,7 @@ public class GameController implements ServerService {
 
         if (serverStatus == ServerStatus.NO_GAME_STARTED) {
             game = new Game(mode);
+            sessions= new SessionManager(game.getGameMode());
             maxPlayerAmount = mode.maxPlayerAmount();
 
             serverStatus = ServerStatus.GAME_INITIALIZING;
@@ -199,5 +205,14 @@ public class GameController implements ServerService {
         } else {
             logger.warn("Wrong keep alive username");
         }
+    }
+
+    public void onNextTurn(PlayerNumber nextPlayerNumber) {
+        // assume the username is correct
+        assert sessions.isPresent(nextPlayerNumber);
+        PlayerNumber currentPlayerNumber = game.getCurrentPlayer().getPlayerNumber();
+
+        currentPlayerNumber = sessions.getByNumber(nextPlayerNumber).getPlayerNumber();
+        game.getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 }

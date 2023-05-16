@@ -13,4 +13,8 @@ public class Console {
     public static String in() {
         return scanner.nextLine();
     }
+
+    public static void flush(){
+        System.out.flush();
+    }
 }
