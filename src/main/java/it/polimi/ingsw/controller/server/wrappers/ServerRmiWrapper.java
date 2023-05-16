@@ -1,18 +1,12 @@
 package it.polimi.ingsw.controller.server.wrappers;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
-import it.polimi.ingsw.controller.server.ServerService;
-import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
-import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.net.rmi.ClientService;
+import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.services.ServerService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
@@ -35,7 +29,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     }
 
     @Override
-    public ServerService serverService() {
+    public ServerService exposeServerService() {
         return server;
     }
 
@@ -77,55 +71,53 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
         }
     }
 
+
     @Override
-    public ServerStatus serverStatusRequest() {
+    public void serverStatusRequest() throws RemoteException {
+        server.serverStatusRequest();
+    }
+
+
+    @Override
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
         try {
-            return server.serverStatusRequest();
+            server.gameStartRequest(username, mode,protocol);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol) {
         try {
-            return server.gameStartRequest(mode, username, protocol);
+            server.gameConnectionRequest(username, protocol);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         try {
-            return server.gameConnectionRequest(username, protocol);
+            server.gameSelectionTurnResponse(username, selection);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         try {
-            return server.gameSelectionTurnResponse(username, selection);
+            server.gameInsertionTurnResponse(username, tiles, column);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public void keepAlive(String username) {
         try {
-            return server.gameInsertionTurnResponse(username, tiles, column);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void keepAlive(String player) {
-        try {
-            server.keepAlive(player);
+            server.keepAlive(username);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

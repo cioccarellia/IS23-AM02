@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.client.gateways;
 
-import it.polimi.ingsw.controller.server.ServerService;
+import it.polimi.ingsw.services.ServerService;
 
 /**
  * Abstracts a client-to-server server model and communication interface

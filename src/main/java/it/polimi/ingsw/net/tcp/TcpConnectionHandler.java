@@ -46,18 +46,18 @@ public class TcpConnectionHandler implements Runnable {
 
 
                     // sends the message to the controller, processes it, and returns a reply message
-                    Message replyMessage = wrapper.receiveAndReturnMessage(inputMessage);
+                    wrapper.convertMessageToControllerMethodCall(inputMessage);
 
-                    logger.info("Sending reply message {}", replyMessage);
+                    // fixme no reply | logger.info("Sending reply message {}", replyMessage);
 
-                    // serialize in JSON the reply message
-                    String serializedReplyMessage = Parsers.marshaledGson().toJson(replyMessage);
+                    // // serialize in JSON the reply message
+                    // String serializedReplyMessage = Parsers.marshaledGson().toJson(replyMessage);
 
-                    logger.info("Serialized reply {}", serializedReplyMessage);
+                    //logger.info("Serialized reply {}", serializedReplyMessage);
 
-                    // Send the serialized reply
-                    out.println(serializedReplyMessage);
-                    out.flush();
+                    // // Send the serialized reply
+                    // out.println(serializedReplyMessage);
+                    // out.flush();
 
                     // todo determine when a socket has been closed and stop communicating
                 }

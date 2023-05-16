@@ -1,20 +1,12 @@
 package it.polimi.ingsw.controller.client.gateways;
 
-import com.google.gson.JsonParseException;
-import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
-import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.net.rmi.ClientService;
 import it.polimi.ingsw.net.tcp.messages.Message;
 import it.polimi.ingsw.net.tcp.messages.request.*;
-import it.polimi.ingsw.net.tcp.messages.request.replies.*;
+import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,91 +65,63 @@ public class TcpClientGateway extends ClientGateway {
         keepAlive(username);
     }
 
-    private <I extends Request, O extends Reply> O sendRequestAndAwaitReply(Message request, Class<I> inputType, Class<O> outputType) {
+    private <I extends Request> void sendRequestAndAwaitReply(Message request, Class<I> inputType) {
         // serializes to JSON the message content
         String serializedJsonRequest = Parsers.marshaledGson().toJson(request, inputType);
 
         // sends the message bytes on TCP
         socketOut.println(serializedJsonRequest);
         socketOut.flush();
-
-        String serializedReply;
-        O messageResponse;
-
-        try {
-            while (true) {
-
-                if ((serializedReply = socketIn.readLine()) != null) {
-                    try {
-                        messageResponse = Parsers.marshaledGson().fromJson(serializedReply, outputType);
-                        break;
-                    } catch (JsonParseException e) {
-                        logger.error("Parsing exception", e);
-                    } catch (RuntimeException rex) {
-                        logger.error("RuntimeException while deserializing class (json={}): {} -> {}", serializedReply, inputType, outputType);
-                        logger.error("RuntimeException", rex);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // De-serializes response back into its expected response type
-
-        // returns
-        return messageResponse;
     }
 
     @Override
-    public ServerStatus serverStatusRequest() {
+    public void serverStatusRequest() {
         ServerStatusRequest message = new ServerStatusRequest();
 
-        ServerStatusRequestReply reply = sendRequestAndAwaitReply(message, ServerStatusRequest.class, ServerStatusRequestReply.class);
-
-        return reply != null ? reply.getStatus() : null;
+        sendRequestAndAwaitReply(message, ServerStatusRequest.class);
+        // fixme return reply != null ? reply.getStatus() : null;
     }
 
     @Override
-    public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
         GameStartRequest message = new GameStartRequest(mode, username, protocol);
 
-        GameStartRequestReply reply = sendRequestAndAwaitReply(message, GameStartRequest.class, GameStartRequestReply.class);
+        sendRequestAndAwaitReply(message, GameStartRequest.class);
 
-        return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
+        // fixme return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
     }
 
     @Override
-    public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol) {
         GameConnectionRequest message = new GameConnectionRequest(username, protocol);
 
-        GameConnectionRequestReply reply = sendRequestAndAwaitReply(message, GameConnectionRequest.class, GameConnectionRequestReply.class);
+        sendRequestAndAwaitReply(message, GameConnectionRequest.class);
 
-        return reply != null ? reply.getStatus() : null;
+        // fixme return reply != null ? reply.getStatus() : null;
     }
 
     @Override
-    public SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         GameSelectionTurnRequest message = new GameSelectionTurnRequest(username, selection);
 
-        GameSelectionTurnRequestReply reply = sendRequestAndAwaitReply(message, GameSelectionTurnRequest.class, GameSelectionTurnRequestReply.class);
+        sendRequestAndAwaitReply(message, GameSelectionTurnRequest.class);
 
-        return reply.getTurnResult();
+        // fixme return reply.getTurnResult();
     }
 
     @Override
-    public SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
-        GameInsertionTurnRequestReply reply = sendRequestAndAwaitReply(message, GameInsertionTurnRequest.class, GameInsertionTurnRequestReply.class);
+        sendRequestAndAwaitReply(message, GameInsertionTurnRequest.class);
 
-        return reply.getTurnResult();
+        // fixme return reply.getTurnResult();
     }
 
     @Override
-    public void keepAlive(String player) {
-        KeepAlive keepAliveMessage = new KeepAlive(player);
+    public void keepAlive(String username) {
+        KeepAlive keepAliveMessage = new KeepAlive(username);
 
-        KeepAliveReply reply = sendRequestAndAwaitReply(keepAliveMessage, KeepAlive.class, KeepAliveReply.class);
+        sendRequestAndAwaitReply(keepAliveMessage, KeepAlive.class);
     }
 }

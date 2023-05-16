@@ -41,11 +41,17 @@ public class ClientConnectionsManager {
         return connections.values().stream().filter(it -> it.getTcpStash().getHostname().equals(hostname)).findFirst();
     }
 
+    /**
+     * Sets the current connection status for a specific user
+     */
     public void setConnectionStatus(String username, ConnectionStatus status) {
         assert containsUsername(username);
         connections.get(username).setStatus(status);
     }
 
+    /**
+     * Whether a given username belongs to the session
+     */
     public boolean containsUsername(String username) {
         return connections.containsKey(username);
     }

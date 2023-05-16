@@ -1,4 +1,4 @@
-package it.polimi.ingsw.net.rmi;
+package it.polimi.ingsw.services;
 
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;

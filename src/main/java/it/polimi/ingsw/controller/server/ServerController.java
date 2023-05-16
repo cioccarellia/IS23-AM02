@@ -3,11 +3,6 @@ package it.polimi.ingsw.controller.server;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
-import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -19,7 +14,9 @@ import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
-import it.polimi.ingsw.net.rmi.ClientService;
+import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.services.ServerFunction;
+import it.polimi.ingsw.services.ServerService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +27,9 @@ import java.util.Set;
 
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 
-public class GameController implements ServerService {
+public class ServerController implements ServerService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerController.class);
 
     /**
      * Keeps a map associating a username (unique identifier for a player)
@@ -51,10 +48,10 @@ public class GameController implements ServerService {
 
     private SessionManager sessions;
 
-    public GameController() {
+    public ServerController() {
         this.connectionsManager = new ClientConnectionsManager();}
 
-    public GameController(ClientConnectionsManager connectionsManager) {
+    public ServerController(ClientConnectionsManager connectionsManager) {
         this.connectionsManager = connectionsManager;
     }
 
@@ -64,12 +61,13 @@ public class GameController implements ServerService {
     }
 
     @Override
-    public ServerStatus serverStatusRequest() {
-        return serverStatus;
+    @ServerFunction
+    public void serverStatusRequest() {
+        // fixme return serverStatus;
     }
 
     @Override
-    public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public void gameStartRequest(String username, GameMode mode,  ClientProtocol protocol) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
         if (serverStatus == ServerStatus.NO_GAME_STARTED) {
@@ -83,35 +81,35 @@ public class GameController implements ServerService {
             game.addPlayer(username);
 
             logger.info("returning success from gameStartRequest()");
-            return new SingleResult.Success<>();
+            // fixme return new SingleResult.Success<>();
         } else {
             logger.warn("returning failure from gameStartRequest()");
-            return new SingleResult.Failure<>(GameStartError.GAME_ALREADY_STARTED);
+            // fixme return new SingleResult.Failure<>(GameStartError.GAME_ALREADY_STARTED);
         }
     }
 
 
     // Creates a connection between client and server
     @Override
-    public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol) {
         logger.info("gameConnectionRequest(username={}, protocol={})", username, protocol);
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
         if (serverStatus == ServerStatus.GAME_RUNNING) {
-            return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED);
+            // fixme return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED);
         }
 
         if (connectionsManager.size() == maxPlayerAmount) {
-            return new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED);
+            // fixme return new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED);
         }
 
         if (connectionsManager.containsUsername(username)) {
-            return new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE);
+            // fixme return new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE);
         }
 
         if (game.getGameStatus() == GameStatus.ENDED) {
-            return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED);
+            // fixme return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED);
         }
 
 
@@ -123,7 +121,7 @@ public class GameController implements ServerService {
         connectionsManager.add(username, protocol, ConnectionStatus.OPEN);
         game.addPlayer(username);
 
-        return new SingleResult.Success<>();
+        // fixme return new SingleResult.Success<>();
     }
 
 
@@ -138,58 +136,58 @@ public class GameController implements ServerService {
 
 
     @Override
-    public SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public void /*SingleResult<TileSelectionFailures>*/ gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
 
         if (isUsernameActivePlayer(username)) {
-            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
+            // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
         }
 
         if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.SELECTING) {
-            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION);
+            // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION);
         }
 
         if (!game.isSelectionValid(selection)) {
-            return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION);
+            // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION);
         }
 
         game.onPlayerSelectionPhase(selection);
-        return new SingleResult.Success<>();
+        // fixme return new SingleResult.Success<>();
     }
 
 
     @Override
-    public SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public void /*SingleResult<BookshelfInsertionFailure>*/ gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         logger.info("onPlayerBookshelfTileInsertionRequest(username={}, tiles={}, column={})", username, tiles, column);
 
         if (isUsernameActivePlayer(username)) {
-            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
+            // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
         }
 
         if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.INSERTING) {
-            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS);
+            // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS);
         }
 
         if (!game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles)) {
-            return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION);
+            // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION);
         }
 
         if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
-            return new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN);
+            // return new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN);
         }
 
         if (tiles.size() > LogicConfiguration.getInstance().maxSelectionSize()) {
-            return new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES);
+            // return new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES);
         }
 
         if (!game.getCurrentPlayer().getBookshelf().canFit(column, tiles.size())) {
-            return new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT);
+            // return new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT);
         }
 
         game.onPlayerInsertionPhase(column, tiles);
 
         onPlayerCheckingRequest();
-        return new SingleResult.Success<>();
+        // return new SingleResult.Success<>();
     }
 
     public void onPlayerCheckingRequest() {

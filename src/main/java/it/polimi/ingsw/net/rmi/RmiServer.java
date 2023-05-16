@@ -1,7 +1,7 @@
 package it.polimi.ingsw.net.rmi;
 
-import it.polimi.ingsw.controller.server.ServerService;
 import it.polimi.ingsw.controller.server.wrappers.ServerRmiWrapper;
+import it.polimi.ingsw.services.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
