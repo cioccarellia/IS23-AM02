@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:controller="it.polimi.ingsw.ui.gui.GuiApp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Pane layoutX="-4.0" layoutY="-6.0">
             <children>
@@ -29,7 +29,8 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <TextField id="usernameInsertion" layoutX="230.0" layoutY="204.0" prefHeight="41.0" prefWidth="181.0" />
+                <TextField id="usernameInsertion" fx:id="UsernameField" layoutX="230.0" layoutY="204.0" prefHeight="41.0" prefWidth="181.0">
+                </TextField>
                 <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="445.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png" />
@@ -40,19 +41,19 @@
                         <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png" />
                     </image>
                 </ImageView>
-                <Button id="joinButton" layoutX="284.0" layoutY="325.0" mnemonicParsing="false" text="Join">
+                <Button id="joinButton" fx:id="joinButton" layoutX="284.0" layoutY="325.0" mnemonicParsing="false" onAction="#joinAction" text="Join">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Button>
-                <Label id="playersCounter" layoutX="504.0" layoutY="376.0" text="Online players: 4" />
+                <Label id="playersCounter" fx:id="playerCounter" layoutX="504.0" layoutY="376.0" text="Online players: 4" />
                 <MenuButton id="protocolSelection" layoutX="273.0" layoutY="273.0" mnemonicParsing="false" text="Protocol">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="TCP" />
-                        <MenuItem mnemonicParsing="false" text="RMI" />
+                        <MenuItem mnemonicParsing="false" fx:id="tcp" text="TCP" />
+                        <MenuItem mnemonicParsing="false" fx:id="rmi" text="RMI" />
                     </items>
                 </MenuButton>
-                <MenuButton id="playerNumberSelection" layoutX="257.0" layoutY="129.0" mnemonicParsing="false" text="Player Number">
+                <MenuButton id="playerNumberSelection" fx:id="playerNumberSelection" layoutX="257.0" layoutY="129.0" mnemonicParsing="false" text="Player Number">
                     <items>
                         <MenuItem mnemonicParsing="false" text="1" />
                         <MenuItem mnemonicParsing="false" text="2" />
