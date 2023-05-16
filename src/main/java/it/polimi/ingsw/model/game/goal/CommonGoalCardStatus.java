@@ -50,7 +50,7 @@ public class CommonGoalCardStatus {
         return commonGoalCard;
     }
 
-    public Stack<Token> getCardTokens(){
+    public Stack<Token> getCardTokens() {
         return tokenStack;
     }
 

@@ -16,9 +16,8 @@ import java.rmi.RemoteException;
 public class AppClient {
 
     private static final Logger logger = LoggerFactory.getLogger(AppClient.class);
-
-    private ClientController controller; // = new ClientController();
     private final ClientGateway gateway;
+    private ClientController controller; // = new ClientController();
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverHost, int serverPort) {
         logger.info("Starting AppClient, config={}, serverHost={}", config, serverHost);

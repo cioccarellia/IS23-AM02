@@ -54,7 +54,7 @@ public class TcpServer implements Runnable {
 
     /**
      * Context-blocking thread
-     * */
+     */
     @Override
     public void run() {
         logger.info("Starting TCP server thread");

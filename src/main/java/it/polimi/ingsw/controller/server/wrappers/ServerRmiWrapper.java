@@ -48,7 +48,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     /**
      * Returns the current thread's client's (underlying TCP socket's) hostname.
      * It is a unique identifier for clients (on LAN, without NAT/Proxies)
-     * */
+     */
     private String getCurrentClientHostname() {
         try {
             return RemoteServer.getClientHost();
@@ -60,7 +60,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     /**
      * Authentication function, verifying that the remote caller can only perform authenticated actions
      * (so tasks that are game-specific)
-     * */
+     */
     private boolean verifyAuthorization(String username) {
         String remoteClientActualHostname = getCurrentClientHostname();
         String correctClientHostname = connectionsManager.get(username).getRmiStash().getHostname();

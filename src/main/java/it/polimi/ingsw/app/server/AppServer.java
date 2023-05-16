@@ -12,17 +12,17 @@ public class AppServer {
 
     /**
      * Handles connection
-     * */
+     */
     ClientConnectionsManager connectionsManager = new ClientConnectionsManager();
 
     /**
      * Root controller
-     * */
+     */
     GameController controller = new GameController(connectionsManager);
 
     /**
      * RMI and TCP active servers
-     * */
+     */
     ServerPair pair;
 
     public AppServer(String serverAddress, int tcpPort, int rmiPort) {

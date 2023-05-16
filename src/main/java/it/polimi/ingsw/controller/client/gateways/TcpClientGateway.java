@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.client.gateways;
 
+import com.google.gson.JsonParseException;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
@@ -15,7 +16,6 @@ import it.polimi.ingsw.net.tcp.messages.Message;
 import it.polimi.ingsw.net.tcp.messages.request.*;
 import it.polimi.ingsw.net.tcp.messages.request.replies.*;
 import it.polimi.ingsw.utils.json.Parsers;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,14 +33,14 @@ public class TcpClientGateway extends ClientGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(TcpClientGateway.class);
 
-    final private Socket echoSocket;
-    final private PrintWriter out;
-    final private BufferedReader in;
+    final private Socket socket;
+    final private PrintWriter socketOut;
+    final private BufferedReader socketIn;
 
 
     public TcpClientGateway(String serverHost, int serverTcpPort) {
         try {
-            echoSocket = new Socket(serverHost, serverTcpPort);
+            socket = new Socket(serverHost, serverTcpPort);
         } catch (UnknownHostException e) {
             logger.error("Unknown host serverHost={}", serverHost);
             throw new IllegalArgumentException("Wrong serverHost/port combination", e);
@@ -49,11 +49,11 @@ public class TcpClientGateway extends ClientGateway {
             throw new IllegalArgumentException("Impossible to acquire I/O for connection to server", e);
         }
 
-        logger.info("Started socket for TcpClientGateway, socket={}", echoSocket);
+        logger.info("Started socket for TcpClientGateway, socket={}", socket);
 
         try {
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+            socketOut = new PrintWriter(socket.getOutputStream(), true);
+            socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
             logger.error("I/O error while acquiring socket", e);
             throw new RuntimeException(e);
@@ -61,9 +61,9 @@ public class TcpClientGateway extends ClientGateway {
     }
 
     public void close() throws IOException {
-        in.close();
-        out.close();
-        echoSocket.close();
+        socketIn.close();
+        socketOut.close();
+        socket.close();
     }
 
 
@@ -73,32 +73,36 @@ public class TcpClientGateway extends ClientGateway {
         keepAlive(username);
     }
 
-    @Nullable private <I extends Request, O extends Reply> O sendMessageAndAwaitReply(Message request, Class<I> inputType, Class<O> outputType) {
+    private <I extends Request, O extends Reply> O sendRequestAndAwaitReply(Message request, Class<I> inputType, Class<O> outputType) {
         // serializes to JSON the message content
         String serializedJsonRequest = Parsers.marshaledGson().toJson(request, inputType);
 
         // sends the message bytes on TCP
-        out.println(serializedJsonRequest);
-        out.flush();
+        socketOut.println(serializedJsonRequest);
+        socketOut.flush();
 
-
-        String serializedResponse;
+        String serializedReply;
+        O messageResponse;
 
         try {
-            // fixme reads response from network
-            while ((serializedResponse = in.readLine()) == null) {
-                serializedResponse = in.readLine();
+            while (true) {
+                //noinspection BlockingMethodInNonBlockingContext
+                if ((serializedReply = socketIn.readLine()) == null) {
+                    try {
+                        messageResponse = Parsers.marshaledGson().fromJson(serializedReply, outputType);
+                        break;
+                    } catch (JsonParseException e) {
+                        logger.error("Parsing exception", e);
+                    } catch (RuntimeException rex) {
+                        logger.error("RuntimeException while deserializing class {} -> {}", inputType, outputType);
+                    }
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        if (serializedResponse == null) {
-            return null;
-        }
-
         // De-serializes response back into its expected response type
-        O messageResponse = Parsers.marshaledGson().fromJson(serializedResponse, outputType);
 
         // returns
         return messageResponse;
@@ -108,34 +112,34 @@ public class TcpClientGateway extends ClientGateway {
     public ServerStatus serverStatusRequest() {
         ServerStatusRequest message = new ServerStatusRequest();
 
-        ServerStatusRequestReply reply = sendMessageAndAwaitReply(message, ServerStatusRequest.class, ServerStatusRequestReply.class);
+        ServerStatusRequestReply reply = sendRequestAndAwaitReply(message, ServerStatusRequest.class, ServerStatusRequestReply.class);
 
-        return reply == null ? null : reply.getStatus();
+        return reply != null ? reply.getStatus() : null;
     }
 
     @Override
     public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
         GameStartRequest message = new GameStartRequest(mode, username, protocol);
 
-        GameStartRequestReply reply = sendMessageAndAwaitReply(message, GameStartRequest.class, GameStartRequestReply.class);
+        GameStartRequestReply reply = sendRequestAndAwaitReply(message, GameStartRequest.class, GameStartRequestReply.class);
 
-        return reply.getStatus();
+        return reply != null ? reply.getStatus() : null;
     }
 
     @Override
     public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
         GameConnectionRequest message = new GameConnectionRequest(username, protocol);
 
-        GameConnectionRequestReply reply = sendMessageAndAwaitReply(message, GameConnectionRequest.class, GameConnectionRequestReply.class);
+        GameConnectionRequestReply reply = sendRequestAndAwaitReply(message, GameConnectionRequest.class, GameConnectionRequestReply.class);
 
-        return reply.getStatus();
+        return reply != null ? reply.getStatus() : null;
     }
 
     @Override
     public SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         GameSelectionTurnRequest message = new GameSelectionTurnRequest(username, selection);
 
-        GameSelectionTurnRequestReply reply = sendMessageAndAwaitReply(message, GameSelectionTurnRequest.class, GameSelectionTurnRequestReply.class);
+        GameSelectionTurnRequestReply reply = sendRequestAndAwaitReply(message, GameSelectionTurnRequest.class, GameSelectionTurnRequestReply.class);
 
         return reply.getTurnResult();
     }
@@ -144,7 +148,7 @@ public class TcpClientGateway extends ClientGateway {
     public SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
-        GameInsertionTurnRequestReply reply = sendMessageAndAwaitReply(message, GameInsertionTurnRequest.class, GameInsertionTurnRequestReply.class);
+        GameInsertionTurnRequestReply reply = sendRequestAndAwaitReply(message, GameInsertionTurnRequest.class, GameInsertionTurnRequestReply.class);
 
         return reply.getTurnResult();
     }
@@ -153,6 +157,6 @@ public class TcpClientGateway extends ClientGateway {
     public void keepAlive(String player) {
         KeepAlive keepAliveMessage = new KeepAlive(player);
 
-        KeepAliveReply reply = sendMessageAndAwaitReply(keepAliveMessage, KeepAlive.class, KeepAliveReply.class);
+        KeepAliveReply reply = sendRequestAndAwaitReply(keepAliveMessage, KeepAlive.class, KeepAliveReply.class);
     }
 }

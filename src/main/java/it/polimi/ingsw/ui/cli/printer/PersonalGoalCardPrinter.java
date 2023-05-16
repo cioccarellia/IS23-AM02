@@ -1,11 +1,8 @@
 package it.polimi.ingsw.ui.cli.printer;
 
-import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.cli.Console;
-
-import java.util.Arrays;
 
 public class PersonalGoalCardPrinter {
     private static final int rows = BookshelfConfiguration.getInstance().rows();

@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.cli.Console;
 
-import java.util.Arrays;
-
 import static it.polimi.ingsw.model.board.Tile.CAT;
 
 public class BookshelfPrinter {

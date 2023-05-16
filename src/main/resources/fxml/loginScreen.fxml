@@ -1,67 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Pane layoutX="-4.0" layoutY="-6.0">
-         <children>
-            <ImageView fitHeight="407.0" fitWidth="606.0" pickOnBounds="true">
-               <image>
-                  <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/misc/sfondoParquet.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="212.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/Publisher%20material/Title%202000x618px.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="110.0" layoutY="198.0" prefHeight="53.0" prefWidth="120.0" text="Username:">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <TextField layoutX="230.0" layoutY="204.0" prefHeight="41.0" prefWidth="181.0" />
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="445.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png" />
-               </image>
-            </ImageView>
-            <Button layoutX="284.0" layoutY="325.0" mnemonicParsing="false" text="Join">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Label layoutX="504.0" layoutY="376.0" text="Online players: 4" />
-            <MenuButton layoutX="273.0" layoutY="273.0" mnemonicParsing="false" text="Protocol">
-              <items>
-                <MenuItem mnemonicParsing="false" text="TCP" />
-                <MenuItem mnemonicParsing="false" text="RMI" />
-              </items>
-            </MenuButton>
-            <MenuButton layoutX="257.0" layoutY="129.0" mnemonicParsing="false" text="Player Number">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="1" />
-                  <MenuItem mnemonicParsing="false" text="2" />
-                  <MenuItem mnemonicParsing="false" text="3" />
-                  <MenuItem mnemonicParsing="false" text="4" />
-               </items>
-            </MenuButton>
-         </children>
-      </Pane>
-   </children>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19">
+    <children>
+        <Pane layoutX="-4.0" layoutY="-6.0">
+            <children>
+                <ImageView fitHeight="407.0" fitWidth="606.0" pickOnBounds="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/misc/sfondoParquet.jpg"/>
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="212.0" layoutY="14.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/Publisher%20material/Title%202000x618px.png"/>
+                    </image>
+                </ImageView>
+                <Label layoutX="110.0" layoutY="198.0" prefHeight="53.0" prefWidth="120.0" text="Username:">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                </Label>
+                <TextField layoutX="230.0" layoutY="204.0" prefHeight="41.0" prefWidth="181.0"/>
+                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="445.0" layoutY="14.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png"/>
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf.png"/>
+                    </image>
+                </ImageView>
+                <Button layoutX="284.0" layoutY="325.0" mnemonicParsing="false" text="Join">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Button>
+                <Label layoutX="504.0" layoutY="376.0" text="Online players: 4"/>
+                <MenuButton layoutX="273.0" layoutY="273.0" mnemonicParsing="false" text="Protocol">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="TCP"/>
+                        <MenuItem mnemonicParsing="false" text="RMI"/>
+                    </items>
+                </MenuButton>
+                <MenuButton layoutX="257.0" layoutY="129.0" mnemonicParsing="false" text="Player Number">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="1"/>
+                        <MenuItem mnemonicParsing="false" text="2"/>
+                        <MenuItem mnemonicParsing="false" text="3"/>
+                        <MenuItem mnemonicParsing="false" text="4"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </Pane>
+    </children>
 </Pane>

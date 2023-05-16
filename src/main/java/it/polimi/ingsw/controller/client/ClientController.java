@@ -75,8 +75,6 @@ public class ClientController implements ClientService, ViewEventHandler {
     }
 
 
-
-
     /**
      * @param coordinates
      */

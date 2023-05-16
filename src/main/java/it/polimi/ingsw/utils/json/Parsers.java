@@ -10,14 +10,7 @@ import it.polimi.ingsw.net.tcp.messages.request.replies.*;
 public class Parsers {
 
     private final static Gson defaultGson = new Gson();
-
-    public static Gson defaultGson() {
-        return defaultGson;
-    }
-
-
-    private final static String META_CLASSNAME_JSON_FIELD = "type";
-
+    private final static String META_CLASSNAME_JSON_FIELD = "CLASS_META_FIELD";
     private final static RuntimeTypeAdapterFactory<Message> runtimeTypeAdapterFactory =
             RuntimeTypeAdapterFactory
                     .of(Message.class, META_CLASSNAME_JSON_FIELD) // typeFieldName
@@ -32,10 +25,13 @@ public class Parsers {
                     .registerSubtype(GameInsertionTurnRequestReply.class, GameInsertionTurnRequestReply.class.getName())
                     .registerSubtype(GameSelectionTurnRequest.class, GameSelectionTurnRequest.class.getName())
                     .registerSubtype(GameSelectionTurnRequestReply.class, GameSelectionTurnRequestReply.class.getName());
-
     private static final Gson marshaledGson = new GsonBuilder()
             .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
             .create();
+
+    public static Gson defaultGson() {
+        return defaultGson;
+    }
 
     public static Gson marshaledGson() {
         return marshaledGson;

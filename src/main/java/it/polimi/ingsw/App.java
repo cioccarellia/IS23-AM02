@@ -23,9 +23,8 @@ import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 public class App {
 
     public static final Logger logger = LoggerFactory.getLogger(App.class);
-
-    private static AppServer server = null;
     private static final List<AppClient> clients = new ArrayList<>();
+    private static AppServer server = null;
 
     private static void startServer(@NotNull ExhaustiveLaunchConfiguration config) {
         server = new AppServer(config.serverHost(), config.serverTcpPort(), config.serverRmiPort());

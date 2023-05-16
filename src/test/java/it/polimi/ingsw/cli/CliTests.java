@@ -2,14 +2,11 @@ package it.polimi.ingsw.cli;
 
 
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.ui.ViewEventHandler;
 import it.polimi.ingsw.ui.cli.CliApp;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.beans.EventHandler;
-import java.io.*;
 
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;

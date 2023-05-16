@@ -245,7 +245,9 @@ public class Game implements ModelService {
         var tileSelection = new PlayerTileSelection(coordinatesAndValues);
 
         // update model accordingly
-        coordinates.stream().forEach(coordinate -> {board.removeTileAt(coordinate);});
+        coordinates.stream().forEach(coordinate -> {
+            board.removeTileAt(coordinate);
+        });
 
         getCurrentPlayer().setPlayerTileSelection(tileSelection);
         getCurrentPlayer().setPlayerCurrentGamePhase(INSERTING);

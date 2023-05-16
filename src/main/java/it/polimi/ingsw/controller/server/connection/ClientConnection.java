@@ -49,6 +49,7 @@ public class ClientConnection {
     public RmiStash getRmiStash() {
         return rmiStash;
     }
+
     public RmiStash getTcpStash() {
         return rmiStash;
     }
