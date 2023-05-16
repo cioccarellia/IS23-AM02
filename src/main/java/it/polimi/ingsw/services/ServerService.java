@@ -1,16 +1,10 @@
-package it.polimi.ingsw.controller.server;
+package it.polimi.ingsw.services;
 
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
-import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.net.rmi.ClientService;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -27,15 +21,15 @@ public interface ServerService extends Remote {
     /**
      * Sends a synchronization message to correctly configure the connection.
      */
+    @ServerFunction
     void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException;
 
     /**
      * Requests an updated value for the current {@link ServerStatus}.
      * This should be used in the connection (pre-game) phase.
-     *
-     * @return the current server status
-     */
-    ServerStatus serverStatusRequest() throws RemoteException;
+     * */
+    @ServerFunction
+    void serverStatusRequest() throws RemoteException;
 
     /**
      * Requests for the current server to start a game.
@@ -44,7 +38,8 @@ public interface ServerService extends Remote {
      * @param protocol defines the communication protocol used by the current client with the server.
      * @param username defines the username for the current client (which is the first player joining).
      */
-    SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) throws RemoteException;
+    @ServerFunction
+    void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) throws RemoteException;
 
     /**
      * Requests for the client to connect to the game and be associated with a player.
@@ -52,25 +47,27 @@ public interface ServerService extends Remote {
      * @param protocol defines the communication protocol used by the requesting client with the server.
      * @param username defines the username for the requesting client.
      */
-    SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) throws RemoteException;
-
-    // SingleResult<StatusError> gameTeardownRequest();
+    @ServerFunction
+    void gameConnectionRequest(String username, ClientProtocol protocol) throws RemoteException;
 
 
     /**
      * Submits a turn response, containing the player actions for the selection turn
      */
-    SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) throws RemoteException;
+    @ServerFunction
+    void gameSelectionTurnResponse(String username, Set<Coordinate> selection) throws RemoteException;
 
 
     /**
      * Submits a turn response, containing the player actions for the insertion turn
      */
-    SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException;
+    @ServerFunction
+    void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException;
 
 
     /**
-     * Sends an acknowledgement call.
+     * Sends an acknowledgement message.
      */
-    void keepAlive(String player) throws RemoteException;
+    @ServerFunction
+    void keepAlive(String username) throws RemoteException;
 }

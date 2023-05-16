@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.server.connection.stash;
 
-import it.polimi.ingsw.net.rmi.ClientService;
+import it.polimi.ingsw.services.ClientService;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -9,20 +9,20 @@ import org.jetbrains.annotations.Nullable;
 public class RmiStash {
 
     /**
-     * Used to keep a remote reference on a client's controller, so that the server (once the connection
-     * has been set up) can remote-invoke methods on the client's controller
+     * Used to keep a RMI remote reference on a client's controller, so that the server
+     * (once the connection has been set up) can remote-invoke methods on the client's controller
      */
     private @Nullable ClientService clientService = null;
 
     /**
      * Whether the current connection has been set up (the client called syn on the server and provided
-     * its controller remote reference)
+     * its controller remote reference, alongside its username)
      */
     private boolean hasSynchronizedRmiConnection = false;
 
     /**
-     * The RMI hostname for the associated player (technically, it's the TCP socket client address for
-     * the RMI implementation)
+     * The RMI hostname for the associated player
+     * (technically, it's the TCP socket client's address for the RMI internal implementation)
      */
     private String hostname;
 

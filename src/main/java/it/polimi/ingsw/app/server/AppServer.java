@@ -1,11 +1,13 @@
 package it.polimi.ingsw.app.server;
 
-import it.polimi.ingsw.controller.server.GameController;
+import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.controller.server.wrappers.ServerPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Launches a server instance
+ * */
 public class AppServer {
 
     private static final Logger logger = LoggerFactory.getLogger(AppServer.class);
@@ -18,7 +20,7 @@ public class AppServer {
     /**
      * Root controller
      */
-    GameController controller = new GameController(connectionsManager);
+    ServerController controller = new ServerController(connectionsManager);
 
     /**
      * RMI and TCP active servers

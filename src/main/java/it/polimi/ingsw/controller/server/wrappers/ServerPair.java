@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.server.wrappers;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
-import it.polimi.ingsw.controller.server.GameController;
+import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.net.rmi.RmiServer;
 import it.polimi.ingsw.net.tcp.TcpServer;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.rmi.RemoteException;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class ServerPair {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerPair.class);
@@ -19,7 +20,7 @@ public class ServerPair {
     private final RmiServer rmiServer;
     private final TcpServer tcpServer;
 
-    public ServerPair(GameController controller, ClientConnectionsManager manager, int tcpPort, int rmiPort) {
+    public ServerPair(ServerController controller, ClientConnectionsManager manager, int tcpPort, int rmiPort) {
         this.tcp = new ServerTcpWrapper(controller);
 
         try {
@@ -28,9 +29,8 @@ public class ServerPair {
             throw new RuntimeException(e);
         }
 
-
         // TCP
-        logger.info("Starting up TCP server, tcpPort {}", tcpPort);
+        logger.info("Starting up TCP server (+ listener thread), tcpPort {}", tcpPort);
         tcpServer = new TcpServer(tcp, tcpPort);
         tcpServer.start();
 

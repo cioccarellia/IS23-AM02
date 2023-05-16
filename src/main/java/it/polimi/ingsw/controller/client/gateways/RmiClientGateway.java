@@ -1,17 +1,11 @@
 package it.polimi.ingsw.controller.client.gateways;
 
-import it.polimi.ingsw.controller.server.ServerService;
-import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
-import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.net.rmi.ClientService;
+import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.services.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,54 +48,54 @@ public class RmiClientGateway extends ClientGateway {
     }
 
     @Override
-    public ServerStatus serverStatusRequest() {
+    public void serverStatusRequest() {
         try {
-            return rmiServerStub.serverStatusRequest();
+            rmiServerStub.serverStatusRequest();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<GameStartError> gameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
         try {
-            return rmiServerStub.gameStartRequest(mode, username, protocol);
+            rmiServerStub.gameStartRequest(username, mode, protocol);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<GameConnectionError> gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol) {
         try {
-            return rmiServerStub.gameConnectionRequest(username, protocol);
+            rmiServerStub.gameConnectionRequest(username, protocol);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<TileSelectionFailures> gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         try {
-            return rmiServerStub.gameSelectionTurnResponse(username, selection);
+            rmiServerStub.gameSelectionTurnResponse(username, selection);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SingleResult<BookshelfInsertionFailure> gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         try {
-            return rmiServerStub.gameInsertionTurnResponse(username, tiles, column);
+            rmiServerStub.gameInsertionTurnResponse(username, tiles, column);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void keepAlive(String player) {
+    public void keepAlive(String username) {
         try {
-            rmiServerStub.keepAlive(player);
+            rmiServerStub.keepAlive(username);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

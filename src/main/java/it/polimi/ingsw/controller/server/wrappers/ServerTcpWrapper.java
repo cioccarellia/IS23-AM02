@@ -1,16 +1,9 @@
 package it.polimi.ingsw.controller.server.wrappers;
 
-import it.polimi.ingsw.controller.server.ServerService;
-import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
-import it.polimi.ingsw.controller.server.result.failures.GameStartError;
-import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.net.tcp.messages.Message;
 import it.polimi.ingsw.net.tcp.messages.request.*;
-import it.polimi.ingsw.net.tcp.messages.request.replies.*;
+import it.polimi.ingsw.services.ServerService;
 
 import java.rmi.RemoteException;
 
@@ -23,7 +16,7 @@ public class ServerTcpWrapper extends ServerWrapper {
     }
 
     @Override
-    public ServerService serverService() {
+    public ServerService exposeServerService() {
         return controller;
     }
 
@@ -32,48 +25,33 @@ public class ServerTcpWrapper extends ServerWrapper {
         return ClientProtocol.TCP;
     }
 
-    public Message receiveAndReturnMessage(final Message incomingMessage) {
+    public void convertMessageToControllerMethodCall(final Message incomingMessage) {
         // visitor pattern
         try {
             switch (incomingMessage) {
                 case ServerStatusRequest serverStatusRequest -> {
-                    ServerStatus status = controller.serverStatusRequest();
-                    return new ServerStatusRequestReply(status);
+                    controller.serverStatusRequest();
                 }
                 case GameStartRequest s -> {
-                    SingleResult<GameStartError> result = controller.gameStartRequest(s.getMode(), s.getUsername(), s.getProtocol());
-
-                    GameStartError eventualError = switch (result) {
-                        case SingleResult.Failure<GameStartError> failure -> failure.error();
-                        case SingleResult.Success<GameStartError> success -> null;
-                    };
-
-                    return new GameStartRequestReply(eventualError);
+                    controller.gameStartRequest(s.getUsername(), s.getMode(), s.getProtocol());
                 }
                 case GameConnectionRequest s -> {
-                    SingleResult<GameConnectionError> result = controller.gameConnectionRequest(s.getUsername(), s.getProtocol());
-
-                    return new GameConnectionRequestReply(result);
+                    controller.gameConnectionRequest(s.getUsername(), s.getProtocol());
                 }
                 case GameSelectionTurnRequest s -> {
-                    SingleResult<TileSelectionFailures> result = controller.gameSelectionTurnResponse(s.getUsername(), s.getSelection());
-
-                    return new GameSelectionTurnRequestReply(result);
+                    controller.gameSelectionTurnResponse(s.getUsername(), s.getSelection());
                 }
                 case GameInsertionTurnRequest s -> {
-                    SingleResult<BookshelfInsertionFailure> result = controller.gameInsertionTurnResponse(s.getUsername(), s.getTiles(), s.getColumn());
-
-                    return new GameInsertionTurnRequestReply(result);
+                    controller.gameInsertionTurnResponse(s.getUsername(), s.getTiles(), s.getColumn());
                 }
                 case KeepAlive r -> {
                     controller.keepAlive(r.getUsername());
-                    return new KeepAliveReply();
                 }
                 case null, default -> throw new IllegalArgumentException("Message type not handled");
             }
         } catch (RemoteException e) {
             // Impossible condition: on TCP instance we get an RMI error.
-            System.exit(-1);
+            System.exit(-123);
             throw new RuntimeException(e);
         }
     }

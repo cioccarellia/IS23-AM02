@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.net.rmi.ClientService;
+import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
 import javafx.util.Pair;

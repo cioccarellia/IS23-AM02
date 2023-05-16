@@ -1,9 +1,7 @@
 package it.polimi.ingsw.ui.cli.printer;
 
-import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
-import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.cli.Console;
 
 import java.util.ArrayList;

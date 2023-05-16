@@ -6,6 +6,9 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 
 /**
  * Class representing a virtual connection with a client app.
+ * It contains protocol-specific data, as well as general functions and
+ * utilities to handle communication and internal representation
+ * for that specific client.
  */
 public class ClientConnection {
 
@@ -14,6 +17,9 @@ public class ClientConnection {
      */
     private final String username;
 
+    /**
+     * Protocol
+     * */
     private final ClientProtocol proto;
 
     private final RmiStash rmiStash = new RmiStash();
@@ -24,10 +30,10 @@ public class ClientConnection {
      */
     private ConnectionStatus status;
 
-    public ClientConnection(String _username, ClientProtocol _proto, ConnectionStatus _status) {
-        username = _username;
-        proto = _proto;
-        status = _status;
+    public ClientConnection(String username, ClientProtocol proto, ConnectionStatus status) {
+        this.username = username;
+        this.proto = proto;
+        this.status = status;
     }
 
     public String getUsername() {
