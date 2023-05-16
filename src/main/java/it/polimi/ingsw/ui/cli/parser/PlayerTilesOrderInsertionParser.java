@@ -12,7 +12,8 @@ import static it.polimi.ingsw.model.board.Tile.*;
 
 public class PlayerTilesOrderInsertionParser {
 
-    final private static List<String> acceptableCharacters = List.of("B", "C", "G", "P", "T", "F");
+    final private static List<String> acceptableCharacters = List.
+            of("B", "C", "G", "P", "T", "F", "b", "c", "g", "p", "t", "f");
 
     /**
      * @param s tile character that needs checking
@@ -31,18 +32,20 @@ public class PlayerTilesOrderInsertionParser {
      */
     public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
-            Console.out("\nYou have selected: \n");
+            Console.printnl();
+            Console.out("You have selected:");
             // printing tiles and prompting the user to sort them
             tiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
                 Console.out(" " + tileText);
             });
 
-            Console.out("\n> ");
-            Console.out("Give me your insertion order (the first one is the first to go in the bookshelf).\n");
-            Console.out("Format: Tile1, Tile2...\n");
+            Console.printnl();
+            Console.out(">Give me your insertion order (the first one is the first to go in the bookshelf).");
+            Console.printnl();
+            Console.out("Format: Tile1, Tile2...");
+            Console.printnl();
             Console.flush();
-
 
             String input = Console.in();
 
@@ -50,7 +53,9 @@ public class PlayerTilesOrderInsertionParser {
             String[] tokens = input.split(",");
 
             if (tokens.length != tiles.size()) {
-                Console.out("\nNot valid, you need to order the selected tiles from before.\n");
+                Console.printnl();
+                Console.out("Not valid, you need to order the selected tiles from before.");
+                Console.printnl();
                 Console.flush();
                 continue;
             }
@@ -63,19 +68,24 @@ public class PlayerTilesOrderInsertionParser {
             for (String token : tokens) {
                 if (isStringValid(token)) {
                     switch (token) {
-                        case "B" -> orderedTiles.add(BOOK);
-                        case "C" -> orderedTiles.add(CAT);
-                        case "G" -> orderedTiles.add(GAME);
-                        case "P" -> orderedTiles.add(PLANT);
-                        case "T" -> orderedTiles.add(TROPHY);
-                        case "F" -> orderedTiles.add(FRAME);
+                        case "B", "b" -> orderedTiles.add(BOOK);
+                        case "C", "c" -> orderedTiles.add(CAT);
+                        case "G", "g" -> orderedTiles.add(GAME);
+                        case "P", "p" -> orderedTiles.add(PLANT);
+                        case "T", "t" -> orderedTiles.add(TROPHY);
+                        case "F", "f" -> orderedTiles.add(FRAME);
                     }
+                } else {
+                    Console.out("You need to write at least one tile.");
+                    Console.printnl();
                 }
             }
             if (orderedTiles.containsAll(tiles) && tiles.containsAll(orderedTiles)) {
                 return orderedTiles;
             } else {
-                Console.out("\nNot valid, you need to order the selected tiles from before.\n ");
+                Console.printnl();
+                Console.out("Not valid, you need to order the selected tiles from before.");
+                Console.printnl();
             }
         }
     }

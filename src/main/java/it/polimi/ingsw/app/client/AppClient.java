@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Launches a client instance
- * */
+ */
 public class AppClient {
 
     private static final Logger logger = LoggerFactory.getLogger(AppClient.class);

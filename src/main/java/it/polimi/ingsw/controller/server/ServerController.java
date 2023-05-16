@@ -49,7 +49,8 @@ public class ServerController implements ServerService {
     private SessionManager sessions;
 
     public ServerController() {
-        this.connectionsManager = new ClientConnectionsManager();}
+        this.connectionsManager = new ClientConnectionsManager();
+    }
 
     public ServerController(ClientConnectionsManager connectionsManager) {
         this.connectionsManager = connectionsManager;
@@ -67,12 +68,12 @@ public class ServerController implements ServerService {
     }
 
     @Override
-    public void gameStartRequest(String username, GameMode mode,  ClientProtocol protocol) {
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
         if (serverStatus == ServerStatus.NO_GAME_STARTED) {
             game = new Game(mode);
-            sessions= new SessionManager(game.getGameMode());
+            sessions = new SessionManager(game.getGameMode());
             maxPlayerAmount = mode.maxPlayerAmount();
 
             serverStatus = ServerStatus.GAME_INITIALIZING;

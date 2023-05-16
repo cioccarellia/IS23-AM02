@@ -16,7 +16,8 @@ public class PersonalGoalCardPrinter {
     public static void print(PersonalGoalCard personalGoalCard) {
         int verticalGuideNumber = 0;
 
-        Console.out("    0  1  2  3  4\n");
+        Console.out("    0  1  2  3  4");
+        Console.printnl();
         for (int i = 0; i < rows; i++) {
 
             Console.out(verticalGuideNumber);
@@ -32,7 +33,7 @@ public class PersonalGoalCardPrinter {
                 }
             }
 
-            Console.out("\n");
+            Console.printnl();
             verticalGuideNumber++;
         }
     }

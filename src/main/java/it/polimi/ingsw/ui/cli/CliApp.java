@@ -2,7 +2,6 @@ package it.polimi.ingsw.ui.cli;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
@@ -10,10 +9,12 @@ import it.polimi.ingsw.ui.ViewEventHandler;
 import it.polimi.ingsw.ui.cli.parser.ColumnParser;
 import it.polimi.ingsw.ui.cli.parser.CoordinatesParser;
 import it.polimi.ingsw.ui.cli.parser.PlayerTilesOrderInsertionParser;
-import it.polimi.ingsw.ui.cli.printer.*;
+import it.polimi.ingsw.ui.cli.printer.BoardPrinter;
+import it.polimi.ingsw.ui.cli.printer.BookshelvesPrinter;
+import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
+import it.polimi.ingsw.ui.cli.printer.PersonalGoalCardPrinter;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -79,37 +80,23 @@ public class CliApp implements UiGateway {
      * goal card
      */
     public void printGameModel() {
-        Console.out("Board: \n");
-
+        Console.out("Board:");
+        Console.printnl();
         BoardPrinter.print(model.getBoard());
 
-        Console.out("First common goal card:\n");
+        CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus());
+        Console.printnl();
 
-        CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(0));
-        Console.out("\n");
-
-        Console.out("Second common goal card:\n");
-        CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus().get(1));
-
-        Console.out("\nPersonal goal card for player: \n" +
+        Console.printnl();
+        Console.out("Personal goal card for player \n" +
                 model.getSessions().getByNumber(model.getCurrentPlayer().getPlayerNumber()).getUsername() + ":\n");
         Console.flush();
         //TODO printing the current player's name is temporary, once fixed remove
         //TODO we need to print the player's card for whom is asking for their private goal card, not the current player. Others can't see other player's card
         PersonalGoalCardPrinter.print(model.getCurrentPlayer().getPersonalGoalCard());
-        Console.out("\n");
-
-        PlayerNumber player = model.getCurrentPlayer().getPlayerNumber();
-
+        Console.printnl();
         BookshelvesPrinter.print(model);
-
-        Console.out("\nThe first player is: " +
-                model.getSessions().getByNumber(model.getStartingPlayerNumber()).getUsername() + "\n");
-
-        Console.out("\nThe current player is: " + model.getCurrentPlayer().getUsername() + "\n");
-        Console.out("\n");
-        PlayersListPrinter.print(model);
-
+        Console.printnl();
     }
 
     /**
@@ -120,7 +107,6 @@ public class CliApp implements UiGateway {
         printGameModel();
         Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
         model.onPlayerSelectionPhase(validCoordinates);
-
     }
 
     /**
@@ -129,12 +115,16 @@ public class CliApp implements UiGateway {
     @Override
     public void gameInsertion() {
         int tilesSize = model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles().size();
-        int column = ColumnParser.scan(model.getGameMatrix(), tilesSize);
-        List<Tile> orderedTiles = new ArrayList<>();
+        List<Tile> selectedTiles = model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles();
+        int column = ColumnParser.scan(model.getCurrentPlayer().getBookshelf().getShelfMatrix(), tilesSize);
+        List<Tile> orderedTiles;
+
         if (tilesSize > 1) {
             orderedTiles = PlayerTilesOrderInsertionParser
-                    .scan(model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles());
-        }
+                    .scan(selectedTiles);
+        } else
+            orderedTiles = selectedTiles;
+
         model.onPlayerInsertionPhase(column, orderedTiles);
 
         model.onPlayerCheckingPhase();

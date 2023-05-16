@@ -27,7 +27,7 @@ public interface ServerService extends Remote {
     /**
      * Requests an updated value for the current {@link ServerStatus}.
      * This should be used in the connection (pre-game) phase.
-     * */
+     */
     @ServerFunction
     void serverStatusRequest() throws RemoteException;
 

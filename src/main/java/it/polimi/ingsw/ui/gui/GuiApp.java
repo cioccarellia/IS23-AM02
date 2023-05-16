@@ -9,16 +9,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.control.Menu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 
 import java.io.IOException;
 import java.util.Objects;
 
 public abstract class GuiApp extends Application implements UiGateway {
-
 
 
     @FXML
@@ -35,11 +35,12 @@ public abstract class GuiApp extends Application implements UiGateway {
 
     @FXML
     public void start(Stage primaryStage) throws IOException {
-        Parent root= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("logInScreen.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("logInScreen.fxml")));
         primaryStage.setScene(root.getScene());
         primaryStage.show();
 
     }
+
     @FXML
     public void joinAction(ActionEvent actionEvent) {
 
@@ -49,10 +50,11 @@ public abstract class GuiApp extends Application implements UiGateway {
 
             if (controller.isUsernameActivePlayer(UsernameField.getText())) {
                 //TODO implement getPlayerList inside game controller
-             //   playerCounter.setText("Online players:" + controller.);
+                //   playerCounter.setText("Online players:" + controller.);
             }
 
-        } else if (tcp.getText().equals("tcp")) controller.gameConnectionRequest(UsernameField.getText(), ClientProtocol.TCP);
+        } else if (tcp.getText().equals("tcp"))
+            controller.gameConnectionRequest(UsernameField.getText(), ClientProtocol.TCP);
 
     }
 }

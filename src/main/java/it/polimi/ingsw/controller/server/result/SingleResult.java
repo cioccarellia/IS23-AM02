@@ -43,6 +43,7 @@ sealed abstract public class SingleResult<T extends RequestError & Serializable>
      */
     public static final class Failure<F extends RequestError & Serializable> extends SingleResult<F> implements Serializable {
         private final F error;
+
         public Failure(F error) {
             this.error = error;
         }

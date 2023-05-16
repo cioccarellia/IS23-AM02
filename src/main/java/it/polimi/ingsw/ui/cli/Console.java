@@ -14,11 +14,11 @@ public class Console {
         return scanner.nextLine();
     }
 
-    public static void flush(){
+    public static void flush() {
         System.out.flush();
     }
 
-    public static void printnl(){
+    public static void printnl() {
         System.out.println();
     }
 }

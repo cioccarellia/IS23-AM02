@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Launches a server instance
- * */
+ */
 public class AppServer {
 
     private static final Logger logger = LoggerFactory.getLogger(AppServer.class);

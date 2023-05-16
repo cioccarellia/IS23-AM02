@@ -19,6 +19,7 @@ public class BookshelvesPrinter {
 
     public static void print(Game game) {
         int dim = game.getSessions().size();
+
         List<Tile[][]> bookshelves = game
                 .getSessions()
                 .playerSessions()
@@ -26,7 +27,11 @@ public class BookshelvesPrinter {
                 .map(player -> player.getBookshelf().getShelfMatrix())
                 .toList();
 
-        List<PlayerSession> players = game.getSessions().playerSessions().stream().toList();
+        List<PlayerSession> players = game.
+                getSessions().
+                playerSessions().
+                stream().
+                toList();
 
 
         for (int i = 0; i < dim; i++) {
@@ -79,6 +84,6 @@ public class BookshelvesPrinter {
 
             Console.out(StringUtils.rightPad(x, 14, " "));
         }
-
+        Console.printnl();
     }
 }

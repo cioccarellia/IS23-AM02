@@ -36,7 +36,7 @@ public class PlayerSession {
     /**
      * Tokens acquired by the current user during gameplay.
      */
-    private List<Token> acquiredTokens = new ArrayList<>();
+    private final List<Token> acquiredTokens = new ArrayList<>();
 
 
     public PlayerSession(String username, PlayerNumber playerNumber, PersonalGoalCard personalGoalCard) {

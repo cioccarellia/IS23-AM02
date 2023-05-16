@@ -19,7 +19,7 @@ public class ClientConnection {
 
     /**
      * Protocol
-     * */
+     */
     private final ClientProtocol proto;
 
     private final RmiStash rmiStash = new RmiStash();

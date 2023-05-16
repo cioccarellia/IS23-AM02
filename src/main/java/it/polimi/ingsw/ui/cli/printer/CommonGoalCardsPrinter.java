@@ -1,112 +1,115 @@
 package it.polimi.ingsw.ui.cli.printer;
 
+import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.ui.cli.Console;
+import javafx.util.Pair;
+import org.apache.commons.lang.StringUtils;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
+
+import static it.polimi.ingsw.ui.cli.printer.ExampleCommonGoalCards.*;
 
 public class CommonGoalCardsPrinter {
 
+    private static final int rows = BookshelfConfiguration.getInstance().rows();
+    private static final int cols = BookshelfConfiguration.getInstance().cols();
+
+    private static final List<Pair<Tile[][], CommonGoalCardStatus>> exampleMatrices = new ArrayList<>();
+
     /**
-     * Prints the (remaining) tokens from a given common goal card
-     *
-     * @param tokens tokens from the common goal card
+     * @param cards status of common goal cards, within the game that is being played
      */
-    public static void printTokens(Stack<Token> tokens) {
-        Console.out("Remaining tokens:");
-        tokens.forEach(token -> Console.out(" " + token.getPoints()));
-        Console.out("\n");
+    public static void print(List<CommonGoalCardStatus> cards) {
+        Console.printnl();
+        int dim = cards.size();
+        for (CommonGoalCardStatus card : cards) {
+            setExampleMatrices(card);
+        }
+
+        Console.out("Common goal cards (the tiles' disposition is just a general description of the card):");
+        Console.printnl();
+        Console.flush();
+
+        for (int i = 0; i < dim; i++) {
+            var x = exampleMatrices
+                    .get(i)
+                    .getValue()
+                    .getCommonGoalCard()
+                    .getId()
+                    .toString()
+                    .toLowerCase();
+
+            Console.out(StringUtils.rightPad(x, 23, " "));
+        }
+
+        Console.printnl();
+        Console.flush();
+
+        for (int i = 0; i < dim; i++) {
+            Console.out("    0  1  2  3  4      ");
+        }
+
+        Console.printnl();
+
+        for (int i = 0; i < rows; i++) {
+            for (int k = 0; k < dim; k++) {
+                Console.out(i);
+                Console.out("  ");
+
+                for (int j = 0; j < cols; j++) {
+                    var tile = exampleMatrices.get(k).getKey()[i][j];
+                    if (tile != null) {
+                        Console.out(" " + TilePrinter.print(tile) + " ");
+                    } else
+                        Console.out("   ");
+                }
+
+                Console.out("     ");
+            }
+            Console.printnl();
+        }
+
+        Console.printnl();
+
+        for (int i = 0; i < dim; i++) {
+            Console.out("  Tokens:");
+            var x = exampleMatrices
+                    .get(i)
+                    .getValue()
+                    .getCardTokens()
+                    .stream()
+                    .map(Token::getPoints)
+                    .toList()
+                    .toString();
+
+            Console.out(StringUtils.rightPad(x, 14, " "));
+        }
+
+        Console.printnl();
+
     }
 
-    /**
-     * @param card status of a common goal card, within the game that is being played
-     */
-    public static void print(CommonGoalCardStatus card) {
+    public static void setExampleMatrices(CommonGoalCardStatus card) {
 
         switch (card.getCommonGoalCard().getId()) {
-            case SIX_PAIRS -> {
-                Console.out("""
-                        Six groups each containing at least 2 tiles of the same type.
-                        The tiles of one group can be different from those of another group.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case DIAGONAL -> {
-                Console.out("""
-                        Five tiles of the same type forming a diagonal
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case FOUR_GROUP_FOUR -> {
-                Console.out("""
-                        Four groups each containing at least 4 tiles of the same type.
-                        The tiles of one group can be different from those of another group.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case FOUR_MAX3DIFF_LINES -> {
-                Console.out("""
-                        Four lines each formed by 5 tiles of maximum three different types.
-                        One line can show the same or a different combination of another line.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case FOUR_CORNERS -> {
-                Console.out("""
-                        Four tiles of the same type in the four corners of the bookshelf.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case TWO_DIFF_COLUMNS -> {
-                Console.out("""
-                        Two columns each formed by 6 different types of tiles.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case TWO_SQUARES -> {
-                Console.out("""
-                        Two groups each containing 4 tiles of the same type in a 2x2 square.
-                        The tiles of one square can be different from those of the other square.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case TWO_DIFF_LINES -> {
-                Console.out("""
-                        Two lines each formed by 5 different types of tiles.
-                         One line can show the same or a different combination of the other line.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case THREE_MAX3DIFF_COLUMNS -> {
-                Console.out("""
-                        Three columns each formed by 6 tiles of maximum three different types.
-                        One column can show the same or a different combination of another column.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case X_TILES -> {
-                Console.out("""
-                        Five tiles of the same type forming an X.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case EIGHT_TILES -> {
-                Console.out("""
-                        Eight tiles of the same type. There’s no restriction about the position of these tiles.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            case STAIRS -> {
-                Console.out("""
-                        Five columns of increasing or decreasing height.
-                        Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.
-                        Tiles can be of any type.
-                        """);
-                printTokens(card.getCardTokens());
-            }
-            default -> {
-            }
+            case SIX_PAIRS -> exampleMatrices.add(new Pair<>(SIX_PAIRS_EXAMPLE, card));
+            case DIAGONAL -> exampleMatrices.add(new Pair<>(DIAGONAL_EXAMPLE, card));
+            case FOUR_GROUP_FOUR -> exampleMatrices.add(new Pair<>(FOUR_GROUP_FOUR_EXAMPLE, card));
+            case FOUR_MAX3DIFF_LINES -> exampleMatrices.add(new Pair<>(FOUR_MAX3DIFF_LINES_EXAMPLE, card));
+            case FOUR_CORNERS -> exampleMatrices.add(new Pair<>(FOUR_CORNERS_EXAMPLE, card));
+            case TWO_DIFF_COLUMNS -> exampleMatrices.add(new Pair<>(TWO_DIFF_COLUMNS_EXAMPLE, card));
+            case TWO_SQUARES -> exampleMatrices.add(new Pair<>(TWO_SQUARES_EXAMPLE, card));
+            case TWO_DIFF_LINES -> exampleMatrices.add(new Pair<>(TWO_DIFF_LINES_EXAMPLE, card));
+            case THREE_MAX3DIFF_COLUMNS -> exampleMatrices.add(new Pair<>(THREE_MAX3DIFF_COLUMNS_EXAMPLE, card));
+            case X_TILES -> exampleMatrices.add(new Pair<>(X_TILES_EXAMPLE, card));
+            case EIGHT_TILES -> exampleMatrices.add(new Pair<>(EIGHT_TILES_EXAMPLE, card));
+            case STAIRS -> exampleMatrices.add(new Pair<>(STAIRS_EXAMPLE, card));
+            default -> {}
         }
     }
 }
+

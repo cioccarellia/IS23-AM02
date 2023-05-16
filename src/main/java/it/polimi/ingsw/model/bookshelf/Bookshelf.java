@@ -77,8 +77,13 @@ public class Bookshelf {
 
 
         // we insert the elements one by one
-        for (Tile tile : selection) {
+        /*for (Tile tile : selection) {
             bookshelfMatrix[lastEmptyShelfIndex--][columnIndex] = tile;
+        }*/
+
+        for (Tile tile : selection) {
+            bookshelfMatrix[lastEmptyShelfIndex][columnIndex] = tile;
+            lastEmptyShelfIndex--;
         }
     }
 

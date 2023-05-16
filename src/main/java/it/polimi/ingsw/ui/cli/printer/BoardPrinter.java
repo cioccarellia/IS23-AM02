@@ -19,12 +19,12 @@ public class BoardPrinter {
      * @param board board that needs printing
      */
     public static void print(Board board) {
-        int verticalGuideNumber = 0;
-
-        Console.out("   0  1  2  3  4  5  6  7  8 \n");
+        Console.printnl();
+        Console.out("   0  1  2  3  4  5  6  7  8 ");
+        Console.printnl();
 
         for (int i = 0; i < dimension; i++) {
-            Console.out(verticalGuideNumber);
+            Console.out(i);
             Console.out(" ");
 
             for (int j = 0; j < dimension; j++) {
@@ -42,11 +42,10 @@ public class BoardPrinter {
                 }
 
             }
-            Console.out("\n");
-            verticalGuideNumber++;
+            Console.printnl();
         }
 
-        Console.out("\n");
+        Console.printnl();
     }
 
 

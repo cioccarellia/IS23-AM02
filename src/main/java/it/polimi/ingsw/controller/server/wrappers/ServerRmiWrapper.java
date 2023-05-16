@@ -81,7 +81,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
         try {
-            server.gameStartRequest(username, mode,protocol);
+            server.gameStartRequest(username, mode, protocol);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

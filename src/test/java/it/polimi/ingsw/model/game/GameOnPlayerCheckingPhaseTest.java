@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameOnPlayerCheckingPhaseTest implements GameTester {
     @Test
@@ -42,7 +43,7 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
             game.onPlayerCheckingPhase();
 
             assertFalse(game.getCurrentPlayer().getBookshelf().isFull());
-            assertEquals(0,game.getCurrentPlayer().getAcquiredTokens().size());
+            assertTrue(game.getCurrentPlayer().getAcquiredTokens().isEmpty());
         }
     }
 
