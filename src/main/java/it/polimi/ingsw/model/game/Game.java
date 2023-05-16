@@ -319,6 +319,10 @@ public class Game implements ModelService {
             }
         }
 
+        if (board.needsRefilling()) {
+            onRefill();
+        }
+
         getCurrentPlayer().setPlayerCurrentGamePhase(IDLE);
     }
 

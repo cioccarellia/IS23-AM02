@@ -24,7 +24,7 @@ public interface ModelService {
 
     void onPlayerCheckingPhase();
 
-    void onNextTurn(String nextUsername);
+    void onNextTurn(String nextPlayerUsername);
 
     List<Pair<PlayerNumber, Integer>> onGameEnded();
 }

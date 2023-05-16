@@ -2,22 +2,30 @@ package it.polimi.ingsw.ui.cli.parser;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
+import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.cli.Console;
+import it.polimi.ingsw.utils.model.CoordinatesHelper;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CoordinatesParser {
 
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
+    private static final LogicConfiguration config = LogicConfiguration.getInstance();
 
-    public static Set<Coordinate> scan() {
+
+    public static Set<Coordinate> scan(Game game) {
 
         while (true) {
             Console.out("""
                     Give me the coordinates of the tiles you want (at least one, at most three),
                     in the format: x1, y1, x2, y2, ... (x are rows, y are columns)
                     """);
+            Console.flush();
 
             String input = Console.in();
 
@@ -51,7 +59,14 @@ public class CoordinatesParser {
                     break;
                 }
             }
-            return validCoordinates;
+            if (isSelectionValid(validCoordinates, game)) {
+                return validCoordinates;
+            } else {
+                Console.out("""
+                            The coordinates are not valid.
+                            """);
+                continue;
+            }
         }
     }
 
@@ -62,6 +77,19 @@ public class CoordinatesParser {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static boolean isSelectionValid(@NotNull Set<Coordinate> coordinates, Game game) {
+        boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates, game);
+        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
+        boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> game.getBoard().countFreeEdges(coordinate) > 0);
+        boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
+
+        return areCoordinatesReferencingValidTiles && isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
+    }
+
+    private static boolean areAllCoordinatesPresent(@NotNull Collection<Coordinate> coordinates, Game game) {
+        return coordinates.stream().allMatch(it -> game.getBoard().getTileAt(it).isPresent());
     }
 
 }

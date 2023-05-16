@@ -15,6 +15,7 @@ import it.polimi.ingsw.ui.cli.parser.PlayerTilesOrderInsertionParser;
 import it.polimi.ingsw.ui.cli.printer.*;
 import it.polimi.ingsw.utils.model.TurnHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -49,10 +50,10 @@ public class CliApp implements UiGateway {
             app.modelUpdate(game);
             app.gameInsertion();
             app.modelUpdate(game);
-
-            turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode());
-            //TODO getNextPlayerNumber doesn't work
+            PlayerNumber nextPlayer = turn.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode());
+            game.onNextTurn(game.getSessions().getByNumber(nextPlayer).getUsername());
             app.modelUpdate(game);
+
         }
 
         app.onGameEnded();
@@ -124,7 +125,7 @@ public class CliApp implements UiGateway {
     @Override
     public void gameSelection() {
         printGameModel();
-        Set<Coordinate> validCoordinates = CoordinatesParser.scan();
+        Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
         model.onPlayerSelectionPhase(validCoordinates);
 
     }
@@ -134,10 +135,13 @@ public class CliApp implements UiGateway {
      */
     @Override
     public void gameInsertion() {
-        int column = ColumnParser.scan();
-
-        List<Tile> orderedTiles = PlayerTilesOrderInsertionParser
-                .scan(model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles());
+        int tilesSize = model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles().size();
+        int column = ColumnParser.scan(model.getGameMatrix(), tilesSize);
+        List<Tile> orderedTiles = new ArrayList<>();
+        if(tilesSize > 1) {
+            orderedTiles = PlayerTilesOrderInsertionParser
+                    .scan(model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles());
+        }
         model.onPlayerInsertionPhase(column, orderedTiles);
 
         model.onPlayerCheckingPhase();
