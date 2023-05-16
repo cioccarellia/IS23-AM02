@@ -396,7 +396,55 @@
             <children>
                 <TextField id="chatTextField" prefHeight="39.0" prefWidth="273.0" />
             </children></TextFlow>
-        //INSERT THIRD GRID PANEL----------------------------------------------
+        <GridPane layoutX="512.0" layoutY="118.0" prefHeight="283.0" prefWidth="272.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="199.5" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="194.5" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <ImageView id="BookshelfTile23" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                <ImageView id="BookshelfTile01" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                <ImageView id="BookshelfTile02" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                <ImageView id="BookshelfTile03" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                <ImageView id="BookshelfTile04" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                <ImageView id="BookshelfTile10" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                <ImageView id="BookshelfTile11" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ImageView id="BookshelfTile12" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <ImageView id="BookshelfTile13" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <ImageView id="BookshelfTile14" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <ImageView id="BookshelfTile20" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+                <ImageView id="BookshelfTile21" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <ImageView id="BookshelfTile54" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                <ImageView id="BookshelfTile22" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <ImageView id="BookshelfTile24" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                <ImageView id="BookshelfTile30" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
+                <ImageView id="BookshelfTile31" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <ImageView id="BookshelfTile32" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <ImageView id="BookshelfTile33" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                <ImageView id="BookshelfTile34" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                <ImageView id="BookshelfTile40" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+                <ImageView id="BookshelfTile41" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <ImageView id="BookshelfTile42" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                <ImageView id="BookshelfTile43" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                <ImageView id="BookshelfTile44" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                <ImageView id="BookshelfTile50" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
+                <ImageView id="BookshelfTile51" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <ImageView id="BookshelfTile52" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                <ImageView id="BookshelfTile53" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                <ImageView id="BookshelfTile00" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+        </GridPane>
         <MenuButton id="chatSelectingMenu" layoutX="33.0" layoutY="754.0" mnemonicParsing="false" text="Chat with">
             <items>
                 <MenuItem mnemonicParsing="false" text="Everyone" />
