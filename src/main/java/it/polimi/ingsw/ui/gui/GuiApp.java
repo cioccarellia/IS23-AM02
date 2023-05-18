@@ -26,65 +26,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 
 
-public class GuiApp extends Application implements UiGateway {
+public abstract class GuiApp extends Application implements UiGateway {
     private final int dimension = BoardConfiguration.getInstance().getDimension();
-    private Game game;
 
-    @FXML
-    public void start(Stage primaryStage) throws IOException {
-        game = new Game(GAME_MODE_4_PLAYERS);
-        game.addPlayer("Cookie");
-        game.addPlayer("Alberto");
-        game.addPlayer("Marco");
-        game.addPlayer("Giulia");
-
-        primaryStage.setMaximized(true);
-        primaryStage.setFullScreen(false);
-        primaryStage.setFullScreenExitHint("");
-
-
-        // Load root layout from fxml file.
-       /*
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/Index.fxml"));
-        Parent rootLayout = null;
-
-        try {
-            rootLayout = loader.load();
-        } catch (IOException e) {
-            AppClient.LOGGER.severe(e.getMessage());
-            System.exit(1);
-        }
-
-        */
-
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Index.fxml")));
-        primaryStage.setScene(root.getScene());
-        primaryStage.setTitle("My shelfie");
-        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        primaryStage.show();
-
-
-
-        Player1Tile23.setOnMouseClicked(mouseEvent -> {
-            Integer col = GridPane.getColumnIndex(Player1Tile23);
-            Integer row = GridPane.getRowIndex(Player1Tile23);
-        });
-    }
-
-    @FXML
-    public void stop() {
-        Platform.exit();
-        System.exit(0);
-    }
 
 
     @Override
     public void onGameStarted() {
-
+        Game game = new Game(GAME_MODE_2_PLAYERS);
     }
 
     @Override
@@ -99,22 +51,22 @@ public class GuiApp extends Application implements UiGateway {
 
                 switch (tile) {
                     case BOOK -> {
-                        matrix.add(createImageMatrix("resources/img/tiles/book1.1.png"), i, j);
+                        matrix.add(createImageMatrix("img/tiles/book1.1.png"), i, j);
                     }
                     case CAT -> {
-                        matrix.add(createImageMatrix("resources/img/tiles/cat1.1.png"), i, j);
+                        matrix.add(createImageMatrix("img/tiles/cat1.1.png"), i, j);
                     }
                     case GAME -> {
-                        matrix.add(createImageMatrix("resources/img/tiles/game1.1.png"), i, j);
+                        matrix.add(createImageMatrix("img/tiles/game1.1.png"), i, j);
                     }
                     case TROPHY -> {
-                        matrix.add(createImageMatrix("resources/img/tiles/trophy1.1.png"), i, j);
+                        matrix.add(createImageMatrix("img/tiles/trophy1.1.png"), i, j);
                     }
                     case PLANT -> {
-                        matrix.add(createImageMatrix("resources/img/tiles/plant1.1.png"), i, j);
+                        matrix.add(createImageMatrix("img/tiles/plant1.1.png"), i, j);
                     }
                     case FRAME -> {
-                        matrix.add(createImageMatrix("resources/img/tiles/frame1.1.png"), i, j);
+                        matrix.add(createImageMatrix("img/tiles/frame1.1.png"), i, j);
                     }
 
                 }
