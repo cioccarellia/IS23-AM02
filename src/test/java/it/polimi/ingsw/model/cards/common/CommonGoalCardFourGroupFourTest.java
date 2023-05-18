@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardFourGroupFourTest implements ShelfMatrixTester {
 
-    CommonGoalCard fourGroupFourCGC = FOUR_GROUP_FOUR;
+    final CommonGoalCard fourGroupFourCGC = FOUR_GROUP_FOUR;
 
     @Test
     @DisplayName("Verify FOUR_GROUP_FOUR positively #1")

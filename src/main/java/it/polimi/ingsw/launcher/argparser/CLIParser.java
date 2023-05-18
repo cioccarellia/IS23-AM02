@@ -43,18 +43,21 @@ public class CLIParser {
         parser.addArgument("--server-address")
                 .dest(SERVER_IP)
                 .metavar("HOST")
+                .setDefault("")
                 .help("The server ip address");
 
         parser.addArgument("--server-tcp-port")
                 .dest(SERVER_TCP_PORT)
                 .metavar("TCP PORT")
                 .type(Integer.class)
+                .setDefault(0)
                 .help("The server port for TCP server");
 
         parser.addArgument("--server-rmi-port")
                 .dest(SERVER_RMI_PORT)
                 .metavar("RMI PORT")
                 .type(Integer.class)
+                .setDefault(0)
                 .help("The server port for RMI server");
 
         parser.addArgument("--client-mode")
@@ -74,6 +77,7 @@ public class CLIParser {
      */
     public boolean areArgumentsExhaustive(@NotNull Namespace ns) {
         AppLaunchTarget config = ns.get(TARGET);
+
         if (config == null) {
             return false;
         }
@@ -89,7 +93,7 @@ public class CLIParser {
         }
 
         if (serverRmiPort <= 0 || serverTcpPort <= 0) {
-            // verify ports are valid
+            // verify ports are invalid
             return false;
         } else if (serverRmiPort < 1024 || serverTcpPort < 1024) {
             // verify ports are not too low
@@ -106,7 +110,7 @@ public class CLIParser {
                 // we only need ports to boot the server
                 return true;
             }
-            case CLIENT, SERVER_AND_CLIENT -> {
+            case CLIENT -> {
                 // we also need client-specific configuration
                 ClientUiMode mode = ns.get(CLIENT_MODE);
                 ClientProtocol proto = ns.get(CLIENT_PROTOCOL);

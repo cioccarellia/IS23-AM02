@@ -108,7 +108,8 @@ public class CommonGoalCardsPrinter {
             case X_TILES -> exampleMatrices.add(new Pair<>(X_TILES_EXAMPLE, card));
             case EIGHT_TILES -> exampleMatrices.add(new Pair<>(EIGHT_TILES_EXAMPLE, card));
             case STAIRS -> exampleMatrices.add(new Pair<>(STAIRS_EXAMPLE, card));
-            default -> {}
+            default -> {
+            }
         }
     }
 }

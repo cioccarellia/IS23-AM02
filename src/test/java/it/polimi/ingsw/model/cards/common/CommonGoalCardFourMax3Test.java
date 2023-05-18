@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardFourMax3Test implements ShelfMatrixTester {
 
-    CommonGoalCard fourMax3DiffCGC = FOUR_MAX3DIFF_LINES;
+    final CommonGoalCard fourMax3DiffCGC = FOUR_MAX3DIFF_LINES;
 
     @Test
     @DisplayName("Verify FOUR_MAX3DIFFERENT_LINES positively #1")

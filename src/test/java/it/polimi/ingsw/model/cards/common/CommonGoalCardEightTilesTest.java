@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardEightTilesTest implements ShelfMatrixTester {
-    CommonGoalCard eightTilesCGC = EIGHT_TILES;
+    final CommonGoalCard eightTilesCGC = EIGHT_TILES;
 
     @Test
     @DisplayName("Verify EIGHT_TILES positively #1")

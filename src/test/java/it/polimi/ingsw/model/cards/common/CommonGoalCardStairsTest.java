@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardStairsTest implements ShelfMatrixTester {
-    CommonGoalCard stairsCGC = STAIRS;
+    final CommonGoalCard stairsCGC = STAIRS;
 
     @Test
     @DisplayName("Verify STAIRS positively #1")

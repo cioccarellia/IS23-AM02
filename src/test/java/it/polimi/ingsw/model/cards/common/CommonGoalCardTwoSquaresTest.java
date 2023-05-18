@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardTwoSquaresTest implements ShelfMatrixTester {
 
-    CommonGoalCard twoSquaresCGC = TWO_SQUARES;
+    final CommonGoalCard twoSquaresCGC = TWO_SQUARES;
 
     @Test
     @DisplayName("Verify TWO_SQUARES positively #1")

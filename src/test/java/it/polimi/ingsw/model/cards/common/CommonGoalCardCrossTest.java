@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardCrossTest implements ShelfMatrixTester {
 
-    CommonGoalCard xTiles = X_TILES;
+    final CommonGoalCard xTiles = X_TILES;
 
     @Test
     @DisplayName("Verify X_TILES positively #1")

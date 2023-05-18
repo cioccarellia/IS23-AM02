@@ -27,13 +27,12 @@ public class BookshelfPrinter {
      * @param bookshelf bookshelf that needs printing
      */
     public static void print(Bookshelf bookshelf) {
-        int verticalGuideNumber = 0;
 
         Console.out("    0  1  2  3  4");
         Console.printnl();
         for (int i = 0; i < rows; i++) {
 
-            Console.out(verticalGuideNumber);
+            Console.out(i);
             Console.out("  ");
 
             for (int j = 0; j < cols; j++) {
@@ -48,7 +47,6 @@ public class BookshelfPrinter {
             }
 
             Console.printnl();
-            verticalGuideNumber++;
         }
     }
 

@@ -22,7 +22,10 @@ import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
  */
 public class App {
 
-    public static final Logger logger = LoggerFactory.getLogger(App.class);
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+
+    private static ExhaustiveLaunchConfiguration finalConfig = null;
+
     private static final List<AppClient> clients = new ArrayList<>();
     private static AppServer server = null;
 
@@ -82,7 +85,6 @@ public class App {
      * Launches a CLI interface for retrieving the missing parameters
      */
     private static @NotNull ExhaustiveLaunchConfiguration launchWizardForConfig(Namespace nonExhaustivePresetConfig) {
-        // TODO wizard
         ExhaustiveLaunchConfiguration config = Wizard.launchWizardAndAcquireParams(nonExhaustivePresetConfig);
         logger.info("wizard returned configuration {}", config);
 
@@ -93,13 +95,11 @@ public class App {
      * Starts the
      */
     private static void launchConfiguration(@NotNull ExhaustiveLaunchConfiguration config) {
+        finalConfig = config;
+
         switch (config.appLaunchTarget()) {
             case SERVER -> startServer(config);
             case CLIENT -> startClient(config);
-            case SERVER_AND_CLIENT -> {
-                startServer(config);
-                startClient(config);
-            }
         }
     }
 

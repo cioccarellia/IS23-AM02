@@ -33,6 +33,9 @@ public class BookshelvesPrinter {
                 stream().
                 toList();
 
+        Console.printnl();
+        Console.out("Bookshelves:");
+        Console.printnl();
 
         for (int i = 0; i < dim; i++) {
             Console.out("    0  1  2  3  4      ");

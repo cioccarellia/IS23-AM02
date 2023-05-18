@@ -80,15 +80,16 @@ public class CliApp implements UiGateway {
      * goal card
      */
     public void printGameModel() {
+        Console.printnl();
         Console.out("Board:");
         Console.printnl();
         BoardPrinter.print(model.getBoard());
 
-        CommonGoalCardsPrinter.print(model.getCommonGoalCardsStatus());
+        CommonGoalCardsPrinter.print(model.getCommonGoalCards());
         Console.printnl();
 
         Console.printnl();
-        Console.out("Personal goal card for player \n" +
+        Console.out("Personal goal card for player " +
                 model.getSessions().getByNumber(model.getCurrentPlayer().getPlayerNumber()).getUsername() + ":\n");
         Console.flush();
         //TODO printing the current player's name is temporary, once fixed remove

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardDiagonalTest implements ShelfMatrixTester {
 
-    CommonGoalCard diagonalCGC = DIAGONAL;
+    final CommonGoalCard diagonalCGC = DIAGONAL;
 
     @Test
     @DisplayName("Verify DIAGONAL positively: upper diagonal, empty matrix")

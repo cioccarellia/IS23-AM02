@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardTwoDifferentLinesTest implements ShelfMatrixTester {
 
-    CommonGoalCard twoDiffLinesCGC = TWO_DIFF_LINES;
+    final CommonGoalCard twoDiffLinesCGC = TWO_DIFF_LINES;
 
     @Test
     @DisplayName("Verify TWO_DIFF_LINES positively #1")

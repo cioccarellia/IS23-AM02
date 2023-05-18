@@ -17,6 +17,7 @@ import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
+import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.utils.CollectionUtils;
 import it.polimi.ingsw.utils.model.CoordinatesHelper;
@@ -83,7 +84,7 @@ public class Game implements ModelService {
     /**
      * Inserts a player into the game
      *
-     * @param username The username for the given player
+     * @param username the username for the given player
      */
     public void addPlayer(String username) {
         if (status != INITIALIZATION) {
@@ -105,6 +106,10 @@ public class Game implements ModelService {
         logger.info("addPlayer(username={}): player added", username);
     }
 
+    /**
+     * @param username the username identifying the player
+     * @return the session of the chosen player
+     */
     public PlayerSession getPlayerSession(String username) {
         if (!sessions.isPresent(username)) {
             throw new IllegalStateException("Username not found in sessions");
@@ -113,25 +118,38 @@ public class Game implements ModelService {
         return sessions.getByUsername(username);
     }
 
-    public int getPlayerNumber() {
+    /**
+     * @return the list of all players' usernames
+     */
+    public List<String> getPlayersUsernameList() {
+        return getSessions().playerSessions().stream().map(PlayerSession::getUsername).toList();
+    }
+
+    /**
+     * @return how many players are in the current game
+     */
+    public int getPlayersCurrentAmount() {
         return sessions.size();
     }
 
+    /**
+     * @return the map of players' sessions
+     */
     public SessionManager getSessions() {
         return sessions;
     }
 
-    public List<CommonGoalCardStatus> getCommonGoalCardsStatus() {
-        return commonGoalCardStatuses;
-    }
-
-
+    /**
+     * Method called when the game starts: sets the game as {@link GameStatus} RUNNING, checks all the players are
+     * present, extracts the two common goal cards, extracts a player to start the game, fills the boards with tiles and
+     * sets the {@link PlayerCurrentGamePhase} as SELECTING
+     */
     @Override
     public void onGameStarted() {
         logger.info("onGameStarted()");
         setGameStatus(RUNNING);
 
-        if (sessions.size() != mode.maxPlayerAmount()) {
+        if (getPlayersCurrentAmount() != mode.maxPlayerAmount()) {
             throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.maxPlayerAmount(), sessions.size()));
         }
 
@@ -156,6 +174,9 @@ public class Game implements ModelService {
     }
 
 
+    /**
+     * Counts how many empty cells are left, it extracts the needed tiles and fills the board with them.
+     */
     public void onRefill() {
         int emptyBoardCells = board.countEmptyCells(mode);
         List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
@@ -163,43 +184,75 @@ public class Game implements ModelService {
         board.fill(extractedTiles, mode);
     }
 
+    /**
+     * @return the {@link GameStatus}
+     */
     public GameStatus getGameStatus() {
         return status;
     }
 
+    /**
+     * It sets the {@link GameStatus} to the one given
+     *
+     * @param status the given {@link GameStatus}
+     */
     public void setGameStatus(GameStatus status) {
         this.status = status;
     }
 
+    /**
+     * @return the {@link GameMode}
+     */
     public GameMode getGameMode() {
         return mode;
     }
 
+    /**
+     * @param coordinates the set of coordinates selected by the current player
+     * @return if the selected coordinates are valid: checks if at the given coordinates there is indeed a tile present,
+     * checks if the selection is no more than 3 and more than 0, checks if all the tiles at the given coordinates have
+     * at least one free edge, checks if they in a straight line (vertically and horizontally)
+     */
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
-        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
+        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize() && coordinates.size() > 0;
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 
         return areCoordinatesReferencingValidTiles && isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
     }
 
+    /**
+     * @return the {@link PlayerSession} of the current player
+     */
     public PlayerSession getCurrentPlayer() {
         return sessions.getByNumber(currentPlayerNumber);
     }
 
+    /**
+     * @return the {@link PlayerNumber} of the player that started the game
+     */
     public PlayerNumber getStartingPlayerNumber() {
         return startingPlayerNumber;
     }
 
+    /**
+     * @return the list of {@link CommonGoalCardStatus} for this game
+     */
     public List<CommonGoalCardStatus> getCommonGoalCards() {
         return commonGoalCardStatuses;
     }
 
+    /**
+     * @return the board
+     */
     public Board getBoard() {
         return board;
     }
 
+    /**
+     * @return the matrix of the board
+     */
     public Tile[][] getGameMatrix() {
         return board.getTileMatrix();
     }
@@ -225,13 +278,17 @@ public class Game implements ModelService {
     }
 
 
+    /**
+     * @param coordinates the collection of coordinates that needs checking
+     * @return if at the given coordinates there are indeed tiles present
+     */
     private boolean areAllCoordinatesPresent(@NotNull Collection<Coordinate> coordinates) {
         return coordinates.stream().allMatch(it -> board.getTileAt(it).isPresent());
     }
 
 
     /**
-     * Select Tiles from the board and set them inside current player session
+     * Fetches the {@link Tile}s from the board at the given coordinates and adds them to the current player's session
      *
      * @param coordinates set of the player's selected tiles' coordinates
      */
@@ -247,16 +304,14 @@ public class Game implements ModelService {
         var tileSelection = new PlayerTileSelection(coordinatesAndValues);
 
         // update model accordingly
-        coordinates.stream().forEach(coordinate -> {
-            board.removeTileAt(coordinate);
-        });
+        coordinates.stream().forEach(board::removeTileAt);
 
         getCurrentPlayer().setPlayerTileSelection(tileSelection);
         getCurrentPlayer().setPlayerCurrentGamePhase(INSERTING);
     }
 
     /**
-     * Insert selected Tiles inside bookshelf after got sure there's empty space in a given column
+     * Inserts the selected {@link Tile}s inside the player's bookshelf
      *
      * @param column the column in which the player wants to add the tiles
      * @param tiles  the tiles the players wants to insert in their bookshelf
@@ -287,7 +342,8 @@ public class Game implements ModelService {
     }
 
     /**
-     * Updates acquired tokens by current player
+     * Updates the current player's tokens, if needed, checks if the board needs refilling and sets the player's status
+     * as IDLE
      */
     @Override
     public void onPlayerCheckingPhase() {
@@ -330,7 +386,7 @@ public class Game implements ModelService {
 
 
     /**
-     * Updates currentPlayer from current player to next player
+     * Updates the current player by setting the next player's status as SELECTING
      */
     @Override
     public void onNextTurn(String nextPlayerUsername) {
@@ -341,6 +397,13 @@ public class Game implements ModelService {
         getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 
+    /**
+     * Calculates points for all players by adding up their tokens (if they had any), the points from the personal goal
+     * card and the points they get from groups of the same {@link Tile} in their bookshelf. It then adds player number
+     * and their point in a list of pairs, to get the players' ranking.
+     *
+     * @return the players' ranking
+     */
     @Override
     public List<Pair<PlayerNumber, Integer>> onGameEnded() {
         List<Pair<PlayerNumber, Integer>> playersScore = new ArrayList<>();
@@ -384,10 +447,17 @@ public class Game implements ModelService {
         return playersScore.stream().sorted(comparing(Pair::getValue)).collect(Collectors.toList());
     }
 
+    /**
+     * @param username the username identifying the player
+     * @return the {@link PlayerSession} of the given player
+     */
     public PlayerSession getSessionFor(String username) {
         return sessions.getByUsername(username);
     }
 
+    /**
+     * @return the map of players
+     */
     @TestOnly
     public Map<PlayerNumber, PlayerSession> getPlayerNumberMap() {
         return sessions.getNumberMap();

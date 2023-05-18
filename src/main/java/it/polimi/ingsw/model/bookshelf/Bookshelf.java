@@ -75,12 +75,6 @@ public class Bookshelf {
             throw new IllegalStateException("Selected tiles do not fit in designated column");
         }
 
-
-        // we insert the elements one by one
-        /*for (Tile tile : selection) {
-            bookshelfMatrix[lastEmptyShelfIndex--][columnIndex] = tile;
-        }*/
-
         for (Tile tile : selection) {
             bookshelfMatrix[lastEmptyShelfIndex][columnIndex] = tile;
             lastEmptyShelfIndex--;

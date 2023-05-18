@@ -4,11 +4,12 @@ import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
-import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.ui.cli.Console;
 
 import java.util.Optional;
+
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
 
 public class BoardPrinter {
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
@@ -51,12 +52,12 @@ public class BoardPrinter {
 
     public static void main(String[] args) {
         var board = new Board();
-        var mode = GameMode.GAME_MODE_4_PLAYERS;
+        var mode = GAME_MODE_4_PLAYERS;
 
         board.fill(new TileExtractor().extractAmount(board.countEmptyCells(mode)), mode);
 
         print(board);
 
-        System.out.flush();
+        Console.flush();
     }
 }

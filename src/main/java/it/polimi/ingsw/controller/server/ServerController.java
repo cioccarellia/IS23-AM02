@@ -25,6 +25,11 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
+import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.DISCONNECTED;
+import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.OPEN;
+import static it.polimi.ingsw.controller.server.model.ServerStatus.*;
+import static it.polimi.ingsw.model.game.GameStatus.ENDED;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 
 public class ServerController implements ServerService {
@@ -44,7 +49,7 @@ public class ServerController implements ServerService {
 
     private int maxPlayerAmount;
 
-    private ServerStatus serverStatus = ServerStatus.NO_GAME_STARTED;
+    private ServerStatus serverStatus = NO_GAME_STARTED;
 
     private SessionManager sessions;
 
@@ -71,14 +76,14 @@ public class ServerController implements ServerService {
     public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
-        if (serverStatus == ServerStatus.NO_GAME_STARTED) {
+        if (serverStatus == NO_GAME_STARTED) {
             game = new Game(mode);
             sessions = new SessionManager(game.getGameMode());
             maxPlayerAmount = mode.maxPlayerAmount();
 
-            serverStatus = ServerStatus.GAME_INITIALIZING;
+            serverStatus = GAME_INITIALIZING;
 
-            connectionsManager.add(username, protocol, ConnectionStatus.OPEN);
+            connectionsManager.add(username, protocol, OPEN);
             game.addPlayer(username);
 
             logger.info("returning success from gameStartRequest()");
@@ -97,7 +102,7 @@ public class ServerController implements ServerService {
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
-        if (serverStatus == ServerStatus.GAME_RUNNING) {
+        if (serverStatus == GAME_RUNNING) {
             // fixme return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED);
         }
 
@@ -109,17 +114,17 @@ public class ServerController implements ServerService {
             // fixme return new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE);
         }
 
-        if (game.getGameStatus() == GameStatus.ENDED) {
+        if (game.getGameStatus() == ENDED) {
             // fixme return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED);
         }
 
 
         // if successful & can start game
         if (maxPlayerAmount == connectionsManager.size() + 1) {
-            serverStatus = ServerStatus.GAME_RUNNING;
+            serverStatus = GAME_RUNNING;
         }
 
-        connectionsManager.add(username, protocol, ConnectionStatus.OPEN);
+        connectionsManager.add(username, protocol, OPEN);
         game.addPlayer(username);
 
         // fixme return new SingleResult.Success<>();
@@ -132,7 +137,7 @@ public class ServerController implements ServerService {
     }
 
     public boolean shouldStandbyGame() {
-        return connectionsManager.values().stream().filter(player -> player.getStatus() == ConnectionStatus.DISCONNECTED).count() >= maxPlayerAmount - 1;
+        return connectionsManager.values().stream().filter(player -> player.getStatus() == DISCONNECTED).count() >= maxPlayerAmount - 1;
     }
 
 
@@ -144,7 +149,7 @@ public class ServerController implements ServerService {
             // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
         }
 
-        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.SELECTING) {
+        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != SELECTING) {
             // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION);
         }
 
@@ -165,7 +170,7 @@ public class ServerController implements ServerService {
             // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
         }
 
-        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != PlayerCurrentGamePhase.INSERTING) {
+        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != INSERTING) {
             // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS);
         }
 
@@ -200,7 +205,7 @@ public class ServerController implements ServerService {
     public void keepAlive(String username) {
         logger.info("keepAlive(username={})", username);
         if (connectionsManager.containsUsername(username)) {
-            connectionsManager.setConnectionStatus(username, ConnectionStatus.OPEN);
+            connectionsManager.setConnectionStatus(username, OPEN);
         } else {
             logger.warn("Wrong keep alive username");
         }

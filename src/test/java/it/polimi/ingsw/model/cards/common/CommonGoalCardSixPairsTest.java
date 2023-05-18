@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommonGoalCardSixPairsTest implements ShelfMatrixTester {
 
-    CommonGoalCard sixPairsCGC = SIX_PAIRS;
+    final CommonGoalCard sixPairsCGC = SIX_PAIRS;
 
 
     @Test
