@@ -44,6 +44,7 @@ public class CliApp implements UiGateway {
         app.onGameStarted();
 
         while (game.getGameStatus() != ENDED) {
+
             app.gameSelection();
             app.modelUpdate(game);
 

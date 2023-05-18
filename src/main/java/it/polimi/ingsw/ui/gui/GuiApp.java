@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ui.gui;
 
 
+import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
@@ -15,6 +16,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.input.KeyCombination;
+import javafx.application.Platform;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -39,19 +42,42 @@ public class GuiApp extends Application implements UiGateway {
         game.addPlayer("Giulia");
 
         primaryStage.setMaximized(true);
-        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(false);
         primaryStage.setFullScreenExitHint("");
+
+
+        // Load root layout from fxml file.
+       /*
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/Index.fxml"));
+        Parent rootLayout = null;
+
+        try {
+            rootLayout = loader.load();
+        } catch (IOException e) {
+            AppClient.LOGGER.severe(e.getMessage());
+            System.exit(1);
+        }
+
+        */
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Index.fxml")));
         primaryStage.setScene(root.getScene());
+        primaryStage.setTitle("My shelfie");
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
 
 
+
+        Player1Tile23.setOnMouseClicked(mouseEvent -> {
+            Integer col = GridPane.getColumnIndex(Player1Tile23);
+            Integer row = GridPane.getRowIndex(Player1Tile23);
+        });
     }
 
     @FXML
     public void stop() {
-        //Guimanager.getInstance().closeConnection();
+        Platform.exit();
         System.exit(0);
     }
 
@@ -120,9 +146,7 @@ public class GuiApp extends Application implements UiGateway {
 
     @Override
     public void gameSelection() {
-        // game.onPlayerSelectionPhase(getSelectedCoordinates());
-
-
+         //game.onPlayerSelectionPhase(getSelectedCoordinates(Player1Tile23.));
 
     }
 
