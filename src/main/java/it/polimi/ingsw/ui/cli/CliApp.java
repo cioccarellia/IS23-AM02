@@ -13,6 +13,7 @@ import it.polimi.ingsw.ui.cli.printer.BoardPrinter;
 import it.polimi.ingsw.ui.cli.printer.BookshelvesPrinter;
 import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
 import it.polimi.ingsw.ui.cli.printer.PersonalGoalCardPrinter;
+import it.polimi.ingsw.utils.cli.ConsoleClear;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -80,8 +81,9 @@ public class CliApp implements UiGateway {
      * goal card
      */
     public void printGameModel() {
-        Console.printnl();
-        Console.out("Board:");
+        ConsoleClear.clearConsole();
+        // Console.printnl();
+        // Console.out("Board:");
         Console.printnl();
         BoardPrinter.print(model.getBoard());
 

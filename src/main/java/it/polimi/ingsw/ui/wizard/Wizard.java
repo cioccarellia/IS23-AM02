@@ -62,9 +62,9 @@ public class Wizard {
 
             String modeValueFromUser = Console.in();
 
-            if (modeValueFromUser.equalsIgnoreCase("s") || modeValueFromUser.toLowerCase().contains("server") || modeValueFromUser.toLowerCase().equals("1")) {
+            if (modeValueFromUser.equalsIgnoreCase("s") || modeValueFromUser.toLowerCase().contains("server") || modeValueFromUser.equalsIgnoreCase("1")) {
                 return AppLaunchTarget.SERVER;
-            } else if (modeValueFromUser.equalsIgnoreCase("c") || modeValueFromUser.toLowerCase().contains("client") || modeValueFromUser.toLowerCase().equals("2")) {
+            } else if (modeValueFromUser.equalsIgnoreCase("c") || modeValueFromUser.toLowerCase().contains("client") || modeValueFromUser.equalsIgnoreCase("2")) {
                 return AppLaunchTarget.CLIENT;
             }
         }
@@ -168,14 +168,10 @@ public class Wizard {
             return false;
         }
 
-       if (serverPort < 1024) {
+        // verify ports are not too high
+        if (serverPort < 1024) {
             // verify ports are not too low
             return false;
-        } else if (serverPort > 65535) {
-            // verify ports are not too high
-            return false;
-        }
-
-        return true;
+        } else return serverPort <= 65535;
     }
 }

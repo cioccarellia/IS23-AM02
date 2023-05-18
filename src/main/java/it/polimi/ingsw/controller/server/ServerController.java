@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
@@ -10,10 +9,8 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
-import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.services.ServerFunction;
 import it.polimi.ingsw.services.ServerService;

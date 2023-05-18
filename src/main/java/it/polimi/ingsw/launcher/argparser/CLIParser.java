@@ -1,6 +1,5 @@
 package it.polimi.ingsw.launcher.argparser;
 
-import it.polimi.ingsw.App;
 import it.polimi.ingsw.launcher.parameters.AppLaunchTarget;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
@@ -131,7 +130,7 @@ public class CLIParser {
         try {
             return parser.parseArgs(args);
         } catch (ArgumentParserException e) {
-            App.logger.error("Error parsing CLI arguments", e);
+            logger.error("Error parsing CLI arguments", e);
             throw new RuntimeException(e);
         }
     }

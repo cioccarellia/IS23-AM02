@@ -52,7 +52,8 @@
                                         <Image url="https://github.com/cioccarellia/IS23-AM02/blob/master/src/main/resources/img/boards/bookshelf_orth.png"/>
                                     </image>
                                 </ImageView>
-                                <GridPane fx:id="gridPane" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
+                                <GridPane fx:id="gridPane" layoutX="39.0" layoutY="36.0" prefHeight="231.0"
+                                          prefWidth="215.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -161,7 +162,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="Player2Button" text="GIulia">
+                <Tab id="Player2Button" text="Giulia">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="451.0">
                             <children>

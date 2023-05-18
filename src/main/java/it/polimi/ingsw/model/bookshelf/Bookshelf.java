@@ -57,6 +57,9 @@ public class Bookshelf {
             throw new IllegalArgumentException("Received a selection of tiles with more than three elements");
         }
 
+        if (!canFit(columnIndex, selection.size())) {
+            throw new IllegalStateException("Selected tiles do not fit in designated column");
+        }
 
         // we find the first void on the designated column.
         // this is also the number of elements in a certain column.
@@ -65,19 +68,14 @@ public class Bookshelf {
         while (bookshelfMatrix[lastEmptyShelfIndex][columnIndex] == null && lastEmptyShelfIndex + 1 < rows) {
             lastEmptyShelfIndex++;
         }
-
-
-        // we check whether we have enough space on our column to insert
-        // the selected items
-        int freeSpace = lastEmptyShelfIndex + 1;
-
-        if (freeSpace < selection.size()) {
-            throw new IllegalStateException("Selected tiles do not fit in designated column");
-        }
+        
+        if(lastEmptyShelfIndex != rows - 1)
+            lastEmptyShelfIndex--;
 
         for (Tile tile : selection) {
             bookshelfMatrix[lastEmptyShelfIndex][columnIndex] = tile;
             lastEmptyShelfIndex--;
+
         }
     }
 

@@ -1,58 +1,51 @@
 package it.polimi.ingsw.ui.gui;
 
 
-import it.polimi.ingsw.controller.server.ServerController;
-import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+import it.polimi.ingsw.model.board.Coordinate;
+import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.ui.UiGateway;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
 
 
 public class GuiApp extends Application implements UiGateway {
-    @FXML
-    private Image Player1Tile23;
-    @FXML
-    private Image Player1Tile01;
-    @FXML
-    private Image Player1Tile02;
-    @FXML
-    private Image Player1Tile03;
-    @FXML
-    private Image Player1Tile04;
-    @FXML
-    private Image Player1Tile10;
-    @FXML
-    private GridPane gridPane;
-
-
+    private final int dimension = BoardConfiguration.getInstance().getDimension();
+    private Game game;
 
     @FXML
     public void start(Stage primaryStage) throws IOException {
-        Game game = new Game(GameMode.GAME_MODE_4_PLAYERS);
+        game = new Game(GAME_MODE_4_PLAYERS);
         game.addPlayer("Cookie");
         game.addPlayer("Alberto");
         game.addPlayer("Marco");
         game.addPlayer("Giulia");
 
+        primaryStage.setMaximized(true);
+        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitHint("");
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Index.fxml")));
         primaryStage.setScene(root.getScene());
         primaryStage.show();
-        gridPane.
+
 
     }
 
@@ -70,11 +63,66 @@ public class GuiApp extends Application implements UiGateway {
 
     @Override
     public void modelUpdate(Game game) {
+        GridPane matrix = new GridPane();
+        Tile tile;
 
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+
+                tile = game.getGameMatrix()[i][j];
+
+                switch (tile) {
+                    case BOOK -> {
+                        matrix.add(createImageMatrix("resources/img/tiles/book1.1.png"), i, j);
+                    }
+                    case CAT -> {
+                        matrix.add(createImageMatrix("resources/img/tiles/cat1.1.png"), i, j);
+                    }
+                    case GAME -> {
+                        matrix.add(createImageMatrix("resources/img/tiles/game1.1.png"), i, j);
+                    }
+                    case TROPHY -> {
+                        matrix.add(createImageMatrix("resources/img/tiles/trophy1.1.png"), i, j);
+                    }
+                    case PLANT -> {
+                        matrix.add(createImageMatrix("resources/img/tiles/plant1.1.png"), i, j);
+                    }
+                    case FRAME -> {
+                        matrix.add(createImageMatrix("resources/img/tiles/frame1.1.png"), i, j);
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    public ImageView createImageMatrix(String name) {
+        ImageView book = new ImageView();
+        book.setImage(new Image(name));
+
+        return book;
+    }
+
+    public Set<Coordinate> getSelectedCoordinates(Node tileNode) {
+
+        Set<Coordinate> selectedCoordinate = new HashSet<>();
+        Coordinate coordinate;
+
+        Integer col = GridPane.getColumnIndex(tileNode);
+        Integer row = GridPane.getRowIndex(tileNode);
+
+        coordinate = new Coordinate(row, col);
+
+        selectedCoordinate.add(coordinate);
+        return selectedCoordinate;
     }
 
     @Override
     public void gameSelection() {
+        // game.onPlayerSelectionPhase(getSelectedCoordinates());
+
+
 
     }
 
@@ -87,4 +135,6 @@ public class GuiApp extends Application implements UiGateway {
     public void onGameEnded() {
 
     }
+
+
 }
