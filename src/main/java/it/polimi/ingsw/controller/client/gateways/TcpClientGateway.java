@@ -9,7 +9,7 @@ import it.polimi.ingsw.network.tcp.messages.request.*;
 import it.polimi.ingsw.network.tcp.messages.request.replies.GameConnectionRequestReply;
 import it.polimi.ingsw.network.tcp.messages.request.replies.GameCreationRequestReply;
 import it.polimi.ingsw.network.tcp.messages.request.replies.ServerStatusRequestReply;
-import it.polimi.ingsw.network.tcp.messages.response.internal.UsernameInjectionEvent;
+import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
@@ -110,19 +110,19 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
 
     public void mapEventToControllerMethodCall(@NotNull final Message incomingMessage) {
         switch (incomingMessage) {
-            case UsernameInjectionEvent s -> {
-                controller.injectUsername(s.getUsername());
+            case ConnectionAcceptanceEvent s -> {
+                controller.onAcceptConnectionAndFinalizeUsername(s.getUsername());
             }
             case GameConnectionRequestReply s -> {
                 var sealed = s.seal();
-                controller.gameConnectionReply(sealed);
+                controller.onGameConnectionReply(sealed);
             }
             case GameCreationRequestReply s -> {
                 var sealed = s.seal();
-                controller.gameCreationReply(sealed);
+                controller.onGameCreationReply(sealed);
             }
             case ServerStatusRequestReply s -> {
-                controller.serverStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
+                controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
             }
             case null, default ->
                     throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);

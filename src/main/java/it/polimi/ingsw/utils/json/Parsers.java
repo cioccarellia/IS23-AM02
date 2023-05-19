@@ -6,7 +6,7 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.request.*;
 import it.polimi.ingsw.network.tcp.messages.request.replies.*;
-import it.polimi.ingsw.network.tcp.messages.response.internal.UsernameInjectionEvent;
+import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
 
 /**
  * Global parser for default and marshaled gson.
@@ -27,7 +27,7 @@ public class Parsers {
     private final static RuntimeTypeAdapterFactory<Message> runtimeTypeAdapterFactory =
             RuntimeTypeAdapterFactory
                     .of(Message.class, META_CLASSNAME_JSON_FIELD) // typeFieldName
-                    .registerSubtype(UsernameInjectionEvent.class, UsernameInjectionEvent.class.getName())
+                    .registerSubtype(ConnectionAcceptanceEvent.class, ConnectionAcceptanceEvent.class.getName())
                     .registerSubtype(ServerStatusRequestReply.class, ServerStatusRequestReply.class.getName())
                     .registerSubtype(GameCreationRequest.class, GameCreationRequest.class.getName())
                     .registerSubtype(GameCreationRequestReply.class, GameCreationRequestReply.class.getName())

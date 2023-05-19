@@ -2,7 +2,11 @@ package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.router.Router;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
@@ -15,11 +19,11 @@ import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.network.tcp.TcpConnectionHandler;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.services.ServerService;
+import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -74,16 +78,24 @@ public class ServerController implements ServerService {
     }
 
 
+    private List<Pair<String, ConnectionStatus>> currentPlayerInfo() {
+        return connectionsManager.values()
+                .stream()
+                .map(user -> new Pair<>(user.getUsername(), user.getStatus()))
+                .toList();
+    }
+
+
     /**
      * Connects a username and a remote service {@link ClientService} to allow asynchronous
      * communication between client and server.
      *
      * @apiNote to be called only when the user connection/creation request has been accepted.
      */
-    public void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
+    public synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
-        service.injectUsername(username);
+        service.onAcceptConnectionAndFinalizeUsername(username);
 
         // en-route parameters
         switch (service) {
@@ -112,75 +124,91 @@ public class ServerController implements ServerService {
             connectionsManager.add(username, protocol, OPEN, remoteService);
             synchronizeConnectionLayer(username, remoteService);
 
-
             // adds a player to the game model
             game.addPlayer(username);
 
-
-            router.route(username).serverStatusUpdateEvent(serverStatus, new ArrayList<>());
-
             // notify the
             logger.info("returning success from gameStartRequest()");
-            // fixme return new SingleResult.Success<>();
+
+            // return success to the caller
+            router.route(username).onGameCreationReply(new SingleResult.Success<>());
+
+            // route the new status to everybody
+            router.broadcast().onServerStatusUpdateEvent(serverStatus, currentPlayerInfo());
         } else {
             logger.warn("returning failure from gameStartRequest()");
-            // fixme return new SingleResult.Failure<>(GameStartError.GAME_ALREADY_STARTED);
+
+            router.route(username).onGameCreationReply(new SingleResult.Failure<>(GameCreationError.GAME_ALREADY_STARTED));
         }
     }
 
 
     // Creates a connection between client and server
     @Override
-    public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
-        logger.info("gameConnectionRequest(username={}, protocol={})", username, protocol);
+    public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
+        logger.info("gameConnectionRequest(username={}, protocol={}, remoteService={})", username, protocol, remoteService);
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
         if (serverStatus == GAME_RUNNING) {
-            // fixme return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED);
+            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
+            return;
         }
 
         if (connectionsManager.size() == maxPlayerAmount) {
-            // fixme return new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED);
+            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED));
+            return;
         }
 
         if (connectionsManager.containsUsername(username)) {
-            // fixme return new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE);
+            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
+            return;
         }
 
         if (game.getGameStatus() == ENDED) {
-            // fixme return new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED);
+            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
+            return;
         }
 
 
-        // if successful & can start game
-        if (maxPlayerAmount == connectionsManager.size() + 1) {
-            serverStatus = GAME_RUNNING;
-        }
-
-
-        // synchronize
+        // add username and connection status
         connectionsManager.add(username, protocol, OPEN, remoteService);
         synchronizeConnectionLayer(username, remoteService);
 
+        // add player to game
         game.addPlayer(username);
 
-        // fixme return new SingleResult.Success<>();
+        // route a success to the caller
+        router.route(username).onGameConnectionReply(new SingleResult.Success<>());
+
+        // route the new status to everybody
+        router.broadcast().onServerStatusUpdateEvent(serverStatus, currentPlayerInfo());
+
+
+        boolean shouldStartGame = maxPlayerAmount == connectionsManager.size();
+
+        if (shouldStartGame) {
+            // conditions for starting game are met
+            serverStatus = GAME_RUNNING;
+
+            // broadcast a game started event to everybody
+            router.broadcast().onGameStartedEvent();
+        }
     }
 
 
     // Game logic
-    public boolean isUsernameActivePlayer(@NotNull String username) {
+    public synchronized boolean isUsernameActivePlayer(@NotNull String username) {
         return username.equals(game.getCurrentPlayer().getUsername());
     }
 
-    public boolean shouldStandbyGame() {
+    public synchronized boolean shouldStandbyGame() {
         return connectionsManager.values().stream().filter(player -> player.getStatus() == DISCONNECTED).count() >= maxPlayerAmount - 1;
     }
 
 
     @Override
-    public void /*SingleResult<TileSelectionFailures>*/ gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public synchronized void /*SingleResult<TileSelectionFailures>*/ gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
 
         if (isUsernameActivePlayer(username)) {
@@ -201,7 +229,7 @@ public class ServerController implements ServerService {
 
 
     @Override
-    public void /*SingleResult<BookshelfInsertionFailure>*/ gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public synchronized void /*SingleResult<BookshelfInsertionFailure>*/ gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         logger.info("onPlayerBookshelfTileInsertionRequest(username={}, tiles={}, column={})", username, tiles, column);
 
         if (isUsernameActivePlayer(username)) {
@@ -234,13 +262,13 @@ public class ServerController implements ServerService {
         // return new SingleResult.Success<>();
     }
 
-    public void onPlayerCheckingRequest() {
+    public synchronized void onPlayerCheckingRequest() {
         logger.info("onPlayerCheckingRequest()");
         game.onPlayerCheckingPhase();
     }
 
     @Override
-    public void keepAlive(String username) {
+    public synchronized void keepAlive(String username) {
         logger.info("keepAlive(username={})", username);
         if (connectionsManager.containsUsername(username)) {
             connectionsManager.setConnectionStatus(username, OPEN);
@@ -249,7 +277,7 @@ public class ServerController implements ServerService {
         }
     }
 
-    public void onNextTurn(String nextPlayerUsername) {
+    public synchronized void onNextTurn(String nextPlayerUsername) {
         // assume the username is correct
         assert game.getSessions().isPresent(nextPlayerUsername);
         PlayerNumber currentPlayerUsername = game.getCurrentPlayer().getPlayerNumber();

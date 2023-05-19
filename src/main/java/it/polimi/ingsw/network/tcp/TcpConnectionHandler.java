@@ -13,7 +13,7 @@ import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.request.replies.GameConnectionRequestReply;
 import it.polimi.ingsw.network.tcp.messages.request.replies.GameCreationRequestReply;
 import it.polimi.ingsw.network.tcp.messages.request.replies.ServerStatusRequestReply;
-import it.polimi.ingsw.network.tcp.messages.response.internal.UsernameInjectionEvent;
+import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
@@ -123,35 +123,35 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void injectUsername(String string) {
-        UsernameInjectionEvent reply = new UsernameInjectionEvent(string);
+    public void onAcceptConnectionAndFinalizeUsername(String string) {
+        ConnectionAcceptanceEvent reply = new ConnectionAcceptanceEvent(string);
 
-        SocketSystem.sendAsync(socketOut, reply, UsernameInjectionEvent.class);
+        SocketSystem.sendAsync(socketOut, reply, ConnectionAcceptanceEvent.class);
     }
 
     @Override
-    public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
         ServerStatusRequestReply reply = new ServerStatusRequestReply(status, playerInfo);
 
         SocketSystem.sendAsync(socketOut, reply, ServerStatusRequestReply.class);
     }
 
     @Override
-    public void gameCreationReply(SingleResult<GameCreationError> result) {
+    public void onGameCreationReply(SingleResult<GameCreationError> result) {
         GameCreationRequestReply reply = new GameCreationRequestReply(result);
 
         SocketSystem.sendAsync(socketOut, reply, GameCreationRequestReply.class);
     }
 
     @Override
-    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
+    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
         GameConnectionRequestReply reply = new GameConnectionRequestReply(result);
 
         SocketSystem.sendAsync(socketOut, reply, GameConnectionRequestReply.class);
     }
 
     @Override
-    public void gameStartedEvent() {
+    public void onGameStartedEvent() {
 
     }
 

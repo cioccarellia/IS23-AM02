@@ -27,8 +27,8 @@ public class ClientController implements ClientService, ViewEventHandler, Serial
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-    transient UiGateway ui;
-    transient final ClientGateway clientGateway;
+    private transient UiGateway ui;
+    private transient final ClientGateway clientGateway;
 
     String authUsername;
 
@@ -37,57 +37,61 @@ public class ClientController implements ClientService, ViewEventHandler, Serial
     }
 
 
-    public void injectUsername(String username) {
-        authUsername = username;
-        logger.info("RECEIVED USERNAME INJECTION");
-    }
 
-
+    /***   ClientService   ***/
     @Override
-    public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
     }
 
     @Override
-    public void gameCreationReply(SingleResult<GameCreationError> result) {
+    public synchronized void onGameCreationReply(SingleResult<GameCreationError> result) {
+        ui.onGameCreated();
+    }
+
+    @Override
+    public synchronized void onGameConnectionReply(SingleResult<GameConnectionError> result) {
 
     }
 
     @Override
-    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
+    public synchronized void onGameStartedEvent() {
 
     }
 
     @Override
-    public void gameStartedEvent() {
-
-    }
-
-    @Override
-    public void modelUpdateEvent(Game game) {
+    public synchronized void modelUpdateEvent(Game game) {
         ui.modelUpdate(game);
     }
 
     @Override
-    public void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public synchronized void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
 
     }
 
     @Override
-    public void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public synchronized void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
 
     }
 
     @Override
-    public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public synchronized void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
 
     }
 
     @Override
-    public void gameEndedEvent() {
+    public synchronized void gameEndedEvent() {
 
     }
 
+
+
+
+    /***   ViewEventHandler   ***/
+
+    public void onAcceptConnectionAndFinalizeUsername(String username) {
+        authUsername = username;
+    }
 
     /**
      * @param coordinates

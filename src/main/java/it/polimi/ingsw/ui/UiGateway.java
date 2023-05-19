@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.game.Game;
 
 public interface UiGateway {
 
-    void onGameStarted();
+    void onGameCreated();
 
     void modelUpdate(Game game);
 

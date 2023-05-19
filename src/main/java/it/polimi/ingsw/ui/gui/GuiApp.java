@@ -22,7 +22,7 @@ public abstract class GuiApp extends Application implements UiGateway {
     private Game game;
 
     @Override
-    public void onGameStarted() {
+    public void onGameCreated() {
 
         Game game = new Game(GAME_MODE_2_PLAYERS);
     }

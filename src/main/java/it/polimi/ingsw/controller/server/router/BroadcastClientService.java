@@ -31,28 +31,28 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void injectUsername(String string) {
-        forward(source -> source.injectUsername(string));
+    public void onAcceptConnectionAndFinalizeUsername(String string) {
+        forward(source -> source.onAcceptConnectionAndFinalizeUsername(string));
     }
 
     @Override
-    public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
-        forward(source -> source.serverStatusUpdateEvent(status, playerInfo));
+    public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+        forward(source -> source.onServerStatusUpdateEvent(status, playerInfo));
     }
 
     @Override
-    public void gameCreationReply(SingleResult<GameCreationError> result) {
-        forward(source -> source.gameCreationReply(result));
+    public void onGameCreationReply(SingleResult<GameCreationError> result) {
+        forward(source -> source.onGameCreationReply(result));
     }
 
     @Override
-    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
-        forward(source -> source.gameConnectionReply(result));
+    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+        forward(source -> source.onGameConnectionReply(result));
     }
 
     @Override
-    public void gameStartedEvent() {
-        forward(ClientService::gameStartedEvent);
+    public void onGameStartedEvent() {
+        forward(ClientService::onGameStartedEvent);
     }
 
     @Override

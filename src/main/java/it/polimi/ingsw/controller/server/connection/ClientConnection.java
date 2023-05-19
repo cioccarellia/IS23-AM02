@@ -102,29 +102,30 @@ public class ClientConnection implements ClientService {
     }
 
 
+
     @Override
-    public void injectUsername(String string) {
-        service().injectUsername(string);
+    public void onAcceptConnectionAndFinalizeUsername(String string) {
+        service().onAcceptConnectionAndFinalizeUsername(string);
     }
 
     @Override
-    public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
-        service().serverStatusUpdateEvent(status, playerInfo);
+    public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+        service().onServerStatusUpdateEvent(status,  playerInfo);
     }
 
     @Override
-    public void gameCreationReply(SingleResult<GameCreationError> result) {
-        service().gameCreationReply(result);
+    public void onGameCreationReply(SingleResult<GameCreationError> result) {
+        service().onGameCreationReply(result);
     }
 
     @Override
-    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
-        service().gameConnectionReply(result);
+    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+        service().onGameConnectionReply(result);
     }
 
     @Override
-    public void gameStartedEvent() {
-        service().gameStartedEvent();
+    public void onGameStartedEvent() {
+        service().onGameStartedEvent();
     }
 
     @Override

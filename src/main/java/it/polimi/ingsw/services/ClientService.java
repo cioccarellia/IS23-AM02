@@ -18,21 +18,25 @@ public interface ClientService {
 
 
     // Initialization
+    /**
+     * Communicates to the client that it has received the username
+     * */
     @ClientFunction
-    void injectUsername(String string);
-
-    @ClientFunction
-    void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo);
-
-    @ClientFunction
-    void gameCreationReply(SingleResult<GameCreationError> result);
-
-    @ClientFunction
-    void gameConnectionReply(SingleResult<GameConnectionError> result);
+    void onAcceptConnectionAndFinalizeUsername(String string);
 
 
     @ClientFunction
-    void gameStartedEvent();
+    void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo);
+
+    @ClientFunction
+    void onGameCreationReply(SingleResult<GameCreationError> result);
+
+    @ClientFunction
+    void onGameConnectionReply(SingleResult<GameConnectionError> result);
+
+
+    @ClientFunction
+    void onGameStartedEvent();
 
 
     // Running

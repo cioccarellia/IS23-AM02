@@ -41,7 +41,7 @@ public class CliTests {
         game.addPlayer("Cookie");
         game.addPlayer("Giulia");
         cliApp.modelUpdate(game);
-        cliApp.onGameStarted();
+        cliApp.onGameCreated();
     }
 
 }
