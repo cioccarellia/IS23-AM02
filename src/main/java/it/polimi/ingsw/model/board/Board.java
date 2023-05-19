@@ -134,7 +134,7 @@ public class Board {
     public boolean needsRefilling() {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                if (getTileMatrix() == null) {
+                if (getTileMatrix()[i][j] == null) {
                     continue;
                 }
                 if (countFreeEdges(new Coordinate(i, j)) < 4)

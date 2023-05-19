@@ -339,12 +339,12 @@ public class Game implements ModelService {
      */
     @Override
     public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
+
         if (!isSelectionValid(coordinates)) {
             throw new IllegalStateException("Coordinates are not valid");
         }
 
-        // TODO where do we get the ordered tiles?
-        // we assume the selection is valid and in the order they want it
+        // we assume the selection is valid
         List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates
                 .stream()
                 .map(it -> new Pair<>(it, board.getTileAt(it).get())).toList();
@@ -367,7 +367,8 @@ public class Game implements ModelService {
     @Override
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
 
-        // we assume the tiles given are already in the order the player wants
+        // TODO where do we get the ordered tiles?
+
         // we assume tiles have been checked and match
         getCurrentPlayer().getBookshelf().insert(column, tiles);
         getCurrentPlayer().setPlayerCurrentGamePhase(CHECKING);
@@ -379,6 +380,7 @@ public class Game implements ModelService {
      */
     @Override
     public void onPlayerCheckingPhase() {
+
         // full bookshelf test
         boolean isBookshelfFull = getCurrentPlayer().getBookshelf().isFull();
 
@@ -389,6 +391,7 @@ public class Game implements ModelService {
             setFlags();
         }
 
+        // checks if it's the last round and sets this turn as the last for the player
         if (status == LAST_ROUND) {
             playerHasNoMoreTurns(currentPlayerNumber);
         }
@@ -402,9 +405,12 @@ public class Game implements ModelService {
 
             boolean hasAlreadyAcquiredToken = getCurrentPlayer().getAchievedCommonGoalCards().contains(card.getId());
 
-            if (isCardConditionVerified && !hasAlreadyAcquiredToken) {
+            boolean cardHasTokensLeft = !cardStatus.getCardTokens().isEmpty();
+
+            if (isCardConditionVerified && !hasAlreadyAcquiredToken && cardHasTokensLeft) {
                 Optional<Token> pendingToken = cardStatus.acquireAndRemoveTopToken();
                 pendingToken.ifPresent(token -> getCurrentPlayer().getAcquiredTokens().add(token));
+                getCurrentPlayer().getAchievedCommonGoalCards().add(card.getId());
             }
         }
 
@@ -420,11 +426,16 @@ public class Game implements ModelService {
      */
     @Override
     public void onNextTurn(String nextPlayerUsername) {
-        // assume the username is correct
-        assert sessions.isPresent(nextPlayerUsername);
+        // checks if the flag noMoreTurns for the nextPlayer is already set as true, in this case the game ends
+        if (sessions.getByUsername(nextPlayerUsername).noMoreTurns)
+            setGameStatus(ENDED);
+        else {
+            // assume the username is correct
+            assert sessions.isPresent(nextPlayerUsername);
 
-        currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
-        getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
+            currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
+            getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
+        }
     }
 
     /**

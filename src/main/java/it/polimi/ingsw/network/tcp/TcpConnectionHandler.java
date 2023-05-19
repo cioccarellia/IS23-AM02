@@ -37,18 +37,18 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
 
     /**
      * Server controller wrapper for abstract {@link it.polimi.ingsw.services.ServerService}
-     * */
+     */
     private final ServerTcpWrapper wrapper;
 
 
     /**
      * Specifies whether the current {@code ClientGateway} is active and listening to the socket.
-     * */
+     */
     private boolean isActivelyListeningOnSocket = true;
 
     /**
      * Used to intercept and associate a username with a socket connection
-     * */
+     */
     private String username = null;
 
     public TcpConnectionHandler(@NotNull Socket socket, ServerTcpWrapper wrapper) {
@@ -84,7 +84,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     public void run() {
         logger.info("Starting TcpConnectionHandler for socket={}", socket);
         try (
-                Scanner in = new Scanner(socketIn);
+                Scanner in = new Scanner(socketIn)
                 // PrintWriter out = new PrintWriter(socket.getOutputStream())
         ) {
             logger.info("Actively monitoring socket={}", socket);

@@ -20,6 +20,7 @@ import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 public abstract class GuiApp extends Application implements UiGateway {
     private final int dimension = BoardConfiguration.getInstance().getDimension();
     private Game game;
+
     @Override
     public void onGameStarted() {
 
@@ -37,27 +38,13 @@ public abstract class GuiApp extends Application implements UiGateway {
                 tile = game.getGameMatrix()[i][j];
 
                 switch (tile) {
-                    case BOOK -> {
-                        matrix.add(createImageMatrix("img/tiles/book1.1.png"), i, j);
-                    }
-                    case CAT -> {
-                        matrix.add(createImageMatrix("img/tiles/cat1.1.png"), i, j);
-                    }
-                    case GAME -> {
-                        matrix.add(createImageMatrix("img/tiles/game1.1.png"), i, j);
-                    }
-                    case TROPHY -> {
-                        matrix.add(createImageMatrix("img/tiles/trophy1.1.png"), i, j);
-                    }
-                    case PLANT -> {
-                        matrix.add(createImageMatrix("img/tiles/plant1.1.png"), i, j);
-                    }
-                    case FRAME -> {
-                        matrix.add(createImageMatrix("img/tiles/frame1.1.png"), i, j);
-                    }
-
+                    case BOOK -> matrix.add(createImageMatrix("img/tiles/book1.1.png"), i, j);
+                    case CAT -> matrix.add(createImageMatrix("img/tiles/cat1.1.png"), i, j);
+                    case GAME -> matrix.add(createImageMatrix("img/tiles/game1.1.png"), i, j);
+                    case TROPHY -> matrix.add(createImageMatrix("img/tiles/trophy1.1.png"), i, j);
+                    case PLANT -> matrix.add(createImageMatrix("img/tiles/plant1.1.png"), i, j);
+                    case FRAME -> matrix.add(createImageMatrix("img/tiles/frame1.1.png"), i, j);
                 }
-
             }
         }
     }

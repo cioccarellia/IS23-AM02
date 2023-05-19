@@ -102,7 +102,6 @@ public class ClientConnection implements ClientService {
     }
 
 
-
     @Override
     public void injectUsername(String string) {
         service().injectUsername(string);
@@ -110,7 +109,7 @@ public class ClientConnection implements ClientService {
 
     @Override
     public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
-        service().serverStatusUpdateEvent(status,  playerInfo);
+        service().serverStatusUpdateEvent(status, playerInfo);
     }
 
     @Override

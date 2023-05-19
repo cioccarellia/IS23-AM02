@@ -10,14 +10,14 @@ import it.polimi.ingsw.network.tcp.messages.response.internal.UsernameInjectionE
 
 /**
  * Global parser for default and marshaled gson.
- * */
+ */
 public class Parsers {
 
     private final static Gson defaultGson = new Gson();
 
     /**
      * Returns the default GSON instance
-     * */
+     */
     public static Gson defaultGson() {
         return defaultGson;
     }
@@ -47,7 +47,7 @@ public class Parsers {
 
     /**
      * Returns the specialized GSON instance for message serialization and deserialization
-     * */
+     */
     public static Gson marshaledGson() {
         return marshaledGson;
     }

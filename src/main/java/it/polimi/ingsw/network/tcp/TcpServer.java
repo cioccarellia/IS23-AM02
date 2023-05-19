@@ -106,8 +106,8 @@ public class TcpServer implements Runnable {
 
     /**
      * Keeps track of all the
-     * */
-    private static List<TcpConnectionHandler> registeredHandlers = new ArrayList<>();
+     */
+    private static final List<TcpConnectionHandler> registeredHandlers = new ArrayList<>();
 
     public static List<TcpConnectionHandler> getRegisteredHandlers() {
         return registeredHandlers;

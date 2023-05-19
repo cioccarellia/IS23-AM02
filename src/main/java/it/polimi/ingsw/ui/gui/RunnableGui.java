@@ -19,6 +19,7 @@ public class RunnableGui extends Application {
     Game game;
     @FXML
     private ImageView Player1Tile23;
+
     public void start(Stage primaryStage) throws IOException {
         game = new Game(GAME_MODE_4_PLAYERS);
         game.addPlayer("Cookie");
@@ -52,7 +53,6 @@ public class RunnableGui extends Application {
         primaryStage.setTitle("My shelfie");
         //primaryStage.setFullScreen().NO_MATCH);
         primaryStage.show();
-
 
 
         Player1Tile23.setOnMouseClicked(mouseEvent -> {

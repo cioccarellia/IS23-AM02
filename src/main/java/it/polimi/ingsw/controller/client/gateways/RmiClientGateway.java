@@ -25,7 +25,7 @@ public class RmiClientGateway extends ClientGateway {
 
     /**
      * RMI stub object to forward the methods on
-     * */
+     */
     final private ServerService rmiServerStub;
 
     public RmiClientGateway(String serverHost, int serverRmiPort) {

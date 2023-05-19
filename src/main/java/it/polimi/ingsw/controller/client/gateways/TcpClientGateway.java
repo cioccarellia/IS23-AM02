@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  * Client gateway for server communication (through {@link it.polimi.ingsw.services.ServerService}).
- * */
+ */
 public class TcpClientGateway extends ClientGateway implements Runnable, Closeable {
 
     private static final Logger logger = LoggerFactory.getLogger(TcpClientGateway.class);
@@ -37,7 +37,7 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
 
     /**
      * Specifies whether the current {@code ClientGateway} is active and listening to the socket.
-     * */
+     */
     private boolean isActivelyListeningOnSocket = true;
 
 
@@ -124,7 +124,8 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
             case ServerStatusRequestReply s -> {
                 controller.serverStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
             }
-            case null, default -> throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
+            case null, default ->
+                    throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
         }
     }
 

@@ -10,6 +10,7 @@ import it.polimi.ingsw.services.ServerService;
 public abstract class ClientGateway implements ServerService {
 
     protected ClientController controller;
+
     public void linkController(final ClientController controller) {
         this.controller = controller;
     }

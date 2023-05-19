@@ -23,7 +23,7 @@ public enum GameMode {
     }
 
     public int maxCellAmount() {
-        return switch(maxPlayerAmount()){
+        return switch (maxPlayerAmount()) {
             case 2 -> CellAmount.NORMAL_AMOUNT.getCellCount();
             case 3 -> CellAmount.THREE_DOTS_AMOUNT.getCellCount();
             case 4 -> CellAmount.FOUR_DOTS_AMOUNT.getCellCount();

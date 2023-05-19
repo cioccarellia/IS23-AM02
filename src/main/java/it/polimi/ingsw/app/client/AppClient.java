@@ -42,13 +42,8 @@ public class AppClient implements Runnable {
 
         this.gateway.linkController(controller);
 
-        switch (gateway) {
-            case TcpClientGateway gateway -> {
-                executorService.execute(gateway);
-            }
-            default -> {
-
-            }
+        if (gateway instanceof TcpClientGateway gateway) {
+            executorService.execute(gateway);
         }
     }
 

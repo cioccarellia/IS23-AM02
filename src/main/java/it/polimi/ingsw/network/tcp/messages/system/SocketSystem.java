@@ -12,7 +12,7 @@ public class SocketSystem {
     /**
      * Serializes the given message into JSON using a {@link RuntimeTypeAdapterFactory}
      * and sends it onto the socket stream immediately
-     * */
+     */
     public static <I extends Message> void sendAsync(@NotNull PrintWriter socketOutput, I request, Class<I> serializationClass) {
         // serializes to JSON the message content
         String serializedJsonRequest = Parsers.marshaledGson().toJson(request, serializationClass);

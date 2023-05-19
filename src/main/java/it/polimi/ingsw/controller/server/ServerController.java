@@ -77,6 +77,7 @@ public class ServerController implements ServerService {
     /**
      * Connects a username and a remote service {@link ClientService} to allow asynchronous
      * communication between client and server.
+     *
      * @apiNote to be called only when the user connection/creation request has been accepted.
      */
     public void synchronizeConnectionLayer(String username, @NotNull ClientService service) {

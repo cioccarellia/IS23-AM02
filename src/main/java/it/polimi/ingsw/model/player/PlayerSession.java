@@ -46,6 +46,7 @@ public class PlayerSession {
     }
 
 
+    // getters
     public String getUsername() {
         return username;
     }
@@ -66,6 +67,29 @@ public class PlayerSession {
         return acquiredTokens;
     }
 
+    public PlayerTileSelection getPlayerTileSelection() {
+        return playerTileSelection;
+    }
+
+    public PlayerCurrentGamePhase getPlayerCurrentGamePhase() {
+        return playerCurrentGamePhase;
+    }
+
+    public List<CommonGoalCardIdentifier> getAchievedCommonGoalCards() {
+        return achievedCommonGoalCards;
+    }
+
+    // setters
+    public void setPlayerTileSelection(PlayerTileSelection selection) {
+        playerTileSelection = selection;
+    }
+
+    public void setPlayerCurrentGamePhase(PlayerCurrentGamePhase phase) {
+        playerCurrentGamePhase = phase;
+    }
+
+
+    // utils
 
     /**
      * Registers a token as acquired by the user
@@ -113,25 +137,7 @@ public class PlayerSession {
         throw new IllegalArgumentException("Expected a number between 0 and 6.");
     }
 
-    public PlayerTileSelection getPlayerTileSelection() {
-        return playerTileSelection;
-    }
-
-    public void setPlayerTileSelection(PlayerTileSelection selection) {
-        playerTileSelection = selection;
-    }
 
 
-    public PlayerCurrentGamePhase getPlayerCurrentGamePhase() {
-        return playerCurrentGamePhase;
-    }
 
-    public void setPlayerCurrentGamePhase(PlayerCurrentGamePhase phase) {
-        playerCurrentGamePhase = phase;
-    }
-
-
-    public List<CommonGoalCardIdentifier> getAchievedCommonGoalCards() {
-        return achievedCommonGoalCards;
-    }
 }
