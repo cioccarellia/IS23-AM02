@@ -9,7 +9,8 @@ import java.util.*;
  */
 public class TileExtractor extends ElementExtractor<Tile> {
 
-    private static final int MAX_TILE_AMOUNT = 22;
+    private static final int MAX_TILE_TYPE_AMOUNT = 22;
+
 
     /**
      * Map used to store the state information about how many likewise items have already
@@ -19,7 +20,7 @@ public class TileExtractor extends ElementExtractor<Tile> {
 
     public TileExtractor() {
         for (Tile tile : Tile.values()) {
-            status.put(tile, MAX_TILE_AMOUNT);
+            status.put(tile, MAX_TILE_TYPE_AMOUNT);
         }
     }
 
@@ -46,6 +47,16 @@ public class TileExtractor extends ElementExtractor<Tile> {
         } else {
             return extract();
         }
+    }
+
+    public void putBackTiles(Map<Tile, Integer> removedTiles) {
+        List<Tile> tileType = removedTiles.keySet().stream().toList();
+
+        for (Tile tile : tileType) {
+            int tileAmount = status.get(tile) + removedTiles.get(tile);
+            status.put(tile, tileAmount);
+        }
+
     }
 
 

@@ -9,6 +9,9 @@ public class PersonalGoalCard {
         shelfPointsMatrix = matrix;
     }
 
+    /**
+     * @return the Tile matrix of the personal card
+     */
     public Tile[][] getShelfPointMatrix() {
         return shelfPointsMatrix;
     }

@@ -73,6 +73,8 @@ public class Game implements ModelService {
      */
     private PlayerNumber startingPlayerNumber, currentPlayerNumber;
 
+
+    //constructor
     public Game(GameMode _mode) {
         mode = _mode;
         sessions = new SessionManager(mode);
@@ -80,31 +82,18 @@ public class Game implements ModelService {
         logger.info("Game initialized");
     }
 
+    // setters
 
     /**
-     * Inserts a player into the game
+     * It sets the {@link GameStatus} to the one given
      *
-     * @param username the username for the given player
+     * @param status the given {@link GameStatus}
      */
-    public void addPlayer(String username) {
-        if (status != INITIALIZATION) {
-            throw new IllegalStateException("Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(status));
-        }
-
-        if (sessions.size() == mode.maxPlayerAmount()) {
-            throw new IllegalStateException("Impossible to add a player: the game is full (having %d players for %s mode)".formatted(sessions.size(), mode));
-        }
-
-        // Creating new player session
-        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(sessions.size() + 1);
-        PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
-        PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
-
-        // Adding session
-        sessions.put(newSession);
-
-        logger.info("addPlayer(username={}): player added", username);
+    public void setGameStatus(GameStatus status) {
+        this.status = status;
     }
+
+    // getters
 
     /**
      * @param username the username identifying the player
@@ -140,51 +129,6 @@ public class Game implements ModelService {
     }
 
     /**
-     * Method called when the game starts: sets the game as {@link GameStatus} RUNNING, checks all the players are
-     * present, extracts the two common goal cards, extracts a player to start the game, fills the boards with tiles and
-     * sets the {@link PlayerCurrentGamePhase} as SELECTING
-     */
-    @Override
-    public void onGameStarted() {
-        logger.info("onGameStarted()");
-        setGameStatus(RUNNING);
-
-        if (getPlayersCurrentAmount() != mode.maxPlayerAmount()) {
-            throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.maxPlayerAmount(), sessions.size()));
-        }
-
-        // Common goal card initialization
-        for (int cardNumber = 1; cardNumber <= config.commonGoalCardAmount(); cardNumber++) {
-            CommonGoalCard card = commonGoalCardExtractor.extract();
-            CommonGoalCardStatus cardStatus = new CommonGoalCardStatus(card, mode);
-            commonGoalCardStatuses.add(cardStatus);
-        }
-
-
-        // Random first-player extraction (concise)
-        startingPlayerNumber = CollectionUtils.extractRandomElement(sessions).getPlayerNumber();
-        currentPlayerNumber = startingPlayerNumber;
-
-
-        // (re)fill board
-        onRefill();
-
-        // Set first state
-        getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
-    }
-
-
-    /**
-     * Counts how many empty cells are left, it extracts the needed tiles and fills the board with them.
-     */
-    public void onRefill() {
-        int emptyBoardCells = board.countEmptyCells(mode);
-        List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
-
-        board.fill(extractedTiles, mode);
-    }
-
-    /**
      * @return the {@link GameStatus}
      */
     public GameStatus getGameStatus() {
@@ -192,34 +136,10 @@ public class Game implements ModelService {
     }
 
     /**
-     * It sets the {@link GameStatus} to the one given
-     *
-     * @param status the given {@link GameStatus}
-     */
-    public void setGameStatus(GameStatus status) {
-        this.status = status;
-    }
-
-    /**
      * @return the {@link GameMode}
      */
     public GameMode getGameMode() {
         return mode;
-    }
-
-    /**
-     * @param coordinates the set of coordinates selected by the current player
-     * @return if the selected coordinates are valid: checks if at the given coordinates there is indeed a tile present,
-     * checks if the selection is no more than 3 and more than 0, checks if all the tiles at the given coordinates have
-     * at least one free edge, checks if they in a straight line (vertically and horizontally)
-     */
-    public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
-        boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
-        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize() && coordinates.size() > 0;
-        boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
-        boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
-
-        return areCoordinatesReferencingValidTiles && isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
     }
 
     /**
@@ -258,11 +178,58 @@ public class Game implements ModelService {
     }
 
     /**
+     * @param username the username identifying the player
+     * @return the {@link PlayerSession} of the given player
+     */
+    public PlayerSession getSessionFor(String username) {
+        return sessions.getByUsername(username);
+    }
+
+    /**
+     * @return the map of players
+     */
+    @TestOnly
+    public Map<PlayerNumber, PlayerSession> getPlayerNumberMap() {
+        return sessions.getNumberMap();
+    }
+
+
+    // utils
+
+    /**
+     * Counts how many empty cells are left, it extracts the needed tiles and fills the board with them.
+     */
+    public void onRefill() {
+        Map<Tile, Integer> removedTiles = board.removeRemainingTiles();
+        tileExtractor.putBackTiles(removedTiles);
+
+        int emptyBoardCells = board.countEmptyCells(mode);
+        List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
+
+        board.fill(extractedTiles, mode);
+    }
+
+    /**
+     * Sets noMoreTurns has true for all the players between the first player and the first that filled his bookshelf;
+     * if this two players are the same person, it simply puts his attribute has true
+     */
+    private void setFlags() {
+        // using currentPlayerNumber and startingPlayerNumber;
+        // playersMap.get(number).noMoreTurns = true;
+        PlayerNumber player = startingPlayerNumber;
+        while (player != currentPlayerNumber) {
+            playerHasNoMoreTurns(player);
+            player = player.next(mode);
+        }
+
+        playerHasNoMoreTurns(player);
+    }
+
+    /**
      * Sets the player's, identified by the given username, attribute noMoreTurns as true
      *
      * @param username player's username
      */
-
     public void playerHasNoMoreTurns(String username) {
         assert sessions.isPresent(username);
         playerHasNoMoreTurns(sessions.getByUsername(username).getPlayerNumber());
@@ -277,6 +244,20 @@ public class Game implements ModelService {
         sessions.getByNumber(number).noMoreTurns = true;
     }
 
+    /**
+     * @param coordinates the set of coordinates selected by the current player
+     * @return if the selected coordinates are valid: checks if at the given coordinates there is indeed a tile present,
+     * checks if the selection is no more than 3 and more than 0, checks if all the tiles at the given coordinates have
+     * at least one free edge, checks if they in a straight line (vertically and horizontally)
+     */
+    public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
+        boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
+        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize() && coordinates.size() > 0;
+        boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
+        boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
+
+        return areCoordinatesReferencingValidTiles && isSelectionAmountValid && isEdgeConditionSatisfied && areCoordinatesInStraightLine;
+    }
 
     /**
      * @param coordinates the collection of coordinates that needs checking
@@ -286,6 +267,67 @@ public class Game implements ModelService {
         return coordinates.stream().allMatch(it -> board.getTileAt(it).isPresent());
     }
 
+
+    // game phases
+
+    /**
+     * Inserts a player into the game
+     *
+     * @param username the username for the given player
+     */
+    public void addPlayer(String username) {
+        if (status != INITIALIZATION) {
+            throw new IllegalStateException("Impossible to add a player: current game phase (%s) not in INITIALIZATION".formatted(status));
+        }
+
+        if (sessions.size() == mode.maxPlayerAmount()) {
+            throw new IllegalStateException("Impossible to add a player: the game is full (having %d players for %s mode)".formatted(sessions.size(), mode));
+        }
+
+        // Creating new player session
+        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(sessions.size() + 1);
+        PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
+        PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
+
+        // Adding session
+        sessions.put(newSession);
+
+        logger.info("addPlayer(username={}): player added", username);
+    }
+
+    /**
+     * Method called when the game starts: sets the game as {@link GameStatus} RUNNING, checks all the players are
+     * present, extracts the two common goal cards, extracts a player to start the game, fills the boards with tiles and
+     * sets the {@link PlayerCurrentGamePhase} as SELECTING
+     */
+    @Override
+    public void onGameStarted() {
+        logger.info("onGameStarted()");
+        setGameStatus(RUNNING);
+
+        if (getPlayersCurrentAmount() != mode.maxPlayerAmount()) {
+            throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.maxPlayerAmount(), sessions.size()));
+        }
+
+        // Common goal card initialization
+        for (int cardNumber = 1; cardNumber <= config.commonGoalCardAmount(); cardNumber++) {
+            CommonGoalCard card = commonGoalCardExtractor.extract();
+            CommonGoalCardStatus cardStatus = new CommonGoalCardStatus(card, mode);
+            commonGoalCardStatuses.add(cardStatus);
+        }
+
+
+        // Random first-player extraction (concise)
+        startingPlayerNumber = CollectionUtils.extractRandomElement(sessions).getPlayerNumber();
+        currentPlayerNumber = startingPlayerNumber;
+
+
+        // (re)fill board
+        onRefill();
+
+        // Set first state
+        getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
+    }
 
     /**
      * Fetches the {@link Tile}s from the board at the given coordinates and adds them to the current player's session
@@ -323,22 +365,6 @@ public class Game implements ModelService {
         // we assume tiles have been checked and match
         getCurrentPlayer().getBookshelf().insert(column, tiles);
         getCurrentPlayer().setPlayerCurrentGamePhase(CHECKING);
-    }
-
-    /**
-     * Sets noMoreTurns has true for all the players between the first player and the first that filled his bookshelf;
-     * if this two players are the same person, it simply puts his attribute has true
-     */
-    private void setFlags() {
-        // using currentPlayerNumber and startingPlayerNumber;
-        // playersMap.get(number).noMoreTurns = true;
-        PlayerNumber player = startingPlayerNumber;
-        while (player != currentPlayerNumber) {
-            playerHasNoMoreTurns(player);
-            player.next(mode);
-        }
-
-        playerHasNoMoreTurns(player);
     }
 
     /**
@@ -383,7 +409,6 @@ public class Game implements ModelService {
 
         getCurrentPlayer().setPlayerCurrentGamePhase(IDLE);
     }
-
 
     /**
      * Updates the current player by setting the next player's status as SELECTING
@@ -447,19 +472,4 @@ public class Game implements ModelService {
         return playersScore.stream().sorted(comparing(Pair::getValue)).collect(Collectors.toList());
     }
 
-    /**
-     * @param username the username identifying the player
-     * @return the {@link PlayerSession} of the given player
-     */
-    public PlayerSession getSessionFor(String username) {
-        return sessions.getByUsername(username);
-    }
-
-    /**
-     * @return the map of players
-     */
-    @TestOnly
-    public Map<PlayerNumber, PlayerSession> getPlayerNumberMap() {
-        return sessions.getNumberMap();
-    }
 }

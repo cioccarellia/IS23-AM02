@@ -10,10 +10,7 @@ import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static it.polimi.ingsw.model.board.cell.CellPattern.*;
 
@@ -56,15 +53,16 @@ public class Board {
         logger.info("Board initialized");
     }
 
+    /**
+     * @return the cell matrix of the board
+     */
     public Cell[][] getCellMatrix() {
         return matrix;
     }
 
     /**
-     * Returns the cell content at the given coordinates
-     *
      * @param c are the coordinates at which we have to get the tile (cell's content)
-     * @return the tile at the given coordinates
+     * @return the cell content (tile or null) at the given coordinates
      */
     public Optional<Tile> getTileAt(@NotNull Coordinate c) {
         Cell required = matrix[c.x()][c.y()];
@@ -72,6 +70,10 @@ public class Board {
     }
 
 
+    /**
+     * @param c are the coordinates at which we have to get the cell
+     * @return the cell at the given coordinates
+     */
     @TestOnly
     public Cell getCellAt(@NotNull Coordinate c) {
         logger.warn("calling test method getCellAt({})", c);
@@ -124,6 +126,11 @@ public class Board {
         return Arrays.stream(BoardUtils.Edge.values()).mapToInt(it -> BoardUtils.hasFreeEdge(this, c, it) ? 1 : 0).sum();
     }
 
+    /**
+     * @return if the board needs filling: you must refill the board when, at the end of a turn, on the board there are
+     * only tiles without any other adjacent tile, meaning that the next player would have to take only one tile in
+     * their turn.
+     */
     public boolean needsRefilling() {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -146,6 +153,10 @@ public class Board {
     }
 
 
+    /**
+     * @param mode the game mode, meaning how many players are playing the game
+     * @return the cell pattern corresponding to the number of players
+     */
     private CellPattern mapFromGameMode(@NotNull GameMode mode) {
         switch (mode) {
             case GAME_MODE_2_PLAYERS -> {
@@ -159,6 +170,30 @@ public class Board {
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
+    }
+
+    /**
+     * @return the map of tile type and amount of that specific tile that have been removed from the board before
+     * refilling it
+     */
+    public Map<Tile, Integer> removeRemainingTiles() {
+        Map<Tile, Integer> removedTiles = new HashMap<>();
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                Cell c = matrix[i][j];
+
+                if (c.isDead() || c.isEmpty()) continue;
+
+                Tile tileType = c.getContent().get();
+
+                int removedTileAmount = removedTiles.get(tileType);
+
+                removedTiles.put(tileType, removedTileAmount + 1);
+            }
+        }
+
+        return removedTiles;
     }
 
     /**

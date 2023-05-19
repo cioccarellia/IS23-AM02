@@ -28,6 +28,11 @@ public class Bookshelf {
         }
     }
 
+    /**
+     * It fills the bookshelf for tests on the {@link Bookshelf}
+     *
+     * @param matrix to be filled
+     */
     @TestOnly
     @VisibleForTesting
     public void fillUpBookShelf(Tile[][] matrix) {
@@ -68,8 +73,8 @@ public class Bookshelf {
         while (bookshelfMatrix[lastEmptyShelfIndex][columnIndex] == null && lastEmptyShelfIndex + 1 < rows) {
             lastEmptyShelfIndex++;
         }
-        
-        if(lastEmptyShelfIndex != rows - 1)
+
+        if (lastEmptyShelfIndex != rows - 1)
             lastEmptyShelfIndex--;
 
         for (Tile tile : selection) {
