@@ -393,7 +393,6 @@ public class Game implements ModelService {
             playerHasNoMoreTurns(currentPlayerNumber);
         }
 
-
         // common goal card testing
         for (CommonGoalCardStatus cardStatus : commonGoalCardStatuses) {
             CommonGoalCard card = cardStatus.getCommonGoalCard();

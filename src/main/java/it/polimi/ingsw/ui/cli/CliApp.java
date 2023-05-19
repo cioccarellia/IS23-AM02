@@ -19,7 +19,7 @@ import javafx.util.Pair;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
+import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 import static it.polimi.ingsw.model.game.GameStatus.ENDED;
 import static it.polimi.ingsw.utils.model.TurnHelper.getNextPlayerNumber;
 
@@ -33,11 +33,9 @@ public class CliApp implements UiGateway {
 
     public static void main(String[] args) {
         CliApp app = new CliApp();
-        Game game = new Game(GAME_MODE_4_PLAYERS);
+        Game game = new Game(GAME_MODE_2_PLAYERS);
 
-        game.addPlayer("Alberto");
         game.addPlayer("Cookie");
-        game.addPlayer("Giulia");
         game.addPlayer("Marco");
 
         app.modelUpdate(game);
@@ -49,6 +47,9 @@ public class CliApp implements UiGateway {
             app.modelUpdate(game);
 
             app.gameInsertion();
+            app.modelUpdate(game);
+
+            app.gameChecking();
             app.modelUpdate(game);
 
             app.gameNextTurn();
@@ -130,7 +131,9 @@ public class CliApp implements UiGateway {
             orderedTiles = selectedTiles;
 
         model.onPlayerInsertionPhase(column, orderedTiles);
+    }
 
+    public void gameChecking() {
         model.onPlayerCheckingPhase();
     }
 

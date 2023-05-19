@@ -74,13 +74,12 @@ public class Bookshelf {
             lastEmptyShelfIndex++;
         }
 
-        if (lastEmptyShelfIndex != rows - 1)
+        if (lastEmptyShelfIndex != rows - 1 || bookshelfMatrix[lastEmptyShelfIndex][columnIndex] != null)
             lastEmptyShelfIndex--;
 
         for (Tile tile : selection) {
             bookshelfMatrix[lastEmptyShelfIndex][columnIndex] = tile;
             lastEmptyShelfIndex--;
-
         }
     }
 

@@ -20,8 +20,9 @@ public class CommonGoalCard {
         f = evaluationFunction;
     }
 
+
     /**
-     * Returns the {@code CommonGoalCard}'s identifier
+     * @return the {@code CommonGoalCard}'s identifier
      */
     public CommonGoalCardIdentifier getId() {
         return id;

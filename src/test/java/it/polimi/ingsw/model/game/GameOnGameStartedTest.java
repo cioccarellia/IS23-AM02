@@ -7,7 +7,7 @@ import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GameCommonGoalCardTest implements GameTester {
+public class GameOnGameStartedTest implements GameTester {
 
     @Test
     @DisplayName("Verify common goal card initialization #1")
