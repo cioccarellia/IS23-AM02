@@ -69,7 +69,6 @@ public class CoordinatesParser {
                 Console.out("""
                         The coordinates are not valid.
                         """);
-                continue;
             }
         }
     }
@@ -95,7 +94,7 @@ public class CoordinatesParser {
      */
     public static boolean isSelectionValid(@NotNull Set<Coordinate> coordinates, Game game) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates, game);
-        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize();
+        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize() && coordinates.size() > 0;
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> game.getBoard().countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 

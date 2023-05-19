@@ -183,7 +183,7 @@ public class Board {
             for (int j = 0; j < dimension; j++) {
                 Cell c = matrix[i][j];
 
-                if (c.isDead() || c.isEmpty()) continue;
+                if (c.isDead() || c.isEmpty() || c.getContent().isPresent()) continue;
 
                 Tile tileType = c.getContent().get();
 
@@ -238,8 +238,7 @@ public class Board {
      */
     public void fill(@NotNull List<Tile> newElements, GameMode mode) {
         CellPattern upperBound = mapFromGameMode(mode);
-        //FIXME deleted "=" for exception because the assumption says: "the given tile list contains the same number of elements as
-        //     * there are empty spaces in the board." so ">=" is not correct => check the correction of the assumption
+
         if (newElements.size() > countEmptyCells(mode)) {
             throw new IllegalArgumentException("Impossible to fit the designated elements inside the board: not enough space");
         }

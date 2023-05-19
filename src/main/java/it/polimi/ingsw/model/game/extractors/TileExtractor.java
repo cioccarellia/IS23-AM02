@@ -49,6 +49,11 @@ public class TileExtractor extends ElementExtractor<Tile> {
         }
     }
 
+    /**
+     * Puts back in the extractor (bag) the removed tiles
+     *
+     * @param removedTiles the tiles that have been removed from the board before refilling
+     */
     public void putBackTiles(Map<Tile, Integer> removedTiles) {
         List<Tile> tileType = removedTiles.keySet().stream().toList();
 

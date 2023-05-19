@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.board.CellAmount;
+
 /**
  * Defines the type of game that is being played.
  * There are three possible configurations, depending on the number
@@ -18,5 +20,14 @@ public enum GameMode {
 
     public int maxPlayerAmount() {
         return players;
+    }
+
+    public int maxCellAmount() {
+        return switch(maxPlayerAmount()){
+            case 2 -> CellAmount.NORMAL_AMOUNT.getCellCount();
+            case 3 -> CellAmount.THREE_DOTS_AMOUNT.getCellCount();
+            case 4 -> CellAmount.FOUR_DOTS_AMOUNT.getCellCount();
+            default -> throw new IllegalStateException("Unexpected value: " + maxPlayerAmount());
+        };
     }
 }

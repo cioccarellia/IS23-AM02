@@ -197,13 +197,16 @@ public class Game implements ModelService {
     // utils
 
     /**
-     * Counts how many empty cells are left, it extracts the needed tiles and fills the board with them.
+     * Removes the remaining isolated tiles from the board, puts them back in the extractor, checks how many empty cells
+     * there, it then extracts the amount of tiles needed and fills the board with them.
+     * Counts how many empty cells are left, it extracts the needed tiles and fills the board with them
      */
     public void onRefill() {
         Map<Tile, Integer> removedTiles = board.removeRemainingTiles();
         tileExtractor.putBackTiles(removedTiles);
 
         int emptyBoardCells = board.countEmptyCells(mode);
+        // int emptyBoardCells = mode.maxCellAmount();
         List<Tile> extractedTiles = tileExtractor.extractAmount(emptyBoardCells);
 
         board.fill(extractedTiles, mode);
@@ -285,7 +288,7 @@ public class Game implements ModelService {
         }
 
         // Creating new player session
-        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(sessions.size() + 1);
+        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(getPlayersCurrentAmount() + 1);
         PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
         PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
 
@@ -340,8 +343,11 @@ public class Game implements ModelService {
             throw new IllegalStateException("Coordinates are not valid");
         }
 
-        // we assume the selection is valid
-        List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates.stream().map(it -> new Pair<>(it, board.getTileAt(it).get())).toList();
+        // TODO where do we get the ordered tiles?
+        // we assume the selection is valid and in the order they want it
+        List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates
+                .stream()
+                .map(it -> new Pair<>(it, board.getTileAt(it).get())).toList();
 
         var tileSelection = new PlayerTileSelection(coordinatesAndValues);
 
@@ -360,8 +366,8 @@ public class Game implements ModelService {
      */
     @Override
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
-        //FIXME PLayers could choose which tile goes where inside the same column, in this function the arguments are just col and tiles
 
+        // we assume the tiles given are already in the order the player wants
         // we assume tiles have been checked and match
         getCurrentPlayer().getBookshelf().insert(column, tiles);
         getCurrentPlayer().setPlayerCurrentGamePhase(CHECKING);

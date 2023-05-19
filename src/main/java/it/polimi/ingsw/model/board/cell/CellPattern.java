@@ -29,4 +29,5 @@ public enum CellPattern {
     public int getPlayerCount() {
         return playerAmount;
     }
+
 }
