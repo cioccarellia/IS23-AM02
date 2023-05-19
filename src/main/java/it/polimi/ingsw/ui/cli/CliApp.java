@@ -16,6 +16,7 @@ import it.polimi.ingsw.ui.cli.printer.PersonalGoalCardPrinter;
 import it.polimi.ingsw.utils.cli.ConsoleClear;
 import javafx.util.Pair;
 
+
 import java.util.List;
 import java.util.Set;
 
@@ -65,6 +66,7 @@ public class CliApp implements UiGateway {
     @Override
     public void onGameStarted() {
         model.onGameStarted();
+        Console.out("MY SHELFIE \n");
         Console.out("Game has started, Enjoy the game and good luck!\n");
     }
 
@@ -83,7 +85,7 @@ public class CliApp implements UiGateway {
      * goal card
      */
     public void printGameModel() {
-        ConsoleClear.clearConsole();
+        //ConsoleClear.clearConsole();
         // Console.printnl();
         // Console.out("Board:");
         Console.printnl();

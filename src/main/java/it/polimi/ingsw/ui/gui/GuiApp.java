@@ -1,41 +1,28 @@
 package it.polimi.ingsw.ui.gui;
 
 
-import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.UiGateway;
 import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import javafx.scene.input.KeyCombination;
-import javafx.application.Platform;
 
-import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 
-
 public abstract class GuiApp extends Application implements UiGateway {
     private final int dimension = BoardConfiguration.getInstance().getDimension();
-
-
-
+    private Game game;
     @Override
     public void onGameStarted() {
+
         Game game = new Game(GAME_MODE_2_PLAYERS);
     }
 
@@ -98,7 +85,6 @@ public abstract class GuiApp extends Application implements UiGateway {
 
     @Override
     public void gameSelection() {
-         //game.onPlayerSelectionPhase(getSelectedCoordinates(Player1Tile23.));
 
     }
 

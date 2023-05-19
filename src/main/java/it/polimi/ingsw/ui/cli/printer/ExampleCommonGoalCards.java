@@ -106,11 +106,11 @@ public class ExampleCommonGoalCards {
     };
     public static final Tile[][] STAIRS_EXAMPLE = {
             {null, null, null, null, null},
-            {CAT, null, null, null, null},
-            {CAT, CAT, null, null, null},
-            {CAT, CAT, CAT, null, null},
-            {CAT, CAT, CAT, CAT, null},
-            {CAT, CAT, CAT, CAT, CAT}
+            {FRAME, null, null, null, null},
+            {CAT, PLANT, null, null, null},
+            {CAT, FRAME, CAT, null, null},
+            {TROPHY, CAT, GAME, CAT, null},
+            {CAT, PLANT, FRAME, CAT, CAT}
 
     };
 
