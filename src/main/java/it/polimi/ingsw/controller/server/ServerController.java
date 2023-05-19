@@ -90,7 +90,7 @@ public class ServerController implements ServerService {
                 handler.setUsername(username);
             }
             case ClientController controller -> {
-                controller.ack();
+
             }
             default -> throw new IllegalStateException("Unexpected value: " + service);
         }

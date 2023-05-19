@@ -23,6 +23,9 @@ public class RmiClientGateway extends ClientGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(RmiClientGateway.class);
 
+    /**
+     * RMI stub object to forward the methods on
+     * */
     final private ServerService rmiServerStub;
 
     public RmiClientGateway(String serverHost, int serverRmiPort) {

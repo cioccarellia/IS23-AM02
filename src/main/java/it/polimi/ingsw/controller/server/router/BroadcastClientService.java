@@ -5,6 +5,8 @@ import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
@@ -36,6 +38,16 @@ public class BroadcastClientService implements ClientService {
     @Override
     public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
         forward(source -> source.serverStatusUpdateEvent(status, playerInfo));
+    }
+
+    @Override
+    public void gameCreationReply(SingleResult<GameCreationError> result) {
+        forward(source -> source.gameCreationReply(result));
+    }
+
+    @Override
+    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
+        forward(source -> source.gameConnectionReply(result));
     }
 
     @Override

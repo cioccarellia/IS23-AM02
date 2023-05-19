@@ -5,6 +5,8 @@ import it.polimi.ingsw.controller.server.connection.stash.StashFactory;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.Game;
@@ -109,6 +111,16 @@ public class ClientConnection implements ClientService {
     @Override
     public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
         service().serverStatusUpdateEvent(status,  playerInfo);
+    }
+
+    @Override
+    public void gameCreationReply(SingleResult<GameCreationError> result) {
+        service().gameCreationReply(result);
+    }
+
+    @Override
+    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
+        service().gameConnectionReply(result);
     }
 
     @Override

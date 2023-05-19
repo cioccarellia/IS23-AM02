@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 
@@ -27,8 +28,10 @@ public class App {
 
     private static ExhaustiveLaunchConfiguration finalConfig = null;
 
-    private static final List<AppClient> clients = new ArrayList<>();
+    private final static List<AppClient> clients = new ArrayList<>();
     private static AppServer server = null;
+
+    private final static ExecutorService executorService = Executors.newCachedThreadPool();
 
     private static void startServer(@NotNull ExhaustiveLaunchConfiguration config) {
         server = new AppServer(config.serverHost(), config.serverTcpPort(), config.serverRmiPort());
@@ -44,14 +47,8 @@ public class App {
             case TCP -> config.serverTcpPort();
         };
 
-        AppClient client = null;
-
-        try {
-            client = new AppClient(clientConfig, config.serverHost(), correctServerProtocolPort);
-            clients.add(client);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        AppClient client = new AppClient(clientConfig, config.serverHost(), correctServerProtocolPort);
+        executorService.execute(client);
     }
 
 

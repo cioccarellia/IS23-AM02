@@ -3,14 +3,14 @@ package it.polimi.ingsw.network.tcp.messages.request;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.GameMode;
 
-public class GameStartRequest extends Request {
+public class GameCreationRequest extends Request {
 
     private final GameMode mode;
     private final String username;
     private final ClientProtocol protocol;
 
 
-    public GameStartRequest(GameMode mode, String username, ClientProtocol protocol) {
+    public GameCreationRequest(GameMode mode, String username, ClientProtocol protocol) {
         this.mode = mode;
         this.username = username;
         this.protocol = protocol;

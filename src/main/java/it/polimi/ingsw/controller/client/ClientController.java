@@ -5,6 +5,8 @@ import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
+import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -17,28 +19,23 @@ import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class ClientController implements ClientService, ViewEventHandler {
+public class ClientController implements ClientService, ViewEventHandler, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-    UiGateway ui;
-    ClientGateway clientGateway;
+    transient UiGateway ui;
+    transient final ClientGateway clientGateway;
 
     String authUsername;
 
     public ClientController(ClientGateway clientGateway) {
         this.clientGateway = clientGateway;
-
-
     }
 
-
-    public void ack() {
-        logger.warn("ack");
-    }
 
     public void injectUsername(String username) {
         authUsername = username;
@@ -48,6 +45,16 @@ public class ClientController implements ClientService, ViewEventHandler {
 
     @Override
     public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+        logger.info("Received status={}, playerInfo={}", status, playerInfo);
+    }
+
+    @Override
+    public void gameCreationReply(SingleResult<GameCreationError> result) {
+
+    }
+
+    @Override
+    public void gameConnectionReply(SingleResult<GameConnectionError> result) {
 
     }
 

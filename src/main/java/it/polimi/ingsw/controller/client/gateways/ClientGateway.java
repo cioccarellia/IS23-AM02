@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.client.gateways;
 
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.services.ServerService;
 
 /**
@@ -8,4 +9,8 @@ import it.polimi.ingsw.services.ServerService;
  */
 public abstract class ClientGateway implements ServerService {
 
+    protected ClientController controller;
+    public void linkController(final ClientController controller) {
+        this.controller = controller;
+    }
 }

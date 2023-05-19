@@ -6,27 +6,39 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.request.*;
+import it.polimi.ingsw.network.tcp.messages.request.replies.GameConnectionRequestReply;
+import it.polimi.ingsw.network.tcp.messages.request.replies.GameCreationRequestReply;
+import it.polimi.ingsw.network.tcp.messages.request.replies.ServerStatusRequestReply;
+import it.polimi.ingsw.network.tcp.messages.response.internal.UsernameInjectionEvent;
+import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
-public class TcpClientGateway extends ClientGateway {
+/**
+ * Client gateway for server communication (through {@link it.polimi.ingsw.services.ServerService}).
+ * */
+public class TcpClientGateway extends ClientGateway implements Runnable, Closeable {
 
     private static final Logger logger = LoggerFactory.getLogger(TcpClientGateway.class);
 
     final private Socket socket;
     final private PrintWriter socketOut;
     final private BufferedReader socketIn;
+
+    /**
+     * Specifies whether the current {@code ClientGateway} is active and listening to the socket.
+     * */
+    private boolean isActivelyListeningOnSocket = true;
 
 
     public TcpClientGateway(String serverHost, int serverTcpPort) {
@@ -51,28 +63,84 @@ public class TcpClientGateway extends ClientGateway {
         }
     }
 
+
+    public boolean isActivelyListeningOnSocket() {
+        return isActivelyListeningOnSocket;
+    }
+
+    public void setActivelyListeningOnSocket(boolean activelyListeningOnSocket) {
+        isActivelyListeningOnSocket = activelyListeningOnSocket;
+    }
+
+
+    @Override
+    public void run() {
+        logger.info("Starting TcpClientGateway for socket={}", socket);
+        Scanner in = new Scanner(socketIn);
+
+        try {
+            logger.info("Actively monitoring socket={}", socket);
+
+            while (isActivelyListeningOnSocket) {
+                if (in.hasNextLine()) {
+                    // receive serialized message
+                    String serializedJsonReply = in.nextLine();
+
+                    logger.info("Received a new line from client socket, line={}, socket={}", serializedJsonReply, socket);
+
+                    // de-serialize message from JSON to Message
+                    Message controllerReply = Parsers.marshaledGson().fromJson(serializedJsonReply, Message.class);
+
+                    logger.info("Deserialized event into reply={}", controllerReply);
+
+                    // sends the message to the controller (converting it into the appropriate function call)
+                    // for the controller to processes it
+                    mapEventToControllerMethodCall(controllerReply);
+                }
+            }
+        } finally {
+            try {
+                close();
+            } catch (IOException e) {
+                logger.error("Error closing socket: socket={}, message={}", socket, e.getMessage());
+            }
+        }
+    }
+
+
+    public void mapEventToControllerMethodCall(@NotNull final Message incomingMessage) {
+        switch (incomingMessage) {
+            case UsernameInjectionEvent s -> {
+                controller.injectUsername(s.getUsername());
+            }
+            case GameConnectionRequestReply s -> {
+                var sealed = s.seal();
+                controller.gameConnectionReply(sealed);
+            }
+            case GameCreationRequestReply s -> {
+                var sealed = s.seal();
+                controller.gameCreationReply(sealed);
+            }
+            case ServerStatusRequestReply s -> {
+                controller.serverStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
+            }
+            case null, default -> throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
+        }
+    }
+
+
+    @Override
     public void close() throws IOException {
         socketIn.close();
         socketOut.close();
         socket.close();
     }
 
-
-    private <I extends Request> void sendAsyncRequestToServer(Message request, Class<I> inputType) {
-        // serializes to JSON the message content
-        String serializedJsonRequest = Parsers.marshaledGson().toJson(request, inputType);
-
-        // sends the message bytes on TCP
-        socketOut.println(serializedJsonRequest);
-        socketOut.flush();
-    }
-
-
     @Override
     public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
-        GameStartRequest message = new GameStartRequest(mode, username, protocol);
+        GameCreationRequest message = new GameCreationRequest(mode, username, protocol);
 
-        sendAsyncRequestToServer(message, GameStartRequest.class);
+        SocketSystem.sendAsync(socketOut, message, GameCreationRequest.class);
 
         // fixme return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
     }
@@ -81,7 +149,7 @@ public class TcpClientGateway extends ClientGateway {
     public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         GameConnectionRequest message = new GameConnectionRequest(username, protocol);
 
-        sendAsyncRequestToServer(message, GameConnectionRequest.class);
+        SocketSystem.sendAsync(socketOut, message, GameConnectionRequest.class);
 
         // fixme return reply != null ? reply.getStatus() : null;
     }
@@ -90,7 +158,7 @@ public class TcpClientGateway extends ClientGateway {
     public void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         GameSelectionTurnRequest message = new GameSelectionTurnRequest(username, selection);
 
-        sendAsyncRequestToServer(message, GameSelectionTurnRequest.class);
+        SocketSystem.sendAsync(socketOut, message, GameSelectionTurnRequest.class);
 
         // fixme return reply.getTurnResult();
     }
@@ -99,7 +167,7 @@ public class TcpClientGateway extends ClientGateway {
     public void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
-        sendAsyncRequestToServer(message, GameInsertionTurnRequest.class);
+        SocketSystem.sendAsync(socketOut, message, GameInsertionTurnRequest.class);
 
         // fixme return reply.getTurnResult();
     }
@@ -108,6 +176,6 @@ public class TcpClientGateway extends ClientGateway {
     public void keepAlive(String username) {
         KeepAlive keepAliveMessage = new KeepAlive(username);
 
-        sendAsyncRequestToServer(keepAliveMessage, KeepAlive.class);
+        SocketSystem.sendAsync(socketOut, keepAliveMessage, KeepAlive.class);
     }
 }

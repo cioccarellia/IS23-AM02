@@ -27,11 +27,11 @@ public class ServerTcpWrapper extends ServerWrapper {
         return ClientProtocol.TCP;
     }
 
-    public void convertMessageToControllerAndForwardMethodCall(@NotNull final Message incomingMessage, TcpConnectionHandler handler) {
+    public void mapRequestToControllerMethodCall(@NotNull final Message incomingMessage, TcpConnectionHandler handler) {
         // visitor pattern
         try {
             switch (incomingMessage) {
-                case GameStartRequest s -> {
+                case GameCreationRequest s -> {
                     controller.gameStartRequest(s.getUsername(), s.getMode(), s.getProtocol(), handler);
                 }
                 case GameConnectionRequest s -> {
