@@ -4,8 +4,8 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.net.tcp.messages.Message;
-import it.polimi.ingsw.net.tcp.messages.request.*;
+import it.polimi.ingsw.network.tcp.messages.Message;
+import it.polimi.ingsw.network.tcp.messages.request.*;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
 import org.slf4j.Logger;
@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -59,13 +58,7 @@ public class TcpClientGateway extends ClientGateway {
     }
 
 
-    @Override
-    public void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException {
-        // INOP, TCP does not need initial
-        keepAlive(username);
-    }
-
-    private <I extends Request> void sendRequestAndAwaitReply(Message request, Class<I> inputType) {
+    private <I extends Request> void sendAsyncRequestToServer(Message request, Class<I> inputType) {
         // serializes to JSON the message content
         String serializedJsonRequest = Parsers.marshaledGson().toJson(request, inputType);
 
@@ -74,28 +67,21 @@ public class TcpClientGateway extends ClientGateway {
         socketOut.flush();
     }
 
-    @Override
-    public void serverStatusRequest() {
-        ServerStatusRequest message = new ServerStatusRequest();
-
-        sendRequestAndAwaitReply(message, ServerStatusRequest.class);
-        // fixme return reply != null ? reply.getStatus() : null;
-    }
 
     @Override
-    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         GameStartRequest message = new GameStartRequest(mode, username, protocol);
 
-        sendRequestAndAwaitReply(message, GameStartRequest.class);
+        sendAsyncRequestToServer(message, GameStartRequest.class);
 
         // fixme return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
     }
 
     @Override
-    public void gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         GameConnectionRequest message = new GameConnectionRequest(username, protocol);
 
-        sendRequestAndAwaitReply(message, GameConnectionRequest.class);
+        sendAsyncRequestToServer(message, GameConnectionRequest.class);
 
         // fixme return reply != null ? reply.getStatus() : null;
     }
@@ -104,7 +90,7 @@ public class TcpClientGateway extends ClientGateway {
     public void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         GameSelectionTurnRequest message = new GameSelectionTurnRequest(username, selection);
 
-        sendRequestAndAwaitReply(message, GameSelectionTurnRequest.class);
+        sendAsyncRequestToServer(message, GameSelectionTurnRequest.class);
 
         // fixme return reply.getTurnResult();
     }
@@ -113,7 +99,7 @@ public class TcpClientGateway extends ClientGateway {
     public void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
-        sendRequestAndAwaitReply(message, GameInsertionTurnRequest.class);
+        sendAsyncRequestToServer(message, GameInsertionTurnRequest.class);
 
         // fixme return reply.getTurnResult();
     }
@@ -122,6 +108,6 @@ public class TcpClientGateway extends ClientGateway {
     public void keepAlive(String username) {
         KeepAlive keepAliveMessage = new KeepAlive(username);
 
-        sendRequestAndAwaitReply(keepAliveMessage, KeepAlive.class);
+        sendAsyncRequestToServer(keepAliveMessage, KeepAlive.class);
     }
 }

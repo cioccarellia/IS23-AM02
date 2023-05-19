@@ -8,15 +8,17 @@ import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
 import javafx.util.Pair;
 
-import java.rmi.Remote;
 import java.util.List;
 
-public interface ClientService extends Remote {
+public interface ClientService {
 
     String NAME = "ClientService";
 
+
     // Initialization
-    void serverStatusResponse(ServerStatus status);
+    void injectUsername(String string);
+
+    void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo);
 
     void gameStartedEvent();
 
@@ -31,10 +33,6 @@ public interface ClientService extends Remote {
 
     // Connection - Disconnection
     void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames);
-
-    void gameStandbyEvent();
-
-    void gameResumedEvent();
 
     void gameEndedEvent();
 }

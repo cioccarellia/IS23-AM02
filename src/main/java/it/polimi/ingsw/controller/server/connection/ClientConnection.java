@@ -1,8 +1,19 @@
 package it.polimi.ingsw.controller.server.connection;
 
-import it.polimi.ingsw.controller.server.connection.stash.RmiStash;
-import it.polimi.ingsw.controller.server.connection.stash.TcpStash;
+import it.polimi.ingsw.controller.server.connection.stash.ProtocolStash;
+import it.polimi.ingsw.controller.server.connection.stash.StashFactory;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.services.ClientService;
+import javafx.util.Pair;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Class representing a virtual connection with a client app.
@@ -10,7 +21,7 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
  * utilities to handle communication and internal representation
  * for that specific client.
  */
-public class ClientConnection {
+public class ClientConnection implements ClientService {
 
     /**
      * The username associated with the current connection.
@@ -18,23 +29,38 @@ public class ClientConnection {
     private final String username;
 
     /**
-     * Protocol
+     * Protocol used throughout the connection to communicate with the client.
      */
     private final ClientProtocol proto;
 
-    private final RmiStash rmiStash = new RmiStash();
-    private final TcpStash tcpStash = new TcpStash();
-
     /**
-     * Status of the connection with the client
+     * Status of the connection with the client, has three possible values.
+     *
+     * @see ConnectionStatus
      */
     private ConnectionStatus status;
 
-    public ClientConnection(String username, ClientProtocol proto, ConnectionStatus status) {
+    /**
+     * Keeps track of the last timestamp where a message/call from the client
+     * has been sent the server-side interface.
+     */
+    private Date lastSeen;
+
+    private final ProtocolStash stash;
+
+    public ClientConnection(String username, ClientProtocol proto, ConnectionStatus status, ClientService remoteService) {
         this.username = username;
         this.proto = proto;
         this.status = status;
+
+        // last seen is now
+        this.lastSeen = Calendar.getInstance().getTime();
+
+        // setting up the stash
+        stash = StashFactory.create(proto);
+        stash.setClientConnectionService(remoteService);
     }
+
 
     public String getUsername() {
         return username;
@@ -48,16 +74,70 @@ public class ClientConnection {
         this.status = status;
     }
 
+
     public ClientProtocol getProto() {
         return proto;
     }
 
-    public RmiStash getRmiStash() {
-        return rmiStash;
+    public ProtocolStash getStash() {
+        return stash;
     }
 
-    public RmiStash getTcpStash() {
-        return rmiStash;
+    public Date getLastSeen() {
+        return lastSeen;
     }
 
+    public void setLastSeen(Date lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+
+    /**
+     * Gets the current client remote reference to forward remote method calls to.
+     */
+    private ClientService service() {
+        return stash.getClientConnectionService();
+    }
+
+
+
+    @Override
+    public void injectUsername(String string) {
+        service().injectUsername(string);
+    }
+
+    @Override
+    public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+        service().serverStatusUpdateEvent(status,  playerInfo);
+    }
+
+    @Override
+    public void gameStartedEvent() {
+        service().gameStartedEvent();
+    }
+
+    @Override
+    public void modelUpdateEvent(Game game) {
+        service().modelUpdateEvent(game);
+    }
+
+    @Override
+    public void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+        service().gameSelectionTurnEvent(turnResult);
+    }
+
+    @Override
+    public void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+        service().gameInsertionTurnEvent(turnResult);
+    }
+
+    @Override
+    public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+        service().playerConnectionStatusUpdateEvent(usernames);
+    }
+
+    @Override
+    public void gameEndedEvent() {
+
+    }
 }

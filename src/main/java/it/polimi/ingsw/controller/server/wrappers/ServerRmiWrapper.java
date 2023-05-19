@@ -57,40 +57,23 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
      */
     private boolean verifyAuthorization(String username) {
         String remoteClientActualHostname = getCurrentClientHostname();
-        String correctClientHostname = connectionsManager.get(username).getRmiStash().getHostname();
+        String correctClientHostname = connectionsManager.get(username).getStash().getClientHostname();
         return remoteClientActualHostname.equals(correctClientHostname);
     }
 
-
     @Override
-    public void synchronizeConnectionLayer(String username, ClientService service) {
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         try {
-            server.synchronizeConnectionLayer(username, service);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    @Override
-    public void serverStatusRequest() throws RemoteException {
-        server.serverStatusRequest();
-    }
-
-
-    @Override
-    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
-        try {
-            server.gameStartRequest(username, mode, protocol);
+            server.gameStartRequest(username, mode, protocol, remoteService);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         try {
-            server.gameConnectionRequest(username, protocol);
+            server.gameConnectionRequest(username, protocol, remoteService);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

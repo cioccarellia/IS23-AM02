@@ -1,6 +1,5 @@
 package it.polimi.ingsw.services;
 
-import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -18,18 +17,18 @@ public interface ServerService extends Remote {
 
     String NAME = "ServerService";
 
-    /**
-     * Sends a synchronization message to correctly configure the connection.
-     */
-    @ServerFunction
-    void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException;
+    // /**
+    //  * Sends a synchronization message to correctly configure the connection.
+    //  */
+    // @ServerFunction
+    // void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException;
 
-    /**
-     * Requests an updated value for the current {@link ServerStatus}.
-     * This should be used in the connection (pre-game) phase.
-     */
-    @ServerFunction
-    void serverStatusRequest() throws RemoteException;
+    // /**
+    //  * Requests an updated value for the current {@link ServerStatus}.
+    //  * This should be used in the connection (pre-game) phase.
+    //  */
+    // @ServerFunction
+    // void serverStatusRequest() throws RemoteException;
 
     /**
      * Requests for the current server to start a game.
@@ -39,7 +38,7 @@ public interface ServerService extends Remote {
      * @param username defines the username for the current client (which is the first player joining).
      */
     @ServerFunction
-    void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) throws RemoteException;
+    void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) throws RemoteException;
 
     /**
      * Requests for the client to connect to the game and be associated with a player.
@@ -48,7 +47,7 @@ public interface ServerService extends Remote {
      * @param username defines the username for the requesting client.
      */
     @ServerFunction
-    void gameConnectionRequest(String username, ClientProtocol protocol) throws RemoteException;
+    void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) throws RemoteException;
 
 
     /**

@@ -8,10 +8,12 @@ public enum CellAmount {
      * Number of cells for a two players game
      */
     NORMAL_AMOUNT(29),
+
     /**
      * Number of cells for a three players game
      */
     THREE_DOTS_AMOUNT(37),
+
     /**
      * Number of cells for a four players game
      */

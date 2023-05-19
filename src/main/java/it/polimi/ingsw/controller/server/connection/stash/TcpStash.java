@@ -1,16 +1,34 @@
 package it.polimi.ingsw.controller.server.connection.stash;
 
-public class TcpStash {
+import it.polimi.ingsw.network.tcp.TcpConnectionHandler;
+import it.polimi.ingsw.services.ClientService;
+
+public class TcpStash extends ProtocolStash {
     /**
      * Remote client socket hostname
      */
     private String hostname;
 
-    public String getHostname() {
+    // It's really a TcpConnectionHandler
+    private TcpConnectionHandler tcpConnectionHandler;
+
+    @Override
+    public ClientService getClientConnectionService() {
+        return tcpConnectionHandler;
+    }
+
+    @Override
+    public String getClientHostname() {
         return hostname;
     }
 
-    public void setHostname(String hostname) {
+
+    @Override
+    public void setClientConnectionService(ClientService service) {
+        this.tcpConnectionHandler = (TcpConnectionHandler) service;
+    }
+
+    public void setClientHostname(String hostname) {
         this.hostname = hostname;
     }
 }

@@ -37,38 +37,19 @@ public class RmiClientGateway extends ClientGateway {
         }
     }
 
-
     @Override
-    public void synchronizeConnectionLayer(String username, ClientService service) {
+    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         try {
-            rmiServerStub.synchronizeConnectionLayer(username, service);
+            rmiServerStub.gameStartRequest(username, mode, protocol, remoteService);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void serverStatusRequest() {
+    public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         try {
-            rmiServerStub.serverStatusRequest();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
-        try {
-            rmiServerStub.gameStartRequest(username, mode, protocol);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void gameConnectionRequest(String username, ClientProtocol protocol) {
-        try {
-            rmiServerStub.gameConnectionRequest(username, protocol);
+            rmiServerStub.gameConnectionRequest(username, protocol, remoteService);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

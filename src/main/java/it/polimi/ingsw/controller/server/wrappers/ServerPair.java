@@ -2,8 +2,8 @@ package it.polimi.ingsw.controller.server.wrappers;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.ServerController;
-import it.polimi.ingsw.net.rmi.RmiServer;
-import it.polimi.ingsw.net.tcp.TcpServer;
+import it.polimi.ingsw.network.rmi.RmiServer;
+import it.polimi.ingsw.network.tcp.TcpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

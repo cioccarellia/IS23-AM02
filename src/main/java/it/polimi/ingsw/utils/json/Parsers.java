@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.*;
-import it.polimi.ingsw.net.tcp.messages.Message;
-import it.polimi.ingsw.net.tcp.messages.request.*;
-import it.polimi.ingsw.net.tcp.messages.request.replies.*;
+import it.polimi.ingsw.network.tcp.messages.Message;
+import it.polimi.ingsw.network.tcp.messages.request.*;
+import it.polimi.ingsw.network.tcp.messages.request.replies.*;
 
 public class Parsers {
 

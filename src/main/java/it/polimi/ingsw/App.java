@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,8 +44,14 @@ public class App {
             case TCP -> config.serverTcpPort();
         };
 
-        AppClient client = new AppClient(clientConfig, config.serverHost(), correctServerProtocolPort);
-        clients.add(client);
+        AppClient client = null;
+
+        try {
+            client = new AppClient(clientConfig, config.serverHost(), correctServerProtocolPort);
+            clients.add(client);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

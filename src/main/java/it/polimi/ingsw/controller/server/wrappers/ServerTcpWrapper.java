@@ -1,9 +1,11 @@
 package it.polimi.ingsw.controller.server.wrappers;
 
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
-import it.polimi.ingsw.net.tcp.messages.Message;
-import it.polimi.ingsw.net.tcp.messages.request.*;
+import it.polimi.ingsw.network.tcp.TcpConnectionHandler;
+import it.polimi.ingsw.network.tcp.messages.Message;
+import it.polimi.ingsw.network.tcp.messages.request.*;
 import it.polimi.ingsw.services.ServerService;
+import org.jetbrains.annotations.NotNull;
 
 import java.rmi.RemoteException;
 
@@ -25,18 +27,15 @@ public class ServerTcpWrapper extends ServerWrapper {
         return ClientProtocol.TCP;
     }
 
-    public void convertMessageToControllerMethodCall(final Message incomingMessage) {
+    public void convertMessageToControllerAndForwardMethodCall(@NotNull final Message incomingMessage, TcpConnectionHandler handler) {
         // visitor pattern
         try {
             switch (incomingMessage) {
-                case ServerStatusRequest serverStatusRequest -> {
-                    controller.serverStatusRequest();
-                }
                 case GameStartRequest s -> {
-                    controller.gameStartRequest(s.getUsername(), s.getMode(), s.getProtocol());
+                    controller.gameStartRequest(s.getUsername(), s.getMode(), s.getProtocol(), handler);
                 }
                 case GameConnectionRequest s -> {
-                    controller.gameConnectionRequest(s.getUsername(), s.getProtocol());
+                    controller.gameConnectionRequest(s.getUsername(), s.getProtocol(), handler);
                 }
                 case GameSelectionTurnRequest s -> {
                     controller.gameSelectionTurnResponse(s.getUsername(), s.getSelection());

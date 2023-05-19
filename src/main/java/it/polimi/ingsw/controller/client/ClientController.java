@@ -14,23 +14,40 @@ import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
 import javafx.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
 
 public class ClientController implements ClientService, ViewEventHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+
     UiGateway ui;
     ClientGateway clientGateway;
 
-    public ClientController(ClientGateway clientGateway, UiGateway ui) {
-        this.ui = ui;
+    String authUsername;
+
+    public ClientController(ClientGateway clientGateway) {
         this.clientGateway = clientGateway;
+
 
     }
 
+
+    public void ack() {
+        logger.warn("ack");
+    }
+
+    public void injectUsername(String username) {
+        authUsername = username;
+        logger.info("RECEIVED USERNAME INJECTION");
+    }
+
+
     @Override
-    public void serverStatusResponse(ServerStatus status) {
+    public void serverStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
 
     }
 
@@ -56,16 +73,6 @@ public class ClientController implements ClientService, ViewEventHandler {
 
     @Override
     public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
-
-    }
-
-    @Override
-    public void gameStandbyEvent() {
-
-    }
-
-    @Override
-    public void gameResumedEvent() {
 
     }
 

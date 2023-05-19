@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Implementation specific properties
  */
-public class RmiStash {
+public class RmiStash extends ProtocolStash {
 
     /**
      * Used to keep a RMI remote reference on a client's controller, so that the server
@@ -26,24 +26,29 @@ public class RmiStash {
      */
     private String hostname;
 
-    public @Nullable ClientService getClientService() {
+
+    @Override
+    public ClientService getClientConnectionService() {
         return clientService;
     }
 
-    public void setClientService(@Nullable ClientService clientService) {
+    @Override
+    public String getClientHostname() {
+        return hostname;
+    }
+
+
+    public void setClientConnectionService(@Nullable ClientService clientService) {
         this.clientService = clientService;
         hasSynchronizedRmiConnection = true;
     }
 
+    public void setClientHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+
     public boolean hasSynchronizedRmiConnection() {
         return hasSynchronizedRmiConnection;
-    }
-
-    public String getHostname() {
-        return hostname;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
     }
 }

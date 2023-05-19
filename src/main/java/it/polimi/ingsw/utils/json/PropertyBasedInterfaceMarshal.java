@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils.json;
 
 import com.google.gson.*;
-import it.polimi.ingsw.net.tcp.messages.Message;
+import it.polimi.ingsw.network.tcp.messages.Message;
 
 import java.lang.reflect.Type;
 

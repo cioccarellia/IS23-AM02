@@ -1,7 +1,9 @@
 package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
+import it.polimi.ingsw.controller.server.router.Router;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -9,16 +11,15 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
+import it.polimi.ingsw.network.tcp.TcpConnectionHandler;
 import it.polimi.ingsw.services.ClientService;
-import it.polimi.ingsw.services.ServerFunction;
 import it.polimi.ingsw.services.ServerService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +30,9 @@ import static it.polimi.ingsw.model.game.GameStatus.ENDED;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 
+/**
+ * Server-side controller
+ */
 public class ServerController implements ServerService {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerController.class);
@@ -40,49 +44,81 @@ public class ServerController implements ServerService {
     private final ClientConnectionsManager connectionsManager;
 
     /**
+     * Routes asynchronous client responses to their destination
+     */
+    private final Router router;
+
+    /**
      * Game instance
      */
     private Game game;
 
+    /**
+     *
+     */
     private int maxPlayerAmount;
 
+    /**
+     * Current server general status, independent from game logic
+     */
     private ServerStatus serverStatus = NO_GAME_STARTED;
 
-    private SessionManager sessions;
-
     public ServerController() {
-        this.connectionsManager = new ClientConnectionsManager();
+        connectionsManager = new ClientConnectionsManager();
+        router = new Router(connectionsManager);
     }
 
-    public ServerController(ClientConnectionsManager connectionsManager) {
-        this.connectionsManager = connectionsManager;
+    public ServerController(ClientConnectionsManager manager) {
+        connectionsManager = manager;
+        router = new Router(connectionsManager);
+    }
+
+
+    /**
+     * Connects a username and a remote service {@link ClientService} to allow asynchronous
+     * communication between client and server.
+     * @apiNote to be called only when the user connection/creation request has been accepted.
+     */
+    public void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
+        // connection stash service for callbacks
+        connectionsManager.get(username).getStash().setClientConnectionService(service);
+        service.injectUsername(username);
+
+        // en-route parameters
+        switch (service) {
+            case TcpConnectionHandler handler -> {
+                handler.setUsername(username);
+            }
+            case ClientController controller -> {
+                controller.ack();
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + service);
+        }
     }
 
     @Override
-    public void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException {
-
-    }
-
-    @Override
-    @ServerFunction
-    public void serverStatusRequest() {
-        // fixme return serverStatus;
-    }
-
-    @Override
-    public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol) {
+    public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
         if (serverStatus == NO_GAME_STARTED) {
+            // accepting request
             game = new Game(mode);
-            sessions = new SessionManager(game.getGameMode());
             maxPlayerAmount = mode.maxPlayerAmount();
-
             serverStatus = GAME_INITIALIZING;
 
-            connectionsManager.add(username, protocol, OPEN);
+
+            // synchronize
+            connectionsManager.add(username, protocol, OPEN, remoteService);
+            synchronizeConnectionLayer(username, remoteService);
+
+
+            // adds a player to the game model
             game.addPlayer(username);
 
+
+            router.route(username).serverStatusUpdateEvent(serverStatus, new ArrayList<>());
+
+            // notify the
             logger.info("returning success from gameStartRequest()");
             // fixme return new SingleResult.Success<>();
         } else {
@@ -94,7 +130,7 @@ public class ServerController implements ServerService {
 
     // Creates a connection between client and server
     @Override
-    public void gameConnectionRequest(String username, ClientProtocol protocol) {
+    public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         logger.info("gameConnectionRequest(username={}, protocol={})", username, protocol);
 
         assert connectionsManager.size() <= maxPlayerAmount;
@@ -121,7 +157,11 @@ public class ServerController implements ServerService {
             serverStatus = GAME_RUNNING;
         }
 
-        connectionsManager.add(username, protocol, OPEN);
+
+        // synchronize
+        connectionsManager.add(username, protocol, OPEN, remoteService);
+        synchronizeConnectionLayer(username, remoteService);
+
         game.addPlayer(username);
 
         // fixme return new SingleResult.Success<>();
@@ -210,10 +250,10 @@ public class ServerController implements ServerService {
 
     public void onNextTurn(String nextPlayerUsername) {
         // assume the username is correct
-        assert sessions.isPresent(nextPlayerUsername);
+        assert game.getSessions().isPresent(nextPlayerUsername);
         PlayerNumber currentPlayerUsername = game.getCurrentPlayer().getPlayerNumber();
 
-        currentPlayerUsername = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
+        currentPlayerUsername = game.getSessions().getByUsername(nextPlayerUsername).getPlayerNumber();
         game.getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
     }
 }
