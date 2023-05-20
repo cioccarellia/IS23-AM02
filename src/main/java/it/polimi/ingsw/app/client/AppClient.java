@@ -20,28 +20,28 @@ public class AppClient implements Runnable {
 
     /**
      * Initial configuration the client has been launched in. Retains all information about protocol and UI.
-     * */
+     */
     private final ClientExhaustiveConfiguration config;
 
     /**
      * Server connection parameters
-     * */
+     */
     private final String serverHost;
     private final int serverPort;
 
     /**
      * Client gateway, to communicate with the server on a protocol-independent basis
-     * */
+     */
     private final ClientGateway gateway;
 
     /**
      * Client controller for handling network callbacks, server interaction and view management
-     * */
+     */
     private final ClientController controller;
 
     /**
      * Client-side executor
-     * */
+     */
     public final static ExecutorService executorService = Executors.newCachedThreadPool();
 
 
@@ -68,7 +68,7 @@ public class AppClient implements Runnable {
 
     /**
      * When the client is initialized and ran on its own thread
-     * */
+     */
     @Override
     public void run() {
         controller.initialize();

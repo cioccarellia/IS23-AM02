@@ -6,7 +6,6 @@ import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
 import it.polimi.ingsw.ui.cli.CliApp;
 import it.polimi.ingsw.ui.gui.GuiApp;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class ViewFactory {

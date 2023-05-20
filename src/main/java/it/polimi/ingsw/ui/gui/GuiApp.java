@@ -4,6 +4,7 @@ package it.polimi.ingsw.ui.gui;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.UiGateway;
+import it.polimi.ingsw.ui.ViewEventHandler;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,12 +13,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import it.polimi.ingsw.ui.ViewEventHandler;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.goal.Token.*;
+import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 
 
 /**
@@ -45,9 +45,9 @@ public class GuiApp extends Application implements UiGateway {
     @FXML
     public ImageView endGameToken;
     @FXML
-    public ImageView firstCommonGoalCardToken;
+    public ImageView firstCommonGoalCardTopToken;
     @FXML
-    public ImageView secondCommonGoalCardToken;
+    public ImageView secondCommonGoalCardTopToken;
     @FXML
     public ImageView firstCommonGoalCard;
     @FXML
@@ -91,8 +91,8 @@ public class GuiApp extends Application implements UiGateway {
 
         // CGC token update
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
-        firstCommonGoalCardToken = scene.CommonGoalCardTokenUpdate(game.getCommonGoalCards().get(FIRST));
-        secondCommonGoalCardToken = scene.CommonGoalCardTokenUpdate(game.getCommonGoalCards().get(SECOND));
+        firstCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(game.getCommonGoalCards().get(FIRST));
+        secondCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(game.getCommonGoalCards().get(SECOND));
 
     }
 

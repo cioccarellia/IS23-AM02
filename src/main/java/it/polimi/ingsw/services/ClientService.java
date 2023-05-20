@@ -18,9 +18,10 @@ public interface ClientService {
 
 
     // Initialization
+
     /**
      * Communicates to the client that it has received the username
-     * */
+     */
     @ClientFunction
     void onAcceptConnectionAndFinalizeUsername(String string, Game game);
 

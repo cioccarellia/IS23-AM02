@@ -102,7 +102,6 @@ public class ClientConnection implements ClientService {
     }
 
 
-
     @Override
     public void onAcceptConnectionAndFinalizeUsername(String string) {
         service().onAcceptConnectionAndFinalizeUsername(string);
@@ -110,7 +109,7 @@ public class ClientConnection implements ClientService {
 
     @Override
     public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
-        service().onServerStatusUpdateEvent(status,  playerInfo);
+        service().onServerStatusUpdateEvent(status, playerInfo);
     }
 
     @Override

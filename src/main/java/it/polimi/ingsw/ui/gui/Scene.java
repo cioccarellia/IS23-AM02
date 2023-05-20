@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
-import it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
@@ -47,7 +46,7 @@ public class Scene {
 
     public GridPane bookshelfUpdate(Bookshelf bookshelf) {
         GridPane matrix = new GridPane();
-        
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Tile tile = bookshelf.getShelfMatrix()[i][j];
@@ -64,6 +63,7 @@ public class Scene {
     public ImageView personalGoalCardUpdate(Game game) {
         GuiResources resources = new GuiResources();
         ImageView image = new ImageView();
+        //TODO capire se current player va bene, perché dovrebbe essere il giocatore stesso a vedere la propria carta anche se non current player
         PersonalGoalCard id = game.getCurrentPlayer().getPersonalGoalCard();
 
         image.setImage(GuiResources.getPersonalGC(id));

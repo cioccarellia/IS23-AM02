@@ -16,21 +16,21 @@ public interface ViewEventHandler {
 
     /**
      * User has completed selection and is sending coordinates to server
-     * */
+     */
     void onViewSelection(Set<Coordinate> coordinates);
 
     /**
      * User has completed insertion and is sending ordered tiles and column
-     * */
+     */
     void onViewInsertion(int column, List<Tile> tiles);
 
     /**
      * User has sent a chat message
-     * */
+     */
     void onViewSendMessage(ChatTextMessage message);
 
     /**
      * User has quit the game
-     * */
+     */
     void onViewQuitGame();
 }

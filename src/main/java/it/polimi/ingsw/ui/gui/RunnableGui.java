@@ -1,6 +1,5 @@
 package it.polimi.ingsw.ui.gui;
 
-import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.model.game.Game;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,9 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
-
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_4_PLAYERS;
 
 public class RunnableGui extends Application {
     Game game;
@@ -31,7 +27,7 @@ public class RunnableGui extends Application {
         // Load root layout from fxml file.
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/Index.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/index.fxml"));
         Parent rootLayout = null;
 
         try {
@@ -42,7 +38,7 @@ public class RunnableGui extends Application {
         }
 
 
-        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Index.fxml")));
+        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("index.fxml")));
         primaryStage.setScene(rootLayout.getScene());
         primaryStage.setTitle("My shelfie");
         primaryStage.show();
