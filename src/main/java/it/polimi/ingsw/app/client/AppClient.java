@@ -1,15 +1,13 @@
 package it.polimi.ingsw.app.client;
 
+import it.polimi.ingsw.app.client.layers.network.NetworkLayer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
-import it.polimi.ingsw.controller.client.gateways.TcpClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
-import it.polimi.ingsw.model.game.GameMode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,14 +18,31 @@ public class AppClient implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(AppClient.class);
 
+    /**
+     * Initial configuration the client has been launched in. Retains all information about protocol and UI.
+     * */
     private final ClientExhaustiveConfiguration config;
+
+    /**
+     * Server connection parameters
+     * */
     private final String serverHost;
     private final int serverPort;
 
+    /**
+     * Client gateway, to communicate with the server on a protocol-independent basis
+     * */
     private final ClientGateway gateway;
+
+    /**
+     * Client controller for handling network callbacks, server interaction and view management
+     * */
     private final ClientController controller;
 
-    private final static ExecutorService executorService = Executors.newCachedThreadPool();
+    /**
+     * Client-side executor
+     * */
+    public final static ExecutorService executorService = Executors.newCachedThreadPool();
 
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverHost, int serverPort) {
@@ -37,32 +52,25 @@ public class AppClient implements Runnable {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
 
+        // creates the gateway (to communicate with server) and the controller (which uses the gateway)
         this.gateway = ClientGatewayFactory.create(config.protocol(), serverHost, serverPort);
-        this.controller = new ClientController(gateway);
+        this.controller = new ClientController(gateway, config);
 
+        // injects the current controller inside the network reference for async callbacks
         this.gateway.linkController(controller);
 
-        if (gateway instanceof TcpClientGateway gateway) {
-            executorService.execute(gateway);
-        }
+        initializeClientThreads();
     }
 
+    private void initializeClientThreads() {
+        NetworkLayer.scheduleReceiverExecutionThread(gateway, executorService);
+    }
+
+    /**
+     * When the client is initialized and ran on its own thread
+     * */
     @Override
     public void run() {
-        try {
-            gateway.gameStartRequest("cioccarellia", GameMode.GAME_MODE_3_PLAYERS, config.protocol(), controller);
-
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public ClientController getController() {
-        return controller;
-    }
-
-    public ClientGateway getClientGateway() {
-        return gateway;
+        controller.initialize();
     }
 }

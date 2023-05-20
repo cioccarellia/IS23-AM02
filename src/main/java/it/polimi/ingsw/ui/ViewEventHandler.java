@@ -8,18 +8,29 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * Describes the hooks that can be implemented on any client-side component (in this case, the {@link it.polimi.ingsw.controller.client.ClientController})
+ * that wants to be aware of view events (generated in {@link UiGateway}).
+ * The methods defined therein are to be called only following a user (manual or automatic) action.
  */
 public interface ViewEventHandler {
 
-    void onSelection(Set<Coordinate> coordinates);
+    /**
+     * User has completed selection and is sending coordinates to server
+     * */
+    void onViewSelection(Set<Coordinate> coordinates);
 
-    void onInsertion(int column, List<Tile> tiles);
+    /**
+     * User has completed insertion and is sending ordered tiles and column
+     * */
+    void onViewInsertion(int column, List<Tile> tiles);
 
-    void sendMessage(ChatTextMessage message);
+    /**
+     * User has sent a chat message
+     * */
+    void onViewSendMessage(ChatTextMessage message);
 
-    void quitGame();
-
-    void keepAlive();
-
+    /**
+     * User has quit the game
+     * */
+    void onViewQuitGame();
 }

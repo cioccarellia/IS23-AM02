@@ -2,7 +2,9 @@ package it.polimi.ingsw.ui;
 
 import it.polimi.ingsw.model.game.Game;
 
-public interface UiGateway {
+import java.io.Serializable;
+
+public interface UiGateway extends Runnable, Serializable {
 
     void onGameCreated();
 

@@ -14,6 +14,8 @@ import it.polimi.ingsw.ui.cli.printer.BookshelvesPrinter;
 import it.polimi.ingsw.ui.cli.printer.CommonGoalCardsPrinter;
 import it.polimi.ingsw.ui.cli.printer.PersonalGoalCardPrinter;
 import javafx.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
@@ -23,6 +25,8 @@ import static it.polimi.ingsw.model.game.GameStatus.ENDED;
 import static it.polimi.ingsw.utils.model.TurnHelper.getNextPlayerNumber;
 
 public class CliApp implements UiGateway {
+
+    private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
     public Game model;
     private ViewEventHandler handler;
@@ -63,6 +67,9 @@ public class CliApp implements UiGateway {
      */
     @Override
     public void onGameCreated() {
+        if (model == null) {
+            return;
+        }
         model.onGameStarted();
         Console.out("MY SHELFIE \n");
         Console.out("Game has started, Enjoy the game and good luck!\n");
@@ -161,4 +168,8 @@ public class CliApp implements UiGateway {
         this.handler = handler;
     }
 
+    @Override
+    public void run() {
+        // app start
+    }
 }

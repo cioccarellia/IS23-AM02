@@ -11,15 +11,23 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 
-public abstract class GuiApp extends Application implements UiGateway {
+/** NO ASTRATTA **/
+public class GuiApp extends Application implements UiGateway {
+
+    private static final Logger logger = LoggerFactory.getLogger(GuiApp.class);
+
     private final int dimension = BoardConfiguration.getInstance().getDimension();
     private Game game;
+
 
     @Override
     public void onGameCreated() {
@@ -86,4 +94,13 @@ public abstract class GuiApp extends Application implements UiGateway {
     }
 
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        // javafx start
+    }
+
+    @Override
+    public void run() {
+        // thread start
+    }
 }
