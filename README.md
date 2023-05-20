@@ -18,10 +18,10 @@
 |:---------------|:-----:|
 | Basic rules    |  🟢   |
 | Complete rules |  🟢   |
-| Socket         |  🟡   |
-| RMI            |  🟡   |
+| Socket         |  🟢   |
+| RMI            |  🟢   |
 | GUI            |  🟡   |
-| CLI            |  🟡   |
+| CLI            |  🟢   |
 | Multiple games |  🔴   |
 | Persistence    |  🟡   |
 | Resilience     |  🟡   |
