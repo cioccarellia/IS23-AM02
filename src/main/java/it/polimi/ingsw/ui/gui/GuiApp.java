@@ -1,12 +1,15 @@
 package it.polimi.ingsw.ui.gui;
 
 
+import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.UiGateway;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,50 +22,84 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
+import static it.polimi.ingsw.model.game.goal.Token.*;
 
-/** NO ASTRATTA **/
+
+/**
+ * NO ASTRATTA
+ **/
 public class GuiApp extends Application implements UiGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiApp.class);
+    private static final int FIRST=0;
+    private static final int SECOND=1;
 
     private final int dimension = BoardConfiguration.getInstance().getDimension();
     private Game game;
+    @FXML
+    public GridPane board;
+    @FXML
+    public GridPane myBookShelf;
+    @FXML
+    public GridPane player1BookShelf;
+    @FXML
+    public GridPane player2BookShelf;
+    @FXML
+    public GridPane player3BookShelf;
+    @FXML
+    public GridPane player4BookShelf;
+    @FXML
+    public ImageView endGameToken;
+    @FXML
+    public ImageView FirstCommonGoalCardToken2;
+    @FXML
+    public ImageView FirstCommonGoalCardToken4;
+    @FXML
+    public ImageView FirstCommonGoalCardToken6;
+    @FXML
+    public ImageView FirstCommonGoalCardToken8;
+    @FXML
+    public ImageView SecondCommonGoalCardToken2;
+    @FXML
+    public ImageView SecondCommonGoalCardToken4;
+    @FXML
+    public ImageView SecondCommonGoalCardToken6;
+    @FXML
+    public ImageView SecondCommonGoalCardToken8;
+    @FXML
+    public ImageView firstCommonGoalCard;
+    @FXML
+    public ImageView secondCommonGoalCard;
+    @FXML
+    public ImageView personalGoalCard;
+
 
 
     @Override
-    public void onGameCreated() {
-
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+    public void onGameCreated(Game game, Scene scene) {
+        modelUpdate(game, scene);
+        game.onGameStarted();
     }
+
 
     @Override
-    public void modelUpdate(Game game) {
-        GridPane matrix = new GridPane();
-        Tile tile;
+    public void modelUpdate(Game game, Scene scene) {
+        GuiResources resources = new GuiResources();
+        board = scene.boardUpdate(game.getBoard());
+        myBookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+        player1BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+        player2BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+        player3BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+        player4BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+        endGameToken.setImage(resources.getToken(FULL_SHELF_TOKEN));
+        firstCommonGoalCard= scene.commonGoalCardUpdate(game.getCommonGoalCards().get(FIRST).getCommonGoalCard());
+        secondCommonGoalCard= scene.commonGoalCardUpdate(game.getCommonGoalCards().get(SECOND).getCommonGoalCard());
+        personalGoalCard=scene.personalGoalCardUpdate(game);
 
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
 
-                tile = game.getGameMatrix()[i][j];
 
-                switch (tile) {
-                    case BOOK -> matrix.add(createImageMatrix("img/tiles/book1.1.png"), i, j);
-                    case CAT -> matrix.add(createImageMatrix("img/tiles/cat1.1.png"), i, j);
-                    case GAME -> matrix.add(createImageMatrix("img/tiles/game1.1.png"), i, j);
-                    case TROPHY -> matrix.add(createImageMatrix("img/tiles/trophy1.1.png"), i, j);
-                    case PLANT -> matrix.add(createImageMatrix("img/tiles/plant1.1.png"), i, j);
-                    case FRAME -> matrix.add(createImageMatrix("img/tiles/frame1.1.png"), i, j);
-                }
-            }
-        }
     }
 
-    public ImageView createImageMatrix(String name) {
-        ImageView book = new ImageView();
-        book.setImage(new Image(name));
-
-        return book;
-    }
 
     public Set<Coordinate> getSelectedCoordinates(Node tileNode) {
 
@@ -80,12 +117,14 @@ public class GuiApp extends Application implements UiGateway {
 
     @Override
     public void gameSelection() {
-
+        //coordinate selezionate
+        //game.onPlayerSelectionPhase();
     }
 
     @Override
     public void gameInsertion() {
-
+        // tile da inserire
+        //game.onPlayerSelectionPhase();
     }
 
     @Override

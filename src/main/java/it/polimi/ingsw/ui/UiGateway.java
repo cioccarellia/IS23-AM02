@@ -1,14 +1,15 @@
 package it.polimi.ingsw.ui;
 
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.ui.gui.Scene;
 
 import java.io.Serializable;
 
 public interface UiGateway extends Runnable, Serializable {
 
-    void onGameCreated();
+    void onGameCreated(Game game, Scene scene);
 
-    void modelUpdate(Game game);
+    void modelUpdate(Game game, Scene scene);
 
     void gameSelection();
 

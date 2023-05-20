@@ -32,7 +32,7 @@
                 <Image url="@../img/boards/bookshelf.png"/>
             </image>
         </ImageView>
-        <ImageView id="personalGoalCard" fitHeight="193.0" fitWidth="151.0" layoutX="836.0" layoutY="146.0"
+        <ImageView fx:id="personalGoalCard" fitHeight="193.0" fitWidth="151.0" layoutX="836.0" layoutY="146.0"
                    pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../img/personal_goal_cards/personal_goal_card_1.png"/>
@@ -52,7 +52,7 @@
                                         <Image url="@../img/boards/bookshelf_orth.png"/>
                                     </image>
                                 </ImageView>
-                                <GridPane fx:id="gridPane" layoutX="39.0" layoutY="36.0" prefHeight="231.0"
+                                <GridPane fx:id="player1Bookshelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0"
                                           prefWidth="215.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -172,7 +172,7 @@
                                         <Image url="@../img/boards/bookshelf_orth.png"/>
                                     </image>
                                 </ImageView>
-                                <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
+                                <GridPane fx:id="player2Bookshelf " layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -291,7 +291,7 @@
                                         <Image url="@../img/boards/bookshelf_orth.png"/>
                                     </image>
                                 </ImageView>
-                                <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
+                                <GridPane fx:id="player3Bookshelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -410,7 +410,7 @@
                                         <Image url="@../img/boards/bookshelf_orth.png"/>
                                     </image>
                                 </ImageView>
-                                <GridPane layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
+                                <GridPane fx:id="player4Bookshelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -527,19 +527,19 @@
                 <Font name="Consolas" size="18.0"/>
             </font>
         </Button>
-        <ImageView id="secondCommonGoalCard" fitHeight="100.0" fitWidth="130.0" layoutX="856.0" layoutY="561.0"
+        <ImageView fx:id="secondCommonGoalCard" fitHeight="100.0" fitWidth="130.0" layoutX="856.0" layoutY="561.0"
                    pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../img/common_goal_cards/eight_tiles.jpg"/>
             </image>
         </ImageView>
-        <ImageView id="firstCommonGoalCard" fitHeight="119.0" fitWidth="130.0" layoutX="856.0" layoutY="460.0"
+        <ImageView fx:id="firstCommonGoalCard" fitHeight="119.0" fitWidth="130.0" layoutX="856.0" layoutY="460.0"
                    pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../img/common_goal_cards/four_group_four.jpg"/>
             </image>
         </ImageView>
-        <GridPane layoutX="17.0" layoutY="18.0" prefHeight="409.0" prefWidth="412.0">
+        <GridPane fx:id="board" layoutX="17.0" layoutY="18.0" prefHeight="409.0" prefWidth="412.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="0.0" prefWidth="47.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="0.0" prefWidth="46.0"/>
@@ -666,7 +666,7 @@
                 <TextField id="chatTextField" prefHeight="39.0" prefWidth="273.0"/>
             </children>
         </TextFlow>
-        <GridPane layoutX="512.0" layoutY="118.0" prefHeight="283.0" prefWidth="272.0">
+        <GridPane fx:id="myBookShelf" layoutX="512.0" layoutY="118.0" prefHeight="283.0" prefWidth="272.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -755,7 +755,7 @@
         </MenuButton>
         <Pane layoutX="358.0" layoutY="311.0" prefHeight="50.0" prefWidth="54.0" rotate="10.0">
             <children>
-                <ImageView id="endGameToken" fitHeight="51.0" fitWidth="50.0" layoutX="2.0" pickOnBounds="true"
+                <ImageView fx:id="endGameToken" id="endGameToken" fitHeight="51.0" fitWidth="50.0" layoutX="2.0" pickOnBounds="true"
                            preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/first_full_bookshelf_token.jpg"/>
@@ -765,25 +765,25 @@
         </Pane>
         <Pane layoutX="931.0" layoutY="579.0" prefHeight="42.0" prefWidth="42.0" rotate="-10.0">
             <children>
-                <ImageView id="2SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true"
+                <ImageView fx:id="SecondCommonGoalCardToken2" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true"
                            preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_2.jpg"/>
                     </image>
                 </ImageView>
-                <ImageView id="4SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
+                <ImageView fx:id="SecondCommonGoalCardToken4" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
                            pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_4.jpg"/>
                     </image>
                 </ImageView>
-                <ImageView id="6SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
+                <ImageView fx:id="SecondCommonGoalCardToken6" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
                            pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_6.jpg"/>
                     </image>
                 </ImageView>
-                <ImageView id="8SecondCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
+                <ImageView fx:id="SecondCommonGoalCardToken8" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
                            pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_8.jpg"/>
@@ -793,25 +793,25 @@
         </Pane>
         <Pane layoutX="929.0" layoutY="478.0" prefHeight="42.0" prefWidth="42.0" rotate="-10.0">
             <children>
-                <ImageView id="2FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true"
+                <ImageView fx:id="FirstCommonGoalCardToken2" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true"
                            preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_2.jpg"/>
                     </image>
                 </ImageView>
-                <ImageView id="4FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
+                <ImageView fx:id="FirstCommonGoalCardToken4" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
                            pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_4.jpg"/>
                     </image>
                 </ImageView>
-                <ImageView id="6FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
+                <ImageView fx:id="FirstCommonGoalCardToken6" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
                            pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_6.jpg"/>
                     </image>
                 </ImageView>
-                <ImageView id="8FirstCommonGoalCardToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
+                <ImageView fx:id="FirstCommonGoalCardToken8" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0"
                            pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../img/tokens/scoring_8.jpg"/>

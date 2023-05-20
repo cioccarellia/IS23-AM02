@@ -12,7 +12,7 @@ import static it.polimi.ingsw.model.board.Tile.*;
  */
 public class PersonalGoalCardMatrixContainer {
 
-    private static final Tile[][] m1 = {
+    public static final Tile[][] m1 = {
             {null, null, null, null, GAME},
             {null, null, null, null, null},
             {TROPHY, null, FRAME, null, null},
@@ -21,7 +21,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, null, null, null}
     };
 
-    private static final Tile[][] m2 = {
+    public static final Tile[][] m2 = {
             {null, null, null, null, null},
             {null, TROPHY, null, null, null},
             {null, null, null, null, null},
@@ -30,7 +30,7 @@ public class PersonalGoalCardMatrixContainer {
             {GAME, null, null, CAT, null}
     };
 
-    private static final Tile[][] m3 = {
+    public static final Tile[][] m3 = {
             {null, null, TROPHY, null, CAT},
             {null, null, null, null, null},
             {null, null, null, BOOK, null},
@@ -39,7 +39,7 @@ public class PersonalGoalCardMatrixContainer {
             {PLANT, null, null, null, null}
     };
 
-    private static final Tile[][] m4 = {
+    public static final Tile[][] m4 = {
             {CAT, null, null, null, null},
             {null, null, null, FRAME, null},
             {null, PLANT, null, null, null},
@@ -48,7 +48,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, BOOK, null, null}
     };
 
-    private static final Tile[][] m5 = {
+    public static final Tile[][] m5 = {
             {null, null, null, null, null},
             {null, PLANT, null, null, null},
             {CAT, null, GAME, null, null},
@@ -57,7 +57,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, null, null, FRAME}
     };
 
-    private static final Tile[][] m6 = {
+    public static final Tile[][] m6 = {
             {null, null, null, null, FRAME},
             {null, CAT, null, null, null},
             {null, null, TROPHY, null, null},
@@ -66,7 +66,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, null, GAME, null}
     };
 
-    private static final Tile[][] m7 = {
+    public static final Tile[][] m7 = {
             {null, null, GAME, null, null},
             {null, null, null, null, null},
             {null, null, CAT, null, null},
@@ -75,7 +75,7 @@ public class PersonalGoalCardMatrixContainer {
             {FRAME, null, null, null, null}
     };
 
-    private static final Tile[][] m8 = {
+    public static final Tile[][] m8 = {
             {null, null, null, null, TROPHY},
             {null, GAME, null, null, null},
             {BOOK, null, null, null, null},
@@ -84,7 +84,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, null, PLANT, null}
     };
 
-    private static final Tile[][] m9 = {
+    public static final Tile[][] m9 = {
             {null, null, PLANT, null, null},
             {null, BOOK, null, null, null},
             {GAME, null, null, null, null},
@@ -93,7 +93,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, null, TROPHY, null}
     };
 
-    private static final Tile[][] m10 = {
+    public static final Tile[][] m10 = {
             {null, null, BOOK, null, null},
             {null, PLANT, null, null, null},
             {null, null, FRAME, null, null},
@@ -102,7 +102,7 @@ public class PersonalGoalCardMatrixContainer {
             {CAT, null, null, null, null}
     };
 
-    private static final Tile[][] m11 = {
+    public static final Tile[][] m11 = {
             {PLANT, null, FRAME, null, null},
             {null, null, null, null, CAT},
             {null, null, null, BOOK, null},
@@ -111,7 +111,7 @@ public class PersonalGoalCardMatrixContainer {
             {null, null, TROPHY, null, null}
     };
 
-    private static final Tile[][] m12 = {
+    public static final Tile[][] m12 = {
             {null, null, null, null, null},
             {FRAME, null, null, GAME, null},
             {null, null, PLANT, null, null},
@@ -120,19 +120,18 @@ public class PersonalGoalCardMatrixContainer {
             {BOOK, null, null, null, null}
     };
 
-
-    private final static PersonalGoalCard p1 = new PersonalGoalCard(m1);
-    private final static PersonalGoalCard p2 = new PersonalGoalCard(m2);
-    private final static PersonalGoalCard p3 = new PersonalGoalCard(m3);
-    private final static PersonalGoalCard p4 = new PersonalGoalCard(m4);
-    private final static PersonalGoalCard p5 = new PersonalGoalCard(m5);
-    private final static PersonalGoalCard p6 = new PersonalGoalCard(m6);
-    private final static PersonalGoalCard p7 = new PersonalGoalCard(m7);
-    private final static PersonalGoalCard p8 = new PersonalGoalCard(m8);
-    private final static PersonalGoalCard p9 = new PersonalGoalCard(m9);
-    private final static PersonalGoalCard p10 = new PersonalGoalCard(m10);
-    private final static PersonalGoalCard p11 = new PersonalGoalCard(m11);
-    private final static PersonalGoalCard p12 = new PersonalGoalCard(m12);
+    public final static PersonalGoalCard p1 = new PersonalGoalCard(m1);
+    public final static PersonalGoalCard p2 = new PersonalGoalCard(m2);
+    public final static PersonalGoalCard p3 = new PersonalGoalCard(m3);
+    public final static PersonalGoalCard p4 = new PersonalGoalCard(m4);
+    public final static PersonalGoalCard p5 = new PersonalGoalCard(m5);
+    public final static PersonalGoalCard p6 = new PersonalGoalCard(m6);
+    public final static PersonalGoalCard p7 = new PersonalGoalCard(m7);
+    public final static PersonalGoalCard p8 = new PersonalGoalCard(m8);
+    public final static PersonalGoalCard p9 = new PersonalGoalCard(m9);
+    public final static PersonalGoalCard p10 = new PersonalGoalCard(m10);
+    public final static PersonalGoalCard p11 = new PersonalGoalCard(m11);
+    public final static PersonalGoalCard p12 = new PersonalGoalCard(m12);
 
 
     public static final List<PersonalGoalCard> personalGoalCardDomain = Arrays.asList(

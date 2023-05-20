@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.game.extractors;
 
 import java.util.List;
 
-abstract class ElementExtractor<E> {
+public abstract class ElementExtractor<E> {
 
     abstract public E extract();
 

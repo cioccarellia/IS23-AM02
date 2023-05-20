@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.gui;
 
+import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.model.game.Game;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,12 +22,6 @@ public class RunnableGui extends Application {
     private ImageView Player1Tile23;
 
     public void start(Stage primaryStage) throws IOException {
-        game = new Game(GAME_MODE_4_PLAYERS);
-        game.addPlayer("Cookie");
-        game.addPlayer("Alberto");
-        game.addPlayer("Marco");
-        game.addPlayer("Giulia");
-
 
         primaryStage.setMaximized(true);
         primaryStage.setFullScreen(false);
@@ -34,7 +29,7 @@ public class RunnableGui extends Application {
 
 
         // Load root layout from fxml file.
-       /*
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/Index.fxml"));
         Parent rootLayout = null;
@@ -42,16 +37,14 @@ public class RunnableGui extends Application {
         try {
             rootLayout = loader.load();
         } catch (IOException e) {
-            AppClient.LOGGER.severe(e.getMessage());
+            //AppClient.LOGGER.severe(e.getMessage());
             System.exit(1);
         }
 
-        */
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Index.fxml")));
-        primaryStage.setScene(root.getScene());
+        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Index.fxml")));
+        primaryStage.setScene(rootLayout.getScene());
         primaryStage.setTitle("My shelfie");
-        //primaryStage.setFullScreen().NO_MATCH);
         primaryStage.show();
 
 
