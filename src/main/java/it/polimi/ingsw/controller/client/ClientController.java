@@ -74,13 +74,13 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
     @Override
-    public synchronized void authorize(String username) {
+    public synchronized void authorize(String username, Game game) {
         // setup internal variables post-authorization
         authUsername = username;
         hasAuthenticatedWithServer = true;
 
         // create UI
-        ui = ViewFactory.create(config.mode());
+        ui = ViewFactory.create(config.mode(), game, this);
 
         // schedules UI initialization on its own thread
         ViewLayer.scheduleUiExecutionThread(ui, AppClient.executorService);
@@ -97,8 +97,9 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
 
     /***   ClientService   ***/
 
-    public void onAcceptConnectionAndFinalizeUsername(String username) {
-        authorize(username);
+    @Override
+    public void onAcceptConnectionAndFinalizeUsername(String username, Game game) {
+        authorize(username, game);
     }
 
     @Override

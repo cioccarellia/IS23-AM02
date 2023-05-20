@@ -95,7 +95,7 @@ public class ServerController implements ServerService {
     public synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
-        service.onAcceptConnectionAndFinalizeUsername(username);
+        service.onAcceptConnectionAndFinalizeUsername(username, game);
 
         // en-route parameters
         switch (service) {
@@ -114,18 +114,20 @@ public class ServerController implements ServerService {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
         if (serverStatus == NO_GAME_STARTED) {
-            // accepting request
+            // accepting request and setting up game
             game = new Game(mode);
+            game.addPlayer(username);
             maxPlayerAmount = mode.maxPlayerAmount();
+
+            // update server status
             serverStatus = GAME_INITIALIZING;
 
+            // adds a player to the game model
 
             // synchronize
             connectionsManager.add(username, protocol, OPEN, remoteService);
             synchronizeConnectionLayer(username, remoteService);
 
-            // adds a player to the game model
-            game.addPlayer(username);
 
             // notify the
             logger.info("returning success from gameStartRequest()");

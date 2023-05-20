@@ -31,8 +31,8 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onAcceptConnectionAndFinalizeUsername(String string) {
-        forward(source -> source.onAcceptConnectionAndFinalizeUsername(string));
+    public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
+        forward(source -> source.onAcceptConnectionAndFinalizeUsername(string, game));
     }
 
     @Override

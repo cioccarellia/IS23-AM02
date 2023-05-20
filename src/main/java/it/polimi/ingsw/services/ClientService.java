@@ -22,7 +22,7 @@ public interface ClientService {
      * Communicates to the client that it has received the username
      * */
     @ClientFunction
-    void onAcceptConnectionAndFinalizeUsername(String string);
+    void onAcceptConnectionAndFinalizeUsername(String string, Game game);
 
 
     @ClientFunction

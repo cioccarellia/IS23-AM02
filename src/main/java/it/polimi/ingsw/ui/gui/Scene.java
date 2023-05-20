@@ -1,6 +1,5 @@
 package it.polimi.ingsw.ui.gui;
 
-import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
@@ -10,53 +9,30 @@ import it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.utils.model.BoardUtils;
+import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
+import it.polimi.ingsw.model.game.goal.Token;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.*;
-import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.personalGoalCardDomain;
-
 
 public class Scene {
-
-    Game game;
 
     private final int rows = BookshelfConfiguration.getInstance().rows();
     private final int cols = BookshelfConfiguration.getInstance().cols();
     private final int dimension = BoardConfiguration.getInstance().getDimension();
 
-    private static final List<PersonalGoalCard> personalGoalCards = new ArrayList<>(personalGoalCardDomain);
-
-
-    public GridPane boardUpdate(Board board) {
-        GuiResources resource = new GuiResources();
+    public GridPane boardUpdate(Game game) {
         GridPane matrix = new GridPane();
-        Tile tile;
+
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
+                Tile tile = game.getGameMatrix()[i][j];
 
-                tile = game.getGameMatrix()[i][j];
-
-                switch (tile) {
-                    case BOOK ->
-                            matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.BOOK))), i, j);
-                    case CAT ->
-                            matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.CAT))), i, j);
-                    case GAME ->
-                            matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.GAME))), i, j);
-                    case TROPHY ->
-                            matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.TROPHY))), i, j);
-                    case PLANT ->
-                            matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.PLANT))), i, j);
-                    case FRAME ->
-                            matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.FRAME))), i, j);
+                if (tile != null) {
+                    matrix.add(createImageMatrix(String.valueOf(GuiResources.getTile(tile))), i, j);
                 }
+
             }
         }
         return matrix;
@@ -71,81 +47,44 @@ public class Scene {
 
     public GridPane bookshelfUpdate(Bookshelf bookshelf) {
         GridPane matrix = new GridPane();
-        Tile tile;
-        GuiResources resource = new GuiResources();
-        for (int i = 0; i < rows; i++){
-            for(int j=0; j<cols;j++){
-                if (bookshelf.getShelfMatrix()[i][j] != null) {
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                Tile tile = bookshelf.getShelfMatrix()[i][j];
 
-                    tile = bookshelf.getShelfMatrix()[i][j];
-                    switch (tile) {
-                        case BOOK -> matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.BOOK))), i, j);
-                        case CAT -> matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.CAT))), i, j);
-                        case GAME -> matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.GAME))), i, j);
-                        case TROPHY -> matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.TROPHY))), i, j);
-                        case PLANT -> matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.PLANT))), i, j);
-                        case FRAME -> matrix.add(createImageMatrix(String.valueOf(resource.getTile(Tile.FRAME))), i, j);
-                    }
+                if (tile != null) {
+                    matrix.add(createImageMatrix(String.valueOf(GuiResources.getTile(tile))), i, j);
                 }
             }
         }
-            return matrix;
+
+        return matrix;
     }
 
     public ImageView personalGoalCardUpdate(Game game) {
         GuiResources resources = new GuiResources();
         ImageView image = new ImageView();
-        /*switch (game.getCurrentPlayer().getPersonalGoalCard()) {
-            case p1 ->{
+        PersonalGoalCard id = game.getCurrentPlayer().getPersonalGoalCard();
 
-            }
-        }*/
+        image.setImage(GuiResources.getPersonalGC(id));
         return image;
     }
-    public ImageView commonGoalCardUpdate(CommonGoalCard commonGoalCard)
-    {
-        GuiResources resources = new GuiResources();
+
+    public ImageView commonGoalCardUpdate(CommonGoalCard commonGoalCard) {
         ImageView image = new ImageView();
         CommonGoalCardIdentifier id = commonGoalCard.getId();
-        switch (id) {
-            case SIX_PAIRS -> {
 
-            }
-            case DIAGONAL -> {
+        image.setImage(GuiResources.getCommonGC((id)));
 
-            }
-            case FOUR_GROUP_FOUR -> {
+        return image;
+    }
 
-            }
-            case FOUR_MAX3DIFF_LINES -> {
+    public ImageView CommonGoalCardTokenUpdate(CommonGoalCardStatus commonGoalCard) {
+        ImageView image = new ImageView();
+        Token id = commonGoalCard.getCardTokens().get(commonGoalCard.getCardTokens().size() - 1);
 
-            }
-            case FOUR_CORNERS -> {
+        image.setImage(GuiResources.getToken(id));
 
-
-            }
-            case TWO_DIFF_COLUMNS -> {
-
-            }
-            case TWO_SQUARES -> {
-
-            }
-            case TWO_DIFF_LINES -> {
-
-            }
-            case THREE_MAX3DIFF_COLUMNS -> {
-
-            }
-            case X_TILES -> {
-
-            }
-            case EIGHT_TILES -> {
-
-            }
-            case STAIRS -> {
-
-            }
-        }
         return image;
     }
 

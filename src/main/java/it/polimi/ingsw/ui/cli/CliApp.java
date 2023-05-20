@@ -29,9 +29,12 @@ public class CliApp implements UiGateway {
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
     public Game model;
+
     private ViewEventHandler handler;
 
-    public CliApp() {
+    public CliApp(Game model, ViewEventHandler handler) {
+        this.model = model;
+        this.handler = handler;
     }
 
     public static void main(String[] args) {

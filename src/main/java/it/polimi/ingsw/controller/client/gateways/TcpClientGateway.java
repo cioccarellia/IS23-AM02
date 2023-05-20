@@ -111,7 +111,7 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
     public void mapEventToControllerMethodCall(@NotNull final Message incomingMessage) {
         switch (incomingMessage) {
             case ConnectionAcceptanceEvent s -> {
-                controller.onAcceptConnectionAndFinalizeUsername(s.getUsername());
+                controller.onAcceptConnectionAndFinalizeUsername(s.getUsername(), s.getModel());
             }
             case GameConnectionRequestReply s -> {
                 var sealed = s.seal();
