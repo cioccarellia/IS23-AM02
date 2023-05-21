@@ -11,7 +11,7 @@ public interface UiGateway extends Runnable, Serializable {
 
     void modelUpdate(Game game, Scene scene);
 
-    void gameSelection();
+    void gameSelection(Game game);
 
     void gameInsertion();
 

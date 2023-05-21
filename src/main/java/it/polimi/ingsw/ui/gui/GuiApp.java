@@ -76,6 +76,8 @@ public class GuiApp extends Application implements UiGateway {
         modelUpdate(game, scene);
         //game starting
         game.onGameStarted();
+
+
     }
 
 
@@ -97,9 +99,8 @@ public class GuiApp extends Application implements UiGateway {
     }
 
 
-    public Set<Coordinate> getSelectedCoordinates(Node tileNode) {
+    public Coordinate getSelectedCoordinates(Node tileNode) {
 
-        Set<Coordinate> selectedCoordinate = new HashSet<>();
         Coordinate coordinate;
 
         Integer col = GridPane.getColumnIndex(tileNode);
@@ -107,14 +108,25 @@ public class GuiApp extends Application implements UiGateway {
 
         coordinate = new Coordinate(row, col);
 
-        selectedCoordinate.add(coordinate);
-        return selectedCoordinate;
+        return coordinate;
     }
 
     @Override
-    public void gameSelection() {
-        //coordinate selezionate tramite un evento mouse del client
-        //game.onPlayerSelectionPhase();
+    public void gameSelection(Game game) {
+
+        Set<Coordinate> selectedCoordinatees = new HashSet<>();
+
+        // aggiungere button per poter terminare prima la selezione in or nel ciclo while
+        while(selectedCoordinatees.size() < 3) {
+
+            //coordinate selezionate tramite un evento mouse del client
+            board.setOnMouseClicked(mouseEvent -> {
+
+                selectedCoordinatees.add(getSelectedCoordinates(board));
+            });
+        }
+
+        game.onPlayerSelectionPhase(selectedCoordinatees);
     }
 
     @Override

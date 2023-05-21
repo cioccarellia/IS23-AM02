@@ -44,10 +44,12 @@ public class RunnableGui extends Application {
         primaryStage.show();
 
 
+        // mouse event, selezione dalla board di una tile
         Player1Tile23.setOnMouseClicked(mouseEvent -> {
             Integer col = GridPane.getColumnIndex(Player1Tile23);
             Integer row = GridPane.getRowIndex(Player1Tile23);
         });
+
     }
 
     @FXML
