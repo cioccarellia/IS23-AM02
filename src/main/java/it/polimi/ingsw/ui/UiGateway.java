@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 public interface UiGateway extends Runnable, Serializable {
 
-    void onGameCreated(Game game, Scene scene);
+    void onGameCreated();
 
-    void modelUpdate(Game game, Scene scene);
+    void modelUpdate(Game game);
 
-    void gameSelection(Game game);
+    void gameSelection();
 
     void gameInsertion();
 

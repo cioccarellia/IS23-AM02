@@ -59,42 +59,45 @@ public class GuiApp extends Application implements UiGateway {
     private final ViewEventHandler handler;
     public Game model;
 
+    public Scene scene;
 
-    public GuiApp(Game model, final ViewEventHandler handler) {
+
+    public GuiApp(Game model, ViewEventHandler handler) {
         this.model = model;
         this.handler = handler;
     }
 
 
     @Override
-    public void onGameCreated(Game game, Scene scene) {
+    public void onGameCreated() {
         //PGC initialization
-        firstCommonGoalCard = scene.commonGoalCardUpdate(game.getCommonGoalCards().get(FIRST).getCommonGoalCard());
-        secondCommonGoalCard = scene.commonGoalCardUpdate(game.getCommonGoalCards().get(SECOND).getCommonGoalCard());
-        personalGoalCard = scene.personalGoalCardUpdate(game);
+        firstCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(FIRST).getCommonGoalCard());
+        secondCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(SECOND).getCommonGoalCard());
+        personalGoalCard = scene.personalGoalCardUpdate(model);
         //model update
-        modelUpdate(game, scene);
+        modelUpdate(model);
         //game starting
-        game.onGameStarted();
+        model.onGameStarted();
 
 
     }
 
 
     @Override
-    public void modelUpdate(Game game, Scene scene) {
-        board = scene.boardUpdate(game);
-        myBookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+    public void modelUpdate(Game game) {
+        this.model = game;
+        board = scene.boardUpdate(model);
+        myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
 
-        player1BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
-        player2BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
-        player3BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
-        player4BookShelf = scene.bookshelfUpdate(game.getCurrentPlayer().getBookshelf());
+        player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
+        player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
+        player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
+        player4BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
 
         // CGC token update
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
-        firstCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(game.getCommonGoalCards().get(FIRST));
-        secondCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(game.getCommonGoalCards().get(SECOND));
+        firstCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(FIRST));
+        secondCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(SECOND));
 
     }
 
@@ -112,7 +115,7 @@ public class GuiApp extends Application implements UiGateway {
     }
 
     @Override
-    public void gameSelection(Game game) {
+    public void gameSelection() {
 
         Set<Coordinate> selectedCoordinatees = new HashSet<>();
 
@@ -121,12 +124,11 @@ public class GuiApp extends Application implements UiGateway {
 
             //coordinate selezionate tramite un evento mouse del client
             board.setOnMouseClicked(mouseEvent -> {
-
                 selectedCoordinatees.add(getSelectedCoordinates(board));
             });
         }
 
-        game.onPlayerSelectionPhase(selectedCoordinatees);
+        model.onPlayerSelectionPhase(selectedCoordinatees);
     }
 
     @Override
