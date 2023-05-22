@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.client;
 
 import it.polimi.ingsw.app.client.AppClient;
-import it.polimi.ingsw.app.client.layers.network.NetworkLayer;
+import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.app.client.layers.view.ViewFactory;
 import it.polimi.ingsw.app.client.layers.view.ViewLayer;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
@@ -86,7 +86,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
         ViewLayer.scheduleUiExecutionThread(ui, AppClient.executorService);
 
         // schedules ack thread
-        NetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
+        ClientNetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
     }
 
     @Override
@@ -123,27 +123,27 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
     @Override
-    public synchronized void modelUpdateEvent(Game game) {
+    public synchronized void onModelUpdateEvent(Game game) {
         ui.modelUpdate(game);
     }
 
     @Override
-    public synchronized void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public synchronized void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
 
     }
 
     @Override
-    public synchronized void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public synchronized void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
 
     }
 
     @Override
-    public synchronized void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public synchronized void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
 
     }
 
     @Override
-    public synchronized void gameEndedEvent() {
+    public synchronized void onGameEndedEvent() {
 
     }
 

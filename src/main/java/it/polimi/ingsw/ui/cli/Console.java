@@ -8,17 +8,24 @@ public class Console {
 
     public static void out(Object string) {
         System.out.print(string);
+        flush();
     }
 
     public static String in() {
         return scanner.nextLine();
     }
 
-    public static void flush() {
+    private static void flush() {
         System.out.flush();
     }
 
     public static void printnl() {
         System.out.println();
+    }
+
+    public static void printnl(int times) {
+        for (int i = 0; i < times; i++) {
+            System.out.println();
+        }
     }
 }

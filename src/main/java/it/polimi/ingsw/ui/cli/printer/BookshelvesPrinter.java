@@ -68,7 +68,7 @@ public class BookshelvesPrinter {
                 Console.out("  ");
 
 
-            if (players.get(i).getPlayerNumber() == game.getCurrentPlayer().getPlayerNumber()) {
+            if (players.get(i).getPlayerNumber() == game.getCurrentPlayerSession().getPlayerNumber()) {
                 var x = Chalk.on("@" + username).bgMagenta().toString();
                 Console.out(StringUtils.rightPad(x, 29, " "));
             } else {

@@ -123,8 +123,8 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onAcceptConnectionAndFinalizeUsername(String string) {
-        ConnectionAcceptanceEvent reply = new ConnectionAcceptanceEvent(string);
+    public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
+        ConnectionAcceptanceEvent reply = new ConnectionAcceptanceEvent(string, game);
 
         SocketSystem.sendAsync(socketOut, reply, ConnectionAcceptanceEvent.class);
     }
@@ -156,27 +156,27 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void modelUpdateEvent(Game game) {
+    public void onModelUpdateEvent(Game game) {
 
     }
 
     @Override
-    public void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
 
     }
 
     @Override
-    public void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
 
     }
 
     @Override
-    public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
 
     }
 
     @Override
-    public void gameEndedEvent() {
+    public void onGameEndedEvent() {
 
     }
 }

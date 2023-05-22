@@ -27,16 +27,16 @@ import java.io.Serializable;
  * and that a specific error type is returned.</li>
  * </ul>
  */
-sealed public interface TypedResult<T extends RequestType, R extends RequestError> extends Serializable {
+sealed public interface TypedResult<T extends RequestType & Serializable, R extends RequestError & Serializable> extends Serializable {
     /**
      * Represents a single, stateful successful result.
      */
-    record Success<T extends RequestType, R extends RequestError>(T value) implements TypedResult<T, R>, Serializable {
+    record Success<T extends RequestType & Serializable, R extends RequestError & Serializable>(T value) implements TypedResult<T, R>, Serializable {
     }
 
     /**
      * Represents a single, stateful failed result.
      */
-    record Failure<T extends RequestType, R extends RequestError>(R error) implements TypedResult<T, R>, Serializable {
+    record Failure<T extends RequestType & Serializable, R extends RequestError & Serializable>(R error) implements TypedResult<T, R>, Serializable {
     }
 }

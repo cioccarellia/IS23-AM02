@@ -40,7 +40,7 @@ public class GameOnPlayerInsertionPhaseTest implements GameTester {
             assertEquals(matrix[c1.x()][c1.y()], tiles.get(0));
             assertEquals(matrix[c2.x()][c2.y()], tiles.get(1));
 
-            assertEquals(CHECKING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
+            assertEquals(CHECKING, game.getCurrentPlayerSession().getPlayerCurrentGamePhase());
         }
     }
 }

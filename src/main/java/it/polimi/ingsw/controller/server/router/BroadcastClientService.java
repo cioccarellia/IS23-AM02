@@ -56,28 +56,28 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void modelUpdateEvent(Game game) {
-        forward(source -> source.modelUpdateEvent(game));
+    public void onModelUpdateEvent(Game game) {
+        forward(source -> source.onModelUpdateEvent(game));
     }
 
     @Override
-    public void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
-        forward(source -> source.gameSelectionTurnEvent(turnResult));
+    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+        forward(source -> source.onGameSelectionTurnEvent(turnResult));
     }
 
     @Override
-    public void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
-        forward(source -> source.gameInsertionTurnEvent(turnResult));
+    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+        forward(source -> source.onGameInsertionTurnEvent(turnResult));
     }
 
     @Override
-    public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
-        forward(source -> source.playerConnectionStatusUpdateEvent(usernames));
+    public void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+        forward(source -> source.onPlayerConnectionStatusUpdateEvent(usernames));
 
     }
 
     @Override
-    public void gameEndedEvent() {
-        forward(ClientService::gameEndedEvent);
+    public void onGameEndedEvent() {
+        forward(ClientService::onGameEndedEvent);
     }
 }

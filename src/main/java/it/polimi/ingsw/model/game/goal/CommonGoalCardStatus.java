@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.game.goal;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
+import it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer;
+import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.game.GameMode;
 
 import java.util.Optional;
@@ -14,7 +16,7 @@ import static it.polimi.ingsw.model.game.goal.Token.*;
  */
 public class CommonGoalCardStatus {
 
-    private final CommonGoalCard commonGoalCard;
+    private final CommonGoalCardIdentifier commonGoalCardId;
 
     /**
      * Stack of tokens associated with the common goal card.
@@ -24,7 +26,7 @@ public class CommonGoalCardStatus {
     private final Stack<Token> tokenStack = new Stack<>();
 
     public CommonGoalCardStatus(CommonGoalCard commonGoalCard, GameMode gameMode) {
-        this.commonGoalCard = commonGoalCard;
+        this.commonGoalCardId = commonGoalCard.getId();
 
         switch (gameMode) {
             case GAME_MODE_2_PLAYERS -> {
@@ -47,7 +49,7 @@ public class CommonGoalCardStatus {
     }
 
     public CommonGoalCard getCommonGoalCard() {
-        return commonGoalCard;
+        return CommonGoalCardFunctionContainer.commonGoalCardMap().get(commonGoalCardId);
     }
 
     public Stack<Token> getCardTokens() {

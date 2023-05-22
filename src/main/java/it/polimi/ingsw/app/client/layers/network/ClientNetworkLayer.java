@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutorService;
 
-public class NetworkLayer {
+public class ClientNetworkLayer {
 
     public static void scheduleReceiverExecutionThread(@NotNull ClientGateway clientGateway, @NotNull ExecutorService executorService) {
         switch (clientGateway) {

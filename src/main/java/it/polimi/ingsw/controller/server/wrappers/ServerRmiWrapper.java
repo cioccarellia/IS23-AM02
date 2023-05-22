@@ -15,22 +15,23 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * RMI wrapper
+ * RMI wrapper for server controller, unboxing RMI protocol calls (coming from the client)
+ * and forwarding them to the server controller
  */
 public class ServerRmiWrapper extends ServerWrapper implements ServerService {
 
-    private final ServerService server;
+    private final ServerService controller;
 
     private final ClientConnectionsManager connectionsManager;
 
-    public ServerRmiWrapper(ServerService server, ClientConnectionsManager connectionsManager) throws RemoteException {
-        this.server = server;
+    public ServerRmiWrapper(ServerService controller, ClientConnectionsManager connectionsManager) throws RemoteException {
+        this.controller = controller;
         this.connectionsManager = connectionsManager;
     }
 
     @Override
     public ServerService exposeServerService() {
-        return server;
+        return controller;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         try {
-            server.gameStartRequest(username, mode, protocol, remoteService);
+            controller.gameStartRequest(username, mode, protocol, remoteService);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -73,7 +74,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         try {
-            server.gameConnectionRequest(username, protocol, remoteService);
+            controller.gameConnectionRequest(username, protocol, remoteService);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -82,7 +83,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         try {
-            server.gameSelectionTurnResponse(username, selection);
+            controller.gameSelectionTurnResponse(username, selection);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -91,7 +92,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         try {
-            server.gameInsertionTurnResponse(username, tiles, column);
+            controller.gameInsertionTurnResponse(username, tiles, column);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -100,7 +101,7 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     @Override
     public void keepAlive(String username) {
         try {
-            server.keepAlive(username);
+            controller.keepAlive(username);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

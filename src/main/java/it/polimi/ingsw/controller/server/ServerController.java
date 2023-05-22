@@ -5,8 +5,10 @@ import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.router.Router;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
@@ -41,6 +43,7 @@ public class ServerController implements ServerService {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerController.class);
 
+
     /**
      * Keeps a map associating a username (unique identifier for a player)
      * to the specific details of its connection to the server.
@@ -66,11 +69,6 @@ public class ServerController implements ServerService {
      * Current server general status, independent from game logic
      */
     private ServerStatus serverStatus = NO_GAME_STARTED;
-
-    public ServerController() {
-        connectionsManager = new ClientConnectionsManager();
-        router = new Router(connectionsManager);
-    }
 
     public ServerController(ClientConnectionsManager manager) {
         connectionsManager = manager;
@@ -102,9 +100,7 @@ public class ServerController implements ServerService {
             case TcpConnectionHandler handler -> {
                 handler.setUsername(username);
             }
-            case ClientController controller -> {
-
-            }
+            case ClientController controller -> {}
             default -> throw new IllegalStateException("Unexpected value: " + service);
         }
     }
@@ -149,6 +145,7 @@ public class ServerController implements ServerService {
     @Override
     public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         logger.info("gameConnectionRequest(username={}, protocol={}, remoteService={})", username, protocol, remoteService);
+        connectionsManager.registerInteraction(username);
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
@@ -201,7 +198,7 @@ public class ServerController implements ServerService {
 
     // Game logic
     public synchronized boolean isUsernameActivePlayer(@NotNull String username) {
-        return username.equals(game.getCurrentPlayer().getUsername());
+        return username.equals(game.getCurrentPlayerSession().getUsername());
     }
 
     public synchronized boolean shouldStandbyGame() {
@@ -210,70 +207,88 @@ public class ServerController implements ServerService {
 
 
     @Override
-    public synchronized void /*SingleResult<TileSelectionFailures>*/ gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public synchronized void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
+        connectionsManager.registerInteraction(username);
 
         if (isUsernameActivePlayer(username)) {
-            // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER);
+            router.route(username).onGameSelectionTurnEvent(new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER));
+            return;
         }
 
-        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != SELECTING) {
-            // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION);
+        if (game.getCurrentPlayerSession().getPlayerCurrentGamePhase() != SELECTING) {
+            router.route(username).onGameSelectionTurnEvent(new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_ACTION));
+            return;
         }
 
         if (!game.isSelectionValid(selection)) {
-            // fixme return new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION);
+            router.route(username).onGameSelectionTurnEvent(new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION));
+            return;
         }
 
         game.onPlayerSelectionPhase(selection);
-        // fixme return new SingleResult.Success<>();
+
+        router.route(username).onGameSelectionTurnEvent(new SingleResult.Success<>());
+        router.broadcast().onModelUpdateEvent(game);
     }
 
 
     @Override
-    public synchronized void /*SingleResult<BookshelfInsertionFailure>*/ gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public synchronized void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
         logger.info("onPlayerBookshelfTileInsertionRequest(username={}, tiles={}, column={})", username, tiles, column);
+        connectionsManager.registerInteraction(username);
 
         if (isUsernameActivePlayer(username)) {
-            // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER);
+            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER));
+            return;
         }
 
-        if (game.getCurrentPlayer().getPlayerCurrentGamePhase() != INSERTING) {
-            // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS);
+        if (game.getCurrentPlayerSession().getPlayerCurrentGamePhase() != INSERTING) {
+            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_STATUS));
+            return;
         }
 
-        if (!game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles)) {
-            // return new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION);
+        if (!game.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles)) {
+            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION));
+            return;
         }
 
         if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
-            // return new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN);
+            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN));
+            return;
         }
 
         if (tiles.size() > LogicConfiguration.getInstance().maxSelectionSize()) {
-            // return new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES);
+            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES));
+            return;
         }
 
-        if (!game.getCurrentPlayer().getBookshelf().canFit(column, tiles.size())) {
-            // return new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT);
+        if (!game.getCurrentPlayerSession().getBookshelf().canFit(column, tiles.size())) {
+            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT));
+            return;
         }
 
         game.onPlayerInsertionPhase(column, tiles);
 
-        onPlayerCheckingRequest();
-        // return new SingleResult.Success<>();
+        onPlayerCheckingPhase();
+
+        router.route(username).onGameInsertionTurnEvent(new SingleResult.Success<>());
+        router.broadcast().onModelUpdateEvent(game);
     }
 
-    public synchronized void onPlayerCheckingRequest() {
+    public synchronized void onPlayerCheckingPhase() {
         logger.info("onPlayerCheckingRequest()");
         game.onPlayerCheckingPhase();
+
+        onNextTurn("");
     }
 
     @Override
     public synchronized void keepAlive(String username) {
         logger.info("keepAlive(username={})", username);
+
         if (connectionsManager.containsUsername(username)) {
-            connectionsManager.setConnectionStatus(username, OPEN);
+            connectionsManager.registerInteraction(username);
         } else {
             logger.warn("Wrong keep alive username");
         }
@@ -282,9 +297,18 @@ public class ServerController implements ServerService {
     public synchronized void onNextTurn(String nextPlayerUsername) {
         // assume the username is correct
         assert game.getSessions().isPresent(nextPlayerUsername);
-        PlayerNumber currentPlayerUsername = game.getCurrentPlayer().getPlayerNumber();
+        PlayerNumber currentPlayerUsername = game.getCurrentPlayerSession().getPlayerNumber();
 
         currentPlayerUsername = game.getSessions().getByUsername(nextPlayerUsername).getPlayerNumber();
-        game.getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
+        game.getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
+    }
+
+
+
+
+
+
+    public ClientConnectionsManager getConnectionsManager() {
+        return connectionsManager;
     }
 }

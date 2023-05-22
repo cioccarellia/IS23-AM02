@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import com.google.gson.annotations.Expose;
 import it.polimi.ingsw.groupfinder.Group;
 import it.polimi.ingsw.groupfinder.GroupFinder;
 import it.polimi.ingsw.model.ModelService;
@@ -41,6 +42,7 @@ import static java.util.Comparator.comparing;
 public class Game implements ModelService {
 
     // Game logger
+    @Expose(serialize = false)
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
     /**
@@ -48,33 +50,47 @@ public class Game implements ModelService {
      */
     private final GameMode mode;
     private final Board board = new Board();
+
     /**
      * Maps a player to its {@link PlayerSession}
      */
     private final SessionManager sessions;
+
     /**
      * Random, stateful extractors for the game
      */
-    private final TileExtractor tileExtractor = new TileExtractor();
-    private final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
-    private final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
+    @Expose(serialize = false)
+    private transient final TileExtractor tileExtractor = new TileExtractor();
+
+    @Expose(serialize = false)
+    private transient final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
+
+    @Expose(serialize = false)
+    private transient final PersonalGoalCardExtractor personalGoalCardExtractor = new PersonalGoalCardExtractor();
+
     /**
      * Holder class for the common goal cards
      * Holds the current statuses for the common goal cards.
      */
     private final List<CommonGoalCardStatus> commonGoalCardStatuses = new ArrayList<>();
+
     /**
      * External game configuration parameters
      */
-    private final LogicConfiguration config = LogicConfiguration.getInstance();
+    @Expose(serialize = false)
+    private transient final LogicConfiguration config = LogicConfiguration.getInstance();
+
+    /**
+     * Game Status
+     * */
     private GameStatus status = INITIALIZATION;
+
     /**
      * Markers for the current state of the game (needed for turn logic)
      */
     private PlayerNumber startingPlayerNumber, currentPlayerNumber;
 
 
-    //constructor
     public Game(GameMode _mode) {
         mode = _mode;
         sessions = new SessionManager(mode);
@@ -82,7 +98,6 @@ public class Game implements ModelService {
         logger.info("Game initialized");
     }
 
-    // setters
 
     /**
      * It sets the {@link GameStatus} to the one given
@@ -93,7 +108,6 @@ public class Game implements ModelService {
         this.status = status;
     }
 
-    // getters
 
     /**
      * @param username the username identifying the player
@@ -112,6 +126,10 @@ public class Game implements ModelService {
      */
     public List<String> getPlayersUsernameList() {
         return getSessions().playerSessions().stream().map(PlayerSession::getUsername).toList();
+    }
+
+    public PlayerSession getCurrentPlayerSession() {
+        return sessions.getByNumber(currentPlayerNumber);
     }
 
     /**
@@ -140,13 +158,6 @@ public class Game implements ModelService {
      */
     public GameMode getGameMode() {
         return mode;
-    }
-
-    /**
-     * @return the {@link PlayerSession} of the current player
-     */
-    public PlayerSession getCurrentPlayer() {
-        return sessions.getByNumber(currentPlayerNumber);
     }
 
     /**
@@ -184,6 +195,7 @@ public class Game implements ModelService {
     public PlayerSession getSessionFor(String username) {
         return sessions.getByUsername(username);
     }
+
 
     /**
      * @return the map of players
@@ -329,7 +341,7 @@ public class Game implements ModelService {
         onRefill();
 
         // Set first state
-        getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
+        getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
     }
 
     /**
@@ -339,7 +351,6 @@ public class Game implements ModelService {
      */
     @Override
     public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
-
         if (!isSelectionValid(coordinates)) {
             throw new IllegalStateException("Coordinates are not valid");
         }
@@ -354,8 +365,8 @@ public class Game implements ModelService {
         // update model accordingly
         coordinates.forEach(board::removeTileAt);
 
-        getCurrentPlayer().setPlayerTileSelection(tileSelection);
-        getCurrentPlayer().setPlayerCurrentGamePhase(INSERTING);
+        getCurrentPlayerSession().setPlayerTileSelection(tileSelection);
+        getCurrentPlayerSession().setPlayerCurrentGamePhase(INSERTING);
     }
 
     /**
@@ -370,8 +381,8 @@ public class Game implements ModelService {
         // TODO where do we get the ordered tiles?
 
         // we assume tiles have been checked and match
-        getCurrentPlayer().getBookshelf().insert(column, tiles);
-        getCurrentPlayer().setPlayerCurrentGamePhase(CHECKING);
+        getCurrentPlayerSession().getBookshelf().insert(column, tiles);
+        getCurrentPlayerSession().setPlayerCurrentGamePhase(CHECKING);
     }
 
     /**
@@ -382,10 +393,10 @@ public class Game implements ModelService {
     public void onPlayerCheckingPhase() {
 
         // full bookshelf test
-        boolean isBookshelfFull = getCurrentPlayer().getBookshelf().isFull();
+        boolean isBookshelfFull = getCurrentPlayerSession().getBookshelf().isFull();
 
         if (isBookshelfFull && status == RUNNING) {
-            getCurrentPlayer().addAcquiredToken(FULL_SHELF_TOKEN);
+            getCurrentPlayerSession().addAcquiredToken(FULL_SHELF_TOKEN);
             status = LAST_ROUND;
 
             setFlags();
@@ -399,18 +410,18 @@ public class Game implements ModelService {
         // common goal card testing
         for (CommonGoalCardStatus cardStatus : commonGoalCardStatuses) {
             CommonGoalCard card = cardStatus.getCommonGoalCard();
-            Tile[][] shelf = getCurrentPlayer().getBookshelf().getShelfMatrix();
+            Tile[][] shelf = getCurrentPlayerSession().getBookshelf().getShelfMatrix();
 
             boolean isCardConditionVerified = card.matches(shelf);
 
-            boolean hasAlreadyAcquiredToken = getCurrentPlayer().getAchievedCommonGoalCards().contains(card.getId());
+            boolean hasAlreadyAcquiredToken = getCurrentPlayerSession().getAchievedCommonGoalCards().contains(card.getId());
 
             boolean cardHasTokensLeft = !cardStatus.getCardTokens().isEmpty();
 
             if (isCardConditionVerified && !hasAlreadyAcquiredToken && cardHasTokensLeft) {
                 Optional<Token> pendingToken = cardStatus.acquireAndRemoveTopToken();
-                pendingToken.ifPresent(token -> getCurrentPlayer().getAcquiredTokens().add(token));
-                getCurrentPlayer().getAchievedCommonGoalCards().add(card.getId());
+                pendingToken.ifPresent(token -> getCurrentPlayerSession().getAcquiredTokens().add(token));
+                getCurrentPlayerSession().getAchievedCommonGoalCards().add(card.getId());
             }
         }
 
@@ -418,7 +429,7 @@ public class Game implements ModelService {
             onRefill();
         }
 
-        getCurrentPlayer().setPlayerCurrentGamePhase(IDLE);
+        getCurrentPlayerSession().setPlayerCurrentGamePhase(IDLE);
     }
 
     /**
@@ -434,7 +445,7 @@ public class Game implements ModelService {
             assert sessions.isPresent(nextPlayerUsername);
 
             currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
-            getCurrentPlayer().setPlayerCurrentGamePhase(SELECTING);
+            getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
         }
     }
 
@@ -453,9 +464,9 @@ public class Game implements ModelService {
         for (int i = 0; i < players.size(); i++) {
             int points = 0;
             points += players.get(i).calculateCurrentPoints();
-            points += players.get(i).calculatePersonalGoalCardPoints(getCurrentPlayer());
+            points += players.get(i).calculatePersonalGoalCardPoints(getCurrentPlayerSession());
 
-            GroupFinder groupFinder = new GroupFinder(getCurrentPlayer().getBookshelf().getShelfMatrix());
+            GroupFinder groupFinder = new GroupFinder(getCurrentPlayerSession().getBookshelf().getShelfMatrix());
             List<Group> groups = groupFinder.computeGroupPartition();
             List<Integer> groupsSize = groups.stream().map(group -> groups.size()).toList();
 

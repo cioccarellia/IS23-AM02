@@ -64,7 +64,7 @@ public class Scene {
         GuiResources resources = new GuiResources();
         ImageView image = new ImageView();
         //TODO capire se current player va bene, perché dovrebbe essere il giocatore stesso a vedere la propria carta anche se non current player
-        PersonalGoalCard id = game.getCurrentPlayer().getPersonalGoalCard();
+        PersonalGoalCard id = game.getCurrentPlayerSession().getPersonalGoalCard();
 
         image.setImage(GuiResources.getPersonalGC(id));
         return image;

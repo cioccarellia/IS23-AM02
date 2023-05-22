@@ -48,7 +48,7 @@ public class GameTest implements GameTester {
 
         // verify random first-player extraction
         assertTrue(game.getPlayerNumberMap().containsKey(game.getStartingPlayerNumber()));
-        assertTrue(game.getPlayerNumberMap().containsValue(game.getCurrentPlayer()));
+        assertTrue(game.getPlayerNumberMap().containsValue(game.getCurrentPlayerSession()));
     }
 
     @Test

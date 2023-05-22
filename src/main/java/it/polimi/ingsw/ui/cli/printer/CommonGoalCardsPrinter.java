@@ -32,7 +32,6 @@ public class CommonGoalCardsPrinter {
 
         Console.out("Common goal cards (the tiles' disposition is just a general description of the card):");
         Console.printnl();
-        Console.flush();
 
         for (int i = 0; i < dim; i++) {
             var x = exampleMatrices
@@ -47,7 +46,6 @@ public class CommonGoalCardsPrinter {
         }
 
         Console.printnl();
-        Console.flush();
 
         for (int i = 0; i < dim; i++) {
             Console.out("    0  1  2  3  4      ");

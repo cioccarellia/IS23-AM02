@@ -20,49 +20,17 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
-import static it.polimi.ingsw.model.game.GameStatus.ENDED;
-import static it.polimi.ingsw.utils.model.TurnHelper.getNextPlayerNumber;
-
 public class CliApp implements UiGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
-    public static Game model;
+    public Game model;
 
-    public static ViewEventHandler handler;
+    public ViewEventHandler handler;
 
     public CliApp(Game model, ViewEventHandler handler) {
         this.model = model;
         this.handler = handler;
-    }
-
-    public static void main(String[] args) {
-        CliApp app = new CliApp(model,handler);
-        Game game = new Game(GAME_MODE_2_PLAYERS);
-
-        game.addPlayer("Cookie");
-        game.addPlayer("Marco");
-
-        app.modelUpdate(game);
-        app.onGameCreated();
-
-        while (game.getGameStatus() != ENDED) {
-
-            app.gameSelection();
-            app.modelUpdate(game);
-
-            app.gameInsertion();
-            app.modelUpdate(game);
-
-            app.gameChecking();
-            app.modelUpdate(game);
-
-            app.gameNextTurn();
-            app.modelUpdate(game);
-        }
-
-        app.onGameEnded();
     }
 
     /**
@@ -73,9 +41,11 @@ public class CliApp implements UiGateway {
         if (model == null) {
             return;
         }
-        model.onGameStarted();
+
         Console.out("MY SHELFIE \n");
         Console.out("Game has started, Enjoy the game and good luck!\n");
+
+        printGameModel();
     }
 
     /**
@@ -86,6 +56,7 @@ public class CliApp implements UiGateway {
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
+        printGameModel();
     }
 
     /**
@@ -93,23 +64,26 @@ public class CliApp implements UiGateway {
      * goal card
      */
     public void printGameModel() {
-        //ConsoleClear.clearConsole();
-        // Console.printnl();
-        // Console.out("Board:");
+        if (model == null) {
+            Console.out("Void model");
+            return;
+        }
+
         Console.printnl();
         BoardPrinter.print(model.getBoard());
 
         CommonGoalCardsPrinter.print(model.getCommonGoalCards());
-        Console.printnl();
+        Console.printnl(2);
 
-        Console.printnl();
-        Console.out("Personal goal card for player " +
-                model.getSessions().getByNumber(model.getCurrentPlayer().getPlayerNumber()).getUsername() + ":\n");
-        Console.flush();
-        //TODO printing the current player's name is temporary, once fixed remove
-        //TODO we need to print the player's card for whom is asking for their private goal card, not the current player. Others can't see other player's card
-        PersonalGoalCardPrinter.print(model.getCurrentPlayer().getPersonalGoalCard());
-        Console.printnl();
+        if (model.getCurrentPlayerSession() != null) {
+            Console.out("Personal goal card for player " + model.getCurrentPlayerSession().getUsername() + ":\n");
+
+            //TODO printing the current player's name is temporary, once fixed remove
+            //TODO we need to print the player's card for whom is asking for their private goal card, not the current player. Others can't see other player's card
+
+            PersonalGoalCardPrinter.print(model.getCurrentPlayerSession().getPersonalGoalCard());
+            Console.printnl();
+        }
         BookshelvesPrinter.print(model);
         Console.printnl();
     }
@@ -129,27 +103,17 @@ public class CliApp implements UiGateway {
      */
     @Override
     public void gameInsertion() {
-        int tilesSize = model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles().size();
-        List<Tile> selectedTiles = model.getCurrentPlayer().getPlayerTileSelection().getSelectedTiles();
-        int column = ColumnParser.scan(model.getCurrentPlayer().getBookshelf().getShelfMatrix(), tilesSize);
+        int tilesSize = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles().size();
+        List<Tile> selectedTiles = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles();
+        int column = ColumnParser.scan(model.getCurrentPlayerSession().getBookshelf().getShelfMatrix(), tilesSize);
         List<Tile> orderedTiles;
 
         if (tilesSize > 1) {
             orderedTiles = PlayerTilesOrderInsertionParser
                     .scan(selectedTiles);
-        } else
+        } else {
             orderedTiles = selectedTiles;
-
-        model.onPlayerInsertionPhase(column, orderedTiles);
-    }
-
-    public void gameChecking() {
-        model.onPlayerCheckingPhase();
-    }
-
-    public void gameNextTurn() {
-        model.onNextTurn(model.getSessions().getByNumber(getNextPlayerNumber(model.getCurrentPlayer().getPlayerNumber(),
-                model.getGameMode())).getUsername());
+        }
     }
 
     /**
@@ -158,7 +122,7 @@ public class CliApp implements UiGateway {
     @Override
     public void onGameEnded() {
         Console.out("""
-                The game has ended. Congratulations to the winner!
+                The game has ended.
                 Here's the player's ranking with their points:
                 """);
 

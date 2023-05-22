@@ -48,8 +48,8 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
             game.onPlayerInsertionPhase(1, tiles);
             game.onPlayerCheckingPhase();
 
-            assertFalse(game.getCurrentPlayer().getBookshelf().isFull());
-            assertTrue(game.getCurrentPlayer().getAcquiredTokens().isEmpty());
+            assertFalse(game.getCurrentPlayerSession().getBookshelf().isFull());
+            assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().isEmpty());
         }
     }
 
@@ -71,26 +71,26 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
         game.onGameStarted();
 
-        game.getCurrentPlayer().getBookshelf().fillUpBookShelf(shelfMatrix);
+        game.getCurrentPlayerSession().getBookshelf().fillUpBookShelf(shelfMatrix);
 
         game.onPlayerCheckingPhase();
 
         if (game.getCommonGoalCards().stream().map(status -> status.getCommonGoalCard().getId()).toList().contains(CommonGoalCardIdentifier.X_TILES))
-            assertTrue(game.getCurrentPlayer().getAcquiredTokens().contains(COMMON_GOAL_TOKEN_8_POINTS));
+            assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().contains(COMMON_GOAL_TOKEN_8_POINTS));
         else
-            assertTrue(game.getCurrentPlayer().getAcquiredTokens().isEmpty());
+            assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().isEmpty());
 
-        String y = game.getSessions().getByNumber(TurnHelper.getNextPlayerNumber(game.getCurrentPlayer().getPlayerNumber(), game.getGameMode())).getUsername();
+        String y = game.getSessions().getByNumber(TurnHelper.getNextPlayerNumber(game.getCurrentPlayerSession().getPlayerNumber(), game.getGameMode())).getUsername();
         game.onNextTurn(y);
 
-        game.getCurrentPlayer().getBookshelf().fillUpBookShelf(shelfMatrix);
+        game.getCurrentPlayerSession().getBookshelf().fillUpBookShelf(shelfMatrix);
 
         game.onPlayerCheckingPhase();
 
         if (game.getCommonGoalCards().stream().map(status -> status.getCommonGoalCard().getId()).toList().contains(CommonGoalCardIdentifier.X_TILES))
-            assertTrue(game.getCurrentPlayer().getAcquiredTokens().contains(COMMON_GOAL_TOKEN_4_POINTS));
+            assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().contains(COMMON_GOAL_TOKEN_4_POINTS));
         else
-            assertTrue(game.getCurrentPlayer().getAcquiredTokens().isEmpty());
+            assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().isEmpty());
 
     }
 

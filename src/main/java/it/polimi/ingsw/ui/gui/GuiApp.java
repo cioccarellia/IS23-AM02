@@ -87,12 +87,12 @@ public class GuiApp extends Application implements UiGateway {
     public void modelUpdate(Game game) {
         this.model = game;
         board = scene.boardUpdate(model);
-        myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
+        myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
-        player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
-        player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
-        player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
-        player4BookShelf = scene.bookshelfUpdate(model.getCurrentPlayer().getBookshelf());
+        player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        player4BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
         // CGC token update
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));

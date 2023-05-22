@@ -42,19 +42,19 @@ public interface ClientService {
 
     // Running
     @ClientFunction
-    void modelUpdateEvent(Game game);
+    void onModelUpdateEvent(Game game);
 
     @ClientFunction
-    void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult);
+    void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult);
 
     @ClientFunction
-    void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult);
+    void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult);
 
 
     // Connection - Disconnection
     @ClientFunction
-    void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames);
+    void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames);
 
     @ClientFunction
-    void gameEndedEvent();
+    void onGameEndedEvent();
 }

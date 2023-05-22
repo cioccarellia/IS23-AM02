@@ -29,7 +29,6 @@ public class CoordinatesParser {
                     Give me the coordinates of the tiles you want (at least one, at most three),
                     in the format: x1, y1, x2, y2, ... (x are rows, y are columns)
                     """);
-            Console.flush();
 
             String input = Console.in();
 

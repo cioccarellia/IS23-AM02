@@ -45,7 +45,6 @@ public class PlayerTilesOrderInsertionParser {
             Console.printnl();
             Console.out("Format: Tile1, Tile2...");
             Console.printnl();
-            Console.flush();
 
             String input = Console.in();
 
@@ -56,7 +55,6 @@ public class PlayerTilesOrderInsertionParser {
                 Console.printnl();
                 Console.out("Not valid, you need to order the selected tiles from before.");
                 Console.printnl();
-                Console.flush();
                 continue;
             }
 

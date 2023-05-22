@@ -39,8 +39,8 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
 
             game.onPlayerSelectionPhase(selection);
 
-            assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
-            assertEquals(INSERTING, game.getCurrentPlayer().getPlayerCurrentGamePhase());
+            assertTrue(game.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles));
+            assertEquals(INSERTING, game.getCurrentPlayerSession().getPlayerCurrentGamePhase());
         }
     }
 
@@ -68,7 +68,7 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
 
             game.onPlayerSelectionPhase(selection);
 
-            assertTrue(game.getCurrentPlayer().getPlayerTileSelection().selectionEquals(tiles));
+            assertTrue(game.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles));
         }
     }
 }

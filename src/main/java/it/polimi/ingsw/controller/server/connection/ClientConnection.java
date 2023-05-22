@@ -103,8 +103,8 @@ public class ClientConnection implements ClientService {
 
 
     @Override
-    public void onAcceptConnectionAndFinalizeUsername(String string) {
-        service().onAcceptConnectionAndFinalizeUsername(string);
+    public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
+        service().onAcceptConnectionAndFinalizeUsername(string, game);
     }
 
     @Override
@@ -128,27 +128,27 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void modelUpdateEvent(Game game) {
-        service().modelUpdateEvent(game);
+    public void onModelUpdateEvent(Game game) {
+        service().onModelUpdateEvent(game);
     }
 
     @Override
-    public void gameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
-        service().gameSelectionTurnEvent(turnResult);
+    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+        service().onGameSelectionTurnEvent(turnResult);
     }
 
     @Override
-    public void gameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
-        service().gameInsertionTurnEvent(turnResult);
+    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+        service().onGameInsertionTurnEvent(turnResult);
     }
 
     @Override
-    public void playerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
-        service().playerConnectionStatusUpdateEvent(usernames);
+    public void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+        service().onPlayerConnectionStatusUpdateEvent(usernames);
     }
 
     @Override
-    public void gameEndedEvent() {
+    public void onGameEndedEvent() {
 
     }
 }

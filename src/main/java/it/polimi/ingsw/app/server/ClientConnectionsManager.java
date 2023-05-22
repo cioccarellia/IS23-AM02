@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.services.ClientService;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,14 @@ public class ClientConnectionsManager {
      */
     public void setConnectionStatus(String username, ConnectionStatus status) {
         assert containsUsername(username);
+        connections.get(username).setLastSeen(Calendar.getInstance().getTime());
         connections.get(username).setStatus(status);
+    }
+
+    public void registerInteraction(String username) {
+        assert containsUsername(username);
+        connections.get(username).setLastSeen(Calendar.getInstance().getTime());
+        setConnectionStatus(username, ConnectionStatus.OPEN);
     }
 
     /**

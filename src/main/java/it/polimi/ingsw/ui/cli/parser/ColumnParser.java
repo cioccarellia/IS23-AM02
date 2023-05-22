@@ -18,7 +18,6 @@ public class ColumnParser {
             Console.printnl();
             Console.out("In which column would you like to insert the selected tiles?");
             Console.printnl();
-            Console.flush();
 
             int column = Integer.parseInt(Console.in());
 

@@ -57,7 +57,5 @@ public class BoardPrinter {
         board.fill(new TileExtractor().extractAmount(board.countEmptyCells(mode)), mode);
 
         print(board);
-
-        Console.flush();
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.app.server;
 
+import it.polimi.ingsw.app.server.network.ServerNetworkLayer;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.controller.server.wrappers.ServerPair;
 import org.slf4j.Logger;
@@ -30,5 +31,7 @@ public class AppServer {
     public AppServer(String serverAddress, int tcpPort, int rmiPort) {
         logger.info("Starting AppServer, serverAddress={}, tcpPort={}, rmiPort={}", serverAddress, tcpPort, rmiPort);
         pair = new ServerPair(controller, connectionsManager, tcpPort, rmiPort);
+
+        ServerNetworkLayer.scheduleTimeoutThread(controller);
     }
 }

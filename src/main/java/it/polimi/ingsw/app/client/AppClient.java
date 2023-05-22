@@ -1,6 +1,6 @@
 package it.polimi.ingsw.app.client;
 
-import it.polimi.ingsw.app.client.layers.network.NetworkLayer;
+import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
@@ -63,7 +63,7 @@ public class AppClient implements Runnable {
     }
 
     private void initializeClientThreads() {
-        NetworkLayer.scheduleReceiverExecutionThread(gateway, executorService);
+        ClientNetworkLayer.scheduleReceiverExecutionThread(gateway, executorService);
     }
 
     /**

@@ -15,7 +15,7 @@ public class PlayersListPrinter {
     public static void print(Game game) {
 
         Console.out("List of players with their acquired tokens:");
-        PlayerNumber currentPlayer = game.getCurrentPlayer().getPlayerNumber();
+        PlayerNumber currentPlayer = game.getCurrentPlayerSession().getPlayerNumber();
 
         for (int i = 0; i < game.getPlayersCurrentAmount(); i++) {
             Console.printnl();
