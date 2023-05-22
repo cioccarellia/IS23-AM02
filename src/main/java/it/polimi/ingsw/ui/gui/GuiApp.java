@@ -8,6 +8,7 @@ import it.polimi.ingsw.ui.ViewEventHandler;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -67,7 +68,6 @@ public class GuiApp extends Application implements UiGateway {
         this.handler = handler;
     }
 
-
     @Override
     public void onGameCreated() {
         //PGC initialization
@@ -81,7 +81,6 @@ public class GuiApp extends Application implements UiGateway {
 
 
     }
-
 
     @Override
     public void modelUpdate(Game game) {
@@ -101,7 +100,6 @@ public class GuiApp extends Application implements UiGateway {
 
     }
 
-
     public Coordinate getSelectedCoordinates(Node tileNode) {
 
         Coordinate coordinate;
@@ -119,8 +117,11 @@ public class GuiApp extends Application implements UiGateway {
 
         Set<Coordinate> selectedCoordinatees = new HashSet<>();
 
+        Button button = new Button();
+        button.setText("go to INSERTION");
+
         // aggiungere button per poter terminare prima la selezione in or nel ciclo while
-        while(selectedCoordinatees.size() < 3) {
+        while(selectedCoordinatees.size() < 3 || button.isPressed()) {
 
             //coordinate selezionate tramite un evento mouse del client
             board.setOnMouseClicked(mouseEvent -> {
