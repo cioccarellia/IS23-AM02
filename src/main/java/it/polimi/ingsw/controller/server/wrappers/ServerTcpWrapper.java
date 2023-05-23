@@ -31,6 +31,9 @@ public class ServerTcpWrapper extends ServerWrapper {
         // visitor pattern
         try {
             switch (incomingMessage) {
+                case ServerStatusRequest s -> {
+                    controller.serverStatusRequest(handler);
+                }
                 case GameCreationRequest s -> {
                     controller.gameStartRequest(s.getUsername(), s.getMode(), s.getProtocol(), handler);
                 }

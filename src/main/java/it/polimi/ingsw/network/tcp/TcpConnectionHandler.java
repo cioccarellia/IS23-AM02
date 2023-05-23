@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -132,7 +132,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         ServerStatusRequestReply reply = new ServerStatusRequestReply(status, playerInfo);
 
         SocketSystem.sendAsync(socketOut, reply, ServerStatusRequestReply.class);
@@ -153,7 +153,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onGameStartedEvent() {
+    public void onGameStartedEvent(Game game) {
 
     }
 
@@ -173,7 +173,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
 
     }
 

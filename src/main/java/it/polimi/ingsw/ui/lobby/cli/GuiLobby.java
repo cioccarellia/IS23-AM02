@@ -1,8 +1,7 @@
 package it.polimi.ingsw.ui.lobby.cli;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
@@ -22,7 +21,7 @@ public class GuiLobby implements LobbyGateway {
     }
 
     @Override
-    public void onServerStatusUpdate(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
+    public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
 
     }
 
@@ -33,11 +32,6 @@ public class GuiLobby implements LobbyGateway {
 
     @Override
     public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-
-    }
-
-    @Override
-    public void confirmOwner(String owner) {
 
     }
 

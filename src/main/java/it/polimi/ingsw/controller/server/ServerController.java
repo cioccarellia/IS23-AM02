@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
@@ -79,10 +79,10 @@ public class ServerController implements ServerService {
     }
 
 
-    private List<AggregatedPlayerInfo> packPlayerInfo() {
+    private List<PlayerInfo> packPlayerInfo() {
         return connectionsManager.values()
                 .stream()
-                .map(user -> new AggregatedPlayerInfo(user.getUsername(), user.getStatus(), user.isHost()))
+                .map(user -> new PlayerInfo(user.getUsername(), user.getStatus(), user.isHost()))
                 .toList();
     }
 
@@ -130,7 +130,7 @@ public class ServerController implements ServerService {
             serverStatus = GAME_INITIALIZING;
 
             // synchronize
-            connectionsManager.add(username, protocol, false, OPEN, remoteService);
+            connectionsManager.add(username, protocol, true, OPEN, remoteService);
             synchronizeConnectionLayer(username, remoteService);
 
 
@@ -138,10 +138,10 @@ public class ServerController implements ServerService {
             logger.info("returning success from gameStartRequest()");
 
             // return success to the caller
-            router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username)));
+            router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packPlayerInfo())));
 
             // route the new status to everybody
-            router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+            // router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
         } else {
             logger.warn("returning failure from gameStartRequest()");
 
@@ -154,7 +154,6 @@ public class ServerController implements ServerService {
     @Override
     public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
         logger.info("gameConnectionRequest(username={}, protocol={}, remoteService={})", username, protocol, remoteService);
-        connectionsManager.registerInteraction(username);
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
@@ -191,7 +190,7 @@ public class ServerController implements ServerService {
         game.addPlayer(username);
 
         // route a success to the caller
-        router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username)));
+        router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packPlayerInfo())));
 
         // route the new status to everybody
         router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
@@ -204,8 +203,10 @@ public class ServerController implements ServerService {
             serverStatus = GAME_RUNNING;
 
             // broadcast a game started event to everybody
-            router.broadcast().onGameStartedEvent();
+            router.broadcast().onGameStartedEvent(game);
         }
+
+        connectionsManager.registerInteraction(username);
     }
 
 
