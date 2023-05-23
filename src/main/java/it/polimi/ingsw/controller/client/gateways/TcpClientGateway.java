@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -144,6 +145,14 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         SocketSystem.sendAsync(socketOut, message, GameCreationRequest.class);
 
         // fixme return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
+    }
+
+    @Override
+    public void serverStatusRequest(ClientService remoteService) throws RemoteException {
+        ServerStatusRequest message = new ServerStatusRequest();
+
+        SocketSystem.sendAsync(socketOut, message, ServerStatusRequest.class);
+
     }
 
     @Override

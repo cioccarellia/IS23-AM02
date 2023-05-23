@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.gui;
 
+import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -88,5 +90,15 @@ public class Scene {
         return image;
     }
 
+    public Coordinate getSelectedCoordinates(Node tileNode) {
 
+        Coordinate coordinate;
+
+        Integer col = GridPane.getColumnIndex(tileNode);
+        Integer row = GridPane.getRowIndex(tileNode);
+
+        coordinate = new Coordinate(row, col);
+
+        return coordinate;
+    }
 }

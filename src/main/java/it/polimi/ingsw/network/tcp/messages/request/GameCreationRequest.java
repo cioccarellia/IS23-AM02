@@ -9,7 +9,6 @@ public class GameCreationRequest extends Request {
     private final String username;
     private final ClientProtocol protocol;
 
-
     public GameCreationRequest(GameMode mode, String username, ClientProtocol protocol) {
         this.mode = mode;
         this.username = username;

@@ -26,8 +26,8 @@ public class ClientConnectionsManager {
         return connections.values();
     }
 
-    public void add(String username, ClientProtocol proto, ConnectionStatus initialStatus, ClientService remoteService) {
-        var newConnection = new ClientConnection(username, proto, initialStatus, remoteService);
+    public void add(String username, ClientProtocol proto, boolean isHost, ConnectionStatus initialStatus, ClientService remoteService) {
+        var newConnection = new ClientConnection(username, proto, isHost, initialStatus, remoteService);
         connections.put(username, newConnection);
     }
 

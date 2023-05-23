@@ -12,7 +12,7 @@ import java.util.Set;
  * that wants to be aware of view events (generated in {@link UiGateway}).
  * The methods defined therein are to be called only following a user (manual or automatic) action.
  */
-public interface ViewEventHandler {
+public interface GameViewEventHandler {
 
     /**
      * User has completed selection and is sending coordinates to server

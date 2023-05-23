@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="GUI" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ui.gui.GuiApp" />
+    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ui.gui.GuiIndexController" />
     <module name="shelfie" />
     <option name="VM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.fxml,javafx.controls,javafx.graphics" />
     <method v="2">

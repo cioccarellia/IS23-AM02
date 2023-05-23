@@ -1,14 +1,16 @@
 package it.polimi.ingsw.services;
 
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.Game;
-import javafx.util.Pair;
 
 import java.util.List;
 
@@ -25,15 +27,14 @@ public interface ClientService {
     @ClientFunction
     void onAcceptConnectionAndFinalizeUsername(String string, Game game);
 
+    @ClientFunction
+    void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo);
 
     @ClientFunction
-    void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo);
+    void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result);
 
     @ClientFunction
-    void onGameCreationReply(SingleResult<GameCreationError> result);
-
-    @ClientFunction
-    void onGameConnectionReply(SingleResult<GameConnectionError> result);
+    void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result);
 
 
     @ClientFunction
@@ -53,7 +54,7 @@ public interface ClientService {
 
     // Connection - Disconnection
     @ClientFunction
-    void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames);
+    void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames);
 
     @ClientFunction
     void onGameEndedEvent();

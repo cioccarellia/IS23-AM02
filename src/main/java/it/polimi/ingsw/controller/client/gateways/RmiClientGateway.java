@@ -41,6 +41,15 @@ public class RmiClientGateway extends ClientGateway {
     }
 
     @Override
+    public void serverStatusRequest(ClientService remoteService) throws RemoteException {
+        try {
+            rmiServerStub.serverStatusRequest(remoteService);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         try {
             rmiServerStub.gameStartRequest(username, mode, protocol, remoteService);

@@ -1,17 +1,20 @@
 package it.polimi.ingsw.controller.server.connection;
 
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.server.connection.stash.ProtocolStash;
 import it.polimi.ingsw.controller.server.connection.stash.StashFactory;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
-import javafx.util.Pair;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -48,11 +51,14 @@ public class ClientConnection implements ClientService {
      */
     private Date lastSeen;
 
+    private final boolean isHost;
+
     private final ProtocolStash stash;
 
-    public ClientConnection(String username, ClientProtocol proto, ConnectionStatus status, ClientService remoteService) {
+    public ClientConnection(String username, ClientProtocol proto, boolean isHost, ConnectionStatus status, ClientService remoteService) {
         this.username = username;
         this.proto = proto;
+        this.isHost = isHost;
         this.status = status;
 
         // last seen is now
@@ -93,6 +99,9 @@ public class ClientConnection implements ClientService {
         this.lastSeen = lastSeen;
     }
 
+    public boolean isHost() {
+        return isHost;
+    }
 
     /**
      * Gets the current client remote reference to forward remote method calls to.
@@ -108,17 +117,17 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
         service().onServerStatusUpdateEvent(status, playerInfo);
     }
 
     @Override
-    public void onGameCreationReply(SingleResult<GameCreationError> result) {
+    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         service().onGameCreationReply(result);
     }
 
     @Override
-    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         service().onGameConnectionReply(result);
     }
 
@@ -143,7 +152,7 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
         service().onPlayerConnectionStatusUpdateEvent(usernames);
     }
 

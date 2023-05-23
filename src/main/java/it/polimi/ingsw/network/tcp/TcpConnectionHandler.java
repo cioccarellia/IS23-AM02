@@ -1,12 +1,15 @@
 package it.polimi.ingsw.network.tcp;
 
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.wrappers.ServerTcpWrapper;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.tcp.messages.Message;
@@ -17,7 +20,6 @@ import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptan
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,21 +132,21 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
         ServerStatusRequestReply reply = new ServerStatusRequestReply(status, playerInfo);
 
         SocketSystem.sendAsync(socketOut, reply, ServerStatusRequestReply.class);
     }
 
     @Override
-    public void onGameCreationReply(SingleResult<GameCreationError> result) {
+    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         GameCreationRequestReply reply = new GameCreationRequestReply(result);
 
         SocketSystem.sendAsync(socketOut, reply, GameCreationRequestReply.class);
     }
 
     @Override
-    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         GameConnectionRequestReply reply = new GameConnectionRequestReply(result);
 
         SocketSystem.sendAsync(socketOut, reply, GameConnectionRequestReply.class);
@@ -171,7 +173,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
 
     }
 

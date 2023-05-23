@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game.extractors;
 
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 
 import java.util.*;
 
@@ -9,7 +10,8 @@ import java.util.*;
  */
 public class TileExtractor extends ElementExtractor<Tile> {
 
-    private static final int MAX_TILE_TYPE_AMOUNT = 22;
+    private static final int maxTilesPerType = LogicConfiguration.getInstance().maxTilesPerType();
+    private static final int tileTypesAmount = LogicConfiguration.getInstance().tileTypesAmount();
 
 
     /**
@@ -20,7 +22,7 @@ public class TileExtractor extends ElementExtractor<Tile> {
 
     public TileExtractor() {
         for (Tile tile : Tile.values()) {
-            status.put(tile, MAX_TILE_TYPE_AMOUNT);
+            status.put(tile, maxTilesPerType);
         }
     }
 
@@ -38,7 +40,7 @@ public class TileExtractor extends ElementExtractor<Tile> {
     public Tile extract() {
         Random generator = new Random();
 
-        Tile extractedTile = Tile.values()[generator.nextInt(6)];
+        Tile extractedTile = Tile.values()[generator.nextInt(tileTypesAmount)];
         int leftoverTiles = status.get(extractedTile);
 
         if (leftoverTiles > 0) {

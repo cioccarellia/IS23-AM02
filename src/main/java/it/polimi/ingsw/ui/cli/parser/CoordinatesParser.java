@@ -16,6 +16,7 @@ public class CoordinatesParser {
 
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
     private static final LogicConfiguration config = LogicConfiguration.getInstance();
+    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
 
 
     /**
@@ -34,7 +35,7 @@ public class CoordinatesParser {
 
             String[] tokens = input.split(",");
 
-            if (tokens.length < 2 || tokens.length > 6 || tokens.length % 2 != 0) {
+            if (tokens.length < 2 || tokens.length > 2 * maxSelectionSize || tokens.length % 2 != 0) {
                 Console.out("""
                         You need to select at least one tile and at most three;
                         also, you need both the x-coordinate and the y-coordinate1n

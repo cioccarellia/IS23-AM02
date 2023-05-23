@@ -2,6 +2,9 @@ package it.polimi.ingsw.ui.cli;
 
 import java.util.Scanner;
 
+/**
+ * Helper to get the input from CL and to print in CL
+ */
 public class Console {
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -10,6 +13,12 @@ public class Console {
         System.out.print(string);
         flush();
     }
+
+    public static String in(String message) {
+        out(message + " > \n");
+        return scanner.nextLine();
+    }
+
 
     public static String in() {
         return scanner.nextLine();

@@ -4,15 +4,18 @@ import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.app.client.layers.view.ViewFactory;
 import it.polimi.ingsw.app.client.layers.view.ViewLayer;
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -20,9 +23,10 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.ui.GameViewEventHandler;
 import it.polimi.ingsw.ui.UiGateway;
-import it.polimi.ingsw.ui.ViewEventHandler;
-import javafx.util.Pair;
+import it.polimi.ingsw.ui.lobby.LobbyGateway;
+import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,28 +36,37 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Client-side controller
- * Handles the view, the
+ * Client-side controller.
+ * Acts as a event hub, routing incoming network calls to their respective interfaces, and back to the server
  */
-public class ClientController implements AppLifecycle, ClientService, ViewEventHandler, Serializable {
+public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
+    private final ClientExhaustiveConfiguration config;
+
+    private final ClientGateway gateway;
+
     /**
-     * User-interface.
+     * Lobby waiting room.
+     * The controller asks for s
+     * */
+    private LobbyGateway lobby;
+
+    /**
+     * Game ser-interface.
      * The controller receives incoming event calls by the server, and forwards model centric events
      * to the user interface gateway.
      * <p>
      * The UI gateway processes those events, displays them to the user, and eventually forwards its
-     * user-generated events to this controller (through {@link ViewEventHandler})
+     * user-generated events to this controller (through {@link GameViewEventHandler})
      */
     private UiGateway ui;
-    private final ClientGateway gateway;
 
-    private final ClientExhaustiveConfiguration config;
 
     String authUsername;
     boolean hasAuthenticatedWithServer = false;
+
 
     public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) {
         this.gateway = gateway;
@@ -63,15 +76,26 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
 
     /***   Lifecycle   ***/
 
+    Thread lobbyThread;
+
     @Override
     public synchronized void initialize() {
+        // initialize
+        lobby = ViewFactory.createLobbyUi(config.mode(), this);
+
+        lobbyThread = new Thread(lobby);
+        lobbyThread.start();
+
+        //ViewLayer.scheduleLobbyExecutionThread(lobby, AppClient.executorService);
+
         try {
-            gateway.gameStartRequest("cioccarellia", GameMode.GAME_MODE_3_PLAYERS, config.protocol(), this);
+            gateway.serverStatusRequest(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+
 
     @Override
     public synchronized void authorize(String username, Game game) {
@@ -80,10 +104,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
         hasAuthenticatedWithServer = true;
 
         // create UI
-        ui = ViewFactory.create(config.mode(), game, this);
-
-        // schedules UI initialization on its own thread
-        ViewLayer.scheduleUiExecutionThread(ui, AppClient.executorService);
+        ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
 
         // schedules ack thread
         ClientNetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
@@ -95,6 +116,36 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
 
+
+
+
+
+
+    /***     Lobby     ***/
+
+    @Override
+    public void sendGameStartRequest(String username, GameMode mode) {
+
+    }
+
+    @Override
+    public void sendGameConnectionRequest(String username) {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /***   ClientService   ***/
 
     @Override
@@ -103,22 +154,34 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
     @Override
-    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
+
+        lobby.onServerStatusUpdate(status, playerInfo);
+
     }
 
     @Override
-    public synchronized void onGameCreationReply(SingleResult<GameCreationError> result) {
-        ui.onGameCreated();
+    public synchronized void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
+        lobby.onServerCreationReply(result);
     }
 
     @Override
-    public synchronized void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+    public synchronized void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
+        lobby.onServerConnectionReply(result);
 
     }
 
     @Override
     public synchronized void onGameStartedEvent() {
+        try {
+            lobbyThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // schedules UI initialization on its own thread
+        ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
 
     }
 
@@ -138,7 +201,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
     @Override
-    public synchronized void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public synchronized void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
 
     }
 

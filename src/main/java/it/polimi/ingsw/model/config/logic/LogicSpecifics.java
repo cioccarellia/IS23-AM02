@@ -8,6 +8,12 @@ public record LogicSpecifics(
         CommonGoalCardLogic commonGoalCardLogic,
 
         @SerializedName("selection_max_size")
-        int maxSelectionSize
+        int maxSelectionSize,
+
+        @SerializedName("tile_types_amount")
+        int tileTypesAmount,
+
+        @SerializedName("max_tiles_per_type")
+        int maxTilesPerType
 ) implements Specifics {
 }
