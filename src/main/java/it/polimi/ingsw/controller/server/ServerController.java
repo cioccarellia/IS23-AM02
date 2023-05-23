@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public class ServerController implements ServerService {
     }
 
 
-    private List<Pair<String, ConnectionStatus>> currentPlayerInfo() {
+    private List<Pair<String, ConnectionStatus>> packPlayerInfo() {
         return connectionsManager.values()
                 .stream()
                 .map(user -> new Pair<>(user.getUsername(), user.getStatus()))
@@ -100,26 +101,30 @@ public class ServerController implements ServerService {
             case TcpConnectionHandler handler -> {
                 handler.setUsername(username);
             }
-            case ClientController controller -> {
-            }
+            case ClientController controller -> {}
             default -> throw new IllegalStateException("Unexpected value: " + service);
         }
     }
+
+
+    @Override
+    public void serverStatusRequest(ClientService remoteService) throws RemoteException {
+        remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+    }
+
 
     @Override
     public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
         if (serverStatus == NO_GAME_STARTED) {
-            // accepting request and setting up game
+            // accepting request and setting up game model
             game = new Game(mode);
             game.addPlayer(username);
             maxPlayerAmount = mode.maxPlayerAmount();
 
             // update server status
             serverStatus = GAME_INITIALIZING;
-
-            // adds a player to the game model
 
             // synchronize
             connectionsManager.add(username, protocol, OPEN, remoteService);
@@ -133,11 +138,11 @@ public class ServerController implements ServerService {
             router.route(username).onGameCreationReply(new SingleResult.Success<>());
 
             // route the new status to everybody
-            router.broadcast().onServerStatusUpdateEvent(serverStatus, currentPlayerInfo());
+            router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
         } else {
             logger.warn("returning failure from gameStartRequest()");
 
-            router.route(username).onGameCreationReply(new SingleResult.Failure<>(GameCreationError.GAME_ALREADY_STARTED));
+            remoteService.onGameCreationReply(new SingleResult.Failure<>(GameCreationError.GAME_ALREADY_STARTED));
         }
     }
 
@@ -151,22 +156,26 @@ public class ServerController implements ServerService {
         assert connectionsManager.size() <= maxPlayerAmount;
 
         if (serverStatus == GAME_RUNNING) {
-            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
+            // anonymous routing
+            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
             return;
         }
 
         if (connectionsManager.size() == maxPlayerAmount) {
-            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED));
+            // anonymous routing
+            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED));
             return;
         }
 
         if (connectionsManager.containsUsername(username)) {
-            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
+            // anonymous routing
+            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
             return;
         }
 
         if (game.getGameStatus() == ENDED) {
-            router.route(username).onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
+            // anonymous routing
+            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
             return;
         }
 
@@ -182,7 +191,7 @@ public class ServerController implements ServerService {
         router.route(username).onGameConnectionReply(new SingleResult.Success<>());
 
         // route the new status to everybody
-        router.broadcast().onServerStatusUpdateEvent(serverStatus, currentPlayerInfo());
+        router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
         boolean shouldStartGame = maxPlayerAmount == connectionsManager.size();

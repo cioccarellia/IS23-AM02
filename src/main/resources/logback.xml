@@ -19,15 +19,15 @@
     </appender>
 
 
-    <!-- <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %-40([%thread]) %-50(%logger{44}) %-5level %kvp %msg%n</pattern>
         </encoder>
-    </appender>-->
+    </appender>
 
 
     <root level="debug">
-        <!-- <appender-ref ref="STDOUT"/> -->
+        <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
 </configuration>

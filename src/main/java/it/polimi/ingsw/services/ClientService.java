@@ -25,7 +25,6 @@ public interface ClientService {
     @ClientFunction
     void onAcceptConnectionAndFinalizeUsername(String string, Game game);
 
-
     @ClientFunction
     void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo);
 

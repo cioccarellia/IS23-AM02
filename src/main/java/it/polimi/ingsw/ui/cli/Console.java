@@ -12,7 +12,7 @@ public class Console {
     }
 
     public static String in(String message) {
-        out(message + " > ");
+        out(message + " > \n");
         return scanner.nextLine();
     }
 

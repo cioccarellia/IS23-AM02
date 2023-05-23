@@ -63,6 +63,15 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     }
 
     @Override
+    public void serverStatusRequest(ClientService remoteService) throws RemoteException {
+        try {
+            controller.serverStatusRequest(remoteService);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         try {
             controller.gameStartRequest(username, mode, protocol, remoteService);

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.services;
 
+import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -23,12 +24,12 @@ public interface ServerService extends Remote {
     // @ServerFunction
     // void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException;
 
-    // /**
-    //  * Requests an updated value for the current {@link ServerStatus}.
-    //  * This should be used in the connection (pre-game) phase.
-    //  */
-    // @ServerFunction
-    // void serverStatusRequest() throws RemoteException;
+    /**
+     * Requests an updated value for the current {@link ServerStatus}.
+     * This should be used in the connection (pre-game) phase.
+     */
+    @ServerFunction
+    void serverStatusRequest(ClientService remoteService) throws RemoteException;
 
     /**
      * Requests for the current server to start a game.
