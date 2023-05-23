@@ -121,7 +121,7 @@ public class GuiApp extends Application implements UiGateway {
         button.setText("go to INSERTION");
 
         // aggiungere button per poter terminare prima la selezione in or nel ciclo while
-        while(selectedCoordinatees.size() < 3 || button.isPressed()) {
+        while (selectedCoordinatees.size() < 3 || button.isPressed()) {
 
             //coordinate selezionate tramite un evento mouse del client
             board.setOnMouseClicked(mouseEvent -> {
