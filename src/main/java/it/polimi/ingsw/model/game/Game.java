@@ -82,7 +82,7 @@ public class Game implements ModelService {
 
     /**
      * Game Status
-     * */
+     */
     private GameStatus status = INITIALIZATION;
 
     /**

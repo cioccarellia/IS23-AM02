@@ -14,7 +14,7 @@ import java.util.Date;
  * in the {@link it.polimi.ingsw.controller.server.connection.ClientConnection} structure.
  * To make sure values are updated, each keep-alive message updates the last time a connection has been detected.
  * Therefore, each fixed time, this thread takes over and checks that
- * */
+ */
 public class TimeoutKeepAliveHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(TimeoutKeepAliveHandler.class);
@@ -23,17 +23,17 @@ public class TimeoutKeepAliveHandler implements Runnable {
 
     /**
      * Period of this thread's execution
-     * */
+     */
     private final static int TIMEOUT = 7_500;
 
     /**
      * The amount of seconds after which a connection is deemed not active
-     * */
+     */
     private final static int MAX_SECONDS_DISCINNECTION_THRESHOLD = 25;
 
     /**
      * Controller to execute the task on
-     * */
+     */
     final ServerController masterController;
 
     public TimeoutKeepAliveHandler(ServerController masterController) {
