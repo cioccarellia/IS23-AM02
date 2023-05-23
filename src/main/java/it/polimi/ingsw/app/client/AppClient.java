@@ -4,7 +4,7 @@ import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
-import it.polimi.ingsw.ui.cli.splash.SplashScreen;
+import it.polimi.ingsw.ui.game.cli.splash.SplashScreen;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

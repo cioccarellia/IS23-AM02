@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.server.connection;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.connection.stash.ProtocolStash;
 import it.polimi.ingsw.controller.server.connection.stash.StashFactory;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
@@ -117,7 +117,7 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         service().onServerStatusUpdateEvent(status, playerInfo);
     }
 
@@ -132,8 +132,8 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onGameStartedEvent() {
-        service().onGameStartedEvent();
+    public void onGameStartedEvent(Game game) {
+        service().onGameStartedEvent(game);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
         service().onPlayerConnectionStatusUpdateEvent(usernames);
     }
 

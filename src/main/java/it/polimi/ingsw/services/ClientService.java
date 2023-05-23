@@ -1,6 +1,6 @@
 package it.polimi.ingsw.services;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -28,7 +28,7 @@ public interface ClientService {
     void onAcceptConnectionAndFinalizeUsername(String string, Game game);
 
     @ClientFunction
-    void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo);
+    void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo);
 
     @ClientFunction
     void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result);
@@ -38,7 +38,7 @@ public interface ClientService {
 
 
     @ClientFunction
-    void onGameStartedEvent();
+    void onGameStartedEvent(Game game);
 
 
     // Running
@@ -54,7 +54,7 @@ public interface ClientService {
 
     // Connection - Disconnection
     @ClientFunction
-    void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames);
+    void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames);
 
     @ClientFunction
     void onGameEndedEvent();

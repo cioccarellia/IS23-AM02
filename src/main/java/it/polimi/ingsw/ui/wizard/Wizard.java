@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ui.wizard;
 
 import it.polimi.ingsw.launcher.parameters.*;
-import it.polimi.ingsw.ui.cli.Console;
+import it.polimi.ingsw.ui.game.cli.Console;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jetbrains.annotations.NotNull;
 

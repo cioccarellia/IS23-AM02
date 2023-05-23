@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.server.router;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
@@ -38,7 +38,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         forward(source -> source.onServerStatusUpdateEvent(status, playerInfo));
     }
 
@@ -53,8 +53,8 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onGameStartedEvent() {
-        forward(ClientService::onGameStartedEvent);
+    public void onGameStartedEvent(Game game) {
+        forward(source -> onGameStartedEvent(game));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
         forward(source -> source.onPlayerConnectionStatusUpdateEvent(usernames));
 
     }

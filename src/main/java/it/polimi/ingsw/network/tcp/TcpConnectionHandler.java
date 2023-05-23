@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp;
 
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -13,9 +13,9 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.wrappers.ServerTcpWrapper;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.tcp.messages.Message;
-import it.polimi.ingsw.network.tcp.messages.request.replies.GameConnectionRequestReply;
-import it.polimi.ingsw.network.tcp.messages.request.replies.GameCreationRequestReply;
-import it.polimi.ingsw.network.tcp.messages.request.replies.ServerStatusRequestReply;
+import it.polimi.ingsw.network.tcp.messages.replies.GameConnectionRequestReply;
+import it.polimi.ingsw.network.tcp.messages.replies.GameCreationRequestReply;
+import it.polimi.ingsw.network.tcp.messages.replies.ServerStatusRequestReply;
 import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
@@ -132,7 +132,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         ServerStatusRequestReply reply = new ServerStatusRequestReply(status, playerInfo);
 
         SocketSystem.sendAsync(socketOut, reply, ServerStatusRequestReply.class);
@@ -153,7 +153,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onGameStartedEvent() {
+    public void onGameStartedEvent(Game game) {
 
     }
 
@@ -173,7 +173,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
 
     }
 

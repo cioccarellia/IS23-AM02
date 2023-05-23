@@ -4,7 +4,7 @@ import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.app.client.layers.view.ViewFactory;
 import it.polimi.ingsw.app.client.layers.view.ViewLayer;
-import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
+import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
@@ -23,8 +23,8 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
-import it.polimi.ingsw.ui.GameViewEventHandler;
-import it.polimi.ingsw.ui.UiGateway;
+import it.polimi.ingsw.ui.game.GameGateway;
+import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * The UI gateway processes those events, displays them to the user, and eventually forwards its
      * user-generated events to this controller (through {@link GameViewEventHandler})
      */
-    private UiGateway ui;
+    private GameGateway ui;
 
 
     String authUsername;
@@ -97,14 +97,14 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
 
 
+    /**
+     * Current client has acquired its username
+     * */
     @Override
     public synchronized void authorize(String username, Game game) {
         // setup internal variables post-authorization
         authUsername = username;
         hasAuthenticatedWithServer = true;
-
-        // create UI
-        ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
 
         // schedules ack thread
         ClientNetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
@@ -118,18 +118,25 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
 
 
-
-
-
     /***     Lobby     ***/
 
     @Override
     public void sendGameStartRequest(String username, GameMode mode) {
-
+        try {
+            gateway.gameStartRequest(username, mode, config.protocol(), this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void sendGameConnectionRequest(String username) {
+        try {
+            gateway.gameConnectionRequest(username, config.protocol(), this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
@@ -154,7 +161,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
+    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
 
         lobby.onServerStatusUpdate(status, playerInfo);
@@ -173,12 +180,14 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public synchronized void onGameStartedEvent() {
+    public synchronized void onGameStartedEvent(Game game) {
         try {
             lobbyThread.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
 
         // schedules UI initialization on its own thread
         ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
@@ -201,7 +210,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public synchronized void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
+    public synchronized void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
 
     }
 

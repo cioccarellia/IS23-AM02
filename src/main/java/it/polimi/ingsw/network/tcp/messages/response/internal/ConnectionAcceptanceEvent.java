@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.tcp.messages.response.internal;
 
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.network.tcp.messages.request.replies.Reply;
+import it.polimi.ingsw.network.tcp.messages.replies.Reply;
 
 public class ConnectionAcceptanceEvent extends Reply {
     private final String username;
