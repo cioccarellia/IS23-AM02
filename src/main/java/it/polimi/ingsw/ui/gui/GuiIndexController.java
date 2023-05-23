@@ -2,6 +2,7 @@ package it.polimi.ingsw.ui.gui;
 
 
 import it.polimi.ingsw.model.board.Coordinate;
+import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.GameViewEventHandler;
@@ -18,7 +19,9 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
@@ -27,9 +30,9 @@ import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 /**
  * NO ASTRATTA
  **/
-public class GuiApp extends Application implements UiGateway {
+public class GuiIndexController extends Application implements UiGateway {
 
-    private static final Logger logger = LoggerFactory.getLogger(GuiApp.class);
+    private static final Logger logger = LoggerFactory.getLogger(GuiIndexController.class);
 
     private static final int first = GuiConfiguration.getInstance().getFirst();
     private static final int second = GuiConfiguration.getInstance().getSecond();
@@ -148,25 +151,18 @@ public class GuiApp extends Application implements UiGateway {
 
         Set<Coordinate> selectedCoordinatees = new HashSet<>();
 
-        Button button = new Button();
-        button.setText("go to INSERTION");
+        
 
-        // aggiungere button per poter terminare prima la selezione in or nel ciclo while
-        while (selectedCoordinatees.size() < maxSelectionSize || button.isPressed()) {
 
-            //coordinate selezionate tramite un evento mouse del client
-            board.setOnMouseClicked(mouseEvent -> {
-                selectedCoordinatees.add(getSelectedCoordinates(board));
-            });
-        }
-
-        model.onPlayerSelectionPhase(selectedCoordinatees);
+        handler.onViewSelection(selectedCoordinatees);
     }
 
     @Override
     public void gameInsertion() {
-        // tile da inserire tramite un evento mouse del client
-        //game.onPlayerSelectionPhase();
+
+        insertingButton.setOnMouseClicked(mouseEvent -> {
+
+        });
     }
 
     @Override

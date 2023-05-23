@@ -50,7 +50,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>it.polimi.ingsw.ui.gui.GuiApp</mainClass>
+                    <mainClass>it.polimi.ingsw.ui.gui.GuiIndexController</mainClass>
                 </configuration>
             </plugin>
         </plugins>

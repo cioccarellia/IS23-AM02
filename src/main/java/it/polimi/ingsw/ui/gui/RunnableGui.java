@@ -35,7 +35,6 @@ public class RunnableGui extends Application {
         }
 
 
-        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("index.fxml")));
         primaryStage.setScene(rootLayout.getScene());
         primaryStage.setTitle("My shelfie");
         primaryStage.show();

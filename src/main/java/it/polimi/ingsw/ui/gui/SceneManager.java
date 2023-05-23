@@ -7,23 +7,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 import java.io.IOException;
 
-public class SceneManager extends Application {
+public class SceneManager extends Application{
     private static Scene actualScene;
-    private static GuiApp actualController;
+    private static GuiIndexController actualController;
 
-    public static void changeScene(GuiApp controller, String pathToFXML) {
+    public static void changeScene(GuiIndexController controller, String pathToFXML) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + pathToFXML));
             fxmlLoader.setController(controller);
-
             actualController = controller;
-
             Parent parent = fxmlLoader.load();
-
             actualScene.setRoot(parent);
-
             Platform.runLater(() -> actualScene.getWindow().sizeToScene());
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,7 +28,7 @@ public class SceneManager extends Application {
         }
     }
 
-    public void start(Stage stage) {
+    public void start(Stage stage){
 
     }
 
@@ -49,7 +46,7 @@ public class SceneManager extends Application {
      *
      * @return actual controller
      */
-    public static GuiApp getActualController() {
+    public static GuiIndexController getActualController() {
         return actualController;
     }
 

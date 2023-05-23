@@ -138,8 +138,26 @@ public class GuiResources {
         return personalGCMap.get(card);
     }
 
+    public static Tile getTileType(Image image){
+        if (image.equals(book1) || image.equals(book2) || image.equals(book3)) {
+            return BOOK;
+        } else if (image.equals(cat1) || image.equals(cat2) || image.equals(cat3)) {
+            return CAT;
+        } else if (image.equals(frame1) || image.equals(frame2) || image.equals(frame3)) {
+            return FRAME;
+        } else if (image.equals(game1) || image.equals(game2) || image.equals(game3)) {
+            return GAME;
+        } else if (image.equals(plant1) || image.equals(plant2) || image.equals(plant3)) {
+            return PLANT;
+        } else if (image.equals(trophy1) || image.equals(trophy2) || image.equals(trophy3)) {
+            return TROPHY;
+        }
+        return null;
+    }
 
     public static final List<Image> tilesDomain = Arrays.asList(
             book1, book2, book3, cat1, cat2, cat3, frame1, frame2, frame3, game1, game2, game3, plant1, plant2, plant3, trophy1, trophy2, trophy3
     );
+
+
 }

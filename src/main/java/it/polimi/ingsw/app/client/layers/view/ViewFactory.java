@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.GameViewEventHandler;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.cli.CliApp;
-import it.polimi.ingsw.ui.gui.GuiApp;
+import it.polimi.ingsw.ui.gui.GuiIndexController;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
@@ -19,7 +19,7 @@ public class ViewFactory {
                 return new CliApp(model, handler, owner);
             }
             case GUI -> {
-                return new GuiApp(model, handler, owner);
+                return new GuiIndexController(model, handler, owner);
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
