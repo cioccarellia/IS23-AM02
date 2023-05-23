@@ -31,14 +31,16 @@ sealed public interface TypedResult<T extends RequestType & Serializable, R exte
     /**
      * Represents a single, stateful successful result.
      */
-    record Success<T extends RequestType & Serializable, R extends RequestError & Serializable>(
-            T value) implements TypedResult<T, R>, Serializable {
+    record Success
+            <T extends RequestType & Serializable, R extends RequestError & Serializable>(T value)
+            implements TypedResult<T, R>, Serializable {
     }
 
     /**
      * Represents a single, stateful failed result.
      */
-    record Failure<T extends RequestType & Serializable, R extends RequestError & Serializable>(
-            R error) implements TypedResult<T, R>, Serializable {
+    record Failure
+            <T extends RequestType & Serializable, R extends RequestError & Serializable>(R error)
+            implements TypedResult<T, R>, Serializable {
     }
 }

@@ -30,4 +30,13 @@ public enum GameMode {
             default -> throw new IllegalStateException("Unexpected value: " + maxPlayerAmount());
         };
     }
+
+    public static GameMode numberToMode(int number) {
+        return switch (number) {
+            case 2 -> GAME_MODE_2_PLAYERS;
+            case 3 -> GAME_MODE_3_PLAYERS;
+            case 4 -> GAME_MODE_4_PLAYERS;
+            default -> throw new IllegalArgumentException("Expecting a number between 2 and 4.");
+        };
+    }
 }

@@ -4,10 +4,13 @@ import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
 
@@ -40,12 +43,12 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onGameCreationReply(SingleResult<GameCreationError> result) {
+    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         forward(source -> source.onGameCreationReply(result));
     }
 
     @Override
-    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         forward(source -> source.onGameConnectionReply(result));
     }
 

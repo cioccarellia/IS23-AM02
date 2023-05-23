@@ -5,10 +5,13 @@ import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.router.Router;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
@@ -135,14 +138,14 @@ public class ServerController implements ServerService {
             logger.info("returning success from gameStartRequest()");
 
             // return success to the caller
-            router.route(username).onGameCreationReply(new SingleResult.Success<>());
+            router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username)));
 
             // route the new status to everybody
             router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
         } else {
             logger.warn("returning failure from gameStartRequest()");
 
-            remoteService.onGameCreationReply(new SingleResult.Failure<>(GameCreationError.GAME_ALREADY_STARTED));
+            remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_STARTED));
         }
     }
 
@@ -157,25 +160,25 @@ public class ServerController implements ServerService {
 
         if (serverStatus == GAME_RUNNING) {
             // anonymous routing
-            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
             return;
         }
 
         if (connectionsManager.size() == maxPlayerAmount) {
             // anonymous routing
-            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED));
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED));
             return;
         }
 
         if (connectionsManager.containsUsername(username)) {
             // anonymous routing
-            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
             return;
         }
 
         if (game.getGameStatus() == ENDED) {
             // anonymous routing
-            remoteService.onGameConnectionReply(new SingleResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
             return;
         }
 
@@ -188,7 +191,7 @@ public class ServerController implements ServerService {
         game.addPlayer(username);
 
         // route a success to the caller
-        router.route(username).onGameConnectionReply(new SingleResult.Success<>());
+        router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username)));
 
         // route the new status to everybody
         router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());

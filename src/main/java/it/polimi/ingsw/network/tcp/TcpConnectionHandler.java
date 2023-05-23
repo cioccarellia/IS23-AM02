@@ -3,10 +3,13 @@ package it.polimi.ingsw.network.tcp;
 import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.wrappers.ServerTcpWrapper;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.tcp.messages.Message;
@@ -136,14 +139,14 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onGameCreationReply(SingleResult<GameCreationError> result) {
+    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         GameCreationRequestReply reply = new GameCreationRequestReply(result);
 
         SocketSystem.sendAsync(socketOut, reply, GameCreationRequestReply.class);
     }
 
     @Override
-    public void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         GameConnectionRequestReply reply = new GameConnectionRequestReply(result);
 
         SocketSystem.sendAsync(socketOut, reply, GameConnectionRequestReply.class);

@@ -9,10 +9,13 @@ import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -28,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +47,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     private final ClientGateway gateway;
 
+    private LobbyGateway lobby;
     /**
      * User-interface.
      * The controller receives incoming event calls by the server, and forwards model centric events
@@ -52,7 +57,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * user-generated events to this controller (through {@link GameViewEventHandler})
      */
     private UiGateway ui;
-    private LobbyGateway lobby;
 
 
     String authUsername;
@@ -69,7 +73,15 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     @Override
     public synchronized void initialize() {
+        lobby = ViewFactory.createLobbyUi(config.mode(), this);
 
+        ViewLayer.scheduleLobbyExecutionThread(lobby, AppClient.executorService);
+
+        try {
+            gateway.serverStatusRequest(this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -84,7 +96,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
 
         // schedules UI initialization on its own thread
-        ViewLayer.scheduleUiExecutionThread(ui, AppClient.executorService);
+        ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
 
         // schedules ack thread
         ClientNetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
@@ -139,19 +151,19 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public synchronized void onGameCreationReply(SingleResult<GameCreationError> result) {
+    public synchronized void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         switch (result) {
-            case SingleResult.Success<GameCreationError> success -> {
+            case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
                 ui.onGameCreated();
             }
-            case SingleResult.Failure<GameCreationError> failure -> {
+            case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
 
             }
         }
     }
 
     @Override
-    public synchronized void onGameConnectionReply(SingleResult<GameConnectionError> result) {
+    public synchronized void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
 
     }
 

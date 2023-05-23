@@ -3,10 +3,13 @@ package it.polimi.ingsw.services;
 import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
+import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.Game;
 
 import java.util.List;
@@ -28,10 +31,10 @@ public interface ClientService {
     void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo);
 
     @ClientFunction
-    void onGameCreationReply(SingleResult<GameCreationError> result);
+    void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result);
 
     @ClientFunction
-    void onGameConnectionReply(SingleResult<GameConnectionError> result);
+    void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result);
 
 
     @ClientFunction
