@@ -22,16 +22,18 @@ public class GuiConfiguration extends Configuration<GuiSpecifics> {
     public int getFirst() {
         return specs.first();
     }
+
     public int getSecond() {
         return specs.second();
     }
+
     public int getThird() {
         return specs.third();
     }
+
     public int getFourth() {
         return specs.fourth();
     }
-
 
 
     @Override

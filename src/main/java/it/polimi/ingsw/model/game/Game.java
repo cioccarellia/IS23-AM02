@@ -456,8 +456,7 @@ public class Game implements ModelService {
      *
      * @return the players' ranking
      */
-    @Override
-    public List<Pair<PlayerNumber, Integer>> onGameEnded() {
+    public List<Pair<PlayerNumber, Integer>> calculateRanking() {
         List<Pair<PlayerNumber, Integer>> playersScore = new ArrayList<>();
 
         List<PlayerSession> players = sessions.getNumberMap().values().stream().toList();
@@ -497,6 +496,11 @@ public class Game implements ModelService {
         }
 
         return playersScore.stream().sorted(comparing(Pair::getValue)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void onGameEnded() {
+
     }
 
 }

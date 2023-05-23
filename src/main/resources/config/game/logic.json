@@ -19,5 +19,7 @@
       ]
     ]
   },
-  "selection_max_size": 3
+  "selection_max_size": 3,
+  "tile_types_amount": 6,
+  "max_tiles_per_type": 22
 }

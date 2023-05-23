@@ -101,7 +101,8 @@ public class ServerController implements ServerService {
             case TcpConnectionHandler handler -> {
                 handler.setUsername(username);
             }
-            case ClientController controller -> {}
+            case ClientController controller -> {
+            }
             default -> throw new IllegalStateException("Unexpected value: " + service);
         }
     }

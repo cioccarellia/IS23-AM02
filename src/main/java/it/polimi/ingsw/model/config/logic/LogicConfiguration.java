@@ -33,6 +33,14 @@ public class LogicConfiguration extends Configuration<LogicSpecifics> {
         return specs.commonGoalCardLogic().amount();
     }
 
+    public int tileTypesAmount() {
+        return specs.tileTypesAmount();
+    }
+
+    public int maxTilesPerType() {
+        return specs.maxTilesPerType();
+    }
+
     @Override
     protected LogicSpecifics provideSpecs() {
         return specs;

@@ -55,7 +55,7 @@ public class BookshelvesPrinter {
                         Console.out("   ");
                 }
 
-                Console.out("     ");
+                Console.out("  |  ");
             }
             Console.printnl();
         }

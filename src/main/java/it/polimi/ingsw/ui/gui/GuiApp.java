@@ -2,6 +2,7 @@ package it.polimi.ingsw.ui.gui;
 
 
 import it.polimi.ingsw.model.board.Coordinate;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
@@ -30,10 +31,12 @@ public class GuiApp extends Application implements UiGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiApp.class);
 
-    private final int first = GuiConfiguration.getInstance().getFirst();
-    private final int second = GuiConfiguration.getInstance().getSecond();
-    private final int third = GuiConfiguration.getInstance().getThird();
-    private final int fourth = GuiConfiguration.getInstance().getFourth();
+    private static final int first = GuiConfiguration.getInstance().getFirst();
+    private static final int second = GuiConfiguration.getInstance().getSecond();
+    private static final int third = GuiConfiguration.getInstance().getThird();
+    private static final int fourth = GuiConfiguration.getInstance().getFourth();
+
+    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
 
 
     @FXML
@@ -92,7 +95,6 @@ public class GuiApp extends Application implements UiGateway {
         //game starting
         model.onGameStarted();
         //GUI initialization
-        //TODO change magical numbers to costants
 
         player1Button.setText(model.getSessions().playerSessions().get(first).getUsername());
         player2Button.setText(model.getSessions().playerSessions().get(second).getUsername());
@@ -150,7 +152,7 @@ public class GuiApp extends Application implements UiGateway {
         button.setText("go to INSERTION");
 
         // aggiungere button per poter terminare prima la selezione in or nel ciclo while
-        while (selectedCoordinatees.size() < 3 || button.isPressed()) {
+        while (selectedCoordinatees.size() < maxSelectionSize || button.isPressed()) {
 
             //coordinate selezionate tramite un evento mouse del client
             board.setOnMouseClicked(mouseEvent -> {
@@ -171,7 +173,6 @@ public class GuiApp extends Application implements UiGateway {
     public void onGameEnded() {
 
     }
-
 
     @Override
     public void start(Stage stage) throws Exception {

@@ -89,7 +89,7 @@ public class PlayerTilesOrderInsertionParser {
     }
 
     public static void main(String[] args) {
-        scan(List.of(Tile.GAME, Tile.FRAME, Tile.CAT));
+        scan(List.of(GAME, FRAME, CAT));
     }
 
 }

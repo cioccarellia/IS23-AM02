@@ -11,6 +11,12 @@ import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 
 public class Wizard {
 
+    /**
+     * Lunches the wizard and acquires the parameters from the user
+     *
+     * @param ns the default values for the parameters
+     * @return the configuration created with the parameters given by the player
+     */
     public static ExhaustiveLaunchConfiguration launchWizardAndAcquireParams(@NotNull Namespace ns) {
         // client target
         AppLaunchTarget target = ns.get(TARGET);
@@ -52,6 +58,10 @@ public class Wizard {
     }
 
 
+    /**
+     * @param defaultValue the default value for {@link AppLaunchTarget}, if the player doesn't choose any
+     * @return the target selected by the player
+     */
     private static AppLaunchTarget selectAppLaunchTarget(AppLaunchTarget defaultValue) {
         if (defaultValue != null) {
             return defaultValue;
@@ -71,6 +81,10 @@ public class Wizard {
 
     }
 
+    /**
+     * @param defaultMode the default value for UI mode, if the player doesn't choose any
+     * @return the UI mode selected by the player (client)
+     */
     private static ClientUiMode selectGameMode(ClientUiMode defaultMode) {
         if (defaultMode != null) {
             return defaultMode;
@@ -89,6 +103,10 @@ public class Wizard {
         }
     }
 
+    /**
+     * @param defaultProtocol the default value for protocol, if the player doesn't choose any
+     * @return the protocol selected by the player (client)
+     */
     private static ClientProtocol selectProtocol(ClientProtocol defaultProtocol) {
         if (defaultProtocol != null) {
             return defaultProtocol;
@@ -107,7 +125,10 @@ public class Wizard {
         }
     }
 
-
+    /**
+     * @param defaultTcpPort the default value for TCP port, if the player doesn't choose any
+     * @return the TCP port selected by the player
+     */
     private static int selectTcpPort(int defaultTcpPort) {
         if (defaultTcpPort != 0) {
             return defaultTcpPort;
@@ -123,6 +144,10 @@ public class Wizard {
         }
     }
 
+    /**
+     * @param defaultRmiPort the default value for RMI port, if the player doesn't choose any
+     * @return the RMI port selected by the player
+     */
     private static int selectRmiPort(int defaultRmiPort) {
         if (defaultRmiPort != 0) {
             return defaultRmiPort;
@@ -139,6 +164,10 @@ public class Wizard {
         }
     }
 
+    /**
+     * @param defaultServerHost the default value for server IP address, if the player doesn't choose any
+     * @return the server IP address selected by the player
+     */
     private static String selectServerHost(String defaultServerHost) {
         if (defaultServerHost != null) {
             return defaultServerHost;
@@ -155,6 +184,10 @@ public class Wizard {
         }
     }
 
+    /**
+     * @param portValueFromUser the port selected by the user, both for RMI and TCP
+     * @return if the port value is between the correct range (from 1024 to 65535)
+     */
     private static boolean isPortValid(String portValueFromUser) {
         if (portValueFromUser.isBlank()) {
             return false;

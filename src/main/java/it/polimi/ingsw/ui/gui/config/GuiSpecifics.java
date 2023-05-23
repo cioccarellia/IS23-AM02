@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ui.gui.config;
 
-import it.polimi.ingsw.model.config.Specifics;
 import com.google.gson.annotations.SerializedName;
+import it.polimi.ingsw.model.config.Specifics;
 
 public record GuiSpecifics(
         @SerializedName("first")
