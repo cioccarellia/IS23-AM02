@@ -23,8 +23,8 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
-import it.polimi.ingsw.ui.GameViewEventHandler;
-import it.polimi.ingsw.ui.UiGateway;
+import it.polimi.ingsw.ui.game.GameGateway;
+import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * The UI gateway processes those events, displays them to the user, and eventually forwards its
      * user-generated events to this controller (through {@link GameViewEventHandler})
      */
-    private UiGateway ui;
+    private GameGateway ui;
 
 
     String authUsername;
@@ -114,9 +114,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     public synchronized void terminate() {
 
     }
-
-
-
 
 
 

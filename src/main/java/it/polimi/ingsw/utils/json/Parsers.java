@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import it.polimi.ingsw.network.tcp.messages.Message;
+import it.polimi.ingsw.network.tcp.messages.replies.*;
 import it.polimi.ingsw.network.tcp.messages.request.*;
-import it.polimi.ingsw.network.tcp.messages.request.replies.*;
 import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
 
 /**
