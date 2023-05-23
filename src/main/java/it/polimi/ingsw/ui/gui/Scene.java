@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.game.goal.Token;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Window;
 
 
 public class Scene {

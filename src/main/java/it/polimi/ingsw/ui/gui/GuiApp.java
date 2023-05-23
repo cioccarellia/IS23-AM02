@@ -5,11 +5,12 @@ import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
+import it.polimi.ingsw.ui.gui.config.GuiConfiguration;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -29,8 +30,11 @@ public class GuiApp extends Application implements UiGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiApp.class);
 
-    private static final int FIRST = 0;
-    private static final int SECOND = 1;
+    private final int first = GuiConfiguration.getInstance().getFirst();
+    private final int second = GuiConfiguration.getInstance().getSecond();
+    private final int third = GuiConfiguration.getInstance().getThird();
+    private final int fourth = GuiConfiguration.getInstance().getFourth();
+
 
     @FXML
     public GridPane board;
@@ -56,6 +60,18 @@ public class GuiApp extends Application implements UiGateway {
     public ImageView secondCommonGoalCard;
     @FXML
     public ImageView personalGoalCard;
+    @FXML
+    public Tab player1Button;
+    @FXML
+    public Tab player2Button;
+    @FXML
+    public Tab player3Button;
+    @FXML
+    public Tab player4Button;
+    @FXML
+    public Button selectingButton;
+    @FXML
+    public Button insertingButton;
 
 
     private final ViewEventHandler handler;
@@ -71,14 +87,23 @@ public class GuiApp extends Application implements UiGateway {
 
     @Override
     public void onGameCreated() {
-        //PGC initialization
-        firstCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(FIRST).getCommonGoalCard());
-        secondCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(SECOND).getCommonGoalCard());
-        personalGoalCard = scene.personalGoalCardUpdate(model);
-        //model update
-        modelUpdate(model);
         //game starting
         model.onGameStarted();
+        //GUI initialization
+        //TODO change magical numbers to costants
+
+        player1Button.setText(model.getSessions().playerSessions().get(first).getUsername());
+        player2Button.setText(model.getSessions().playerSessions().get(second).getUsername());
+        player3Button.setText(model.getSessions().playerSessions().get(third).getUsername());
+        player4Button.setText(model.getSessions().playerSessions().get(fourth).getUsername());
+
+        //PGC initialization
+        firstCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(first).getCommonGoalCard());
+        secondCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(second).getCommonGoalCard());
+        personalGoalCard = scene.personalGoalCardUpdate(model);
+
+        //model update
+        modelUpdate(model);
 
 
     }
@@ -89,6 +114,7 @@ public class GuiApp extends Application implements UiGateway {
         board = scene.boardUpdate(model);
         myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
+        //TODO change bookshelves, now it's printing always the same one; create id
         player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
         player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
         player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
@@ -96,8 +122,8 @@ public class GuiApp extends Application implements UiGateway {
 
         // CGC token update
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
-        firstCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(FIRST));
-        secondCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(SECOND));
+        firstCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(first));
+        secondCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(second));
 
     }
 
