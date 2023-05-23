@@ -23,17 +23,17 @@
                 <Image url="@../img/boards/bookshelf.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="PGC" fitHeight="139.0" fitWidth="111.0" layoutX="45.0" layoutY="187.0">
+        <ImageView fx:id="insertionPersonalGoalCard" fitHeight="139.0" fitWidth="111.0" layoutX="45.0" layoutY="187.0">
             <image>
                 <Image url="@../img/personal_goal_cards/personal_goal_card_1.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="CGC1" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="158.0">
+        <ImageView fx:id="insertionCommonGoalCard1" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="158.0">
             <image>
                 <Image url="@../img/common_goal_cards/diagonal.jpg" />
             </image>
         </ImageView>
-        <ImageView fx:id="CGC2" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="236.0">
+        <ImageView fx:id="insertionCommonGoalCard2" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="236.0">
             <image>
                 <Image url="@../img/common_goal_cards/eight_tiles.jpg" />
             </image>
@@ -43,12 +43,12 @@
                 <Image url="@../img/tiles/game1.1.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="t2selected" fitHeight="61.0" fitWidth="55.0" layoutX="73.0" layoutY="48.0">
+        <ImageView fx:id="tile2selected" fitHeight="61.0" fitWidth="55.0" layoutX="73.0" layoutY="48.0">
             <image>
                 <Image url="@../img/tiles/cat1.1.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="t3selected" fitHeight="61.0" fitWidth="55.0" layoutX="129.0" layoutY="48.0">
+        <ImageView fx:id="tile3selected" fitHeight="61.0" fitWidth="55.0" layoutX="129.0" layoutY="48.0">
             <image>
                 <Image url="@../img/tiles/trophy1.1.png" />
             </image>
