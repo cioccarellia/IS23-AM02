@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class SceneManager extends Application{
     private static Scene actualScene;
-    private static GuiIndexController actualController;
+    private static GuiController actualController;
 
     public static void changeScene(GuiIndexController controller, String pathToFXML) {
         try {
