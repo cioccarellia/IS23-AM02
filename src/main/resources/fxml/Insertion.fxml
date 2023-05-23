@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="411.0" fitWidth="613.0" layoutX="-5.0" layoutY="-6.0">
+            <image>
+                <Image url="@../img/misc/page_base.jpg" />
+            </image>
+        </ImageView>
+        <Button fx:id="insertingButton" layoutX="532.0" layoutY="351.0" mnemonicParsing="false" onAction="#goToIndex" onMouseClicked="#endInserting" text="INSERT" textFill="#e06a2f" />
+        <Label fx:id="titolo" layoutX="208.0" layoutY="14.0" prefHeight="53.0" prefWidth="215.0" text="INSERTION" textFill="#e06a2f">
+            <font>
+                <Font name="Book Antiqua" size="36.0" />
+            </font>
+        </Label>
+        <ImageView fx:id="bookshelf" fitHeight="252.0" fitWidth="266.0" layoutX="184.0" layoutY="136.0">
+            <image>
+                <Image url="@../img/boards/bookshelf.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="PGC" fitHeight="139.0" fitWidth="111.0" layoutX="45.0" layoutY="187.0">
+            <image>
+                <Image url="@../img/personal_goal_cards/personal_goal_card_1.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="CGC1" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="158.0">
+            <image>
+                <Image url="@../img/common_goal_cards/diagonal.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="CGC2" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="236.0">
+            <image>
+                <Image url="@../img/common_goal_cards/eight_tiles.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="t1selected" fitHeight="61.0" fitWidth="55.0" layoutX="18.0" layoutY="48.0">
+            <image>
+                <Image url="@../img/tiles/game1.1.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="t2selected" fitHeight="61.0" fitWidth="55.0" layoutX="73.0" layoutY="48.0">
+            <image>
+                <Image url="@../img/tiles/cat1.1.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="t3selected" fitHeight="61.0" fitWidth="55.0" layoutX="129.0" layoutY="48.0">
+            <image>
+                <Image url="@../img/tiles/trophy1.1.png" />
+            </image>
+        </ImageView>
+        <Pane fx:id="t00" layoutX="215.0" layoutY="151.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <Pane fx:id="t01" layoutX="258.0" layoutY="151.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <Pane fx:id="t02" layoutX="302.0" layoutY="152.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t03" layoutX="342.0" layoutY="151.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t04" layoutX="390.0" layoutY="152.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t10" layoutX="215.0" layoutY="184.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <Pane fx:id="t11" layoutX="258.0" layoutY="183.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t12" layoutX="299.0" layoutY="184.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <Pane fx:id="t13" layoutX="342.0" layoutY="188.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <Pane fx:id="t14" layoutX="384.0" layoutY="184.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t20" layoutX="215.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t21" layoutX="258.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t22" layoutX="302.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t23" layoutX="342.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t24" layoutX="384.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t30" layoutX="215.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t31" layoutX="258.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t32" layoutX="301.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t33" layoutX="342.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t34" layoutX="384.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t44" layoutX="384.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t43" layoutX="342.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t42" layoutX="302.0" layoutY="288.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t41" layoutX="258.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t40" layoutX="215.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t50" layoutX="215.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t51" layoutX="258.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t52" layoutX="299.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t53" layoutX="342.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
+
+        <HBox fx:id="t54" layoutX="384.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
+        <RadioButton fx:id="column1" layoutX="218.0" layoutY="101.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="81.0" />
+        <RadioButton fx:id="column2" layoutX="259.0" layoutY="101.0" mnemonicParsing="false" />
+        <RadioButton fx:id="column3" layoutX="307.0" layoutY="101.0" mnemonicParsing="false" />
+        <RadioButton fx:id="column4" layoutX="350.0" layoutY="101.0" mnemonicParsing="false" />
+        <RadioButton fx:id="column5" layoutX="392.0" layoutY="101.0" mnemonicParsing="false" />
+        <ImageView fitHeight="34.0" fitWidth="136.0" layoutX="470.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../img/publisher_material/title_2000x618px.png" />
+            </image>
+        </ImageView>
+
+    </children>
+</Pane>

@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -153,4 +154,5 @@ public class GuiApp extends Application implements UiGateway {
     public void run() {
         // thread start
     }
+
 }
