@@ -109,7 +109,7 @@ public class GuiIndexController extends Application implements GameGateway {
     public ImageView insertionPersonalGoalCard;
 
 
-    
+
     private final GameViewEventHandler handler;
     public Game model;
     private final String owner;
@@ -189,7 +189,7 @@ public class GuiIndexController extends Application implements GameGateway {
             if(selectedCoordinatees.size()<3) {
                 selectedCoordinatees.add(getSelectedCoordinates(board));
             }
-            
+
         });
 
         selectingButton.setOnMouseClicked(mouseEvent -> {
@@ -202,35 +202,35 @@ public class GuiIndexController extends Application implements GameGateway {
 
     @Override
     public void gameInsertion() {
-        
+
         List<Tile> orderedTiles = new ArrayList<>();
-        
+
         column1.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column1);
             col=first;
         });
-        
-        
+
+
         column2.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column2);
             col=second;
         });
-        
+
         column3.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column3);
             col=third;
         });
-        
+
         column4.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column4);
             col=fourth;
         });
-        
+
         column5.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column5);
             col=5;
         });
-        
+
         tile1Selected.setOnMouseClicked(mouseEvent -> {
             if(orderedTiles.size()==0){
                 orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
@@ -268,8 +268,8 @@ public class GuiIndexController extends Application implements GameGateway {
             }
         });
 
-        
-        
+
+
         insertingButton.setOnMouseClicked(mouseEvent -> {
             handler.onViewInsertion(col,orderedTiles);
             SceneManager.changeScene(SceneManager.getActualController(),"index.fxml");
