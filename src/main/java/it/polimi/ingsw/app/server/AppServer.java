@@ -32,6 +32,11 @@ public class AppServer {
         logger.info("Starting AppServer, serverAddress={}, tcpPort={}, rmiPort={}", serverAddress, tcpPort, rmiPort);
         pair = new ServerPair(controller, connectionsManager, tcpPort, rmiPort);
 
+        initializeServerThreads();
+    }
+
+
+    private void initializeServerThreads() {
         ServerNetworkLayer.scheduleTimeoutThread(controller);
     }
 }

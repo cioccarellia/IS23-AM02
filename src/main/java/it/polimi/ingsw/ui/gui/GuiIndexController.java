@@ -2,7 +2,6 @@ package it.polimi.ingsw.ui.gui;
 
 
 import it.polimi.ingsw.model.board.Coordinate;
-import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.GameViewEventHandler;
@@ -19,9 +18,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
@@ -87,7 +84,7 @@ public class GuiIndexController extends Application implements UiGateway {
     public Scene scene;
 
 
-    public GuiApp(Game model, GameViewEventHandler handler, String owner) {
+    public GuiIndexController(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
