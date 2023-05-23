@@ -11,6 +11,12 @@ public class Console {
         flush();
     }
 
+    public static String in(String message) {
+        out(message + " > ");
+        return scanner.nextLine();
+    }
+
+
     public static String in() {
         return scanner.nextLine();
     }

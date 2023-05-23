@@ -3,6 +3,7 @@ package it.polimi.ingsw.ui.cli;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
@@ -28,9 +29,12 @@ public class CliApp implements UiGateway {
 
     public ViewEventHandler handler;
 
-    public CliApp(Game model, ViewEventHandler handler) {
+    public String owner;
+
+    public CliApp(Game model, ViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
+        this.owner = owner;
     }
 
     /**
@@ -69,23 +73,27 @@ public class CliApp implements UiGateway {
             return;
         }
 
-        Console.printnl();
-        BoardPrinter.print(model.getBoard());
+        if (model.getGameStatus() == GameStatus.RUNNING || (model.getGameStatus() == GameStatus.LAST_ROUND)) {
 
-        CommonGoalCardsPrinter.print(model.getCommonGoalCards());
-        Console.printnl(2);
+            Console.printnl();
+            BoardPrinter.print(model.getBoard());
 
-        if (model.getCurrentPlayerSession() != null) {
-            Console.out("Personal goal card for player " + model.getCurrentPlayerSession().getUsername() + ":\n");
+            CommonGoalCardsPrinter.print(model.getCommonGoalCards());
+            Console.printnl(2);
 
-            //TODO printing the current player's name is temporary, once fixed remove
-            //TODO we need to print the player's card for whom is asking for their private goal card, not the current player. Others can't see other player's card
+            if (model.getCurrentPlayerSession() != null) {
+                Console.out("Personal goal card for player " + model.getCurrentPlayerSession().getUsername() + ":\n");
 
-            PersonalGoalCardPrinter.print(model.getCurrentPlayerSession().getPersonalGoalCard());
+                //TODO printing the current player's name is temporary, once fixed remove
+                //TODO we need to print the player's card for whom is asking for their private goal card, not the current player. Others can't see other player's card
+
+                PersonalGoalCardPrinter.print(model.getCurrentPlayerSession().getPersonalGoalCard());
+                Console.printnl();
+            }
+
+            BookshelvesPrinter.print(model);
             Console.printnl();
         }
-        BookshelvesPrinter.print(model);
-        Console.printnl();
     }
 
     /**

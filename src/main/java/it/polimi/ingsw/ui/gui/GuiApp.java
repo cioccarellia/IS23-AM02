@@ -76,13 +76,15 @@ public class GuiApp extends Application implements UiGateway {
 
     private final ViewEventHandler handler;
     public Game model;
+    private final String owner;
 
     public Scene scene;
 
 
-    public GuiApp(Game model, ViewEventHandler handler) {
+    public GuiApp(Game model, ViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
+        this.owner = owner;
     }
 
     @Override

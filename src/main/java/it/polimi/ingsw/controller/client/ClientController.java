@@ -22,6 +22,7 @@ import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.ui.UiGateway;
 import it.polimi.ingsw.ui.ViewEventHandler;
+import it.polimi.ingsw.ui.cli.Console;
 import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     String authUsername;
     boolean hasAuthenticatedWithServer = false;
 
+
     public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) {
         this.gateway = gateway;
         this.config = config;
@@ -65,13 +67,18 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
 
     @Override
     public synchronized void initialize() {
+        handshake();
+    }
+
+    private void handshake() {
         try {
-            gateway.gameStartRequest("cioccarellia", GameMode.GAME_MODE_3_PLAYERS, config.protocol(), this);
+            String username = Console.in("Select your username");
+            gateway.gameStartRequest(username, GameMode.GAME_MODE_3_PLAYERS, config.protocol(), this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     @Override
     public synchronized void authorize(String username, Game game) {
@@ -80,7 +87,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
         hasAuthenticatedWithServer = true;
 
         // create UI
-        ui = ViewFactory.create(config.mode(), game, this);
+        ui = ViewFactory.create(config.mode(), game, this, authUsername);
 
         // schedules UI initialization on its own thread
         ViewLayer.scheduleUiExecutionThread(ui, AppClient.executorService);
@@ -109,7 +116,14 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
 
     @Override
     public synchronized void onGameCreationReply(SingleResult<GameCreationError> result) {
-        ui.onGameCreated();
+        switch (result) {
+            case SingleResult.Success<GameCreationError> success -> {
+                ui.onGameCreated();
+            }
+            case SingleResult.Failure<GameCreationError> failure -> {
+                handshake();
+            }
+        }
     }
 
     @Override

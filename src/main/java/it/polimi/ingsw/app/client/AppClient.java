@@ -4,6 +4,7 @@ import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
+import it.polimi.ingsw.ui.cli.splash.SplashScreen;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,8 @@ public class AppClient implements Runnable {
 
         // injects the current controller inside the network reference for async callbacks
         this.gateway.linkController(controller);
+
+        SplashScreen.print();
 
         initializeClientThreads();
     }
