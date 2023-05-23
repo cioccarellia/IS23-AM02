@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Client-side controller
- * Handles the view, the
+ * Client-side controller.
+ * Acts as a event hub, routing incoming network calls to their respective interfaces, and back to the server
  */
 public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
@@ -47,9 +47,14 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     private final ClientGateway gateway;
 
-    private LobbyGateway lobby;
     /**
-     * User-interface.
+     * Lobby waiting room.
+     * The controller asks for s
+     * */
+    private LobbyGateway lobby;
+
+    /**
+     * Game ser-interface.
      * The controller receives incoming event calls by the server, and forwards model centric events
      * to the user interface gateway.
      * <p>
@@ -71,11 +76,17 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     /***   Lifecycle   ***/
 
+    Thread lobbyThread;
+
     @Override
     public synchronized void initialize() {
+        // initialize
         lobby = ViewFactory.createLobbyUi(config.mode(), this);
 
-        ViewLayer.scheduleLobbyExecutionThread(lobby, AppClient.executorService);
+        lobbyThread = new Thread(lobby);
+        lobbyThread.start();
+
+        //ViewLayer.scheduleLobbyExecutionThread(lobby, AppClient.executorService);
 
         try {
             gateway.serverStatusRequest(this);
@@ -94,9 +105,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
         // create UI
         ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
-
-        // schedules UI initialization on its own thread
-        ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
 
         // schedules ack thread
         ClientNetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
@@ -148,27 +156,32 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     @Override
     public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
+
+        lobby.onServerStatusUpdate(status, playerInfo);
+
     }
 
     @Override
     public synchronized void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        switch (result) {
-            case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
-                ui.onGameCreated();
-            }
-            case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
-
-            }
-        }
+        lobby.onServerCreationReply(result);
     }
 
     @Override
     public synchronized void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
+        lobby.onServerConnectionReply(result);
 
     }
 
     @Override
     public synchronized void onGameStartedEvent() {
+        try {
+            lobbyThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // schedules UI initialization on its own thread
+        ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
 
     }
 

@@ -12,8 +12,7 @@ public class ViewLayer {
         service.execute(ui);
     }
 
-
     public static void scheduleLobbyExecutionThread(@NotNull LobbyGateway ui, @NotNull ExecutorService service) {
-        service.execute(ui);
+        service.submit(ui);
     }
 }
