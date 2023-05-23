@@ -1,8 +1,8 @@
 package it.polimi.ingsw.controller.server;
 
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.client.ClientController;
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
@@ -21,7 +21,6 @@ import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.network.tcp.TcpConnectionHandler;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.services.ServerService;
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,10 +76,10 @@ public class ServerController implements ServerService {
     }
 
 
-    private List<Pair<String, ConnectionStatus>> packPlayerInfo() {
+    private List<AggregatedPlayerInfo> packPlayerInfo() {
         return connectionsManager.values()
                 .stream()
-                .map(user -> new Pair<>(user.getUsername(), user.getStatus()))
+                .map(user -> new AggregatedPlayerInfo(user.getUsername(), user.getStatus(), user.isHost()))
                 .toList();
     }
 
@@ -128,7 +127,7 @@ public class ServerController implements ServerService {
             serverStatus = GAME_INITIALIZING;
 
             // synchronize
-            connectionsManager.add(username, protocol, OPEN, remoteService);
+            connectionsManager.add(username, protocol, false, OPEN, remoteService);
             synchronizeConnectionLayer(username, remoteService);
 
 
@@ -182,7 +181,7 @@ public class ServerController implements ServerService {
 
 
         // add username and connection status
-        connectionsManager.add(username, protocol, OPEN, remoteService);
+        connectionsManager.add(username, protocol, false, OPEN, remoteService);
         synchronizeConnectionLayer(username, remoteService);
 
         // add player to game

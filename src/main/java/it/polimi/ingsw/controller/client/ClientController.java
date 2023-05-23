@@ -4,9 +4,9 @@ import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.app.client.layers.view.ViewFactory;
 import it.polimi.ingsw.app.client.layers.view.ViewLayer;
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
@@ -20,15 +20,14 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.ui.GameViewEventHandler;
 import it.polimi.ingsw.ui.UiGateway;
-import it.polimi.ingsw.ui.ViewEventHandler;
-import it.polimi.ingsw.ui.cli.Console;
-import javafx.util.Pair;
+import it.polimi.ingsw.ui.lobby.LobbyGateway;
+import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -36,9 +35,13 @@ import java.util.Set;
  * Client-side controller
  * Handles the view, the
  */
-public class ClientController implements AppLifecycle, ClientService, ViewEventHandler, Serializable {
+public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+
+    private final ClientExhaustiveConfiguration config;
+
+    private final ClientGateway gateway;
 
     /**
      * User-interface.
@@ -46,12 +49,11 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
      * to the user interface gateway.
      * <p>
      * The UI gateway processes those events, displays them to the user, and eventually forwards its
-     * user-generated events to this controller (through {@link ViewEventHandler})
+     * user-generated events to this controller (through {@link GameViewEventHandler})
      */
     private UiGateway ui;
-    private final ClientGateway gateway;
+    private LobbyGateway lobby;
 
-    private final ClientExhaustiveConfiguration config;
 
     String authUsername;
     boolean hasAuthenticatedWithServer = false;
@@ -67,17 +69,9 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
 
     @Override
     public synchronized void initialize() {
-        handshake();
+
     }
 
-    private void handshake() {
-        try {
-            String username = Console.in("Select your username");
-            gateway.gameStartRequest(username, GameMode.GAME_MODE_3_PLAYERS, config.protocol(), this);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     @Override
@@ -87,7 +81,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
         hasAuthenticatedWithServer = true;
 
         // create UI
-        ui = ViewFactory.create(config.mode(), game, this, authUsername);
+        ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
 
         // schedules UI initialization on its own thread
         ViewLayer.scheduleUiExecutionThread(ui, AppClient.executorService);
@@ -102,6 +96,36 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
 
+
+
+
+
+
+    /***     Lobby     ***/
+
+    @Override
+    public void sendGameStartRequest(String username, GameMode mode) {
+
+    }
+
+    @Override
+    public void sendGameConnectionRequest(String username) {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /***   ClientService   ***/
 
     @Override
@@ -110,7 +134,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
     @Override
-    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
     }
 
@@ -121,7 +145,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
                 ui.onGameCreated();
             }
             case SingleResult.Failure<GameCreationError> failure -> {
-                handshake();
+
             }
         }
     }
@@ -152,7 +176,7 @@ public class ClientController implements AppLifecycle, ClientService, ViewEventH
     }
 
     @Override
-    public synchronized void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public synchronized void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
 
     }
 

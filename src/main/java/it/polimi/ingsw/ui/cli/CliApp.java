@@ -3,10 +3,9 @@ package it.polimi.ingsw.ui.cli;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.PlayerNumber;
+import it.polimi.ingsw.ui.GameViewEventHandler;
 import it.polimi.ingsw.ui.UiGateway;
-import it.polimi.ingsw.ui.ViewEventHandler;
 import it.polimi.ingsw.ui.cli.parser.ColumnParser;
 import it.polimi.ingsw.ui.cli.parser.CoordinatesParser;
 import it.polimi.ingsw.ui.cli.parser.PlayerTilesOrderInsertionParser;
@@ -30,11 +29,11 @@ public class CliApp implements UiGateway {
 
     public Game model;
 
-    public ViewEventHandler handler;
+    public GameViewEventHandler handler;
 
     public String owner;
 
-    public CliApp(Game model, ViewEventHandler handler, String owner) {
+    public CliApp(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
@@ -144,7 +143,7 @@ public class CliApp implements UiGateway {
         playersRanking.forEach(System.out::println);
     }
 
-    public void setHandler(ViewEventHandler handler) {
+    public void setHandler(GameViewEventHandler handler) {
         this.handler = handler;
     }
 

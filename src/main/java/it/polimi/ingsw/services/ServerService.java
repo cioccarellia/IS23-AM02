@@ -12,17 +12,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * High level protocol for client-to-server communication (response and reply)
+ * High level protocol for client-to-server communication (response and reply).
+ *
+ *
  */
 public interface ServerService extends Remote {
 
     String NAME = "ServerService";
-
-    // /**
-    //  * Sends a synchronization message to correctly configure the connection.
-    //  */
-    // @ServerFunction
-    // void synchronizeConnectionLayer(String username, ClientService service) throws RemoteException;
 
     /**
      * Requests an updated value for the current {@link ServerStatus}.

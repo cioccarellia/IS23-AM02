@@ -4,8 +4,8 @@ package it.polimi.ingsw.ui.gui;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.ui.GameViewEventHandler;
 import it.polimi.ingsw.ui.UiGateway;
-import it.polimi.ingsw.ui.ViewEventHandler;
 import it.polimi.ingsw.ui.gui.config.GuiConfiguration;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -77,14 +77,14 @@ public class GuiApp extends Application implements UiGateway {
     public Button insertingButton;
 
 
-    private final ViewEventHandler handler;
+    private final GameViewEventHandler handler;
     public Game model;
     private final String owner;
 
     public Scene scene;
 
 
-    public GuiApp(Game model, ViewEventHandler handler, String owner) {
+    public GuiApp(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;

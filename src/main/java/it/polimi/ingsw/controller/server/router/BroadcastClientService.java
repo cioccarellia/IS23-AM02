@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.server.router;
 
+import it.polimi.ingsw.app.model.AggregatedPlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
-import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
@@ -10,7 +10,6 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
-import javafx.util.Pair;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -36,7 +35,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<Pair<String, ConnectionStatus>> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<AggregatedPlayerInfo> playerInfo) {
         forward(source -> source.onServerStatusUpdateEvent(status, playerInfo));
     }
 
@@ -71,7 +70,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<Pair<String, ConnectionStatus>> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<AggregatedPlayerInfo> usernames) {
         forward(source -> source.onPlayerConnectionStatusUpdateEvent(usernames));
 
     }
