@@ -5,10 +5,7 @@ import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.services.ClientService;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ClientConnectionsManager {
 
@@ -55,5 +52,17 @@ public class ClientConnectionsManager {
      */
     public boolean containsUsername(String username) {
         return connections.containsKey(username);
+    }
+
+    public boolean isAnyClientDisconnected() {
+        return connections.values().stream().anyMatch(it -> it.getStatus() == ConnectionStatus.DISCONNECTED);
+    }
+
+    public List<String> getDisconnectedClientUsernames() {
+        return connections.values().stream().filter(it -> it.getStatus() == ConnectionStatus.DISCONNECTED).map(ClientConnection::getUsername).toList();
+    }
+
+    public boolean isAnyClientClosed() {
+        return connections.values().stream().anyMatch(it -> it.getStatus() == ConnectionStatus.CLOSED);
     }
 }

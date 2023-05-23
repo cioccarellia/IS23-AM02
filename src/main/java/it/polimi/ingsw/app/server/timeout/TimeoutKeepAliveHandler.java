@@ -1,13 +1,17 @@
 package it.polimi.ingsw.app.server.timeout;
 
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.connection.ClientConnection;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
+import it.polimi.ingsw.controller.server.connection.PeriodicConnectionAwareComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Timeout handler. Each connection is kept as a {@link it.polimi.ingsw.controller.server.connection.ConnectionStatus}
@@ -32,33 +36,55 @@ public class TimeoutKeepAliveHandler implements Runnable {
     private final static int MAX_SECONDS_DISCINNECTION_THRESHOLD = 25;
 
     /**
-     * Controller to execute the task on
+     * Component to execute the task on
      */
-    final ServerController masterController;
+    private final PeriodicConnectionAwareComponent consumer;
 
-    public TimeoutKeepAliveHandler(ServerController masterController) {
-        this.masterController = masterController;
+    /**
+     * For state-awareness
+     */
+    private final Map<String, ConnectionStatus> previousState = new HashMap<>();
+
+    public TimeoutKeepAliveHandler(PeriodicConnectionAwareComponent consumer) {
+        this.consumer = consumer;
     }
 
     @Override
     public void run() {
         while (isTimeoutThreadActive) {
-            Date now = Calendar.getInstance().getTime();
-            var connections = masterController.getConnectionsManager().values();
-
             synchronized (ServerController.class) {
-                connections.forEach(connection -> {
-                    if (connection.getStatus() != ConnectionStatus.OPEN) {
-                        long secondsDiff = ChronoUnit.SECONDS.between(connection.getLastSeen().toInstant(), now.toInstant());
+                Date now = Calendar.getInstance().getTime();
+                var connections = consumer.getConnectionsManager().values();
 
-                        logger.warn("keep alive checking for {}: delta is {}", connection.getUsername(), secondsDiff);
+                boolean hasDetectedAnyChanges = false;
 
-                        if (secondsDiff > MAX_SECONDS_DISCINNECTION_THRESHOLD) {
-                            logger.warn("Disconnection threshold reached, flagging {} as DISCONNECTED", connection.getUsername());
-                            connection.setStatus(ConnectionStatus.DISCONNECTED);
-                        }
+                for (ClientConnection connection : connections) {
+                    // how many seconds since last contact
+                    long secondsDiff = ChronoUnit.SECONDS.between(connection.getLastSeen().toInstant(), now.toInstant());
+
+                    logger.warn("keep alive checking for @{}: delta is {}s", connection.getUsername(), secondsDiff);
+
+
+                    if (connection.getStatus() == ConnectionStatus.OPEN && secondsDiff > MAX_SECONDS_DISCINNECTION_THRESHOLD) {
+                        // we went over the threshold, flagging that client as disconnected
+                        logger.warn("Disconnection threshold reached, flagging {} as DISCONNECTED", connection.getUsername());
+                        connection.setStatus(ConnectionStatus.DISCONNECTED);
                     }
-                });
+
+
+                    // check for changes
+                    if (previousState.containsKey(connection.getUsername()) && previousState.get(connection.getUsername()) != connection.getStatus()) {
+                        // new state detected
+                        hasDetectedAnyChanges = true;
+                    }
+
+                    // save the current value on the previous state
+                    previousState.put(connection.getUsername(), connection.getStatus());
+                }
+
+                if (hasDetectedAnyChanges) {
+                    consumer.onConnectionChange();
+                }
             }
 
             try {

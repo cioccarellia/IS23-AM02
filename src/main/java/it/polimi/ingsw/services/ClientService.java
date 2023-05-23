@@ -36,7 +36,6 @@ public interface ClientService {
     @ClientFunction
     void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result);
 
-
     @ClientFunction
     void onGameStartedEvent(Game game);
 

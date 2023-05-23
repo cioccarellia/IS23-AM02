@@ -9,7 +9,7 @@ import it.polimi.ingsw.network.tcp.messages.replies.GameConnectionRequestReply;
 import it.polimi.ingsw.network.tcp.messages.replies.GameCreationRequestReply;
 import it.polimi.ingsw.network.tcp.messages.replies.ServerStatusRequestReply;
 import it.polimi.ingsw.network.tcp.messages.request.*;
-import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
+import it.polimi.ingsw.network.tcp.messages.response.*;
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
@@ -111,20 +111,14 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
 
     public void mapEventToControllerMethodCall(@NotNull final Message incomingMessage) {
         switch (incomingMessage) {
-            case ConnectionAcceptanceEvent s -> {
-                controller.onAcceptConnectionAndFinalizeUsername(s.getUsername(), s.getModel());
-            }
-            case GameConnectionRequestReply s -> {
-                var sealed = s.seal();
-                controller.onGameConnectionReply(sealed);
-            }
-            case GameCreationRequestReply s -> {
-                var sealed = s.seal();
-                controller.onGameCreationReply(sealed);
-            }
-            case ServerStatusRequestReply s -> {
-                controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
-            }
+            case ConnectionAcceptanceEvent s -> controller.onAcceptConnectionAndFinalizeUsername(s.getUsername(), s.getModel());
+            case GameConnectionRequestReply s -> controller.onGameConnectionReply(s.seal());
+            case GameCreationRequestReply s -> controller.onGameCreationReply(s.seal());
+            case ServerStatusRequestReply s -> controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
+            case GameStartedEvent e -> controller.onGameStartedEvent(e.getGame());
+            case ModelUpdateEvent e -> controller.onModelUpdateEvent(e.getGame());
+            case GameSelectionTurnResponse r -> controller.onGameSelectionTurnEvent(r.seal());
+            case GameInsertionTurnResponse r -> controller.onGameInsertionTurnEvent(r.seal());
             case null, default ->
                     throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
         }

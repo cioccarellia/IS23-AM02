@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.tcp.messages.response.internal;
+package it.polimi.ingsw.network.tcp.messages.response;
 
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.tcp.messages.replies.Reply;

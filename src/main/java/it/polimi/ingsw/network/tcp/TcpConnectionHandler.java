@@ -16,7 +16,7 @@ import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.replies.GameConnectionRequestReply;
 import it.polimi.ingsw.network.tcp.messages.replies.GameCreationRequestReply;
 import it.polimi.ingsw.network.tcp.messages.replies.ServerStatusRequestReply;
-import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
+import it.polimi.ingsw.network.tcp.messages.response.*;
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.utils.json.Parsers;
@@ -154,21 +154,31 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
 
     @Override
     public void onGameStartedEvent(Game game) {
+        GameStartedEvent event = new GameStartedEvent(game);
 
+        SocketSystem.sendAsync(socketOut, event, GameStartedEvent.class);
     }
 
     @Override
     public void onModelUpdateEvent(Game game) {
+        ModelUpdateEvent event = new ModelUpdateEvent(game);
 
+        SocketSystem.sendAsync(socketOut, event, ModelUpdateEvent.class);
     }
 
     @Override
     public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+        GameSelectionTurnResponse event = new GameSelectionTurnResponse(turnResult);
+
+        SocketSystem.sendAsync(socketOut, event, GameSelectionTurnResponse.class);
 
     }
 
     @Override
     public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+        GameInsertionTurnResponse event = new GameInsertionTurnResponse(turnResult);
+
+        SocketSystem.sendAsync(socketOut, event, GameInsertionTurnResponse.class);
 
     }
 

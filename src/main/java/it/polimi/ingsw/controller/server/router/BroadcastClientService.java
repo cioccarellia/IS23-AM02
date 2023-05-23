@@ -14,6 +14,7 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -22,14 +23,34 @@ import java.util.function.Consumer;
  */
 public class BroadcastClientService implements ClientService {
 
+    /**
+     * Support to forward the method sources to
+     */
     private final ClientConnectionsManager support;
+
+    /**
+     * List of clients which won't be forwarded
+     */
+    private List<String> ignoredSources = new ArrayList<>();
 
     public BroadcastClientService(ClientConnectionsManager support) {
         this.support = support;
     }
 
-    private void forward(Consumer<ClientService> method) {
-        support.values().forEach(method);
+    public BroadcastClientService(ClientConnectionsManager support, List<String> ignoredSources) {
+        this.support = support;
+        this.ignoredSources = ignoredSources;
+    }
+
+    /**
+     * Forwards a method call to a remote service ({@link ClientService})
+     */
+    private void forward(Consumer<ClientService> remoteMethodCall) {
+        support.values().forEach(clientConnection -> {
+            if (!ignoredSources.contains(clientConnection.getUsername())) {
+                remoteMethodCall.accept(clientConnection);
+            }
+        });
     }
 
     @Override
@@ -54,7 +75,7 @@ public class BroadcastClientService implements ClientService {
 
     @Override
     public void onGameStartedEvent(Game game) {
-        forward(source -> onGameStartedEvent(game));
+        forward(source -> source.onGameStartedEvent(game));
     }
 
     @Override

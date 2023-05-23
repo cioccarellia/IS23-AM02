@@ -13,8 +13,8 @@ import java.util.Set;
 
 /**
  * High level protocol for client-to-server communication (response and reply).
- *
- *
+ * Methods can use an anonymous remote service ({@link ClientService}) to invoke methods on the client.
+ * This is used for unauthenticated request to be able to have an async response
  */
 public interface ServerService extends Remote {
 

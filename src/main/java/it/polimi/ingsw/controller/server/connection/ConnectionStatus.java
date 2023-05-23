@@ -17,5 +17,13 @@ public enum ConnectionStatus {
     /**
      * The client has closed the connection
      */
-    CLOSED
+    CLOSED;
+
+    public String toHumanReadable() {
+        return switch (this) {
+            case OPEN -> "connected";
+            case DISCONNECTED -> "disconnected";
+            case CLOSED -> "exited";
+        };
+    }
 }

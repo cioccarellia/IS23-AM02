@@ -2,10 +2,11 @@ package it.polimi.ingsw.network.tcp.messages.response;
 
 import it.polimi.ingsw.model.game.Game;
 
-public class ModelUpdateEvent extends Response {
-    final private Game game;
+public class GameStartedEvent extends Response {
 
-    public ModelUpdateEvent(Game game) {
+    private final Game game;
+
+    public GameStartedEvent(Game game) {
         this.game = game;
     }
 
@@ -15,7 +16,7 @@ public class ModelUpdateEvent extends Response {
 
     @Override
     public String toString() {
-        return "ModelUpdateEvent{" +
+        return "GameStartedEvent{" +
                 "game=" + game +
                 '}';
     }

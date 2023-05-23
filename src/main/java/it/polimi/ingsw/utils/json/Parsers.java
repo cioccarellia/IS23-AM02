@@ -6,7 +6,9 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.replies.*;
 import it.polimi.ingsw.network.tcp.messages.request.*;
-import it.polimi.ingsw.network.tcp.messages.response.internal.ConnectionAcceptanceEvent;
+import it.polimi.ingsw.network.tcp.messages.response.ConnectionAcceptanceEvent;
+import it.polimi.ingsw.network.tcp.messages.response.GameStartedEvent;
+import it.polimi.ingsw.network.tcp.messages.response.ModelUpdateEvent;
 
 /**
  * Global parser for default and marshaled gson.
@@ -39,7 +41,9 @@ public class Parsers {
                     .registerSubtype(GameInsertionTurnRequest.class, GameInsertionTurnRequest.class.getName())
                     .registerSubtype(GameInsertionTurnRequestReply.class, GameInsertionTurnRequestReply.class.getName())
                     .registerSubtype(GameSelectionTurnRequest.class, GameSelectionTurnRequest.class.getName())
-                    .registerSubtype(GameSelectionTurnRequestReply.class, GameSelectionTurnRequestReply.class.getName());
+                    .registerSubtype(GameSelectionTurnRequestReply.class, GameSelectionTurnRequestReply.class.getName())
+                    .registerSubtype(GameStartedEvent.class, GameStartedEvent.class.getName())
+                    .registerSubtype(ModelUpdateEvent.class, ModelUpdateEvent.class.getName());
 
 
     private static final Gson marshaledGson = new GsonBuilder()

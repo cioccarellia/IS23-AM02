@@ -41,6 +41,9 @@ import java.util.Set;
  */
 public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
+    // @Serial
+    // private static final long serialVersionUID = -7833101767829378741L;
+
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     private final ClientExhaustiveConfiguration config;
@@ -49,7 +52,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     /**
      * Lobby waiting room.
-     * The controller asks for s
      * */
     private LobbyGateway lobby;
 
@@ -64,8 +66,8 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     private GameGateway ui;
 
 
-    String authUsername;
-    boolean hasAuthenticatedWithServer = false;
+    private String ownerUsername;
+    private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
 
 
     public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) {
@@ -76,17 +78,13 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     /***   Lifecycle   ***/
 
-    Thread lobbyThread;
-
     @Override
     public synchronized void initialize() {
         // initialize
         lobby = ViewFactory.createLobbyUi(config.mode(), this);
 
-        lobbyThread = new Thread(lobby);
-        lobbyThread.start();
 
-        //ViewLayer.scheduleLobbyExecutionThread(lobby, AppClient.executorService);
+        //ViewLayer.scheduleLobbyExecutionThread(lobby, executorService);
 
         try {
             gateway.serverStatusRequest(this);
@@ -103,11 +101,11 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     @Override
     public synchronized void authorize(String username, Game game) {
         // setup internal variables post-authorization
-        authUsername = username;
-        hasAuthenticatedWithServer = true;
+        ownerUsername = username;
+        hasAuthenticatedWithServerAndExchangedUsername = true;
 
         // schedules ack thread
-        ClientNetworkLayer.scheduleKeepAliveThread(authUsername, gateway, AppClient.executorService);
+        ClientNetworkLayer.scheduleKeepAliveThread(ownerUsername, gateway, AppClient.executorService);
     }
 
     @Override
@@ -152,7 +150,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
 
 
-
     /***   ClientService   ***/
 
     @Override
@@ -181,13 +178,9 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     @Override
     public synchronized void onGameStartedEvent(Game game) {
-        try {
-            lobbyThread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        lobby.kill();
 
-        ui = ViewFactory.createGameUi(config.mode(), game, this, authUsername);
+        ui = ViewFactory.createGameUi(config.mode(), game, this, ownerUsername);
 
         // schedules UI initialization on its own thread
         ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);

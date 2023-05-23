@@ -15,7 +15,7 @@ public class Console {
     }
 
     public static String in(String message) {
-        out(message + " > \n");
+        out(message + " > ");
         return scanner.nextLine();
     }
 

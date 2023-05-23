@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.server;
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.server.connection.PeriodicConnectionAwareComponent;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -13,6 +14,7 @@ import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.router.Router;
+import it.polimi.ingsw.controller.server.validator.Validator;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -42,7 +44,7 @@ import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTI
 /**
  * Server-side controller
  */
-public class ServerController implements ServerService {
+public class ServerController implements ServerService, PeriodicConnectionAwareComponent {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerController.class);
 
@@ -93,7 +95,7 @@ public class ServerController implements ServerService {
      *
      * @apiNote to be called only when the user connection/creation request has been accepted.
      */
-    public synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
+    private synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
         service.onAcceptConnectionAndFinalizeUsername(username, game);
@@ -120,33 +122,42 @@ public class ServerController implements ServerService {
     public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
-        if (serverStatus == NO_GAME_STARTED) {
-            // accepting request and setting up game model
-            game = new Game(mode);
-            game.addPlayer(username);
-            maxPlayerAmount = mode.maxPlayerAmount();
-
-            // update server status
-            serverStatus = GAME_INITIALIZING;
-
-            // synchronize
-            connectionsManager.add(username, protocol, true, OPEN, remoteService);
-            synchronizeConnectionLayer(username, remoteService);
-
-
-            // notify the
-            logger.info("returning success from gameStartRequest()");
-
-            // return success to the caller
-            router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packPlayerInfo())));
-
-            // route the new status to everybody
-            // router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-        } else {
-            logger.warn("returning failure from gameStartRequest()");
+        if (serverStatus != NO_GAME_STARTED) {
+            logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.GAME_ALREADY_STARTED);
 
             remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_STARTED));
+            return;
         }
+
+        if (!Validator.isValidUsername(username)) {
+            logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.INVALID_USERNAME);
+
+            remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.INVALID_USERNAME));
+            return;
+        }
+
+
+        // accepting request and setting up game model
+        game = new Game(mode);
+        game.addPlayer(username);
+        maxPlayerAmount = mode.maxPlayerAmount();
+
+        // update server status
+        serverStatus = GAME_INITIALIZING;
+
+        // synchronize
+        connectionsManager.add(username, protocol, true, OPEN, remoteService);
+        synchronizeConnectionLayer(username, remoteService);
+
+
+        // notify the
+        logger.info("returning success from gameStartRequest()");
+
+        // return success to the caller
+        router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packPlayerInfo())));
+
+        // route the new status to everybody
+        // router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
     }
 
 
@@ -157,30 +168,52 @@ public class ServerController implements ServerService {
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
+        if (!Validator.isValidUsername(username)) {
+            logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.INVALID_USERNAME);
+
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.INVALID_USERNAME));
+            return;
+        }
+
         if (serverStatus == GAME_RUNNING) {
+            logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_STARTED);
+
             // anonymous routing
             remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
             return;
         }
 
-        if (connectionsManager.size() == maxPlayerAmount) {
+        if (serverStatus == NO_GAME_STARTED) {
+            logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.NO_GAME_TO_JOIN);
+
             // anonymous routing
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_REACHED));
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.NO_GAME_TO_JOIN));
+            return;
+        }
+
+        if (connectionsManager.size() == maxPlayerAmount) {
+            logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.MAX_PLAYER_AMOUNT_EACHED);
+
+            // anonymous routing
+            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_AMOUNT_EACHED));
             return;
         }
 
         if (connectionsManager.containsUsername(username)) {
+            logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.USERNAME_ALREADY_IN_USE);
+
             // anonymous routing
             remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
             return;
         }
 
         if (game.getGameStatus() == ENDED) {
+            logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_ENDED);
+
             // anonymous routing
             remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
             return;
         }
-
 
         // add username and connection status
         connectionsManager.add(username, protocol, false, OPEN, remoteService);
@@ -193,19 +226,29 @@ public class ServerController implements ServerService {
         router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packPlayerInfo())));
 
         // route the new status to everybody
-        router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
         boolean shouldStartGame = maxPlayerAmount == connectionsManager.size();
 
         if (shouldStartGame) {
+            logger.info("Conditions are met, starting game");
+
             // conditions for starting game are met
             serverStatus = GAME_RUNNING;
+
+            // tell model to start its active game phase
+            game.onGameStarted();
+
+
+            logger.info("Broadcasting game started event");
 
             // broadcast a game started event to everybody
             router.broadcast().onGameStartedEvent(game);
         }
 
+
+        // log an interaction for the requiring user
         connectionsManager.registerInteraction(username);
     }
 
@@ -318,7 +361,25 @@ public class ServerController implements ServerService {
     }
 
 
+    @Override
     public ClientConnectionsManager getConnectionsManager() {
         return connectionsManager;
+    }
+
+    @Override
+    public void onConnectionChange() {
+        if (connectionsManager.isAnyClientClosed()) {
+            throw new IllegalStateException();
+        }
+
+        if (connectionsManager.isAnyClientDisconnected()) {
+            router.broadcastExcluding(
+                    connectionsManager.getDisconnectedClientUsernames()
+            ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        } else {
+            // all clients are back online, resend model and server status. Maybe make appropriate request
+            router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+            router.broadcast().onModelUpdateEvent(game);
+        }
     }
 }
