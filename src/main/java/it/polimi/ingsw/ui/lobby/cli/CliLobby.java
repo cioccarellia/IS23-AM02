@@ -43,11 +43,14 @@ public class CliLobby implements LobbyGateway {
     public synchronized void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         switch (result) {
             case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
-
-
+                switch (failure.error()) {
+                    case GAME_ALREADY_STARTED -> {
+                        Console.out("A game is already running, you can't enter. Change server if you want to play.");
+                    }
+                }
             }
             case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
-
+                owner = success.value().username();
             }
         }
     }
@@ -56,13 +59,28 @@ public class CliLobby implements LobbyGateway {
     public synchronized void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         switch (result) {
             case TypedResult.Failure<GameConnectionSuccess, GameConnectionError> failure -> {
-
+                switch (failure.error()){
+                    case ALREADY_CONNECTED_PLAYER -> {
+                        Console.out("You are alredy connected to this game.");
+                    }
+                    case USERNAME_ALREADY_IN_USE -> {
+                        Console.out("This username is already taken.");
+                    }
+                    case MAX_PLAYER_REACHED -> {
+                        Console.out("The maximum amount of players for this game has been reached already.");
+                    }
+                    case GAME_ALREADY_STARTED -> {
+                        Console.out("A game is already running, you can't enter. Change server if you want to play.");
+                    }
+                    case GAME_ALREADY_ENDED -> {
+                        Console.out("The game has already ended.");
+                    }
+                }
             }
             case TypedResult.Success<GameConnectionSuccess, GameConnectionError> success -> {
-
+                owner = success.value().username();
             }
         }
-
     }
 
     @Override
@@ -89,7 +107,7 @@ public class CliLobby implements LobbyGateway {
             Console.out("List of players currently in this game:\n");
             for (int i = 0; i < playerInfo.size(); i++) {
                 Console.out(playerInfo.get(i).username() + " " + playerInfo.get(i).status());
-                if (playerInfo.get(i).isHost()){
+                if (playerInfo.get(i).isHost()) {
                     Console.out(" Game Host");
                 }
                 Console.printnl();
