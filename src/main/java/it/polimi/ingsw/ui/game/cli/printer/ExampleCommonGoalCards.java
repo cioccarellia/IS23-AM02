@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.board.Tile;
 
 import static it.polimi.ingsw.model.board.Tile.*;
 
+/**
+ * The example matrices used to represent the common goal cards, as an example for the players
+ */
 public class ExampleCommonGoalCards {
     public static final Tile[][] SIX_PAIRS_EXAMPLE = {
             {CAT, null, null, null, null},

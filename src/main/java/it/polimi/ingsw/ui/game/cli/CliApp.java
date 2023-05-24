@@ -31,7 +31,7 @@ public class CliApp implements GameGateway {
 
     public GameViewEventHandler handler;
 
-    public String owner;
+    public final String owner;
 
     public CliApp(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;

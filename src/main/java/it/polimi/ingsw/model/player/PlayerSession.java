@@ -119,20 +119,27 @@ public class PlayerSession {
         }
 
         switch (counter) {
-            case 0:
+            case 0 -> {
                 return 0;
-            case 1:
+            }
+            case 1 -> {
                 return 1;
-            case 2:
+            }
+            case 2 -> {
                 return 2;
-            case 3:
+            }
+            case 3 -> {
                 return 4;
-            case 4:
+            }
+            case 4 -> {
                 return 6;
-            case 5:
+            }
+            case 5 -> {
                 return 9;
-            case 6:
+            }
+            case 6 -> {
                 return 12;
+            }
         }
         throw new IllegalArgumentException("Expected a number between 0 and 6.");
     }

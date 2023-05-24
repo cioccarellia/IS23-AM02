@@ -11,6 +11,9 @@ public record GuiSpecifics(
         @SerializedName("third")
         int third,
         @SerializedName("fourth")
-        int fourth
+        int fourth,
+        @SerializedName("fifth")
+        int fifth
+
 ) implements Specifics {
 }

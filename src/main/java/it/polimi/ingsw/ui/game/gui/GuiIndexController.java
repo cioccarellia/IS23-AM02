@@ -37,9 +37,11 @@ public class GuiIndexController extends Application implements GameGateway {
     private static final int second = GuiConfiguration.getInstance().getSecond();
     private static final int third = GuiConfiguration.getInstance().getThird();
     private static final int fourth = GuiConfiguration.getInstance().getFourth();
+    private static final int fifth = GuiConfiguration.getInstance().getFifth();
+
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
-    private static int col=0;
+    private static int col = 0;
 
     @FXML
     public GridPane board;
@@ -109,7 +111,6 @@ public class GuiIndexController extends Application implements GameGateway {
     public ImageView insertionPersonalGoalCard;
 
 
-
     private final GameViewEventHandler handler;
     public Game model;
     private final String owner;
@@ -142,7 +143,7 @@ public class GuiIndexController extends Application implements GameGateway {
         //insertion scene PGC +CGC inizialization
         insertionCommonGoalCard1 = insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(first).getCommonGoalCard());
         insertionCommonGoalCard2 = insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(second).getCommonGoalCard());
-        insertionPersonalGoalCard= insertionScene.personalGoalCardUpdate(model);
+        insertionPersonalGoalCard = insertionScene.personalGoalCardUpdate(model);
         //model update
         modelUpdate(model);
 
@@ -186,7 +187,7 @@ public class GuiIndexController extends Application implements GameGateway {
         Set<Coordinate> selectedCoordinatees = new HashSet<>();
 
         board.setOnMouseClicked(mouseEvent -> {
-            if(selectedCoordinatees.size()<3) {
+            if (selectedCoordinatees.size() < maxSelectionSize) {
                 selectedCoordinatees.add(getSelectedCoordinates(board));
             }
 
@@ -194,7 +195,7 @@ public class GuiIndexController extends Application implements GameGateway {
 
         selectingButton.setOnMouseClicked(mouseEvent -> {
 
-            SceneManager.changeScene(SceneManager.getActualController(),"Insertion.fxml");
+            SceneManager.changeScene(SceneManager.getActualController(), "Insertion.fxml");
             handler.onViewSelection(selectedCoordinatees);
         });
 
@@ -207,72 +208,71 @@ public class GuiIndexController extends Application implements GameGateway {
 
         column1.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column1);
-            col=first;
+            col = first;
         });
 
 
         column2.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column2);
-            col=second;
+            col = second;
         });
 
         column3.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column3);
-            col=third;
+            col = third;
         });
 
         column4.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column4);
-            col=fourth;
+            col = fourth;
         });
 
         column5.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column5);
-            col=5;
+            col = fifth;
         });
 
         tile1Selected.setOnMouseClicked(mouseEvent -> {
-            if(orderedTiles.size()==0){
+            if (orderedTiles.size() == 0) {
                 orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
                 label1.setText(String.valueOf(second));
-            } else if (orderedTiles.size()==1) {
+            } else if (orderedTiles.size() == 1) {
                 orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
                 label1.setText(String.valueOf(third));
-            } else if (orderedTiles.size()==2) {
+            } else if (orderedTiles.size() == 2) {
                 orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
                 label1.setText(String.valueOf(fourth));
             }
         });
         tile2Selected.setOnMouseClicked(mouseEvent -> {
-            if(orderedTiles.size()==0){
+            if (orderedTiles.size() == 0) {
                 orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
                 label2.setText(String.valueOf(second));
-            } else if (orderedTiles.size()==1) {
+            } else if (orderedTiles.size() == 1) {
                 orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
                 label2.setText(String.valueOf(third));
-            } else if (orderedTiles.size()==2) {
+            } else if (orderedTiles.size() == 2) {
                 orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
                 label2.setText(String.valueOf(fourth));
             }
         });
         tile3Selected.setOnMouseClicked(mouseEvent -> {
-            if(orderedTiles.size()==0){
+            if (orderedTiles.size() == 0) {
                 orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
                 label3.setText(String.valueOf(second));
-            } else if (orderedTiles.size()==1) {
+            } else if (orderedTiles.size() == 1) {
                 orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
                 label3.setText(String.valueOf(third));
-            } else if (orderedTiles.size()==2) {
+            } else if (orderedTiles.size() == 2) {
                 orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
                 label3.setText(String.valueOf(fourth));
             }
         });
 
 
-
         insertingButton.setOnMouseClicked(mouseEvent -> {
-            handler.onViewInsertion(col,orderedTiles);
-            SceneManager.changeScene(SceneManager.getActualController(),"index.fxml");
+            handler.onViewInsertion(col, orderedTiles);
+            SceneManager.changeScene(SceneManager.getActualController(), "index.fxml");
         });
     }
 

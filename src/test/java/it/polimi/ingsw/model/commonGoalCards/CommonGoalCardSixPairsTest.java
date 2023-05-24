@@ -1,7 +1,8 @@
-package it.polimi.ingsw.model.cards.common;
+package it.polimi.ingsw.model.commonGoalCards;
 
 import it.polimi.ingsw.commons.ShelfMatrixTester;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

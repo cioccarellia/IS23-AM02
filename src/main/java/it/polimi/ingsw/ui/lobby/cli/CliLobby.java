@@ -25,7 +25,7 @@ public class CliLobby implements LobbyGateway {
 
     /**
      * Keeps a reference to the owner (which can be null at the beginning) of this client instance.
-     * */
+     */
     private String owner = null;
 
     boolean isKilled = false;
@@ -54,7 +54,8 @@ public class CliLobby implements LobbyGateway {
         switch (result) {
             case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
                 switch (failure.error()) {
-                    case GAME_ALREADY_STARTED -> Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
+                    case GAME_ALREADY_STARTED ->
+                            Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
                     case INVALID_USERNAME -> Console.out("The username is invalid.\n");
                 }
             }
@@ -77,9 +78,11 @@ public class CliLobby implements LobbyGateway {
                 switch (failure.error()) {
                     case ALREADY_CONNECTED_PLAYER -> Console.out("You are already connected to this game.\n");
                     case USERNAME_ALREADY_IN_USE -> Console.out("This username is already taken.\n");
-                    case MAX_PLAYER_AMOUNT_EACHED -> Console.out("The maximum amount of players for this game has been reached already.\n");
+                    case MAX_PLAYER_AMOUNT_EACHED ->
+                            Console.out("The maximum amount of players for this game has been reached already.\n");
                     case NO_GAME_TO_JOIN -> Console.out("No game has been started.\n");
-                    case GAME_ALREADY_STARTED -> Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
+                    case GAME_ALREADY_STARTED ->
+                            Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
                     case GAME_ALREADY_ENDED -> Console.out("The game has already ended.\n");
                     case INVALID_USERNAME -> Console.out("The username is invalid.\n");
                 }
@@ -150,7 +153,8 @@ public class CliLobby implements LobbyGateway {
 
                 handler.sendGameConnectionRequest(username);
             }
-            case GAME_RUNNING -> Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
+            case GAME_RUNNING ->
+                    Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
         }
     }
 

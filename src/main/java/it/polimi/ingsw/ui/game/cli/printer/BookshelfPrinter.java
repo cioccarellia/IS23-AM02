@@ -1,23 +1,10 @@
 package it.polimi.ingsw.ui.game.cli.printer;
 
-import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.game.cli.Console;
 
-import static it.polimi.ingsw.model.board.Tile.CAT;
-
 public class BookshelfPrinter {
-
-    public static final Tile[][] BOOKSHELF_MATRIX = {
-            {CAT, CAT, CAT, CAT, CAT},
-            {CAT, CAT, CAT, CAT, CAT},
-            {CAT, CAT, CAT, CAT, CAT},
-            {CAT, CAT, CAT, CAT, CAT},
-            {CAT, CAT, CAT, CAT, CAT},
-            {CAT, CAT, CAT, CAT, CAT}
-
-    };
     private static final int rows = BookshelfConfiguration.getInstance().rows();
     private static final int cols = BookshelfConfiguration.getInstance().cols();
 
@@ -49,15 +36,4 @@ public class BookshelfPrinter {
             Console.printnl();
         }
     }
-
-    public static void main(String[] args) {
-
-        Bookshelf bookshelf = new Bookshelf();
-
-        bookshelf.fillUpBookShelf(BOOKSHELF_MATRIX);
-        print(bookshelf);
-
-        System.out.flush();
-    }
-
 }

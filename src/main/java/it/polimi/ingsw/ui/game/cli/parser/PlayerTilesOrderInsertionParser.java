@@ -87,9 +87,4 @@ public class PlayerTilesOrderInsertionParser {
             }
         }
     }
-
-    public static void main(String[] args) {
-        scan(List.of(GAME, FRAME, CAT));
-    }
-
 }

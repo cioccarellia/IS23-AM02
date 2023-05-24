@@ -35,6 +35,10 @@ public class GuiConfiguration extends Configuration<GuiSpecifics> {
         return specs.fourth();
     }
 
+    public int getFifth() {
+        return specs.fifth();
+    }
+
 
     @Override
     protected GuiSpecifics provideSpecs() {

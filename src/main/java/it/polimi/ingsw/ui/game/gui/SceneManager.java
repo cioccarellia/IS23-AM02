@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class SceneManager extends Application{
+public class SceneManager extends Application {
     private static Scene actualScene;
     private static GuiIndexController actualController;
 
@@ -27,7 +27,7 @@ public class SceneManager extends Application{
         }
     }
 
-    public void start(Stage stage){
+    public void start(Stage stage) {
 
     }
 

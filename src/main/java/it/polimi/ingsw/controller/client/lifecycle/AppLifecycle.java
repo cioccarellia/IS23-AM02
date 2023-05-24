@@ -12,12 +12,12 @@ public interface AppLifecycle {
 
     /**
      * The current game has been cleared to proceed using its given username.
-     * */
+     */
     void authorize(String username, Game game);
 
     /**
      * The app is terminated
-     * */
+     */
     void terminate();
 
 }
