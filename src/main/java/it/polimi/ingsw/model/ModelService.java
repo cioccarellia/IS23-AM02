@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import org.jetbrains.annotations.CheckReturnValue;
 
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,14 @@ public interface ModelService {
     void onPlayerCheckingPhase();
 
     void onNextTurn(String nextPlayerUsername);
+
+    void onForcedNextTurn(String nextPlayer);
+
+    @CheckReturnValue
+    boolean onStandby();
+
+    @CheckReturnValue
+    boolean onResume();
 
     void onGameEnded();
 }

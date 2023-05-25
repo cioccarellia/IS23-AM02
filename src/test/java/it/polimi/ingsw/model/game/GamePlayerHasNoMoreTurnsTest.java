@@ -16,8 +16,8 @@ public class GamePlayerHasNoMoreTurnsTest implements GameTester {
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
 
-        game.playerHasNoMoreTurns(PLAYER_A);
-        game.playerHasNoMoreTurns(PLAYER_B);
+        game.flagNoMoreTurnsForPlayer(PLAYER_A);
+        game.flagNoMoreTurnsForPlayer(PLAYER_B);
 
         assertTrue(game.getSessionFor(PLAYER_A).noMoreTurns);
         assertTrue(game.getSessionFor(PLAYER_B).noMoreTurns);

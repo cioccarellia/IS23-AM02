@@ -74,7 +74,7 @@ public class GuiLobbyController implements LobbyGateway {
         switch (result) {
             case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
                 switch (failure.error()) {
-                    case GAME_ALREADY_STARTED -> {
+                    case GAME_ALREADY_INITIALIZING -> {
                         loginStatus.setText("GAME ALREADY STARTED, insert Username!");
                     }
                     case INVALID_USERNAME -> {

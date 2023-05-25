@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.utils.model.BoardUtils;
+import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
@@ -51,6 +52,17 @@ public class Board {
         }
 
         logger.info("Board initialized");
+    }
+
+    public void setTile(Pair<Coordinate, Tile> tile) {
+        int x = tile.getKey().x();
+        int y = tile.getKey().y();
+
+        Cell c = matrix[x][y];
+
+        if (c.isEmpty()) {
+            matrix[x][y].setContent(tile.getValue());
+        }
     }
 
     /**

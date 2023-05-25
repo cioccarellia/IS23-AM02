@@ -6,9 +6,7 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.replies.*;
 import it.polimi.ingsw.network.tcp.messages.request.*;
-import it.polimi.ingsw.network.tcp.messages.response.ConnectionAcceptanceEvent;
-import it.polimi.ingsw.network.tcp.messages.response.GameStartedEvent;
-import it.polimi.ingsw.network.tcp.messages.response.ModelUpdateEvent;
+import it.polimi.ingsw.network.tcp.messages.response.*;
 
 /**
  * Global parser for default and marshaled gson.
@@ -38,12 +36,14 @@ public class Parsers {
                     .registerSubtype(GameConnectionRequestReply.class, GameConnectionRequestReply.class.getName())
                     .registerSubtype(KeepAlive.class, KeepAlive.class.getName())
                     .registerSubtype(KeepAliveReply.class, KeepAliveReply.class.getName())
+                    .registerSubtype(GameStartedEvent.class, GameStartedEvent.class.getName())
+                    .registerSubtype(ModelUpdateEvent.class, ModelUpdateEvent.class.getName())
                     .registerSubtype(GameInsertionTurnRequest.class, GameInsertionTurnRequest.class.getName())
                     .registerSubtype(GameInsertionTurnRequestReply.class, GameInsertionTurnRequestReply.class.getName())
+                    .registerSubtype(GameInsertionTurnResponse.class, GameInsertionTurnResponse.class.getName())
                     .registerSubtype(GameSelectionTurnRequest.class, GameSelectionTurnRequest.class.getName())
                     .registerSubtype(GameSelectionTurnRequestReply.class, GameSelectionTurnRequestReply.class.getName())
-                    .registerSubtype(GameStartedEvent.class, GameStartedEvent.class.getName())
-                    .registerSubtype(ModelUpdateEvent.class, ModelUpdateEvent.class.getName());
+                    .registerSubtype(GameSelectionTurnResponse.class, GameSelectionTurnResponse.class.getName());
 
 
     private static final Gson marshaledGson = new GsonBuilder()

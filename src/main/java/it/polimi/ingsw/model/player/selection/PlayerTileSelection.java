@@ -32,6 +32,12 @@ public class PlayerTileSelection {
         this.selectedTiles = selectedTiles;
     }
 
+    public List<Pair<Coordinate, Tile>> getSelection() {
+        return selectedTiles;
+    }
+
+
+
     /**
      * Checks whether the given list of tiles contains the same elements (and the same number of elements)
      * as this selection.

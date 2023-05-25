@@ -6,5 +6,5 @@ public enum BookshelfInsertionFailure implements RequestError {
     TOO_MANY_TILES,
     NO_FIT,
     WRONG_PLAYER,
-    WRONG_STATUS,
+    WRONG_GAME_PHASE,
 }

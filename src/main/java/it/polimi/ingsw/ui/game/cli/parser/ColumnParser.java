@@ -3,6 +3,9 @@ package it.polimi.ingsw.ui.game.cli.parser;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.game.cli.Console;
+import it.polimi.ingsw.ui.game.cli.printer.TilePrinter;
+
+import java.util.List;
 
 public class ColumnParser {
     private static final int rows = BookshelfConfiguration.getInstance().rows();
@@ -10,13 +13,20 @@ public class ColumnParser {
 
     /**
      * @param bookshelf   current player's bookshelf
-     * @param tilesAmount how many tiles the player wants to insert in their bookshelf
+     * @param selectedTiles the tiles the player wants to insert in their bookshelf
      * @return the column the player chose
      */
-    public static int scan(Tile[][] bookshelf, int tilesAmount) {
+    public static int scan(Tile[][] bookshelf, List<Tile> selectedTiles) {
         while (true) {
             Console.outln();
-            Console.out("In which column would you like to insert the selected tiles?");
+            Console.out("In which column would you like to insert the selected tiles: ");
+
+            selectedTiles.forEach(tile -> {
+                String tileText = TilePrinter.print(tile);
+                Console.out(" " + tileText);
+            });
+
+            Console.out(" ?");
             Console.outln();
 
             int column = Integer.parseInt(Console.in());
@@ -25,7 +35,7 @@ public class ColumnParser {
                 Console.outln();
                 Console.out("The column you selected is out of bounds, choose a number between 0 and 4.");
                 Console.outln();
-            } else if (!itFits(bookshelf, tilesAmount, column)) {
+            } else if (!itFits(bookshelf, selectedTiles.size(), column)) {
                 Console.outln();
                 Console.out("You selected more tiles than there is space in this column. Change column.");
             } else

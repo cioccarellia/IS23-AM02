@@ -78,6 +78,9 @@ public class CliApp implements GameGateway {
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
+                PlayerSession currentPlayer = model.getCurrentPlayerSession();
+                boolean isOwnerTurn = currentPlayer.getUsername().equals(owner);
+
                 Console.outln();
                 BoardPrinter.print(model.getBoard());
                 CommonGoalCardsPrinter.print(model.getCommonGoalCards());
@@ -87,11 +90,11 @@ public class CliApp implements GameGateway {
                 BookshelvesPrinter.print(model);
                 Console.outln();
 
-                PlayerSession currentPlayer = model.getCurrentPlayerSession();
 
-                if (currentPlayer.getUsername().equals(owner)) {
+                if (isOwnerTurn) {
                     switch (currentPlayer.getPlayerCurrentGamePhase()) {
                         case IDLE -> {
+                            logger.warn("Current user in idle state, model={},", model);
                         }
                         case SELECTING -> {
                             gameSelection();
@@ -99,14 +102,11 @@ public class CliApp implements GameGateway {
                         case INSERTING -> {
                             gameInsertion();
                         }
-                        case CHECKING -> {
-
-                        }
                     }
                 } else {
                     Console.out("@" + currentPlayer.getUsername() + " is " + currentPlayer.getPlayerCurrentGamePhase().toString().toLowerCase());
+                    Console.outln();
                 }
-
             }
             case ENDED -> onGameEnded();
             case STANDBY -> onGameStandby();
@@ -126,11 +126,11 @@ public class CliApp implements GameGateway {
      * To be invoked when it's the player turn to insert
      */
     public void gameInsertion() {
-        int tilesSize = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles().size();
-
         List<Tile> selectedTiles = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles();
 
-        int column = ColumnParser.scan(model.getCurrentPlayerSession().getBookshelf().getShelfMatrix(), tilesSize);
+        int tilesSize = selectedTiles.size();
+
+        int column = ColumnParser.scan(model.getCurrentPlayerSession().getBookshelf().getShelfMatrix(), selectedTiles);
 
         List<Tile> orderedTiles;
 
@@ -148,6 +148,14 @@ public class CliApp implements GameGateway {
     public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
         switch (turnResult) {
             case SingleResult.Failure<TileSelectionFailures> failure -> {
+                switch (failure.error()) {
+                    case WRONG_GAME_PHASE:
+                        break;
+                    case UNAUTHORIZED_SELECTION:
+                        break;
+                    case UNAUTHORIZED_PLAYER:
+                        break;
+                }
 
             }
             case SingleResult.Success<TileSelectionFailures> success -> {
@@ -184,6 +192,6 @@ public class CliApp implements GameGateway {
     }
 
     private void onGameStandby() {
-        Console.out("Game standby.");
+        Console.out("Game standby.\n");
     }
 }

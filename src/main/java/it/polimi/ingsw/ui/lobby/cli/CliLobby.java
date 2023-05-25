@@ -54,18 +54,28 @@ public class CliLobby implements LobbyGateway {
         switch (result) {
             case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
                 switch (failure.error()) {
-                    case GAME_ALREADY_STARTED ->
-                            Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
-                    case INVALID_USERNAME -> Console.out("The username is invalid.\n");
+                    case GAME_ALREADY_INITIALIZING -> {
+                        Console.out("A game has been initialized already. You can't choose the number of players.");
+
+                        // out of phase model, requiring manual model update since server isn't aware of our existence yet
+                        handler.sendStatusUpdateRequest();
+                    }
+                    case GAME_ALREADY_RUNNING -> {
+                        Console.out("A game is already running, you can't enter. Change server if you want to play.\n");
+                    }
+                    case INVALID_USERNAME -> {
+                        Console.out("The username is invalid.\n");
+                        renderModelUpdate();
+                    }
                 }
+
             }
             case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
                 owner = success.value().username();
                 playerInfo = success.value().playerInfo();
+                renderModelUpdate();
             }
         }
-
-        renderModelUpdate();
     }
 
     @Override

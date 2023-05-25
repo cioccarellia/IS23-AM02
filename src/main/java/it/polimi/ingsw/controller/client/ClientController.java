@@ -112,7 +112,18 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
 
+    @Override
+    public void sendStatusUpdateRequest() {
+        try {
+            gateway.serverStatusRequest( this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /***     Lobby     ***/
+
+
 
     @Override
     public void sendGameStartRequest(String username, GameMode mode) {
@@ -158,7 +169,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     @Override
     public synchronized void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         lobby.onServerConnectionReply(result);
-
     }
 
     @Override
@@ -188,12 +198,12 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     @Override
     public synchronized void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
-
+        // not used
     }
 
     @Override
     public synchronized void onGameEndedEvent() {
-
+        // not used
     }
 
 
@@ -204,7 +214,11 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      */
     @Override
     public void onViewSelection(Set<Coordinate> coordinates) {
-
+        try {
+            gateway.gameSelectionTurnResponse(ownerUsername, coordinates);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -213,7 +227,11 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      */
     @Override
     public void onViewInsertion(int column, List<Tile> tiles) {
-
+        try {
+            gateway.gameInsertionTurnResponse(ownerUsername, tiles, column);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -120,6 +120,11 @@ public class Game implements ModelService {
         return sessions.getByUsername(username);
     }
 
+
+    public PlayerSession getPlayerSession(PlayerNumber number) {
+        return sessions.getByNumber(number);
+    }
+
     public PlayerSession getStartingPlayerSession() {
         return sessions.getByNumber(startingPlayerNumber);
     }
@@ -230,11 +235,11 @@ public class Game implements ModelService {
         // playersMap.get(number).noMoreTurns = true;
         PlayerNumber player = startingPlayerNumber;
         while (player != currentPlayerNumber) {
-            playerHasNoMoreTurns(player);
+            flagNoMoreTurnsForPlayer(player);
             player = player.next(mode);
         }
 
-        playerHasNoMoreTurns(player);
+        flagNoMoreTurnsForPlayer(player);
     }
 
     /**
@@ -242,9 +247,9 @@ public class Game implements ModelService {
      *
      * @param username player's username
      */
-    public void playerHasNoMoreTurns(String username) {
+    public void flagNoMoreTurnsForPlayer(String username) {
         assert sessions.isPresent(username);
-        playerHasNoMoreTurns(sessions.getByUsername(username).getPlayerNumber());
+        flagNoMoreTurnsForPlayer(sessions.getByUsername(username).getPlayerNumber());
     }
 
     /**
@@ -252,7 +257,7 @@ public class Game implements ModelService {
      *
      * @param number player's number
      */
-    private void playerHasNoMoreTurns(PlayerNumber number) {
+    private void flagNoMoreTurnsForPlayer(PlayerNumber number) {
         sessions.getByNumber(number).noMoreTurns = true;
     }
 
@@ -375,11 +380,12 @@ public class Game implements ModelService {
     @Override
     public void onPlayerInsertionPhase(int column, List<Tile> tiles) {
 
-        // TODO where do we get the ordered tiles?
-
         // we assume tiles have been checked and match
         getCurrentPlayerSession().getBookshelf().insert(column, tiles);
-        getCurrentPlayerSession().setPlayerCurrentGamePhase(CHECKING);
+        getCurrentPlayerSession().clearTileSelection();
+
+        // need to check
+        getCurrentPlayerSession().setPlayerCurrentGamePhase(IDLE);
     }
 
     /**
@@ -388,7 +394,6 @@ public class Game implements ModelService {
      */
     @Override
     public void onPlayerCheckingPhase() {
-
         // full bookshelf test
         boolean isBookshelfFull = getCurrentPlayerSession().getBookshelf().isFull();
 
@@ -401,7 +406,7 @@ public class Game implements ModelService {
 
         // checks if it's the last round and sets this turn as the last for the player
         if (status == LAST_ROUND) {
-            playerHasNoMoreTurns(currentPlayerNumber);
+            flagNoMoreTurnsForPlayer(currentPlayerNumber);
         }
 
         // common goal card testing
@@ -435,14 +440,36 @@ public class Game implements ModelService {
     @Override
     public void onNextTurn(String nextPlayerUsername) {
         // checks if the flag noMoreTurns for the nextPlayer is already set as true, in this case the game ends
-        if (sessions.getByUsername(nextPlayerUsername).noMoreTurns)
+        if (sessions.getByUsername(nextPlayerUsername).noMoreTurns) {
             setGameStatus(ENDED);
-        else {
+        } else {
             // assume the username is correct
             assert sessions.isPresent(nextPlayerUsername);
 
             currentPlayerNumber = sessions.getByUsername(nextPlayerUsername).getPlayerNumber();
             getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
+        }
+    }
+
+    @Override
+    public void onForcedNextTurn(String nextPlayer) {
+        // conditioned rollback
+        switch (getCurrentPlayerSession().getPlayerCurrentGamePhase()) {
+            case IDLE, SELECTING -> {
+                // normal phase, no changes required, switching
+                onNextTurn(nextPlayer);
+            }
+            case INSERTING -> {
+                // rollback model to pre-selection stage and forward turns
+                // todo
+                List<Pair<Coordinate, Tile>> selectedTiles = getCurrentPlayerSession().getPlayerTileSelection().getSelection();
+
+                for (Pair<Coordinate, Tile> selectedTile : selectedTiles) {
+                    board.setTile(selectedTile);
+                }
+
+                getCurrentPlayerSession().clearTileSelection();
+            }
         }
     }
 
@@ -467,6 +494,29 @@ public class Game implements ModelService {
         }
 
         return scores.stream().sorted(comparing(PlayerScore::total)).toList();
+    }
+
+    private GameStatus preStandByGameStatus;
+
+    @Override
+    public boolean onStandby() {
+        if (status != STANDBY) {
+            preStandByGameStatus = status;
+            status = STANDBY;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onResume() {
+        if (status == STANDBY) {
+            status = preStandByGameStatus;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

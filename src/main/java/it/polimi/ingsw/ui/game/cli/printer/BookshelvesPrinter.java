@@ -68,16 +68,16 @@ public class BookshelvesPrinter {
         for (int i = 0; i < dim; i++) {
             String username = players.get(i).getUsername();
             if (players.get(i).getPlayerNumber() == game.getStartingPlayerNumber()) {
-                Console.out(Chalk.on("[F] ").red().toString());
+                Console.out(Chalk.on("F ").red().toString());
             } else
-                Console.out("    ");
+                Console.out("  ");
 
 
             if (players.get(i).getPlayerNumber() == game.getCurrentPlayerSession().getPlayerNumber()) {
                 var x = Chalk.on("@" + username).bgMagenta().toString();
-                Console.out(StringUtils.rightPad(x, 27, " "));
+                Console.out(StringUtils.rightPad(x, 29, " "));
             } else {
-                Console.out(StringUtils.rightPad("@" + username, 17, " "));
+                Console.out(StringUtils.rightPad("@" + username, 19, " "));
             }
 
             Console.out("  ");

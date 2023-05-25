@@ -54,12 +54,24 @@ public class ClientConnectionsManager {
         return connections.containsKey(username);
     }
 
+    public boolean isClientDisconnected(String username) {
+        return getDisconnectedClientUsernames().contains(username);
+    }
+
+
     public boolean isAnyClientDisconnected() {
         return connections.values().stream().anyMatch(it -> it.getStatus() == ConnectionStatus.DISCONNECTED);
     }
 
     public List<String> getDisconnectedClientUsernames() {
         return connections.values().stream().filter(it -> it.getStatus() == ConnectionStatus.DISCONNECTED).map(ClientConnection::getUsername).toList();
+    }
+
+    public List<String> getDisconnectedOrClosedClientUsernames() {
+        return connections.values()
+                .stream()
+                .filter(it -> it.getStatus() == ConnectionStatus.DISCONNECTED || it.getStatus() == ConnectionStatus.CLOSED)
+                .map(ClientConnection::getUsername).toList();
     }
 
     public boolean isAnyClientClosed() {

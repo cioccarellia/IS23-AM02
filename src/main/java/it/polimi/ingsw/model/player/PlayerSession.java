@@ -26,15 +26,27 @@ public class PlayerSession {
     private final PlayerNumber playerNumber;
     private final PersonalGoalCard personalGoalCard;
     private final Bookshelf bookshelf = new Bookshelf();
+
+
+    /**
+     * Keeps track of the game phase for the current user
+     * */
+    private PlayerCurrentGamePhase playerCurrentGamePhase;
+
     /**
      * Identifiers of all the {@link it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier}s that
      * have been acquired by the user during the game (i.e. for which the user has received any common goal card token).
      */
     private final List<CommonGoalCardIdentifier> achievedCommonGoalCards = new ArrayList<>();
+
+    /**
+     * Flags whether the current user has any more turns to play
+     * */
     public boolean noMoreTurns = false;
-    private PlayerCurrentGamePhase playerCurrentGamePhase;
+
     // If the player is after the selection phase, its selection is saved here
     private PlayerTileSelection playerTileSelection;
+
     /**
      * Tokens acquired by the current user during gameplay.
      */
@@ -84,6 +96,10 @@ public class PlayerSession {
     // setters
     public void setPlayerTileSelection(PlayerTileSelection selection) {
         playerTileSelection = selection;
+    }
+
+    public void clearTileSelection() {
+        playerTileSelection = null;
     }
 
     public void setPlayerCurrentGamePhase(PlayerCurrentGamePhase phase) {
