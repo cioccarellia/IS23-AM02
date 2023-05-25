@@ -24,7 +24,7 @@
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="177.0" layoutY="171.0" prefHeight="17.0" prefWidth="166.0" text="NUMERO GIOCATORI" textFill="WHITE">
+      <Label fx:id="nplayers" layoutX="177.0" layoutY="171.0" prefHeight="17.0" prefWidth="166.0" text="NUMERO GIOCATORI" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
@@ -44,13 +44,13 @@
             <Image url="@../img/misc/closed_tiles_bag.png" />
          </image>
       </ImageView>
-      <RadioButton fx:id="twoplayer" layoutX="193.0" layoutY="192.0" mnemonicParsing="false" text="2" textFill="WHITE">
+      <RadioButton fx:id="twoplayers" layoutX="193.0" layoutY="192.0" mnemonicParsing="false" text="2" textFill="WHITE">
          <toggleGroup>
             <ToggleGroup fx:id="numgiocatori" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="threeplayer" layoutX="193.0" layoutY="223.0" mnemonicParsing="false" text="3" textFill="WHITE" toggleGroup="$numgiocatori" />
-      <RadioButton fx:id="fourplayer" layoutX="193.0" layoutY="255.0" mnemonicParsing="false" text="4" textFill="WHITE" toggleGroup="$numgiocatori" />
+      <RadioButton fx:id="threeplayers" layoutX="193.0" layoutY="223.0" mnemonicParsing="false" text="3" textFill="WHITE" toggleGroup="$numgiocatori" />
+      <RadioButton fx:id="fourplayers" layoutX="193.0" layoutY="255.0" mnemonicParsing="false" text="4" textFill="WHITE" toggleGroup="$numgiocatori" />
       <Label fx:id="loginStatus" layoutX="179.0" layoutY="292.0" prefHeight="17.0" prefWidth="166.0" text="Login staus: NOT LOGGED IN" />
    </children>
 </Pane>
