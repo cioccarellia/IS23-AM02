@@ -32,7 +32,7 @@ public class PlayerTilesOrderInsertionParser {
      */
     public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
-            Console.printnl();
+            Console.outln();
             Console.out("You have selected:");
             // printing tiles and prompting the user to sort them
             tiles.forEach(tile -> {
@@ -40,11 +40,11 @@ public class PlayerTilesOrderInsertionParser {
                 Console.out(" " + tileText);
             });
 
-            Console.printnl();
+            Console.outln();
             Console.out(">Give me your insertion order (the first one is the first to go in the bookshelf).");
-            Console.printnl();
+            Console.outln();
             Console.out("Format: Tile1, Tile2...");
-            Console.printnl();
+            Console.outln();
 
             String input = Console.in();
 
@@ -52,9 +52,9 @@ public class PlayerTilesOrderInsertionParser {
             String[] tokens = input.split(",");
 
             if (tokens.length != tiles.size()) {
-                Console.printnl();
+                Console.outln();
                 Console.out("Not valid, you need to order the selected tiles from before.");
-                Console.printnl();
+                Console.outln();
                 continue;
             }
 
@@ -75,15 +75,15 @@ public class PlayerTilesOrderInsertionParser {
                     }
                 } else {
                     Console.out("You need to write at least one tile.");
-                    Console.printnl();
+                    Console.outln();
                 }
             }
             if (orderedTiles.containsAll(tiles) && tiles.containsAll(orderedTiles)) {
                 return orderedTiles;
             } else {
-                Console.printnl();
+                Console.outln();
                 Console.out("Not valid, you need to order the selected tiles from before.");
-                Console.printnl();
+                Console.outln();
             }
         }
     }

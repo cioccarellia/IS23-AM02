@@ -114,7 +114,7 @@ public class CliLobby implements LobbyGateway {
 
                 Console.out(" @" + info.username() + ", " + info.status().toHumanReadable());
 
-                Console.printnl();
+                Console.outln();
             }
             return;
         }

@@ -18,13 +18,13 @@ public class PlayersListPrinter {
         PlayerNumber currentPlayer = game.getCurrentPlayerSession().getPlayerNumber();
 
         for (int i = 0; i < game.getPlayerCount(); i++) {
-            Console.printnl();
+            Console.outln();
             Console.out("  Player " +
                     game.getSessions().getByNumber(currentPlayer).getUsername());
-            Console.printnl();
+            Console.outln();
             Console.out("  Tokens: " +
                     game.getSessions().getByNumber(currentPlayer).getAcquiredTokens());
-            Console.printnl();
+            Console.outln();
 
             currentPlayer = TurnHelper.getNextPlayerNumber(currentPlayer, game.getGameMode());
         }

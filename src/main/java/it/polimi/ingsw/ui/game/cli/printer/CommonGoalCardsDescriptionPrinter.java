@@ -16,7 +16,7 @@ public class CommonGoalCardsDescriptionPrinter {
     public static void printTokens(Stack<Token> tokens) {
         Console.out("Remaining tokens:");
         tokens.forEach(token -> Console.out(" " + token.getPoints()));
-        Console.printnl();
+        Console.outln();
     }
 
     /**

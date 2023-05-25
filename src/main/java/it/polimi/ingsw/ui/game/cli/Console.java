@@ -28,7 +28,7 @@ public class Console {
         System.out.flush();
     }
 
-    public static void printnl() {
+    public static void outln() {
         System.out.println();
     }
 

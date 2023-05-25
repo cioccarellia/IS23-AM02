@@ -38,15 +38,15 @@ public class BookshelvesPrinter {
                 stream().
                 toList();
 
-        Console.printnl();
+        Console.outln();
         Console.out("Bookshelves:");
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < dim; i++) {
             Console.out("    0  1  2  3  4      ");
         }
 
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < rows; i++) {
             for (int k = 0; k < dim; k++) {
@@ -62,7 +62,7 @@ public class BookshelvesPrinter {
 
                 Console.out("  |  ");
             }
-            Console.printnl();
+            Console.outln();
         }
 
         for (int i = 0; i < dim; i++) {
@@ -83,7 +83,7 @@ public class BookshelvesPrinter {
             Console.out("  ");
         }
 
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < dim; i++) {
             Console.out("  Tokens:");
@@ -91,6 +91,6 @@ public class BookshelvesPrinter {
 
             Console.out(StringUtils.rightPad(x, 14, " "));
         }
-        Console.printnl();
+        Console.outln();
     }
 }

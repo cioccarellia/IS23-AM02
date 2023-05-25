@@ -78,14 +78,14 @@ public class CliApp implements GameGateway {
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
-                Console.printnl();
+                Console.outln();
                 BoardPrinter.print(model.getBoard());
                 CommonGoalCardsPrinter.print(model.getCommonGoalCards());
                 Console.printnl(2);
                 PersonalGoalCardPrinter.print(model.getSessions().getByUsername(owner).getPersonalGoalCard());
-                Console.printnl();
+                Console.outln();
                 BookshelvesPrinter.print(model);
-                Console.printnl();
+                Console.outln();
 
                 PlayerSession currentPlayer = model.getCurrentPlayerSession();
 
@@ -94,13 +94,17 @@ public class CliApp implements GameGateway {
                         case IDLE -> {
                         }
                         case SELECTING -> {
+                            gameSelection();
                         }
                         case INSERTING -> {
+                            gameInsertion();
                         }
                         case CHECKING -> {
 
                         }
                     }
+                } else {
+                    Console.out("@" + currentPlayer.getUsername() + " is " + currentPlayer.getPlayerCurrentGamePhase().toString().toLowerCase());
                 }
 
             }

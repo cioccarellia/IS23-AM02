@@ -22,14 +22,14 @@ public class CommonGoalCardsPrinter {
      * @param cards status of common goal cards, within the game that is being played
      */
     public static void print(List<CommonGoalCardStatus> cards) {
-        Console.printnl();
+        Console.outln();
         int dim = cards.size();
         for (CommonGoalCardStatus card : cards) {
             setExampleMatrices(card);
         }
 
         Console.out("Common goal cards (the tiles' disposition is just a general description of the card):");
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < dim; i++) {
             var x = exampleMatrices
@@ -43,13 +43,13 @@ public class CommonGoalCardsPrinter {
             Console.out(StringUtils.rightPad(x, 23, " "));
         }
 
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < dim; i++) {
             Console.out("    0  1  2  3  4      ");
         }
 
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < rows; i++) {
             for (int k = 0; k < dim; k++) {
@@ -66,10 +66,10 @@ public class CommonGoalCardsPrinter {
 
                 Console.out("     ");
             }
-            Console.printnl();
+            Console.outln();
         }
 
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < dim; i++) {
             Console.out("  Tokens:");
@@ -85,7 +85,7 @@ public class CommonGoalCardsPrinter {
             Console.out(StringUtils.rightPad(x, 14, " "));
         }
 
-        Console.printnl();
+        Console.outln();
 
     }
 

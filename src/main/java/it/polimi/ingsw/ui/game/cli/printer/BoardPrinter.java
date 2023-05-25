@@ -17,9 +17,9 @@ public class BoardPrinter {
      * @param board board that needs printing
      */
     public static void print(Board board) {
-        Console.printnl();
+        Console.outln();
         Console.out("   0  1  2  3  4  5  6  7  8 ");
-        Console.printnl();
+        Console.outln();
 
         for (int i = 0; i < dimension; i++) {
             Console.out(i);
@@ -40,9 +40,9 @@ public class BoardPrinter {
                 }
 
             }
-            Console.printnl();
+            Console.outln();
         }
 
-        Console.printnl();
+        Console.outln();
     }
 }

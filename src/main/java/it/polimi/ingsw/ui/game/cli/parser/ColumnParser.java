@@ -15,18 +15,18 @@ public class ColumnParser {
      */
     public static int scan(Tile[][] bookshelf, int tilesAmount) {
         while (true) {
-            Console.printnl();
+            Console.outln();
             Console.out("In which column would you like to insert the selected tiles?");
-            Console.printnl();
+            Console.outln();
 
             int column = Integer.parseInt(Console.in());
 
             if (column < 0 || column > cols) {
-                Console.printnl();
+                Console.outln();
                 Console.out("The column you selected is out of bounds, choose a number between 0 and 4.");
-                Console.printnl();
+                Console.outln();
             } else if (!itFits(bookshelf, tilesAmount, column)) {
-                Console.printnl();
+                Console.outln();
                 Console.out("You selected more tiles than there is space in this column. Change column.");
             } else
                 return column;
