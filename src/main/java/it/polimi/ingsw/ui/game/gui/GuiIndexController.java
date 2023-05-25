@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.config.GuiConfiguration;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -36,14 +35,9 @@ public class GuiIndexController extends Application implements GameGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiIndexController.class);
 
-    private static final int first = GuiConfiguration.getInstance().getFirst();
-    private static final int second = GuiConfiguration.getInstance().getSecond();
-    private static final int third = GuiConfiguration.getInstance().getThird();
-    private static final int fourth = GuiConfiguration.getInstance().getFourth();
-    private static final int fifth = GuiConfiguration.getInstance().getFifth();
-
-
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
+    private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
+
     private static int col = 0;
 
     @FXML
@@ -51,33 +45,37 @@ public class GuiIndexController extends Application implements GameGateway {
     @FXML
     public GridPane myBookShelf;
     @FXML
-    public GridPane player1BookShelf;
+    public GridPane player1BookShelf; //
     @FXML
-    public GridPane player2BookShelf;
+    public GridPane player2BookShelf; //
     @FXML
-    public GridPane player3BookShelf;
+    public GridPane player3BookShelf; //
     @FXML
-    public GridPane player4BookShelf;
+    public GridPane player4BookShelf; //
+    public List<GridPane> bookshelves = List.of(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
     @FXML
     public ImageView endGameToken;
     @FXML
-    public ImageView firstCommonGoalCardTopToken;
+    public ImageView firstCommonGoalCardTopToken; //
     @FXML
-    public ImageView secondCommonGoalCardTopToken;
+    public ImageView secondCommonGoalCardTopToken; //
+    public List<ImageView> topTokens = List.of(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
     @FXML
-    public ImageView firstCommonGoalCard;
+    public ImageView firstCommonGoalCard; //
     @FXML
-    public ImageView secondCommonGoalCard;
+    public ImageView secondCommonGoalCard; //
+    public List<ImageView> commonGoalCards = List.of(firstCommonGoalCard, secondCommonGoalCard);
     @FXML
     public ImageView personalGoalCard;
     @FXML
-    public Tab player1Button;
+    public Tab player1Button; //
     @FXML
-    public Tab player2Button;
+    public Tab player2Button; //
     @FXML
-    public Tab player3Button;
+    public Tab player3Button; //
     @FXML
-    public Tab player4Button;
+    public Tab player4Button; //
+    public List<Tab> playersButtons = List.of(player1Button, player2Button, player3Button, player4Button);
     @FXML
     public Button selectingButton;
     @FXML
@@ -85,31 +83,35 @@ public class GuiIndexController extends Application implements GameGateway {
     @FXML
     public ToggleGroup column;
     @FXML
-    public RadioButton column1;
+    public RadioButton column1; //
     @FXML
-    public RadioButton column2;
+    public RadioButton column2; //
     @FXML
-    public RadioButton column3;
+    public RadioButton column3; //
     @FXML
-    public RadioButton column4;
+    public RadioButton column4; //
     @FXML
-    public RadioButton column5;
+    public RadioButton column5; //
+    public List<RadioButton> columnButtons = List.of(column1, column2, column3, column4, column5);
     @FXML
-    public ImageView tile1Selected;
+    public ImageView tile1Selected; //
     @FXML
-    public ImageView tile2Selected;
+    public ImageView tile2Selected; //
     @FXML
-    public ImageView tile3Selected;
+    public ImageView tile3Selected; //
+    public List<ImageView> selectedTiles = List.of(tile1Selected, tile2Selected, tile3Selected);
     @FXML
-    public Label label1;
+    public Label label1; //
     @FXML
-    public Label label2;
+    public Label label2; //
     @FXML
-    public Label label3;
+    public Label label3; //
+    public List<Label> labels = List.of(label1, label2, label3);
     @FXML
-    public ImageView insertionCommonGoalCard1;
+    public ImageView insertionCommonGoalCard1; //
     @FXML
-    public ImageView insertionCommonGoalCard2;
+    public ImageView insertionCommonGoalCard2; //
+    public List<ImageView> insertionCommonGoalCard = List.of(insertionCommonGoalCard1, insertionCommonGoalCard2);
     @FXML
     public ImageView insertionPersonalGoalCard;
 
@@ -134,18 +136,26 @@ public class GuiIndexController extends Application implements GameGateway {
         model.onGameStarted();
         //GUI initialization
 
-        player1Button.setText(model.getSessions().playerSessions().get(first).getUsername());
-        player2Button.setText(model.getSessions().playerSessions().get(second).getUsername());
-        player3Button.setText(model.getSessions().playerSessions().get(third).getUsername());
-        player4Button.setText(model.getSessions().playerSessions().get(fourth).getUsername());
+        //todo
+        for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
+            playersButtons.get(i).setText(model.getSessions().playerSessions().get(i).getUsername());
+        }
 
         //PGC + CGC initialization
-        firstCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(first).getCommonGoalCard());
-        secondCommonGoalCard = scene.commonGoalCardUpdate(model.getCommonGoalCards().get(second).getCommonGoalCard());
+        //todo
+        for (int i = 0; i < commonGoalCardsAmount; i++) {
+            commonGoalCards.set(i, scene.commonGoalCardUpdate(model.getCommonGoalCards().get(i).getCommonGoalCard()));
+        }
+
+        //todo print the owner's personal goal card;
         personalGoalCard = scene.personalGoalCardUpdate(model);
-        //insertion scene PGC +CGC inizialization
-        insertionCommonGoalCard1 = insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(first).getCommonGoalCard());
-        insertionCommonGoalCard2 = insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(second).getCommonGoalCard());
+
+        //insertion scene PGC +CGC initialization
+        //to
+        for (int i = 0; i < commonGoalCardsAmount; i++) {
+            insertionCommonGoalCard.set(i, insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(i).getCommonGoalCard()));
+        }
+
         insertionPersonalGoalCard = insertionScene.personalGoalCardUpdate(model);
         //model update
         modelUpdate(model);
@@ -160,16 +170,22 @@ public class GuiIndexController extends Application implements GameGateway {
         myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
         //TODO change bookshelves, now it's printing always the same one; create id
-        player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
-        player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
-        player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
-        player4BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        for(int i = 0; i < model.getGameMode().maxPlayerAmount(); i++){
+            bookshelves.set(i, scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf()));
+        }
+
+        //player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        //player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        //player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        //player4BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
         // CGC token update
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
-        firstCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(first));
-        secondCommonGoalCardTopToken = scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(second));
 
+        //to
+        for(int i = 0; i < commonGoalCardsAmount; i++){
+            topTokens.set(i, scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(i)));
+        }
     }
 
     @Override
@@ -195,7 +211,7 @@ public class GuiIndexController extends Application implements GameGateway {
 
     /**
      * To be invoked when it's the player turn to select
-     * */
+     */
     public void gameSelection() {
         Set<Coordinate> selectedCoordinatees = new HashSet<>();
 
@@ -215,73 +231,39 @@ public class GuiIndexController extends Application implements GameGateway {
 
     /**
      * To be invoked when it's the player turn to insert
-     * */
+     */
     public void gameInsertion() {
         List<Tile> orderedTiles = new ArrayList<>();
 
-        column1.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column1);
-            col = first;
-        });
+        //todo
+        for(int i = 0; i < columnButtons.size(); i++){
+            RadioButton columnButton = columnButtons.get(i);
+            int value = i;
+            columnButton.setOnMouseClicked(mouseEvent -> {
+                column.selectToggle(columnButton);
+                col = value;
+            });
+        }
 
+        //todo
+        for(int i = 0; i < selectedTiles.size(); i++){
+            ImageView selTile = selectedTiles.get(i);
+            Label label = labels.get(i);
+            int value = i;
 
-        column2.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column2);
-            col = second;
-        });
-
-        column3.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column3);
-            col = third;
-        });
-
-        column4.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column4);
-            col = fourth;
-        });
-
-        column5.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column5);
-            col = fifth;
-        });
-
-        tile1Selected.setOnMouseClicked(mouseEvent -> {
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(second));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(third));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(fourth));
-            }
-        });
-        tile2Selected.setOnMouseClicked(mouseEvent -> {
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
-                label2.setText(String.valueOf(second));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
-                label2.setText(String.valueOf(third));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
-                label2.setText(String.valueOf(fourth));
-            }
-        });
-        tile3Selected.setOnMouseClicked(mouseEvent -> {
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
-                label3.setText(String.valueOf(second));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
-                label3.setText(String.valueOf(third));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
-                label3.setText(String.valueOf(fourth));
-            }
-        });
-
+            selTile.setOnMouseClicked(mouseEvent -> {
+                if (orderedTiles.size() == 0) {
+                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
+                    label.setText(String.valueOf(value + 1));
+                } else if (orderedTiles.size() == 1) {
+                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
+                    label.setText(String.valueOf(value + 2));
+                } else if (orderedTiles.size() == 2) {
+                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
+                    label.setText(String.valueOf(value + 3));
+                }
+            });
+        }
 
         insertingButton.setOnMouseClicked(mouseEvent -> {
             handler.onViewInsertion(col, orderedTiles);

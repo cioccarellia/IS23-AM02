@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.lobby.gui;
 
+import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,12 @@ import java.io.IOException;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class GuiLobby extends Application {
+
+    private final LobbyViewEventHandler handler;
+
+    public GuiLobby(LobbyViewEventHandler handler) {
+        this.handler = handler;
+    }
 
     @Override
     public void start(Stage lobbyStage) throws Exception {
