@@ -52,43 +52,66 @@ public class RankingController extends Application {
     @FXML
     public Label Personal4;
 
-Game model;
+    private final Game model;
+
+    public RankingController(Game game) {
+        this.model = game;
+    }
 
     @Override
     public void start(Stage primaryStage) {
 
-    }
-
-
-    public void onGameEnded() {
         //Setting winner player
         winnerPlayer.setText(model.getRankings().get(0).username());
-        //setting ranking
+
+        //setting ranking 2 players game mode
         Player1.setText(model.getRankings().get(0).username());
-        Player2.setText(model.getRankings().get(1).username());
-
         Total1.setText(String.valueOf(model.getRankings().get(0).total()));
+        Token1.setText(String.valueOf(model.getRankings().get(0).getTokenPoints()));
+        Bookshelf1.setText(String.valueOf(model.getRankings().get(0).getBookshelfPoints()));
+        Personal1.setText(String.valueOf(model.getRankings().get(0).getPersonalGoalCardsPoints()));
+
+        Player2.setText(model.getRankings().get(1).username());
         Total2.setText(String.valueOf(model.getRankings().get(1).total()));
+        Token2.setText(String.valueOf(model.getRankings().get(1).getTokenPoints()));
+        Bookshelf2.setText(String.valueOf(model.getRankings().get(1).getBookshelfPoints()));
+        Personal2.setText(String.valueOf(model.getRankings().get(1).getPersonalGoalCardsPoints()));
 
-        if(model.getRankings().size()==3) {
+
+        if (model.getRankings().size() == 3) {
             //3 players game mode
-            Player3.setText(model.getRankings().get(2).username());
 
+            //Player 3
+            Player3.setText(model.getRankings().get(2).username());
+            Total3.setText(String.valueOf(model.getRankings().get(2).total()));
+            Token3.setText(String.valueOf(model.getRankings().get(2).getTokenPoints()));
+            Bookshelf3.setText(String.valueOf(model.getRankings().get(2).getBookshelfPoints()));
+            Personal3.setText(String.valueOf(model.getRankings().get(2).getPersonalGoalCardsPoints()));
+
+            //Player 4
             Player4.setText(" ");
             Total4.setText(" ");
             Token4.setText(" ");
             Bookshelf4.setText(" ");
             Personal4.setText(" ");
 
-        }else if (model.getRankings().size()==4) {
+        } else if (model.getRankings().size() == 4) {
             //4 players game mode
-            Player3.setText(model.getRankings().get(2).username());
-            Total3.setText(" ");
-            Token3.setText(" ");
-            Bookshelf3.setText(" ");
-            Personal3.setText(" ");
 
+            //Player 3
+            Player3.setText(model.getRankings().get(2).username());
+            Total3.setText(String.valueOf(model.getRankings().get(2).total()));
+            Token3.setText(String.valueOf(model.getRankings().get(2).getTokenPoints()));
+            Bookshelf3.setText(String.valueOf(model.getRankings().get(2).getBookshelfPoints()));
+            Personal3.setText(String.valueOf(model.getRankings().get(2).getPersonalGoalCardsPoints()));
+
+            //Player 4
             Player4.setText(model.getRankings().get(3).username());
+            Total4.setText(String.valueOf(model.getRankings().get(3).total()));
+            Token4.setText(String.valueOf(model.getRankings().get(3).getTokenPoints()));
+            Bookshelf4.setText(String.valueOf(model.getRankings().get(3).getBookshelfPoints()));
+            Personal4.setText(String.valueOf(model.getRankings().get(3).getPersonalGoalCardsPoints()));
+
         }
 
     }
