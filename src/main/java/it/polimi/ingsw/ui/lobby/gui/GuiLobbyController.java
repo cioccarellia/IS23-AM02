@@ -47,6 +47,7 @@ public class GuiLobbyController implements LobbyGateway {
     public Label nplayers;
 
     GameMode gameMode;
+    String username;
 
     public GuiLobbyController(LobbyViewEventHandler handler) {
         this.server = handler;
@@ -105,7 +106,7 @@ public class GuiLobbyController implements LobbyGateway {
                     case USERNAME_ALREADY_IN_USE -> {
                         loginStatus.setText("loginStatus: Username already in use");
                         loginButton.setOnMouseClicked(mouseEvent -> {
-                            server.sendGameConnectionRequest(usernameField.getText());
+                            server.sendGameConnectionRequest(username);
                         });
 
                     }
@@ -140,7 +141,7 @@ public class GuiLobbyController implements LobbyGateway {
                     case INVALID_USERNAME -> {
                         loginStatus.setText("loginStatus: invalid Username");
                         loginButton.setOnMouseClicked(mouseEvent -> {
-                            server.sendGameConnectionRequest(usernameField.getText());
+                            server.sendGameConnectionRequest(username);
                         });
                     }
                 }
@@ -154,7 +155,6 @@ public class GuiLobbyController implements LobbyGateway {
 
         renderModelUpdate();
     }
-
 
 
     private void renderModelUpdate() {
@@ -174,7 +174,7 @@ public class GuiLobbyController implements LobbyGateway {
                     twoplayers.setSelected(true);
                     gameMode = GameMode.GAME_MODE_2_PLAYERS;
                 }
-                server.sendGameStartRequest(usernameField.getText(), gameMode);
+                server.sendGameStartRequest(username, gameMode);
             }
             case GAME_INITIALIZING -> {
 
@@ -189,7 +189,7 @@ public class GuiLobbyController implements LobbyGateway {
                 fourplayers.setDisable(true);
                 fourplayers.setOpacity(0);
 
-                server.sendGameConnectionRequest(usernameField.getText());
+                server.sendGameConnectionRequest(username);
             }
             case GAME_RUNNING -> {
                 // no operation required, controller handles this case
@@ -207,6 +207,10 @@ public class GuiLobbyController implements LobbyGateway {
         threeplayers.setOnMouseClicked(mouseEvent -> {
             gameMode = GameMode.GAME_MODE_4_PLAYERS;
         });
+    }
+
+    private void setTextFieldListener() {
+        username = usernameField.getText();
     }
 
     @Override
