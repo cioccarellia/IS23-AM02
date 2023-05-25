@@ -8,7 +8,6 @@ import java.util.Set;
 
 import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
 import static it.polimi.ingsw.model.game.GameStatus.RUNNING;
-import static it.polimi.ingsw.model.player.PlayerNumber.PLAYER_3;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameExceptionTests implements GameTester {
@@ -116,22 +115,6 @@ public class GameExceptionTests implements GameTester {
 
         assertTrue(actualMessage.contains(expectedMessage));
 
-    }
-
-    @Test
-    @DisplayName("Verify the function of playerHasNoMoreTurns, edge case #1")
-    public void test_playerHasNoMoreTurns_edgeCase_1() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
-
-        game.addPlayer(PLAYER_A);
-        game.addPlayer(PLAYER_B);
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> game.playerHasNoMoreTurns(PLAYER_3));
-
-        String expectedMessage = "Given number does not match to any session";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
     }
 
 }

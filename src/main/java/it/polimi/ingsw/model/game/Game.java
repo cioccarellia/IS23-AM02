@@ -120,11 +120,8 @@ public class Game implements ModelService {
         return sessions.getByUsername(username);
     }
 
-    /**
-     * @return the list of all players' usernames
-     */
-    public List<String> getPlayersUsernameList() {
-        return getSessions().playerSessions().stream().map(PlayerSession::getUsername).toList();
+    public PlayerSession getStartingPlayerSession() {
+        return sessions.getByNumber(startingPlayerNumber);
     }
 
     public PlayerSession getCurrentPlayerSession() {
@@ -134,7 +131,7 @@ public class Game implements ModelService {
     /**
      * @return how many players are in the current game
      */
-    public int getPlayersCurrentAmount() {
+    public int getPlayerCount() {
         return sessions.size();
     }
 
@@ -207,6 +204,7 @@ public class Game implements ModelService {
 
     // utils
 
+
     /**
      * Removes the remaining isolated tiles from the board, puts them back in the extractor, checks how many empty cells
      * there, it then extracts the amount of tiles needed and fills the board with them.
@@ -254,7 +252,7 @@ public class Game implements ModelService {
      *
      * @param number player's number
      */
-    public void playerHasNoMoreTurns(PlayerNumber number) {
+    private void playerHasNoMoreTurns(PlayerNumber number) {
         sessions.getByNumber(number).noMoreTurns = true;
     }
 
@@ -299,7 +297,7 @@ public class Game implements ModelService {
         }
 
         // Creating new player session
-        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(getPlayersCurrentAmount() + 1);
+        PlayerNumber newPlayerNumber = PlayerNumber.fromInt(getPlayerCount() + 1);
         PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
         PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
 
@@ -319,7 +317,7 @@ public class Game implements ModelService {
         logger.info("onGameStarted()");
         setGameStatus(RUNNING);
 
-        if (getPlayersCurrentAmount() != mode.maxPlayerAmount()) {
+        if (getPlayerCount() != mode.maxPlayerAmount()) {
             throw new IllegalStateException("Expected number of players (%d) differs from the actual number of players in game (%d)".formatted(mode.maxPlayerAmount(), sessions.size()));
         }
 

@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller.client;
 import it.polimi.ingsw.app.client.AppClient;
 import it.polimi.ingsw.app.client.layers.network.ClientNetworkLayer;
 import it.polimi.ingsw.app.client.layers.view.ViewFactory;
-import it.polimi.ingsw.app.client.layers.view.ViewLayer;
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
@@ -169,8 +168,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         ui = ViewFactory.createGameUi(config.mode(), game, this, ownerUsername);
 
         // schedules UI initialization on its own thread
-        ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
-
+        // ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
     }
 
     @Override
@@ -180,12 +178,12 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     @Override
     public synchronized void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
-
+        ui.onGameSelectionReply(turnResult);
     }
 
     @Override
     public synchronized void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
-
+        ui.onGameInsertionReply(turnResult);
     }
 
     @Override

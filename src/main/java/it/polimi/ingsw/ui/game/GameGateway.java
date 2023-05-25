@@ -1,10 +1,13 @@
 package it.polimi.ingsw.ui.game;
 
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
 
 import java.io.Serializable;
 
-public interface GameGateway extends Runnable, Serializable {
+public interface GameGateway extends Serializable {
 
     /**
      * Called when the game is started
@@ -17,17 +20,12 @@ public interface GameGateway extends Runnable, Serializable {
     void modelUpdate(Game game);
 
     /**
-     * Called to notify that it's the current player's turn to select
+     * Calls to notify about a previously-submitted selection attempt
      */
-    void gameSelection();
+    void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult);
 
     /**
-     * Called to notify that it's the current player's turn to insert
+     * Calls to notify about a previously-submitted insertion attempt
      */
-    void gameInsertion();
-
-    /**
-     * Called when the game ends
-     */
-    void onGameEnded();
+    void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult);
 }

@@ -1,9 +1,13 @@
 package it.polimi.ingsw.ui.game.cli;
 
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.score.PlayerScore;
+import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.parser.ColumnParser;
@@ -19,9 +23,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
-import static it.polimi.ingsw.model.game.GameStatus.RUNNING;
-
 public class CliApp implements GameGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
@@ -36,6 +37,8 @@ public class CliApp implements GameGateway {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
+
+        processModel();
     }
 
     /**
@@ -49,7 +52,7 @@ public class CliApp implements GameGateway {
 
         Console.out("Hi " + owner + "! Game has started, Enjoy the game and good luck!\n");
 
-        printGameModel();
+        processModel();
     }
 
     /**
@@ -60,55 +63,64 @@ public class CliApp implements GameGateway {
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
-        printGameModel();
+        processModel();
     }
 
     /**
      * Shows users' Bookshelves, updates Board, Common goal cards and Tokens, First Player and Current Player, Private
      * goal card
      */
-    public void printGameModel() {
+    public void processModel() {
         if (model == null) {
             Console.out("Void model.");
             return;
         }
 
-        if (model.getGameStatus() == RUNNING || (model.getGameStatus() == LAST_ROUND)) {
-
-            Console.printnl();
-            BoardPrinter.print(model.getBoard());
-
-            CommonGoalCardsPrinter.print(model.getCommonGoalCards());
-            Console.printnl(2);
-
-            if (model.getSessions().getByUsername(owner) != null) {
-                Console.out("Your personal goal card:\n");
-
+        switch (model.getGameStatus()) {
+            case RUNNING, LAST_ROUND -> {
+                Console.printnl();
+                BoardPrinter.print(model.getBoard());
+                CommonGoalCardsPrinter.print(model.getCommonGoalCards());
+                Console.printnl(2);
                 PersonalGoalCardPrinter.print(model.getSessions().getByUsername(owner).getPersonalGoalCard());
                 Console.printnl();
-            }
+                BookshelvesPrinter.print(model);
+                Console.printnl();
 
-            BookshelvesPrinter.print(model);
-            Console.printnl();
+                PlayerSession currentPlayer = model.getCurrentPlayerSession();
+
+                if (currentPlayer.getUsername().equals(owner)) {
+                    switch (currentPlayer.getPlayerCurrentGamePhase()) {
+                        case IDLE -> {
+                        }
+                        case SELECTING -> {
+                        }
+                        case INSERTING -> {
+                        }
+                        case CHECKING -> {
+
+                        }
+                    }
+                }
+
+            }
+            case ENDED -> onGameEnded();
+            case STANDBY -> onGameStandby();
         }
     }
 
     /**
-     * Calls model's onPlayerSelectionPhase in order have the current player selecting up to three tiles.
+     * To be invoked when it's the player turn to select
      */
-    @Override
     public void gameSelection() {
-        printGameModel();
-
         Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
 
         handler.onViewSelection(validCoordinates);
     }
 
     /**
-     * Inserts selected tiles inside current player's own Bookshelf, in the column they chose.
+     * To be invoked when it's the player turn to insert
      */
-    @Override
     public void gameInsertion() {
         int tilesSize = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles().size();
 
@@ -127,10 +139,35 @@ public class CliApp implements GameGateway {
         handler.onViewInsertion(column, orderedTiles);
     }
 
+
+    @Override
+    public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
+        switch (turnResult) {
+            case SingleResult.Failure<TileSelectionFailures> failure -> {
+
+            }
+            case SingleResult.Success<TileSelectionFailures> success -> {
+
+            }
+        }
+    }
+
+    @Override
+    public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
+        switch (turnResult) {
+            case SingleResult.Failure<BookshelfInsertionFailure> failure -> {
+
+            }
+            case SingleResult.Success<BookshelfInsertionFailure> success -> {
+
+            }
+        }
+    }
+
+
     /**
      * Shows ranking and announces the winner.
      */
-    @Override
     public void onGameEnded() {
         Console.out("""
                 The game has ended.
@@ -142,12 +179,7 @@ public class CliApp implements GameGateway {
         playersRanking.forEach(System.out::println);
     }
 
-    public void setHandler(GameViewEventHandler handler) {
-        this.handler = handler;
-    }
-
-    @Override
-    public void run() {
-        // app start
+    private void onGameStandby() {
+        Console.out("Game standby.");
     }
 }

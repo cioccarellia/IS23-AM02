@@ -23,7 +23,7 @@ public class BookshelvesPrinter {
      * @param game the game being played
      */
     public static void print(Game game) {
-        int dim = game.getPlayersCurrentAmount();
+        int dim = game.getPlayerCount();
 
         List<Tile[][]> bookshelves = game
                 .getSessions()

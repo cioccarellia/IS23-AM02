@@ -15,6 +15,8 @@ public class PersonalGoalCardPrinter {
      */
     public static void print(PersonalGoalCard personalGoalCard) {
 
+        Console.out("Your personal goal card:\n");
+
         Console.out("    0  1  2  3  4");
         Console.printnl();
         for (int i = 0; i < rows; i++) {

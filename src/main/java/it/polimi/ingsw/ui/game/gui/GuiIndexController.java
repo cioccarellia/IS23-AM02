@@ -1,6 +1,9 @@
 package it.polimi.ingsw.ui.game.gui;
 
 
+import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
+import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
@@ -169,8 +172,17 @@ public class GuiIndexController extends Application implements GameGateway {
 
     }
 
-    public Coordinate getSelectedCoordinates(Node tileNode) {
+    @Override
+    public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
 
+    }
+
+    @Override
+    public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
+
+    }
+
+    public Coordinate getSelectedCoordinates(Node tileNode) {
         Coordinate coordinate;
 
         Integer col = GridPane.getColumnIndex(tileNode);
@@ -181,9 +193,10 @@ public class GuiIndexController extends Application implements GameGateway {
         return coordinate;
     }
 
-    @Override
+    /**
+     * To be invoked when it's the player turn to select
+     * */
     public void gameSelection() {
-
         Set<Coordinate> selectedCoordinatees = new HashSet<>();
 
         board.setOnMouseClicked(mouseEvent -> {
@@ -194,16 +207,16 @@ public class GuiIndexController extends Application implements GameGateway {
         });
 
         selectingButton.setOnMouseClicked(mouseEvent -> {
-
             SceneManager.changeScene(SceneManager.getActualController(), "Insertion.fxml");
             handler.onViewSelection(selectedCoordinatees);
         });
 
     }
 
-    @Override
+    /**
+     * To be invoked when it's the player turn to insert
+     * */
     public void gameInsertion() {
-
         List<Tile> orderedTiles = new ArrayList<>();
 
         column1.setOnMouseClicked(mouseEvent -> {
@@ -277,18 +290,8 @@ public class GuiIndexController extends Application implements GameGateway {
     }
 
     @Override
-    public void onGameEnded() {
-
-    }
-
-    @Override
     public void start(Stage stage) throws Exception {
         // javafx start
-    }
-
-    @Override
-    public void run() {
-        // thread start
     }
 
 }
