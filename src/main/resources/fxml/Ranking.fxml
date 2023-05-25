@@ -23,7 +23,7 @@
                 <Font name="Dubai Light" size="18.0" />
             </font>
         </Label>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="136.0" prefHeight="73.0" prefWidth="200.0" text="PLAYER1" textAlignment="CENTER">
+        <Label fx:id="winnerPlayer" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="136.0" prefHeight="73.0" prefWidth="200.0" text="PLAYER1" textAlignment="CENTER">
             <font>
                 <Font size="24.0" />
             </font>

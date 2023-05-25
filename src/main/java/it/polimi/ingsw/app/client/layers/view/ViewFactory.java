@@ -9,7 +9,7 @@ import it.polimi.ingsw.ui.game.gui.GuiIndexController;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
-import it.polimi.ingsw.ui.lobby.cli.GuiLobby;
+import it.polimi.ingsw.ui.lobby.gui.GuiLobby;
 import org.jetbrains.annotations.NotNull;
 
 public class ViewFactory {
