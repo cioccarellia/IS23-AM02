@@ -5,7 +5,7 @@ import it.polimi.ingsw.app.model.PlayerInfo;
 import java.util.List;
 
 public class PlayerConnectionStatusUpdateEvent extends Response {
-    List<PlayerInfo> status;
+    final List<PlayerInfo> status;
 
     public PlayerConnectionStatusUpdateEvent(List<PlayerInfo> status) {
         this.status = status;

@@ -138,7 +138,7 @@ public class GuiResources {
         return personalGCMap.get(card);
     }
 
-    public static Tile getTileType(Image image){
+    public static Tile getTileType(Image image) {
         if (image.equals(book1) || image.equals(book2) || image.equals(book3)) {
             return BOOK;
         } else if (image.equals(cat1) || image.equals(cat2) || image.equals(cat3)) {

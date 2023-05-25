@@ -3,15 +3,12 @@ package it.polimi.ingsw.ui.game.gui;
 import it.polimi.ingsw.model.board.Tile;
 import javafx.scene.image.Image;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ImageExtractor {
-
     private static final List<Image> state = new ArrayList<>(GuiResources.tilesDomain);
-
-    public Set<Image> domain() {
-        return new HashSet<>(state);
-    }
 
     public static Image extract(Tile tileType) {
 

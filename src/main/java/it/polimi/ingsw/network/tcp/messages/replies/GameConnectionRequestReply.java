@@ -28,7 +28,7 @@ public class GameConnectionRequestReply extends Reply implements TypedSealable<G
                 '}';
     }
 
-    public GameConnectionRequestReply(@NotNull TypedResult<GameConnectionSuccess,GameConnectionError> status) {
+    public GameConnectionRequestReply(@NotNull TypedResult<GameConnectionSuccess, GameConnectionError> status) {
         this.gameConnectionValue = switch (status) {
             case TypedResult.Failure<GameConnectionSuccess, GameConnectionError> failure -> null;
             case TypedResult.Success<GameConnectionSuccess, GameConnectionError> success -> success.value();

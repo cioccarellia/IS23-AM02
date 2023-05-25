@@ -52,7 +52,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     /**
      * Lobby waiting room.
-     * */
+     */
     private LobbyGateway lobby;
 
     /**
@@ -94,10 +94,9 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
 
-
     /**
      * Current client has acquired its username
-     * */
+     */
     @Override
     public synchronized void authorize(String username, Game game) {
         // setup internal variables post-authorization
@@ -112,8 +111,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     public synchronized void terminate() {
 
     }
-
-
 
 
     /***     Lobby     ***/
@@ -137,17 +134,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     /***   ClientService   ***/

@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutorService;
 public class ClientNetworkLayer {
 
 
-
     public static void scheduleReceiverExecutionThread(@NotNull ClientGateway clientGateway, @NotNull ExecutorService executorService) {
         switch (clientGateway) {
             case TcpClientGateway tcpGateway -> executorService.execute(tcpGateway);
