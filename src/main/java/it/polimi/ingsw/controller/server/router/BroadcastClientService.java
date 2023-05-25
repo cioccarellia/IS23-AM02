@@ -14,6 +14,7 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -55,52 +56,112 @@ public class BroadcastClientService implements ClientService {
 
     @Override
     public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
-        forward(source -> source.onAcceptConnectionAndFinalizeUsername(string, game));
+        forward(source -> {
+            try {
+                source.onAcceptConnectionAndFinalizeUsername(string, game);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
-        forward(source -> source.onServerStatusUpdateEvent(status, playerInfo));
+        forward(source -> {
+            try {
+                source.onServerStatusUpdateEvent(status, playerInfo);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        forward(source -> source.onGameCreationReply(result));
+        forward(source -> {
+            try {
+                source.onGameCreationReply(result);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        forward(source -> source.onGameConnectionReply(result));
+        forward(source -> {
+            try {
+                source.onGameConnectionReply(result);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onGameStartedEvent(Game game) {
-        forward(source -> source.onGameStartedEvent(game));
+        forward(source -> {
+            try {
+                source.onGameStartedEvent(game);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onModelUpdateEvent(Game game) {
-        forward(source -> source.onModelUpdateEvent(game));
+        forward(source -> {
+            try {
+                source.onModelUpdateEvent(game);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
-        forward(source -> source.onGameSelectionTurnEvent(turnResult));
+        forward(source -> {
+            try {
+                source.onGameSelectionTurnEvent(turnResult);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
-        forward(source -> source.onGameInsertionTurnEvent(turnResult));
+        forward(source -> {
+            try {
+                source.onGameInsertionTurnEvent(turnResult);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
-        forward(source -> source.onPlayerConnectionStatusUpdateEvent(usernames));
+        forward(source -> {
+            try {
+                source.onPlayerConnectionStatusUpdateEvent(usernames);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
     }
 
     @Override
     public void onGameEndedEvent() {
-        forward(ClientService::onGameEndedEvent);
+        forward(clientService -> {
+            try {
+                clientService.onGameEndedEvent();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

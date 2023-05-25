@@ -95,7 +95,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      *
      * @apiNote to be called only when the user connection/creation request has been accepted.
      */
-    private synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) {
+    private synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) throws RemoteException {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
         service.onAcceptConnectionAndFinalizeUsername(username, game);
@@ -119,7 +119,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
     @Override
-    public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) {
+    public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) throws RemoteException {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
 
         if (serverStatus != NO_GAME_STARTED) {
@@ -163,7 +163,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     // Creates a connection between client and server
     @Override
-    public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) {
+    public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) throws RemoteException {
         logger.info("gameConnectionRequest(username={}, protocol={}, remoteService={})", username, protocol, remoteService);
 
         assert connectionsManager.size() <= maxPlayerAmount;
@@ -264,7 +264,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
     @Override
-    public synchronized void gameSelectionTurnResponse(String username, Set<Coordinate> selection) {
+    public synchronized void gameSelectionTurnResponse(String username, Set<Coordinate> selection) throws RemoteException {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
         connectionsManager.registerInteraction(username);
 
@@ -291,7 +291,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
     @Override
-    public synchronized void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) {
+    public synchronized void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException {
         logger.info("onPlayerBookshelfTileInsertionRequest(username={}, tiles={}, column={})", username, tiles, column);
         connectionsManager.registerInteraction(username);
 
@@ -368,18 +368,23 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     @Override
     public void onConnectionChange() {
-        if (connectionsManager.isAnyClientClosed()) {
-            throw new IllegalStateException();
-        }
+        try {
 
-        if (connectionsManager.isAnyClientDisconnected()) {
-            router.broadcastExcluding(
-                    connectionsManager.getDisconnectedClientUsernames()
-            ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-        } else {
-            // all clients are back online, resend model and server status. Maybe make appropriate request
-            router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-            router.broadcast().onModelUpdateEvent(game);
+            if (connectionsManager.isAnyClientClosed()) {
+                throw new IllegalStateException();
+            }
+
+            if (connectionsManager.isAnyClientDisconnected()) {
+                router.broadcastExcluding(
+                        connectionsManager.getDisconnectedClientUsernames()
+                ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+            } else {
+                // all clients are back online, resend model and server status. Maybe make appropriate request
+                router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+                router.broadcast().onModelUpdateEvent(game);
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }

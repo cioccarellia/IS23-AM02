@@ -16,6 +16,7 @@ import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
 
+import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -113,47 +114,83 @@ public class ClientConnection implements ClientService {
 
     @Override
     public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
-        service().onAcceptConnectionAndFinalizeUsername(string, game);
+        try {
+            service().onAcceptConnectionAndFinalizeUsername(string, game);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
-        service().onServerStatusUpdateEvent(status, playerInfo);
+        try {
+            service().onServerStatusUpdateEvent(status, playerInfo);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        service().onGameCreationReply(result);
+        try {
+            service().onGameCreationReply(result);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        service().onGameConnectionReply(result);
+        try {
+            service().onGameConnectionReply(result);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onGameStartedEvent(Game game) {
-        service().onGameStartedEvent(game);
+        try {
+            service().onGameStartedEvent(game);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onModelUpdateEvent(Game game) {
-        service().onModelUpdateEvent(game);
+        try {
+            service().onModelUpdateEvent(game);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
-        service().onGameSelectionTurnEvent(turnResult);
+        try {
+            service().onGameSelectionTurnEvent(turnResult);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
-        service().onGameInsertionTurnEvent(turnResult);
+        try {
+            service().onGameInsertionTurnEvent(turnResult);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
-        service().onPlayerConnectionStatusUpdateEvent(usernames);
+        try {
+            service().onPlayerConnectionStatusUpdateEvent(usernames);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

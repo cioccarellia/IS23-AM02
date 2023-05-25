@@ -39,8 +39,8 @@ public class SessionManager {
     /**
      * Returns a collection containing the sessions
      */
-    public Collection<PlayerSession> values() {
-        return map.values();
+    public List<PlayerSession> values() {
+        return map.values().stream().toList();
     }
 
     /**

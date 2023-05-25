@@ -13,6 +13,7 @@ import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class GuiLobby implements LobbyGateway {
 
     private final LobbyViewEventHandler handler;
@@ -35,6 +36,7 @@ public class GuiLobby implements LobbyGateway {
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
         if (isKilled)
             return;
+
         currentState = status;
         this.playerInfo = playerInfo;
 

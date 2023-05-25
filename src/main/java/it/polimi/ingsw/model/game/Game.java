@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.game;
 
 import com.google.gson.annotations.Expose;
-import it.polimi.ingsw.groupfinder.Group;
-import it.polimi.ingsw.groupfinder.GroupFinder;
 import it.polimi.ingsw.model.ModelService;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
@@ -15,6 +13,8 @@ import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
+import it.polimi.ingsw.model.game.score.PlayerScore;
+import it.polimi.ingsw.model.game.score.ScoreBreakdown;
 import it.polimi.ingsw.model.game.session.SessionManager;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.game.GameStatus.*;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
@@ -456,51 +455,24 @@ public class Game implements ModelService {
      *
      * @return the players' ranking
      */
-    public List<Pair<PlayerNumber, Integer>> calculateRanking() {
-        List<Pair<PlayerNumber, Integer>> playersScore = new ArrayList<>();
+    public List<PlayerScore> getRankings() {
+        List<PlayerScore> scores = new ArrayList<>();
+        List<PlayerSession> players = sessions.values();
 
-        List<PlayerSession> players = sessions.getNumberMap().values().stream().toList();
-        for (int i = 0; i < players.size(); i++) {
-            int points = 0;
-            points += players.get(i).calculateCurrentPoints();
-            points += players.get(i).calculatePersonalGoalCardPoints(getCurrentPlayerSession());
+        for (PlayerSession player : players) {
+            int tokenPoints = player.calculateCurrentTokenPoints();
+            int personalGoalCardPoints = player.calculateCurrentPersonalGoalCardPoints();
+            int bookshelfGroupPoints = player.calculateBookshelfGroupPoints();
 
-            GroupFinder groupFinder = new GroupFinder(getCurrentPlayerSession().getBookshelf().getShelfMatrix());
-            List<Group> groups = groupFinder.computeGroupPartition();
-            List<Integer> groupsSize = groups.stream().map(group -> groups.size()).toList();
-
-            for (int j = 0; j < groups.size(); j++) {
-                assert groupsSize.get(i) >= 0;
-                switch (groupsSize.get(i)) {
-                    case 0, 1, 2:
-                        break;
-                    case 3:
-                        points += 2;
-                        break;
-                    case 4:
-                        points += 3;
-                        break;
-                    case 5:
-                        points += 5;
-                        break;
-                    case 6:
-                        points += 8;
-                        break;
-                    default:
-                        points += 8;
-                        break;
-                }
-            }
-
-            playersScore.add(new Pair<>(players.get(i).getPlayerNumber(), points));
+            ScoreBreakdown breakdown = new ScoreBreakdown(tokenPoints, personalGoalCardPoints, bookshelfGroupPoints);
+            scores.add(new PlayerScore(player.getUsername(), player.getAcquiredTokens(), breakdown));
         }
 
-        return playersScore.stream().sorted(comparing(Pair::getValue)).collect(Collectors.toList());
+        return scores.stream().sorted(comparing(PlayerScore::total)).toList();
     }
 
     @Override
     public void onGameEnded() {
 
     }
-
 }

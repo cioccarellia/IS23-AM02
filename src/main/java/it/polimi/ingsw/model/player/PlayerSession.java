@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.player;
 
+import it.polimi.ingsw.groupfinder.Group;
+import it.polimi.ingsw.groupfinder.GroupFinder;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
@@ -101,41 +103,78 @@ public class PlayerSession {
     /**
      * Calculates all the points associated to a specific token given by Token Enumeration
      */
-    public int calculateCurrentPoints() {
+    public int calculateCurrentTokenPoints() {
         return acquiredTokens.stream().mapToInt(Token::getPoints).sum();
     }
 
-    public int calculatePersonalGoalCardPoints(PlayerSession player) {
-        int counter = 0;
-        Tile[][] bookshelf = player.getBookshelf().getShelfMatrix();
-        Tile[][] personalGoalCard = player.getPersonalGoalCard().getShelfPointMatrix();
+    public int calculateCurrentPersonalGoalCardPoints() {
+        Tile[][] bookshelf = getBookshelf().getShelfMatrix();
+        Tile[][] personalGoalCard = getPersonalGoalCard().getShelfPointMatrix();
+
+        int points = 0;
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (personalGoalCard[i][j] == bookshelf[i][j]) {
-                    counter++;
+                    points++;
                 }
             }
         }
 
-        switch (counter) {
-            case 0:
+        switch (points) {
+            case 0 -> {
                 return 0;
-            case 1:
+            }
+            case 1 -> {
                 return 1;
-            case 2:
+            }
+            case 2 -> {
                 return 2;
-            case 3:
+            }
+            case 3 -> {
                 return 4;
-            case 4:
+            }
+            case 4 -> {
                 return 6;
-            case 5:
+            }
+            case 5 -> {
                 return 9;
-            case 6:
+            }
+            case 6 -> {
                 return 12;
+            }
+            default -> throw new IllegalArgumentException("Expected a number between 0 and 6.");
         }
-        throw new IllegalArgumentException("Expected a number between 0 and 6.");
     }
 
+    public int calculateBookshelfGroupPoints() {
+        int points = 0;
 
+        GroupFinder groupFinder = new GroupFinder(getBookshelf().getShelfMatrix());
+        List<Group> groups = groupFinder.computeGroupPartition();
+
+        for (Group g : groups) {
+            switch (g.size()) {
+                case 0, 1, 2:
+                    break;
+                case 3:
+                    points += 2;
+                    break;
+                case 4:
+                    points += 3;
+                    break;
+                case 5:
+                    points += 5;
+                    break;
+                case 6:
+                    points += 8;
+                    break;
+                default:
+                    points += 8;
+                    break;
+            }
+        }
+
+        return points;
+    }
 }

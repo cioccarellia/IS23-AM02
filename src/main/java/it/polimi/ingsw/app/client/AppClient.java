@@ -55,6 +55,7 @@ public class AppClient implements Runnable {
 
         // creates the gateway (to communicate with server) and the controller (which uses the gateway)
         this.gateway = ClientGatewayFactory.create(config.protocol(), serverHost, serverPort);
+
         this.controller = new ClientController(gateway, config);
 
         // injects the current controller inside the network reference for async callbacks

@@ -12,9 +12,11 @@ import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.Game;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 
-public interface ClientService {
+public interface ClientService extends Remote {
 
     String NAME = "ClientService";
 
@@ -25,36 +27,36 @@ public interface ClientService {
      * Communicates to the client that it has received the username
      */
     @ClientFunction
-    void onAcceptConnectionAndFinalizeUsername(String string, Game game);
+    void onAcceptConnectionAndFinalizeUsername(String string, Game game) throws RemoteException;
 
     @ClientFunction
-    void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo);
+    void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) throws RemoteException;
 
     @ClientFunction
-    void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result);
+    void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) throws RemoteException;
 
     @ClientFunction
-    void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result);
+    void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) throws RemoteException;
 
     @ClientFunction
-    void onGameStartedEvent(Game game);
+    void onGameStartedEvent(Game game) throws RemoteException;
 
 
     // Running
     @ClientFunction
-    void onModelUpdateEvent(Game game);
+    void onModelUpdateEvent(Game game) throws RemoteException;
 
     @ClientFunction
-    void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult);
+    void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) throws RemoteException;
 
     @ClientFunction
-    void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult);
+    void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) throws RemoteException;
 
 
     // Connection - Disconnection
     @ClientFunction
-    void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames);
+    void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) throws RemoteException;
 
     @ClientFunction
-    void onGameEndedEvent();
+    void onGameEndedEvent() throws RemoteException;
 }

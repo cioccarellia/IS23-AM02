@@ -3,7 +3,7 @@ package it.polimi.ingsw.ui.game.cli;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.player.PlayerNumber;
+import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.parser.ColumnParser;
@@ -13,7 +13,6 @@ import it.polimi.ingsw.ui.game.cli.printer.BoardPrinter;
 import it.polimi.ingsw.ui.game.cli.printer.BookshelvesPrinter;
 import it.polimi.ingsw.ui.game.cli.printer.CommonGoalCardsPrinter;
 import it.polimi.ingsw.ui.game.cli.printer.PersonalGoalCardPrinter;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +137,7 @@ public class CliApp implements GameGateway {
                 Here's the player's ranking with their points:
                 """);
 
-        List<Pair<PlayerNumber, Integer>> playersRanking = model.calculateRanking();
+        List<PlayerScore> playersRanking = model.getRankings();
 
         playersRanking.forEach(System.out::println);
     }
