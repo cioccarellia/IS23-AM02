@@ -115,14 +115,13 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     @Override
     public void sendStatusUpdateRequest() {
         try {
-            gateway.serverStatusRequest( this);
+            gateway.serverStatusRequest(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     /***     Lobby     ***/
-
 
 
     @Override

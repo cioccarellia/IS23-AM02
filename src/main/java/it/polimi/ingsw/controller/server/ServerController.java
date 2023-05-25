@@ -416,7 +416,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
-
                 /**  Model Update  ***/
                 // we have to check if the current player is disconnected.
                 // if it is, and we are not in standby, we need to move forward

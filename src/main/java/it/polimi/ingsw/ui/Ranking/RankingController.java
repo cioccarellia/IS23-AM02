@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ui.Ranking;
 
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.ui.game.GameGateway;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

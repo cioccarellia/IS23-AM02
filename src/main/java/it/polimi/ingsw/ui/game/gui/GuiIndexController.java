@@ -45,36 +45,36 @@ public class GuiIndexController extends Application implements GameGateway {
     @FXML
     public GridPane myBookShelf;
     @FXML
-    public GridPane player1BookShelf; //
+    public GridPane player1BookShelf;
     @FXML
-    public GridPane player2BookShelf; //
+    public GridPane player2BookShelf;
     @FXML
-    public GridPane player3BookShelf; //
+    public GridPane player3BookShelf;
     @FXML
-    public GridPane player4BookShelf; //
+    public GridPane player4BookShelf;
     public List<GridPane> bookshelves = List.of(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
     @FXML
     public ImageView endGameToken;
     @FXML
-    public ImageView firstCommonGoalCardTopToken; //
+    public ImageView firstCommonGoalCardTopToken;
     @FXML
-    public ImageView secondCommonGoalCardTopToken; //
+    public ImageView secondCommonGoalCardTopToken;
     public List<ImageView> topTokens = List.of(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
     @FXML
-    public ImageView firstCommonGoalCard; //
+    public ImageView firstCommonGoalCard;
     @FXML
-    public ImageView secondCommonGoalCard; //
+    public ImageView secondCommonGoalCard;
     public List<ImageView> commonGoalCards = List.of(firstCommonGoalCard, secondCommonGoalCard);
     @FXML
     public ImageView personalGoalCard;
     @FXML
-    public Tab player1Button; //
+    public Tab player1Button;
     @FXML
-    public Tab player2Button; //
+    public Tab player2Button;
     @FXML
-    public Tab player3Button; //
+    public Tab player3Button;
     @FXML
-    public Tab player4Button; //
+    public Tab player4Button;
     public List<Tab> playersButtons = List.of(player1Button, player2Button, player3Button, player4Button);
     @FXML
     public Button selectingButton;
@@ -83,34 +83,34 @@ public class GuiIndexController extends Application implements GameGateway {
     @FXML
     public ToggleGroup column;
     @FXML
-    public RadioButton column1; //
+    public RadioButton column1;
     @FXML
-    public RadioButton column2; //
+    public RadioButton column2;
     @FXML
-    public RadioButton column3; //
+    public RadioButton column3;
     @FXML
-    public RadioButton column4; //
+    public RadioButton column4;
     @FXML
-    public RadioButton column5; //
+    public RadioButton column5;
     public List<RadioButton> columnButtons = List.of(column1, column2, column3, column4, column5);
     @FXML
-    public ImageView tile1Selected; //
+    public ImageView tile1Selected;
     @FXML
-    public ImageView tile2Selected; //
+    public ImageView tile2Selected;
     @FXML
-    public ImageView tile3Selected; //
+    public ImageView tile3Selected;
     public List<ImageView> selectedTiles = List.of(tile1Selected, tile2Selected, tile3Selected);
     @FXML
-    public Label label1; //
+    public Label label1;
     @FXML
-    public Label label2; //
+    public Label label2;
     @FXML
-    public Label label3; //
+    public Label label3;
     public List<Label> labels = List.of(label1, label2, label3);
     @FXML
-    public ImageView insertionCommonGoalCard1; //
+    public ImageView insertionCommonGoalCard1;
     @FXML
-    public ImageView insertionCommonGoalCard2; //
+    public ImageView insertionCommonGoalCard2;
     public List<ImageView> insertionCommonGoalCard = List.of(insertionCommonGoalCard1, insertionCommonGoalCard2);
     @FXML
     public ImageView insertionPersonalGoalCard;
@@ -121,7 +121,7 @@ public class GuiIndexController extends Application implements GameGateway {
     private final String owner;
 
     public Scene scene;
-    public Scene insertionScene; //to remeber that insertion scene needs an inzialization
+    public Scene insertionScene; //to remember that insertion scene needs an initialization
 
 
     public GuiIndexController(Game model, GameViewEventHandler handler, String owner) {
@@ -170,7 +170,7 @@ public class GuiIndexController extends Application implements GameGateway {
         myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
         //TODO change bookshelves, now it's printing always the same one; create id
-        for(int i = 0; i < model.getGameMode().maxPlayerAmount(); i++){
+        for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
             bookshelves.set(i, scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf()));
         }
 
@@ -183,7 +183,7 @@ public class GuiIndexController extends Application implements GameGateway {
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
 
         //to
-        for(int i = 0; i < commonGoalCardsAmount; i++){
+        for (int i = 0; i < commonGoalCardsAmount; i++) {
             topTokens.set(i, scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(i)));
         }
     }
@@ -236,7 +236,7 @@ public class GuiIndexController extends Application implements GameGateway {
         List<Tile> orderedTiles = new ArrayList<>();
 
         //todo
-        for(int i = 0; i < columnButtons.size(); i++){
+        for (int i = 0; i < columnButtons.size(); i++) {
             RadioButton columnButton = columnButtons.get(i);
             int value = i;
             columnButton.setOnMouseClicked(mouseEvent -> {
@@ -246,7 +246,7 @@ public class GuiIndexController extends Application implements GameGateway {
         }
 
         //todo
-        for(int i = 0; i < selectedTiles.size(); i++){
+        for (int i = 0; i < selectedTiles.size(); i++) {
             ImageView selTile = selectedTiles.get(i);
             Label label = labels.get(i);
             int value = i;

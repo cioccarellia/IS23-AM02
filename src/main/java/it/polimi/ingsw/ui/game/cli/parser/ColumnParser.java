@@ -12,7 +12,7 @@ public class ColumnParser {
     private static final int cols = BookshelfConfiguration.getInstance().cols();
 
     /**
-     * @param bookshelf   current player's bookshelf
+     * @param bookshelf     current player's bookshelf
      * @param selectedTiles the tiles the player wants to insert in their bookshelf
      * @return the column the player chose
      */

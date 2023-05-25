@@ -30,7 +30,7 @@ public class PlayerSession {
 
     /**
      * Keeps track of the game phase for the current user
-     * */
+     */
     private PlayerCurrentGamePhase playerCurrentGamePhase;
 
     /**
@@ -41,7 +41,7 @@ public class PlayerSession {
 
     /**
      * Flags whether the current user has any more turns to play
-     * */
+     */
     public boolean noMoreTurns = false;
 
     // If the player is after the selection phase, its selection is saved here

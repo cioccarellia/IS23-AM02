@@ -12,13 +12,16 @@ public record PlayerScore(
     public int total() {
         return breakdown.bookshelfGroupPoints() + breakdown.tokenPoints() + breakdown.personalGoalCardPoints();
     }
-    public int getBookshelfPoints(){
+
+    public int getBookshelfPoints() {
         return breakdown.bookshelfGroupPoints();
     }
-    public int getTokenPoints(){
+
+    public int getTokenPoints() {
         return breakdown.tokenPoints();
     }
-    public int getPersonalGoalCardsPoints(){
+
+    public int getPersonalGoalCardsPoints() {
         return breakdown.personalGoalCardPoints();
     }
 }
