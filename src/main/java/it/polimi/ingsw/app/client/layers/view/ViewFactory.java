@@ -31,7 +31,7 @@ public class ViewFactory {
                 return new CliLobby(handler);
             }
             case GUI -> {
-                return new GuiLobby(handler);
+                return (LobbyGateway) new GuiLobby(handler);
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }

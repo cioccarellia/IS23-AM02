@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
+import it.polimi.ingsw.model.player.PlayerNumber;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -62,11 +63,11 @@ public class Scene {
         return matrix;
     }
 
-    public ImageView personalGoalCardUpdate(Game game) {
+    public ImageView personalGoalCardUpdate(Game game, String owner) {
+
         GuiResources resources = new GuiResources();
         ImageView image = new ImageView();
-        //TODO capire se current player va bene, perché dovrebbe essere il giocatore stesso a vedere la propria carta anche se non current player
-        PersonalGoalCard id = game.getCurrentPlayerSession().getPersonalGoalCard();
+        PersonalGoalCard id = game.getSessions().getByUsername(owner).getPersonalGoalCard();
 
         image.setImage(GuiResources.getPersonalGC(id));
         return image;

@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.gui.GuiInsertionController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.gui.GuiIndexController">
     <children>
         <ImageView fitHeight="411.0" fitWidth="613.0" layoutX="-5.0" layoutY="-6.0">
             <image>
                 <Image url="@../img/misc/page_base.jpg" />
             </image>
         </ImageView>
-        <Button fx:id="insertingButton" layoutX="532.0" layoutY="351.0" mnemonicParsing="false" onAction="#gameInsertion" onMouseClicked="#insertButton" text="INSERT" textFill="#e06a2f" />
+        <Button fx:id="insertingButton" layoutX="532.0" layoutY="351.0" mnemonicParsing="false" text="INSERT" textFill="#e06a2f" />
         <Label fx:id="titolo" layoutX="208.0" layoutY="14.0" prefHeight="53.0" prefWidth="215.0" text="INSERTION" textFill="#e06a2f">
             <font>
                 <Font name="Book Antiqua" size="36.0" />
@@ -53,65 +53,55 @@
                 <Image url="@../img/tiles/trophy1.1.png" />
             </image>
         </ImageView>
-        <Pane fx:id="t00" layoutX="215.0" layoutY="151.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <Pane fx:id="t01" layoutX="258.0" layoutY="151.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <Pane fx:id="t02" layoutX="302.0" layoutY="152.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t03" layoutX="342.0" layoutY="151.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t04" layoutX="390.0" layoutY="152.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t10" layoutX="215.0" layoutY="184.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <Pane fx:id="t11" layoutX="258.0" layoutY="183.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t12" layoutX="299.0" layoutY="184.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <Pane fx:id="t13" layoutX="342.0" layoutY="188.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <Pane fx:id="t14" layoutX="384.0" layoutY="184.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t20" layoutX="215.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t21" layoutX="258.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t22" layoutX="302.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t23" layoutX="342.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t24" layoutX="384.0" layoutY="222.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t30" layoutX="215.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t31" layoutX="258.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t32" layoutX="301.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t33" layoutX="342.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t34" layoutX="384.0" layoutY="256.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t44" layoutX="384.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t43" layoutX="342.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t42" layoutX="302.0" layoutY="288.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t41" layoutX="258.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t40" layoutX="215.0" layoutY="290.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t50" layoutX="215.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t51" layoutX="258.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t52" layoutX="299.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t53" layoutX="342.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
-
-        <HBox fx:id="t54" layoutX="384.0" layoutY="324.0" prefHeight="34.0" prefWidth="32.0" />
+        <GridPane fx:id="insertionBookshelf" layoutX="213.0" layoutY="152.0" prefHeight="207.0" prefWidth="207.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="199.5" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="194.5" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="36.5" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="42.5" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <ImageView id="Player1Tile23" fitHeight="34.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                <ImageView id="Player1Tile01" fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                <ImageView id="Player1Tile02" fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                <ImageView id="Player1Tile03" fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                <ImageView id="Player1Tile04" fitHeight="51.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                <ImageView id="Player1Tile10" fitHeight="37.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                <ImageView id="Player1Tile11" fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ImageView id="Player1Tile12" fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <ImageView id="Player1Tile13" fitHeight="34.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <ImageView id="Player1Tile14" fitHeight="37.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <ImageView id="Player1Tile20" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+                <ImageView id="Player1Tile21" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <ImageView id="Player1Tile54" fitHeight="45.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                <ImageView id="Player1Tile22" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <ImageView id="Player1Tile24" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                <ImageView id="Player1Tile30" fitHeight="36.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
+                <ImageView id="Player1Tile31" fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <ImageView id="Player1Tile32" fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <ImageView id="Player1Tile33" fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                <ImageView id="Player1Tile34" fitHeight="34.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                <ImageView id="Player1Tile40" fitHeight="36.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+                <ImageView id="Player1Tile41" fitHeight="36.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <ImageView id="Player1Tile42" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                <ImageView id="Player1Tile43" fitHeight="37.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                <ImageView id="Player1Tile44" fitHeight="37.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                <ImageView id="Player1Tile50" fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
+                <ImageView id="Player1Tile51" fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <ImageView id="Player1Tile52" fitHeight="37.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                <ImageView id="Player1Tile53" fitHeight="37.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                <ImageView id="Player1Tile00" fitHeight="42.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+        </GridPane>
         <RadioButton fx:id="column1" layoutX="218.0" layoutY="101.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="81.0" text="↓" textFill="#e06a2f">
          <toggleGroup>
             <ToggleGroup fx:id="column" />
@@ -126,8 +116,9 @@
             </image>
         </ImageView>
       <Label fx:id="label1" layoutX="42.0" layoutY="110.0" text="1" textAlignment="CENTER" />
-      <Label fx:id="label2" layoutX="97.0" layoutY="110.0" text="2" />
-      <Label fx:id="label3" layoutX="153.0" layoutY="110.0" text="3" />
+      <Label fx:id="label2" layoutX="97.0" layoutY="110.0" text="2" textAlignment="CENTER" />
+      <Label fx:id="label3" layoutX="153.0" layoutY="110.0" text="3" textAlignment="CENTER" />
+        <Label fx:id="insertionStatus" layoutX="29.0" layoutY="368.0" prefHeight="17.0" prefWidth="111.0" text="INSERION STATUS" textFill="WHITE" />
 
     </children>
 </Pane>

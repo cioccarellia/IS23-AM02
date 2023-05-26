@@ -2,6 +2,7 @@ package it.polimi.ingsw.ui.game.gui;
 
 
 import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.SingleResult.Failure;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
@@ -28,9 +29,7 @@ import java.util.Set;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 
 
-/**
- * NO ASTRATTA
- **/
+
 public class GuiIndexController extends Application implements GameGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiIndexController.class);
@@ -39,6 +38,8 @@ public class GuiIndexController extends Application implements GameGateway {
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
 
     private static int col = 0;
+    private final List<Tile> orderedTiles = new ArrayList<>();
+    private final Set<Coordinate> selectedCoordinates = new HashSet<>();
 
     @FXML
     public GridPane board;
@@ -64,6 +65,7 @@ public class GuiIndexController extends Application implements GameGateway {
     public ImageView firstCommonGoalCard;
     @FXML
     public ImageView secondCommonGoalCard;
+
     public List<ImageView> commonGoalCards = List.of(firstCommonGoalCard, secondCommonGoalCard);
     @FXML
     public ImageView personalGoalCard;
@@ -92,21 +94,19 @@ public class GuiIndexController extends Application implements GameGateway {
     public RadioButton column4;
     @FXML
     public RadioButton column5;
-    public List<RadioButton> columnButtons = List.of(column1, column2, column3, column4, column5);
     @FXML
     public ImageView tile1Selected;
     @FXML
     public ImageView tile2Selected;
     @FXML
     public ImageView tile3Selected;
-    public List<ImageView> selectedTiles = List.of(tile1Selected, tile2Selected, tile3Selected);
+    public List<ImageView> insertionTileSelected = List.of(tile1Selected, tile2Selected, tile3Selected);
     @FXML
     public Label label1;
     @FXML
     public Label label2;
     @FXML
     public Label label3;
-    public List<Label> labels = List.of(label1, label2, label3);
     @FXML
     public ImageView insertionCommonGoalCard1;
     @FXML
@@ -114,9 +114,17 @@ public class GuiIndexController extends Application implements GameGateway {
     public List<ImageView> insertionCommonGoalCard = List.of(insertionCommonGoalCard1, insertionCommonGoalCard2);
     @FXML
     public ImageView insertionPersonalGoalCard;
+    @FXML
+    public Label Status;
+    @FXML
+    public Label CurrentPlayer;
+    @FXML
+    public Label insertionStatus;
+    @FXML
+    public GridPane insertionBookshelf;
 
 
-    private final GameViewEventHandler handler;
+    private final GameViewEventHandler server;
     public Game model;
     private final String owner;
 
@@ -126,7 +134,7 @@ public class GuiIndexController extends Application implements GameGateway {
 
     public GuiIndexController(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
-        this.handler = handler;
+        this.server = handler;
         this.owner = owner;
     }
 
@@ -134,141 +142,231 @@ public class GuiIndexController extends Application implements GameGateway {
     public void onGameCreated() {
         //game starting
         model.onGameStarted();
-        //GUI initialization
 
-        //todo
+        //GUI initialization:
+        //index scene
+
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
             playersButtons.get(i).setText(model.getSessions().playerSessions().get(i).getUsername());
         }
 
         //PGC + CGC initialization
-        //todo
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             commonGoalCards.set(i, scene.commonGoalCardUpdate(model.getCommonGoalCards().get(i).getCommonGoalCard()));
         }
 
-        //todo print the owner's personal goal card;
-        personalGoalCard = scene.personalGoalCardUpdate(model);
+        personalGoalCard = scene.personalGoalCardUpdate(model, owner);
 
-        //insertion scene PGC +CGC initialization
-        //to
+        //insertion scene:
+
+        // PGC +CGC initialization
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             insertionCommonGoalCard.set(i, insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(i).getCommonGoalCard()));
         }
 
-        insertionPersonalGoalCard = insertionScene.personalGoalCardUpdate(model);
+        insertionPersonalGoalCard = insertionScene.personalGoalCardUpdate(model, owner);
+
+        //owner's bookshelf inizialization
+        insertionBookshelf = insertionScene.bookshelfUpdate(model.getSessions().getByUsername(owner).getBookshelf());
+
+
         //model update
         modelUpdate(model);
-
 
     }
 
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
+
+        //INDEX UPDATE:
+
+        //board Update
         board = scene.boardUpdate(model);
+
+        //owner's bookshelf update
         myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
-        //TODO change bookshelves, now it's printing always the same one; create id
+        //player's bookshelf update
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            bookshelves.set(i, scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf()));
+            bookshelves.set(i, scene.bookshelfUpdate(model.getSessions().playerSessions().get(i).getBookshelf()));
         }
 
-        //player1BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
-        //player2BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
-        //player3BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
-        //player4BookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
 
         // CGC token update
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
 
-        //to
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             topTokens.set(i, scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(i)));
         }
+
+        CurrentPlayer.setText(model.getCurrentPlayerSession().getUsername());
+
+        //INSERTION UPDATE:
+
+        //tile update
+        for (int i = 0; i < model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().size(); i++) {
+            ImageView temporalImage;
+            insertionTileSelected.get(i).setImage(GuiResources.getTile(model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
+        }
+
+        //bookshelf update
+        insertionBookshelf = insertionScene.bookshelfUpdate(model.getSessions().getByUsername(owner).getBookshelf());
+
     }
+
 
     @Override
     public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
+        switch (turnResult) {
+            case Failure<TileSelectionFailures> failure -> {
+                switch (failure.error()) {
+                    case WRONG_GAME_PHASE -> {
+                        Status.setOpacity(1);
+                        Status.setText("Error, wrong game phase");
+
+                    }
+                    case UNAUTHORIZED_SELECTION -> {
+                        Status.setOpacity(1);
+                        Status.setText("Error, unauthorized selection");
+
+                    }
+                    case UNAUTHORIZED_PLAYER -> {
+                        Status.setOpacity(1);
+                        Status.setText("Error, unauthirized");
+                    }
+                }
+            }
+            case SingleResult.Success<TileSelectionFailures> success -> {
+                Status.setOpacity(0);
+            }
+
+        }
 
     }
 
     @Override
     public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
+        switch (turnResult) {
+            case Failure<BookshelfInsertionFailure> failure -> {
+                switch (failure.error()) {
+                    case WRONG_SELECTION -> {
+                        insertionStatus.setOpacity(1);
+                        insertionStatus.setText("Error, wrong selection");
 
-    }
+                    }
+                    case ILLEGAL_COLUMN -> {
+                        insertionStatus.setOpacity(1);
+                        insertionStatus.setText("Error, illegeal column");
 
-    public Coordinate getSelectedCoordinates(Node tileNode) {
-        Coordinate coordinate;
+                    }
+                    case TOO_MANY_TILES -> {
+                        insertionStatus.setOpacity(1);
+                        insertionStatus.setText("Error, too many tiles selected");
 
-        Integer col = GridPane.getColumnIndex(tileNode);
-        Integer row = GridPane.getRowIndex(tileNode);
+                    }
+                    case NO_FIT -> {
+                        insertionStatus.setOpacity(1);
+                        insertionStatus.setText("Error, can't fit");
 
-        coordinate = new Coordinate(row, col);
+                    }
+                    case WRONG_PLAYER -> {
+                        insertionStatus.setOpacity(1);
+                        insertionStatus.setText("Error, wrong player");
 
-        return coordinate;
-    }
+                    }
+                    case WRONG_GAME_PHASE -> {
+                        insertionStatus.setOpacity(1);
+                        insertionStatus.setText("Error, wrong game phase");
 
-    /**
-     * To be invoked when it's the player turn to select
-     */
-    public void gameSelection() {
-        Set<Coordinate> selectedCoordinatees = new HashSet<>();
-
-        board.setOnMouseClicked(mouseEvent -> {
-            if (selectedCoordinatees.size() < maxSelectionSize) {
-                selectedCoordinatees.add(getSelectedCoordinates(board));
-            }
-
-        });
-
-        selectingButton.setOnMouseClicked(mouseEvent -> {
-            SceneManager.changeScene(SceneManager.getActualController(), "Insertion.fxml");
-            handler.onViewSelection(selectedCoordinatees);
-        });
-
-    }
-
-    /**
-     * To be invoked when it's the player turn to insert
-     */
-    public void gameInsertion() {
-        List<Tile> orderedTiles = new ArrayList<>();
-
-        //todo
-        for (int i = 0; i < columnButtons.size(); i++) {
-            RadioButton columnButton = columnButtons.get(i);
-            int value = i;
-            columnButton.setOnMouseClicked(mouseEvent -> {
-                column.selectToggle(columnButton);
-                col = value;
-            });
-        }
-
-        //todo
-        for (int i = 0; i < selectedTiles.size(); i++) {
-            ImageView selTile = selectedTiles.get(i);
-            Label label = labels.get(i);
-            int value = i;
-
-            selTile.setOnMouseClicked(mouseEvent -> {
-                if (orderedTiles.size() == 0) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 1));
-                } else if (orderedTiles.size() == 1) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 2));
-                } else if (orderedTiles.size() == 2) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 3));
+                    }
                 }
-            });
+            }
+            case SingleResult.Success<BookshelfInsertionFailure> success -> {
+                insertionStatus.setOpacity(0);
+
+            }
         }
 
+
+    }
+
+
+
+    public void setInsertionButtonListener() {
         insertingButton.setOnMouseClicked(mouseEvent -> {
-            handler.onViewInsertion(col, orderedTiles);
+            server.onViewInsertion(col, orderedTiles);
             SceneManager.changeScene(SceneManager.getActualController(), "index.fxml");
         });
+    }
+
+    public void setRadioButtonInsertionListeners() {
+
+        column1.setOnMouseClicked(mouseEvent -> {
+            column.selectToggle(column1);
+            col = 0;
+        });
+
+
+        column2.setOnMouseClicked(mouseEvent -> {
+            column.selectToggle(column2);
+            col = 1;
+        });
+
+        column3.setOnMouseClicked(mouseEvent -> {
+            column.selectToggle(column3);
+            col = 2;
+        });
+
+        column4.setOnMouseClicked(mouseEvent -> {
+            column.selectToggle(column4);
+            col = 3;
+        });
+
+        column5.setOnMouseClicked(mouseEvent -> {
+            column.selectToggle(column5);
+            col = 4;
+        });
+    }
+
+    public void setOrderedSelectionTIleInsertionListeners() {
+        tile1Selected.setOnMouseClicked(mouseEvent -> {
+            if (orderedTiles.size() == 0) {
+                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
+                label1.setText(String.valueOf(1));
+            } else if (orderedTiles.size() == 1) {
+                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
+                label1.setText(String.valueOf(2));
+            } else if (orderedTiles.size() == 2) {
+                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
+                label1.setText(String.valueOf(3));
+            }
+        });
+        tile2Selected.setOnMouseClicked(mouseEvent -> {
+            if (orderedTiles.size() == 0) {
+                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
+                label2.setText(String.valueOf(1));
+            } else if (orderedTiles.size() == 1) {
+                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
+                label2.setText(String.valueOf(2));
+            } else if (orderedTiles.size() == 2) {
+                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
+                label2.setText(String.valueOf(3));
+            }
+        });
+        tile3Selected.setOnMouseClicked(mouseEvent -> {
+            if (orderedTiles.size() == 0) {
+                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
+                label3.setText(String.valueOf(1));
+            } else if (orderedTiles.size() == 1) {
+                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
+                label3.setText(String.valueOf(2));
+            } else if (orderedTiles.size() == 2) {
+                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
+                label3.setText(String.valueOf(3));
+            }
+        });
+
     }
 
     @Override
