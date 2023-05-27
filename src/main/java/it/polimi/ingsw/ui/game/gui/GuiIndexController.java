@@ -13,7 +13,6 @@ import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
-
 
 
 public class GuiIndexController extends Application implements GameGateway {
@@ -292,7 +290,6 @@ public class GuiIndexController extends Application implements GameGateway {
     }
 
 
-
     public void setInsertionButtonListener() {
         insertingButton.setOnMouseClicked(mouseEvent -> {
             server.onViewInsertion(col, orderedTiles);
@@ -306,7 +303,6 @@ public class GuiIndexController extends Application implements GameGateway {
             column.selectToggle(column1);
             col = 0;
         });
-
 
         column2.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column2);

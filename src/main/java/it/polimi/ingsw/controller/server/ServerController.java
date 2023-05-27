@@ -335,7 +335,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         }
 
         game.onPlayerInsertionPhase(column, tiles);
-        game.onPlayerCheckingPhase();
+        game.onPlayerTurnEnding();
 
         PlayerSession nextPlayer = processNextPlayer();
 

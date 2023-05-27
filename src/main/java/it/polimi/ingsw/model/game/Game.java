@@ -388,12 +388,12 @@ public class Game implements ModelService {
         getCurrentPlayerSession().setPlayerCurrentGamePhase(IDLE);
     }
 
-    /**
+    /**˙
      * Updates the current player's tokens, if needed, checks if the board needs refilling and sets the player's status
      * as IDLE
      */
     @Override
-    public void onPlayerCheckingPhase() {
+    public void onPlayerTurnEnding() {
         // full bookshelf test
         boolean isBookshelfFull = getCurrentPlayerSession().getBookshelf().isFull();
 

@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
-import it.polimi.ingsw.model.player.PlayerNumber;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

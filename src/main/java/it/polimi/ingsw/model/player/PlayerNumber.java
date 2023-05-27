@@ -20,6 +20,10 @@ public enum PlayerNumber {
         };
     }
 
+    /**
+     * @param mode the game mode, to know how many players are in this game
+     * @return the next player number
+     */
     public PlayerNumber next(GameMode mode) {
         return TurnHelper.getNextPlayerNumber(this, mode);
     }

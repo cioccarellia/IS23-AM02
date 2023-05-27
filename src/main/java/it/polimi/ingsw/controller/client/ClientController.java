@@ -36,7 +36,7 @@ import java.util.Set;
 
 /**
  * Client-side controller.
- * Acts as a event hub, routing incoming network calls to their respective interfaces, and back to the server
+ * Acts as an event hub, routing incoming network calls to their respective interfaces, and back to the server
  */
 public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 

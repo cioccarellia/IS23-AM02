@@ -98,6 +98,9 @@ public class PlayerSession {
         playerTileSelection = selection;
     }
 
+    /**
+     * Clears the player's tile selection. It is used when their turn ends.
+     */
     public void clearTileSelection() {
         playerTileSelection = null;
     }
@@ -123,6 +126,11 @@ public class PlayerSession {
         return acquiredTokens.stream().mapToInt(Token::getPoints).sum();
     }
 
+    /**
+     * Calculates the points earned by the player based on their personal goal card
+     *
+     * @return the points earned from the personal goal ard
+     */
     public int calculateCurrentPersonalGoalCardPoints() {
         Tile[][] bookshelf = getBookshelf().getShelfMatrix();
         Tile[][] personalGoalCard = getPersonalGoalCard().getShelfPointMatrix();
@@ -163,6 +171,11 @@ public class PlayerSession {
         }
     }
 
+    /**
+     * Calculates the points earned by the player based on the groups formed on their bookshelf
+     *
+     * @return the points earned from bookshelf groups
+     */
     public int calculateBookshelfGroupPoints() {
         int points = 0;
 

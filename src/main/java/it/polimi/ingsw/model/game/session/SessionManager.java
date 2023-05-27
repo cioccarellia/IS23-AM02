@@ -60,21 +60,45 @@ public class SessionManager {
         map.put(username, session);
     }
 
+    /**
+     * Checks if a player session with the specified username is present in the session manager
+     *
+     * @param username the username to check
+     * @return true if the session is present, false otherwise
+     */
     public boolean isPresent(String username) {
         return map.containsKey(username);
     }
 
+    /**
+     * Checks if a player session with the specified player number is present in the session manager
+     *
+     * @param number the player number to check
+     * @return true if the session is present, false otherwise
+     */
     public boolean isPresent(PlayerNumber number) {
         return map.values().stream().anyMatch(it -> it.getPlayerNumber() == number);
     }
 
-
-    public PlayerSession getByUsername(String username) {
+    /**
+     * Retrieves the player session with the specified username.
+     *
+     * @param username the username of the player session to retrieve
+     * @return the player session
+     * @throws IllegalStateException if the session with the specified username does not exist
+     */
+    public PlayerSession getByUsername(String username) throws IllegalArgumentException {
         assert map.containsKey(username);
         return map.get(username);
     }
 
-
+    /**
+     * Retrieves the player session with the specified player number.
+     *
+     * @param number the player number of the player session to retrieve
+     * @return the player session
+     * @throws IllegalStateException if the session with the specified player number does not exist
+     */
     public PlayerSession getByNumber(PlayerNumber number) {
         Optional<PlayerSession> matchingPlayerSession = map.values()
                 .stream()
@@ -88,7 +112,11 @@ public class SessionManager {
         }
     }
 
-
+    /**
+     * Retrieves a map of player numbers to their corresponding player sessions.
+     *
+     * @return the map of player numbers to player sessions
+     */
     public Map<PlayerNumber, PlayerSession> getNumberMap() {
         return map.values().stream().collect(
                 Collectors.toMap(
@@ -98,6 +126,11 @@ public class SessionManager {
         );
     }
 
+    /**
+     * Retrieves a list of all player sessions.
+     *
+     * @return the list of player sessions
+     */
     public List<PlayerSession> playerSessions() {
         return map.values().stream().toList();
     }

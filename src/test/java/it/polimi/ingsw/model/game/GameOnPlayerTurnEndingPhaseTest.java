@@ -18,10 +18,10 @@ import static it.polimi.ingsw.model.game.goal.Token.COMMON_GOAL_TOKEN_8_POINTS;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GameOnPlayerCheckingPhaseTest implements GameTester {
+public class GameOnPlayerTurnEndingPhaseTest implements GameTester {
     @Test
-    @DisplayName("verify the function OnPlayerCheckingPhase, positively")
-    public void test_OnPlayerCheckingPhase_positively_1() {
+    @DisplayName("verify the function OnPlayerTurnEndingPhase, positively")
+    public void test_OnPlayerTurnEndingPhase_positively_1() {
         Game game = new Game(GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
@@ -46,7 +46,7 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
             game.onPlayerSelectionPhase(selection);
 
             game.onPlayerInsertionPhase(1, tiles);
-            game.onPlayerCheckingPhase();
+            game.onPlayerTurnEnding();
 
             assertFalse(game.getCurrentPlayerSession().getBookshelf().isFull());
             assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().isEmpty());
@@ -54,8 +54,8 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
     }
 
     @Test
-    @DisplayName("verify the function OnPlayerCheckingPhase, positively")
-    public void test_OnPlayerCheckingPhase_positively_2() {
+    @DisplayName("verify the function OnPlayerTurnEndingPhase, positively")
+    public void test_OnPlayerTurnEndingPhase_positively_2() {
         Game game = new Game(GAME_MODE_2_PLAYERS);
         Tile[][] shelfMatrix = {
                 {null, null, null, null, null},
@@ -73,7 +73,7 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
         game.getCurrentPlayerSession().getBookshelf().fillUpBookShelf(shelfMatrix);
 
-        game.onPlayerCheckingPhase();
+        game.onPlayerTurnEnding();
 
         if (game.getCommonGoalCards().stream().map(status -> status.getCommonGoalCard().getId()).toList().contains(CommonGoalCardIdentifier.X_TILES))
             assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().contains(COMMON_GOAL_TOKEN_8_POINTS));
@@ -85,7 +85,7 @@ public class GameOnPlayerCheckingPhaseTest implements GameTester {
 
         game.getCurrentPlayerSession().getBookshelf().fillUpBookShelf(shelfMatrix);
 
-        game.onPlayerCheckingPhase();
+        game.onPlayerTurnEnding();
 
         if (game.getCommonGoalCards().stream().map(status -> status.getCommonGoalCard().getId()).toList().contains(CommonGoalCardIdentifier.X_TILES))
             assertTrue(game.getCurrentPlayerSession().getAcquiredTokens().contains(COMMON_GOAL_TOKEN_4_POINTS));
