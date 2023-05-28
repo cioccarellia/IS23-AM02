@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.Ranking;
+package it.polimi.ingsw.ui.ranking;
 
 import it.polimi.ingsw.model.game.Game;
 import javafx.application.Application;

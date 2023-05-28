@@ -67,11 +67,17 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     private String ownerUsername;
     private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
-
+    private ClientService identity;
 
     public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) {
         this.gateway = gateway;
         this.config = config;
+
+        // try {
+        //     identity = (ClientService) UnicastRemoteObject.exportObject(this, 10292);
+        // } catch (RemoteException e) {
+        //     throw new RuntimeException(e);
+        // }
     }
 
 
