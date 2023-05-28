@@ -9,12 +9,12 @@
     <children>
         <ImageView fitHeight="548.0" fitWidth="800.0" layoutX="1.0" pickOnBounds="true">
             <image>
-                <Image url="@../img/misc/wood_background.jpg" />
+                <Image url="@../../img/misc/wood_background.jpg" />
             </image>
         </ImageView>
         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="300.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/publisher_material/title_2000x618px.png" />
+                <Image url="@../../img/publisher_material/title_2000x618px.png" />
             </image>
         </ImageView>
         <Label alignment="CENTER" layoutX="343.0" layoutY="109.0" prefHeight="55.0" prefWidth="115.0" text="The Winner is: " textAlignment="CENTER">

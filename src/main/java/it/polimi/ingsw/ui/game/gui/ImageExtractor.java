@@ -2,6 +2,7 @@ package it.polimi.ingsw.ui.game.gui;
 
 import it.polimi.ingsw.model.board.Tile;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,7 @@ import java.util.Random;
 public class ImageExtractor {
     private static final List<Image> state = new ArrayList<>(GuiResources.tilesDomain);
 
-    public static Image extract(Tile tileType) {
-
+    public static Image extract(@NotNull Tile tileType) {
         switch (tileType) {
             case BOOK -> {
                 return state.get(new Random().ints(0, 3).findAny().getAsInt());

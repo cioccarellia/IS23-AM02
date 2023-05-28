@@ -23,11 +23,10 @@ import java.util.List;
 /**
  * Keeps a reference to the owner (which can be null at the beginning) of this client instance.
  */
-
 public class GuiLobbyController implements LobbyGateway {
     private String owner = null;
 
-    private final LobbyViewEventHandler server;
+    private LobbyViewEventHandler server;
     private boolean isKilled = false;
 
     private ServerStatus status = null;
@@ -51,7 +50,7 @@ public class GuiLobbyController implements LobbyGateway {
     GameMode gameMode;
     String username;
 
-    public GuiLobbyController(LobbyViewEventHandler handler) {
+    public void init(LobbyViewEventHandler handler) {
         this.server = handler;
 
         setRadioButtonsClickListeners();
@@ -176,7 +175,8 @@ public class GuiLobbyController implements LobbyGateway {
                     twoplayers.setSelected(true);
                     gameMode = GameMode.GAME_MODE_2_PLAYERS;
                 }
-                server.sendGameStartRequest(username, gameMode);
+
+                // NO server.sendGameStartRequest(username, gameMode);
             }
             case GAME_INITIALIZING -> {
 
@@ -191,7 +191,7 @@ public class GuiLobbyController implements LobbyGateway {
                 fourplayers.setDisable(true);
                 fourplayers.setOpacity(0);
 
-                server.sendGameConnectionRequest(username);
+                // NO server.sendGameConnectionRequest(username);
             }
             case GAME_RUNNING -> {
                 // no operation required, controller handles this case

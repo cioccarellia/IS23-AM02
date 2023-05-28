@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:controller="it.polimi.ingsw.ui.lobby.gui.GuiLobbyController" xmlns:fx="http://javafx.com/fxml/1">
+   <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+         prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
+      <ImageView fitHeight="400.0" fitWidth="600.0">
+         <Image url="@../../img/misc/wood_background.jpg"/>
+      </ImageView>
+      <Button fx:id="loginButton" layoutX="253.0" layoutY="326.0" mnemonicParsing="false" text="START GAME"/>
+      <Label layoutX="228.0" layoutY="38.0" prefHeight="54.0" prefWidth="145.0" text="LOGIN " textFill="WHITE">
+         <font>
+            <Font name="Baskerville Old Face" size="36.0"/>
+         </font>
+      </Label>
+      <TextField fx:id="usernameField" layoutX="176.0" layoutY="120.0" prefHeight="25.0" prefWidth="247.0"/>
+      <Label layoutX="175.0" layoutY="95.0" prefHeight="25.0" prefWidth="76.0" text="USERNAME" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0"/>
+         </font>
+      </Label>
+      <Label fx:id="nplayers" layoutX="177.0" layoutY="171.0" prefHeight="17.0" prefWidth="166.0"
+             text="NUMERO GIOCATORI" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0"/>
+         </font>
+      </Label>
+      <ImageView fitHeight="61.0" fitWidth="200.0" layoutX="400.0" layoutY="4.0">
+         <Image url="@../../img/publisher_material/title_2000x618px.png"/>
+      </ImageView>
+      <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="-23.0" layoutY="200.0">
+         <Image url="@../../img/publisher_material/box_280x280px.png"/>
+      </ImageView>
+      <ImageView fitHeight="139.0" fitWidth="152.0" layoutX="424.0" layoutY="231.0">
+         <Image url="@../../img/misc/closed_tiles_bag.png"/>
+      </ImageView>
+      <RadioButton fx:id="twoplayers" layoutX="193.0" layoutY="192.0" mnemonicParsing="false" text="2" textFill="WHITE">
+         <toggleGroup>
+            <ToggleGroup fx:id="numgiocatori"/>
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="threeplayers" layoutX="193.0" layoutY="223.0" mnemonicParsing="false" text="3"
+                   textFill="WHITE" toggleGroup="$numgiocatori"/>
+      <RadioButton fx:id="fourplayers" layoutX="193.0" layoutY="255.0" mnemonicParsing="false" text="4" textFill="WHITE"
+                   toggleGroup="$numgiocatori"/>
+      <Label fx:id="loginStatus" layoutX="179.0" layoutY="292.0" prefHeight="17.0" prefWidth="166.0"
+             text="Login staus: NOT LOGGED IN"/>
+   </Pane>
+</VBox>

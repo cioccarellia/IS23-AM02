@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.gui.GuiIndexController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.gui.GuiGameController">
     <children>
         <ImageView fitHeight="411.0" fitWidth="613.0" layoutX="-5.0" layoutY="-6.0">
             <image>
-                <Image url="@../img/misc/page_base.jpg" />
+                <Image url="@../../img/misc/page_base.jpg" />
             </image>
         </ImageView>
         <Button fx:id="insertingButton" layoutX="532.0" layoutY="351.0" mnemonicParsing="false" text="INSERT" textFill="#e06a2f" />
@@ -20,37 +20,37 @@
         </Label>
         <ImageView fx:id="bookshelf" fitHeight="252.0" fitWidth="266.0" layoutX="184.0" layoutY="136.0">
             <image>
-                <Image url="@../img/boards/bookshelf.png" />
+                <Image url="@../../img/boards/bookshelf.png" />
             </image>
         </ImageView>
         <ImageView fx:id="insertionPersonalGoalCard" fitHeight="139.0" fitWidth="111.0" layoutX="45.0" layoutY="187.0">
             <image>
-                <Image url="@../img/personal_goal_cards/personal_goal_card_1.png" />
+                <Image url="@../../img/personal_goal_cards/personal_goal_card_1.png" />
             </image>
         </ImageView>
         <ImageView fx:id="insertionCommonGoalCard1" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="158.0">
             <image>
-                <Image url="@../img/common_goal_cards/diagonal.jpg" />
+                <Image url="@../../img/common_goal_cards/diagonal.jpg" />
             </image>
         </ImageView>
         <ImageView fx:id="insertionCommonGoalCard2" fitHeight="52.0" fitWidth="81.0" layoutX="470.0" layoutY="236.0">
             <image>
-                <Image url="@../img/common_goal_cards/eight_tiles.jpg" />
+                <Image url="@../../img/common_goal_cards/eight_tiles.jpg" />
             </image>
         </ImageView>
         <ImageView fx:id="tile1Selected" fitHeight="61.0" fitWidth="55.0" layoutX="18.0" layoutY="48.0">
             <image>
-                <Image url="@../img/tiles/game1.1.png" />
+                <Image url="@../../img/tiles/game1.1.png" />
             </image>
         </ImageView>
         <ImageView fx:id="tile2selected" fitHeight="61.0" fitWidth="55.0" layoutX="73.0" layoutY="48.0">
             <image>
-                <Image url="@../img/tiles/cat1.1.png" />
+                <Image url="@../../img/tiles/cat1.1.png" />
             </image>
         </ImageView>
         <ImageView fx:id="tile3selected" fitHeight="61.0" fitWidth="55.0" layoutX="129.0" layoutY="48.0">
             <image>
-                <Image url="@../img/tiles/trophy1.1.png" />
+                <Image url="@../../img/tiles/trophy1.1.png" />
             </image>
         </ImageView>
         <GridPane fx:id="insertionBookshelf" layoutX="213.0" layoutY="152.0" prefHeight="207.0" prefWidth="207.0">
@@ -112,7 +112,7 @@
         <RadioButton fx:id="column5" layoutX="392.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" />
         <ImageView fitHeight="34.0" fitWidth="136.0" layoutX="470.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/publisher_material/title_2000x618px.png" />
+                <Image url="@../../img/publisher_material/title_2000x618px.png" />
             </image>
         </ImageView>
       <Label fx:id="label1" layoutX="42.0" layoutY="110.0" text="1" textAlignment="CENTER" />

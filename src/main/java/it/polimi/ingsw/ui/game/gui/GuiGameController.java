@@ -20,17 +20,14 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 
 
-public class GuiIndexController extends Application implements GameGateway {
+public class GuiGameController implements GameGateway {
 
-    private static final Logger logger = LoggerFactory.getLogger(GuiIndexController.class);
+    private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
@@ -51,20 +48,16 @@ public class GuiIndexController extends Application implements GameGateway {
     public GridPane player3BookShelf;
     @FXML
     public GridPane player4BookShelf;
-    public List<GridPane> bookshelves = List.of(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
     @FXML
     public ImageView endGameToken;
     @FXML
     public ImageView firstCommonGoalCardTopToken;
     @FXML
     public ImageView secondCommonGoalCardTopToken;
-    public List<ImageView> topTokens = List.of(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
     @FXML
     public ImageView firstCommonGoalCard;
     @FXML
     public ImageView secondCommonGoalCard;
-
-    public List<ImageView> commonGoalCards = List.of(firstCommonGoalCard, secondCommonGoalCard);
     @FXML
     public ImageView personalGoalCard;
     @FXML
@@ -75,7 +68,6 @@ public class GuiIndexController extends Application implements GameGateway {
     public Tab player3Button;
     @FXML
     public Tab player4Button;
-    public List<Tab> playersButtons = List.of(player1Button, player2Button, player3Button, player4Button);
     @FXML
     public Button selectingButton;
     @FXML
@@ -98,7 +90,6 @@ public class GuiIndexController extends Application implements GameGateway {
     public ImageView tile2Selected;
     @FXML
     public ImageView tile3Selected;
-    public List<ImageView> insertionTileSelected = List.of(tile1Selected, tile2Selected, tile3Selected);
     @FXML
     public Label label1;
     @FXML
@@ -109,7 +100,6 @@ public class GuiIndexController extends Application implements GameGateway {
     public ImageView insertionCommonGoalCard1;
     @FXML
     public ImageView insertionCommonGoalCard2;
-    public List<ImageView> insertionCommonGoalCard = List.of(insertionCommonGoalCard1, insertionCommonGoalCard2);
     @FXML
     public ImageView insertionPersonalGoalCard;
     @FXML
@@ -121,16 +111,15 @@ public class GuiIndexController extends Application implements GameGateway {
     @FXML
     public GridPane insertionBookshelf;
 
-
-    private final GameViewEventHandler server;
-    public Game model;
-    private final String owner;
+    private GameViewEventHandler server;
+    private Game model;
+    private String owner;
 
     public Scene scene;
     public Scene insertionScene; //to remember that insertion scene needs an initialization
 
 
-    public GuiIndexController(Game model, GameViewEventHandler handler, String owner) {
+    public void initModel(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.server = handler;
         this.owner = owner;
@@ -138,6 +127,16 @@ public class GuiIndexController extends Application implements GameGateway {
 
     @Override
     public void onGameCreated() {
+
+        List<ImageView> insertionTileSelected = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
+
+        List<ImageView> insertionCommonGoalCard = Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
+        List<GridPane> bookshelves = Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
+        List<ImageView> topTokens = Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
+        List<ImageView> commonGoalCards = Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
+        List<Tab> playersButtons = Arrays.asList(player1Button, player2Button, player3Button, player4Button);
+
+
         //game starting
         model.onGameStarted();
 
@@ -175,6 +174,14 @@ public class GuiIndexController extends Application implements GameGateway {
 
     @Override
     public void modelUpdate(Game game) {
+        List<ImageView> insertionTileSelected = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
+        List<ImageView> insertionCommonGoalCard = Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
+        List<GridPane> bookshelves = Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
+        List<ImageView> topTokens = Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
+        List<ImageView> commonGoalCards = Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
+        List<Tab> playersButtons = Arrays.asList(player1Button, player2Button, player3Button, player4Button);
+
+
         this.model = game;
 
         //INDEX UPDATE:
@@ -365,9 +372,5 @@ public class GuiIndexController extends Application implements GameGateway {
 
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        // javafx start
-    }
 
 }

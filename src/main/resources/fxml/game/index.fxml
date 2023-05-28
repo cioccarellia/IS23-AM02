@@ -5,33 +5,34 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.gui.GuiIndexController">
+<VBox fx:controller="it.polimi.ingsw.ui.game.gui.GuiGameController" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
     <children>
         <ImageView fitHeight="815.0" fitWidth="1025.0" layoutX="-6.0" layoutY="-7.0" pickOnBounds="true">
             <image>
-                <Image url="@../img/misc/wood_background.jpg" />
+                <Image url="@../../img/misc/wood_background.jpg" />
             </image>
         </ImageView>
         <ImageView fitHeight="448.0" fitWidth="554.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/boards/living_room.png" />
+                <Image url="@../../img/boards/living_room.png" />
             </image>
         </ImageView>
         <Separator layoutX="448.0" orientation="VERTICAL" prefHeight="800.0" />
         <Separator layoutY="447.0" prefWidth="1000.0" />
         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="636.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/publisher_material/title_2000x618px.png" />
+                <Image url="@../../img/publisher_material/title_2000x618px.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="347.0" fitWidth="436.0" layoutX="477.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/boards/bookshelf.png" />
+                <Image url="@../../img/boards/bookshelf.png" />
             </image>
         </ImageView>
         <ImageView id="personalGoalCard" fitHeight="193.0" fitWidth="151.0" layoutX="836.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/personal_goal_cards/personal_goal_card_1.png" />
+                <Image url="@../../img/personal_goal_cards/personal_goal_card_1.png" />
             </image>
         </ImageView>
         <TabPane layoutX="454.0" layoutY="460.0" prefHeight="337.0" prefWidth="401.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
@@ -42,7 +43,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/boards/bookshelf_orth.png" />
+                                        <Image url="@../../img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane fx:id="player1BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -104,7 +105,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/boards/bookshelf_orth.png" />
+                                        <Image url="@../../img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane fx:id="player2BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -166,7 +167,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/boards/bookshelf_orth.png" />
+                                        <Image url="@../../img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane fx:id="player3BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -228,7 +229,7 @@
                             <children>
                                 <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/boards/bookshelf_orth.png" />
+                                        <Image url="@../../img/boards/bookshelf_orth.png" />
                                     </image>
                                 </ImageView>
                                 <GridPane fx:id="player4Bookshelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
@@ -293,12 +294,12 @@
         </Button>
         <ImageView id="secondCommonGoalCard" fitHeight="100.0" fitWidth="130.0" layoutX="856.0" layoutY="561.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/common_goal_cards/back.jpg" />
+                <Image url="@../../img/common_goal_cards/back.jpg" />
             </image>
         </ImageView>
         <ImageView id="firstCommonGoalCard" fitHeight="119.0" fitWidth="130.0" layoutX="856.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../img/common_goal_cards/diagonal.jpg" />
+                <Image url="@../../img/common_goal_cards/diagonal.jpg" />
             </image>
         </ImageView>
         <GridPane fx:id="board" layoutX="17.0" layoutY="18.0" prefHeight="409.0" prefWidth="412.0">
@@ -327,7 +328,7 @@
             <children>
                 <ImageView id="boardTile03" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                     <image>
-                        <Image url="@../img/tiles/book1.1.png" />
+                        <Image url="@../../img/tiles/book1.1.png" />
                     </image>
                 </ImageView>
                 <ImageView id="boardTile04" fitHeight="49.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
@@ -443,7 +444,7 @@
             <children>
                 <ImageView id="endGameToken" fitHeight="51.0" fitWidth="50.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../img/tokens/first_full_bookshelf_token.jpg" />
+                        <Image url="@../../img/tokens/first_full_bookshelf_token.jpg" />
                     </image>
                 </ImageView>
             </children>
@@ -452,7 +453,7 @@
             <children>
                 <ImageView fx:id="secondCommonGoalCardTopToken" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../img/tokens/scoring_8.jpg" />
+                        <Image url="@../../img/tokens/scoring_8.jpg" />
                     </image>
                 </ImageView>
             </children>
@@ -461,7 +462,7 @@
             <children>
                 <ImageView fx:id="firstCommonGoalCardTopToken" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../img/tokens/scoring_8.jpg" />
+                        <Image url="@../../img/tokens/scoring_8.jpg" />
                     </image>
                 </ImageView>
             </children>
@@ -472,3 +473,4 @@
         <Label fx:id="CurrentPlayer" layoutX="881.0" layoutY="686.0" text="Current Player: " />
     </children>
 </Pane>
+</VBox>

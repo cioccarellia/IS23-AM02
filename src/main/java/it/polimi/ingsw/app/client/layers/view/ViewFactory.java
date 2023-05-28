@@ -5,11 +5,12 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.CliApp;
-import it.polimi.ingsw.ui.game.gui.GuiIndexController;
+import it.polimi.ingsw.ui.game.gui.GuiGameController;
+import it.polimi.ingsw.ui.game.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
-import it.polimi.ingsw.ui.lobby.gui.GuiLobby;
+import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,7 +32,11 @@ public class ViewFactory {
                 return new CliApp(model, handler, owner);
             }
             case GUI -> {
-                return new GuiIndexController(model, handler, owner);
+                var gui = new RunnableGuiGame();
+                gui.initModel(model, handler, owner);
+
+                return gui;
+
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
@@ -50,7 +55,9 @@ public class ViewFactory {
                 return new CliLobby(handler);
             }
             case GUI -> {
-                return (LobbyGateway) new GuiLobby(handler);
+                RunnableGuiLobby lobby = new RunnableGuiLobby();
+                lobby.initHandler(handler);
+                return lobby;
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }

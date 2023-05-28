@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="OFFLINE GUI GAME" type="Application" factoryName="Application">
+    <envs>
+      <env name="PATH_TO_FX" value="C:\Users\alber\Downloads\openjfx-20.0.1_windows-x64_bin-sdk\javafx-sdk-20.0.1\lib" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ui.game.gui.RunnableGuiGame" />
+    <module name="shelfie" />
+    <option name="PROGRAM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.fxml,javafx.controls,javafx.graphics" />
+    <option name="VM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.fxml,javafx.controls,javafx.graphics" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="it.polimi.ingsw.ui.lobby.gui.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

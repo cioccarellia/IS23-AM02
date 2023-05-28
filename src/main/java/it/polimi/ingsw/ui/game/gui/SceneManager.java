@@ -9,9 +9,10 @@ import java.io.IOException;
 
 public class SceneManager {
     private static Scene actualScene;
-    private static GuiIndexController actualController;
+    private static GuiGameController actualController;
 
-    public static void changeScene(GuiIndexController controller, String pathToFXML) {
+
+    public static void changeScene(GuiGameController controller, String pathToFXML) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + pathToFXML));
             fxmlLoader.setController(controller);
@@ -24,7 +25,6 @@ public class SceneManager {
             System.out.println(e.getMessage());
         }
     }
-
 
     /**
      * Returns the actual scene
@@ -40,7 +40,7 @@ public class SceneManager {
      *
      * @return actual controller
      */
-    public static GuiIndexController getActualController() {
+    public static GuiGameController getActualController() {
         return actualController;
     }
 
