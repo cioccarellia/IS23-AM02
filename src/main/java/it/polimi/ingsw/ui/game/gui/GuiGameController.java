@@ -70,32 +70,8 @@ public class GuiGameController implements GameGateway {
     public Tab player4Button;
     @FXML
     public Button selectingButton;
-    @FXML
-    public Button insertingButton;
-    @FXML
-    public ToggleGroup column;
-    @FXML
-    public RadioButton column1;
-    @FXML
-    public RadioButton column2;
-    @FXML
-    public RadioButton column3;
-    @FXML
-    public RadioButton column4;
-    @FXML
-    public RadioButton column5;
-    @FXML
-    public ImageView tile1Selected;
-    @FXML
-    public ImageView tile2Selected;
-    @FXML
-    public ImageView tile3Selected;
-    @FXML
-    public Label label1;
-    @FXML
-    public Label label2;
-    @FXML
-    public Label label3;
+
+
     @FXML
     public ImageView insertionCommonGoalCard1;
     @FXML
@@ -110,6 +86,12 @@ public class GuiGameController implements GameGateway {
     public Label insertionStatus;
     @FXML
     public GridPane insertionBookshelf;
+    @FXML
+    public ImageView tile1Selected;
+    @FXML
+    public ImageView tile2Selected;
+    @FXML
+    public ImageView tile3Selected;
 
     private GameViewEventHandler handler;
     private Game model;
@@ -120,7 +102,6 @@ public class GuiGameController implements GameGateway {
         this.handler = handler;
         this.owner = owner;
     }
-
 
     private List<ImageView> selectedTileList() {
         return Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
@@ -144,14 +125,6 @@ public class GuiGameController implements GameGateway {
 
     private List<Tab> playersButtons() {
         return Arrays.asList(player1Button, player2Button, player3Button, player4Button);
-    }
-
-    private List<RadioButton> columnButtons() {
-        return Arrays.asList(column1, column2, column3, column4, column5);
-    }
-
-    private List<Label> labels() {
-        return Arrays.asList(label1, label2, label3);
     }
 
 
@@ -314,79 +287,5 @@ public class GuiGameController implements GameGateway {
         SceneManager.changeScene(SceneManager.getActualController(), indexPath);
     }
 
-     public void onRadioButtonClick() {
 
-         List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
-         for (int i = 0; i < columnButtons.size(); i++) {
-             RadioButton columnButton = columnButtons.get(i);
-             int value = i;
-             columnButton.setOnMouseClicked(mouseEvent -> {
-                 column.selectToggle(columnButton);
-                 col = value;
-             });
-         }
-
-     }
-
-    public void setOrderedSelectionTIleInsertionListeners() {
-        /* se dovesse funzionare con il for loop
-        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
-        List<Label> labels = Arrays.asList(label1, label2, label3);
-        for (int i = 0; i < selectedTiles.size(); i++) {
-            ImageView selTile = selectedTiles.get(i);
-            Label label = labels.get(i);
-            int value = i;
-
-            selTile.setOnMouseClicked(mouseEvent -> {
-                if (orderedTiles.size() == 0) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 1));
-                } else if (orderedTiles.size() == 1) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 2));
-                } else if (orderedTiles.size() == 2) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 3));
-                }
-            });
-        }
-        */
-
-        tile1Selected.setOnMouseClicked(mouseEvent -> {
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(1));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(2));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(3));
-            }
-        });
-        tile2Selected.setOnMouseClicked(mouseEvent -> {
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
-                label2.setText(String.valueOf(1));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
-                label2.setText(String.valueOf(2));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile2Selected.getImage()));
-                label2.setText(String.valueOf(3));
-            }
-        });
-        tile3Selected.setOnMouseClicked(mouseEvent -> {
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
-                label3.setText(String.valueOf(1));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
-                label3.setText(String.valueOf(2));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile3Selected.getImage()));
-                label3.setText(String.valueOf(3));
-            }
-        });
-    }
 }
