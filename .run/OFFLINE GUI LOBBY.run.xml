@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="OFFLINE GUI LOBBY" type="Application" factoryName="Application">
     <envs>
-      <env name="PATH_TO_FX" value="C:\Users\alber\Downloads\openjfx-20.0.1_windows-x64_bin-sdk\javafx-sdk-20.0.1\lib" />
+      <env name="PATH_TO_FX" value="$PATH_TO_FX$" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby" />
     <module name="shelfie" />

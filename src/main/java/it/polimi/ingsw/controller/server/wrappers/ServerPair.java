@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.rmi.RemoteException;
 
-@SuppressWarnings("FieldCanBeLocal")
 public class ServerPair {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerPair.class);

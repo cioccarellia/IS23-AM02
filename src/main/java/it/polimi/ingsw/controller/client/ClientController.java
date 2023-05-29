@@ -69,6 +69,12 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
     private ClientService identity;
 
+    /**
+     * Constructs a ClientController object with the specified gateway and configuration.
+     *
+     * @param gateway The client gateway.
+     * @param config  The exhaustive configuration for the client.
+     */
     public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) {
         this.gateway = gateway;
         this.config = config;
@@ -81,8 +87,11 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
 
-    /***   Lifecycle   ***/
+    // Lifecycle
 
+    /**
+     * Initializes the client controller.
+     */
     @Override
     public synchronized void initialize() {
         // initialize
@@ -100,7 +109,10 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
 
     /**
-     * Current client has acquired its username
+     * Authorizes the client with the specified username and game.
+     *
+     * @param username The username of the client.
+     * @param game     The game.
      */
     @Override
     public synchronized void authorize(String username, Game game) {
@@ -112,12 +124,17 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         ClientNetworkLayer.scheduleKeepAliveThread(ownerUsername, gateway, AppClient.executorService);
     }
 
+    /**
+     * Terminates the client controller.
+     */
     @Override
     public synchronized void terminate() {
 
     }
 
-
+    /**
+     * Sends a status update request to the server.
+     */
     @Override
     public void sendStatusUpdateRequest() {
         try {
@@ -127,9 +144,14 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         }
     }
 
-    /***     Lobby     ***/
+    // Lobby
 
-
+    /**
+     * Sends a game start request with the specified username and game mode.
+     *
+     * @param username The username of the client.
+     * @param mode     The game mode.
+     */
     @Override
     public void sendGameStartRequest(String username, GameMode mode) {
         try {
@@ -139,6 +161,11 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         }
     }
 
+    /**
+     * Sends a game connection request with the specified username.
+     *
+     * @param username The username of the client.
+     */
     @Override
     public void sendGameConnectionRequest(String username) {
         try {
@@ -150,14 +177,25 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     }
 
+    // ClientService
 
-    /***   ClientService   ***/
-
+    /**
+     * Handles the event when the connection is accepted and the username is finalized.
+     *
+     * @param username The username of the client.
+     * @param game     The game.
+     */
     @Override
     public void onAcceptConnectionAndFinalizeUsername(String username, Game game) {
         authorize(username, game);
     }
 
+    /**
+     * Handles the event when the server status is updated.
+     *
+     * @param status     The server status.
+     * @param playerInfo The list of player information.
+     */
     @Override
     public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
@@ -166,16 +204,31 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     }
 
+    /**
+     * Handles the event when the game creation reply is received.
+     *
+     * @param result The result of the game creation, either a success or an error.
+     */
     @Override
     public synchronized void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         lobby.onServerCreationReply(result);
     }
 
+    /**
+     * Handles the event when the game connection reply is received.
+     *
+     * @param result The result of the game connection, either a success or an error.
+     */
     @Override
     public synchronized void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         lobby.onServerConnectionReply(result);
     }
 
+    /**
+     * Handles the event when the game is started.
+     *
+     * @param game The game.
+     */
     @Override
     public synchronized void onGameStartedEvent(Game game) {
         lobby.kill();
@@ -186,36 +239,61 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         // ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
     }
 
+    /**
+     * Handles the event when the model is updated.
+     *
+     * @param game The game.
+     */
     @Override
     public synchronized void onModelUpdateEvent(Game game) {
         ui.modelUpdate(game);
     }
 
+    /**
+     * Handles the event when the game selection turn event is received.
+     *
+     * @param turnResult The result of the game selection turn, either a success or a failure.
+     */
     @Override
     public synchronized void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
         ui.onGameSelectionReply(turnResult);
     }
 
+    /**
+     * Handles the event when the game insertion turn event is received.
+     *
+     * @param turnResult The result of the game insertion turn, either a success or a failure.
+     */
     @Override
     public synchronized void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
         ui.onGameInsertionReply(turnResult);
     }
 
+    /**
+     * Handles the event when the player connection status is updated.
+     *
+     * @param usernames The list of player usernames.
+     */
     @Override
     public synchronized void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
         // not used
     }
 
+    /**
+     * Handles the event when the game is ended.
+     */
     @Override
     public synchronized void onGameEndedEvent() {
         // not used
     }
 
 
-    /***   ViewEventHandler   ***/
+    // ViewEventHandler
 
     /**
-     * @param coordinates
+     * Handles the event when the view performs a selection.
+     *
+     * @param coordinates The set of coordinates selected by the view.
      */
     @Override
     public void onViewSelection(Set<Coordinate> coordinates) {
@@ -227,8 +305,10 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     /**
-     * @param column
-     * @param tiles
+     * Handles the event when the view performs an insertion.
+     *
+     * @param column The column where the insertion is performed.
+     * @param tiles  The list of tiles to be inserted.
      */
     @Override
     public void onViewInsertion(int column, List<Tile> tiles) {
@@ -240,7 +320,9 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     /**
-     * @param message
+     * Handles the event when the view sends a chat message.
+     *
+     * @param message The chat message.
      */
     @Override
     public void onViewSendMessage(ChatTextMessage message) {
@@ -248,7 +330,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     /**
-     *
+     * Handles the event when the view requests to quit the game.
      */
     @Override
     public void onViewQuitGame() {
@@ -256,7 +338,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     /**
-     *
+     * Keeps the connection alive.
      */
     public void keepAlive() {
 

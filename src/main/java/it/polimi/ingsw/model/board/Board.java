@@ -105,7 +105,6 @@ public class Board {
     /**
      * Returns the board current setup
      */
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public Tile[][] getTileMatrix() {
         Tile[][] tileMatrix = new Tile[dimension][dimension];
 

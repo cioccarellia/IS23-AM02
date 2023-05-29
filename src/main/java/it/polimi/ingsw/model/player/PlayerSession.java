@@ -195,10 +195,7 @@ public class PlayerSession {
                 case 5:
                     points += 5;
                     break;
-                case 6:
-                    points += 8;
-                    break;
-                default:
+                case 6, default:
                     points += 8;
                     break;
             }

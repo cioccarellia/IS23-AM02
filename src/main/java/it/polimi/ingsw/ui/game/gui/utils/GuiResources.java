@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.game.gui;
+package it.polimi.ingsw.ui.game.gui.utils;
 
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
@@ -15,10 +15,13 @@ import static it.polimi.ingsw.model.board.Tile.*;
 import static it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier.*;
 import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.*;
 import static it.polimi.ingsw.model.game.goal.Token.*;
-import static it.polimi.ingsw.ui.game.gui.ImageExtractor.extract;
+import static it.polimi.ingsw.ui.game.gui.utils.ImageExtractor.extract;
 
+/**
+ * The GuiResources class provides access to various graphical resources used in the GUI.
+ * It includes images for tiles, tokens, personal goal cards, common goal cards, and more.
+ */
 public class GuiResources {
-
 
     private GuiResources() {
 
@@ -43,7 +46,6 @@ public class GuiResources {
     public static final Image trophy1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/trophy1.1.png")));
     public static final Image trophy2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/trophy1.2.png")));
     public static final Image trophy3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/trophy1.3.png")));
-    private static final Map<Tile, Image> tileImageMap = Map.of(BOOK, extract(BOOK), CAT, extract(CAT), FRAME, extract(FRAME), GAME, extract(GAME), PLANT, extract(PLANT), TROPHY, extract(TROPHY));
 
     // Tokens
     public static final Image token_2_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_2.jpg")));
@@ -51,9 +53,6 @@ public class GuiResources {
     public static final Image token_6_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_6.jpg")));
     public static final Image token_8_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_8.jpg")));
     public static final Image token_full_bookshelf = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/first_full_bookshelf_token.jpg")));
-    private static final Map<Token, Image> tokenMap = Map.of(COMMON_GOAL_TOKEN_2_POINTS, token_2_points,
-            COMMON_GOAL_TOKEN_4_POINTS, token_4_points, COMMON_GOAL_TOKEN_6_POINTS, token_6_points, COMMON_GOAL_TOKEN_8_POINTS, token_8_points, FULL_SHELF_TOKEN, token_full_bookshelf);
-
 
     // Personal goal cards
     public static final Image personal_GC1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_1.png")));
@@ -68,19 +67,6 @@ public class GuiResources {
     public static final Image personal_GC10 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_10.png")));
     public static final Image personal_GC11 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_11.png")));
     public static final Image personal_GC12 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_12.png")));
-    private static final Map<PersonalGoalCard, Image> personalGCMap = Map.ofEntries(
-            Map.entry(p1, personal_GC1),
-            Map.entry(p2, personal_GC2),
-            Map.entry(p3, personal_GC3),
-            Map.entry(p4, personal_GC4),
-            Map.entry(p5, personal_GC5),
-            Map.entry(p6, personal_GC6),
-            Map.entry(p7, personal_GC7),
-            Map.entry(p8, personal_GC8),
-            Map.entry(p9, personal_GC9),
-            Map.entry(p10, personal_GC10),
-            Map.entry(p11, personal_GC11),
-            Map.entry(p12, personal_GC12));
 
     // Common goal cards
     public static final Image common_diagonal = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/diagonal.jpg")));
@@ -95,19 +81,6 @@ public class GuiResources {
     public static final Image common_two_diff_lines = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/two_diff_lines.jpg")));
     public static final Image common_two_squares = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/two_squares.jpg")));
     public static final Image common_x_tiles = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/x_tiles.jpg")));
-    private static final Map<CommonGoalCardIdentifier, Image> commonGCMap = Map.ofEntries(
-            Map.entry(SIX_PAIRS, common_six_pairs),
-            Map.entry(DIAGONAL, common_diagonal),
-            Map.entry(FOUR_GROUP_FOUR, common_four_group_four),
-            Map.entry(FOUR_MAX3DIFF_LINES, common_four_max3diff_lines),
-            Map.entry(FOUR_CORNERS, common_four_corners),
-            Map.entry(TWO_DIFF_COLUMNS, common_two_diff_columns),
-            Map.entry(TWO_SQUARES, common_two_squares),
-            Map.entry(TWO_DIFF_LINES, common_two_diff_lines),
-            Map.entry(THREE_MAX3DIFF_COLUMNS, common_three_max3diff_columns),
-            Map.entry(X_TILES, common_x_tiles),
-            Map.entry(EIGHT_TILES, common_eight_tiles),
-            Map.entry(STAIRS, common_stairs));
 
     // Boards tutte
     public static final Image bookshelf_image = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/boards/bookshelf.png")));
@@ -121,23 +94,86 @@ public class GuiResources {
     public static final Image title = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/publisher_material/title_2000x618px.png")));
 
 
+    // maps
+    private static final Map<Tile, Image> tileImageMap = Map.of(BOOK, extract(BOOK), CAT, extract(CAT), FRAME, extract(FRAME), GAME, extract(GAME), PLANT, extract(PLANT), TROPHY, extract(TROPHY));
+    private static final Map<Token, Image> tokenImageMap = Map.of(COMMON_GOAL_TOKEN_2_POINTS, token_2_points,
+            COMMON_GOAL_TOKEN_4_POINTS, token_4_points, COMMON_GOAL_TOKEN_6_POINTS, token_6_points, COMMON_GOAL_TOKEN_8_POINTS, token_8_points, FULL_SHELF_TOKEN, token_full_bookshelf);
+    private static final Map<PersonalGoalCard, Image> personalGCImageMap = Map.ofEntries(
+            Map.entry(p1, personal_GC1),
+            Map.entry(p2, personal_GC2),
+            Map.entry(p3, personal_GC3),
+            Map.entry(p4, personal_GC4),
+            Map.entry(p5, personal_GC5),
+            Map.entry(p6, personal_GC6),
+            Map.entry(p7, personal_GC7),
+            Map.entry(p8, personal_GC8),
+            Map.entry(p9, personal_GC9),
+            Map.entry(p10, personal_GC10),
+            Map.entry(p11, personal_GC11),
+            Map.entry(p12, personal_GC12));
+    private static final Map<CommonGoalCardIdentifier, Image> commonGCImageMap = Map.ofEntries(
+            Map.entry(SIX_PAIRS, common_six_pairs),
+            Map.entry(DIAGONAL, common_diagonal),
+            Map.entry(FOUR_GROUP_FOUR, common_four_group_four),
+            Map.entry(FOUR_MAX3DIFF_LINES, common_four_max3diff_lines),
+            Map.entry(FOUR_CORNERS, common_four_corners),
+            Map.entry(TWO_DIFF_COLUMNS, common_two_diff_columns),
+            Map.entry(TWO_SQUARES, common_two_squares),
+            Map.entry(TWO_DIFF_LINES, common_two_diff_lines),
+            Map.entry(THREE_MAX3DIFF_COLUMNS, common_three_max3diff_columns),
+            Map.entry(X_TILES, common_x_tiles),
+            Map.entry(EIGHT_TILES, common_eight_tiles),
+            Map.entry(STAIRS, common_stairs));
+
+
     //Get resources
+
+    /**
+     * Retrieves the image associated with a specific tile.
+     *
+     * @param tile The tile type.
+     * @return The image representing the tile.
+     */
     public static Image getTile(Tile tile) {
         return tileImageMap.get(tile);
     }
 
+    /**
+     * Retrieves the image associated with a specific token.
+     *
+     * @param token The token type.
+     * @return The image representing the token.
+     */
     public static Image getToken(Token token) {
-        return tokenMap.get(token);
+        return tokenImageMap.get(token);
     }
 
+    /**
+     * Retrieves the image associated with a specific common goal card.
+     *
+     * @param card The common goal card identifier.
+     * @return The image representing the common goal card.
+     */
     public static Image getCommonGC(CommonGoalCardIdentifier card) {
-        return commonGCMap.get(card);
+        return commonGCImageMap.get(card);
     }
 
+    /**
+     * Retrieves the image associated with a specific personal goal card.
+     *
+     * @param card The personal goal card.
+     * @return The image representing the personal goal card.
+     */
     public static Image getPersonalGC(PersonalGoalCard card) {
-        return personalGCMap.get(card);
+        return personalGCImageMap.get(card);
     }
 
+    /**
+     * Determines the tile type based on the provided image.
+     *
+     * @param image The image representing a tile.
+     * @return The corresponding tile type.
+     */
     public static Tile getTileType(Image image) {
         if (image.equals(book1) || image.equals(book2) || image.equals(book3)) {
             return BOOK;
@@ -158,6 +194,4 @@ public class GuiResources {
     public static final List<Image> tilesDomain = Arrays.asList(
             book1, book2, book3, cat1, cat2, cat3, frame1, frame2, frame3, game1, game2, game3, plant1, plant2, plant3, trophy1, trophy2, trophy3
     );
-
-
 }

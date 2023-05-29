@@ -11,8 +11,11 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
@@ -22,7 +25,11 @@ import java.util.*;
 
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 
-
+/**
+ * The GuiGameController class is responsible for managing the graphical user interface (GUI)
+ * for the game. It handles user interactions, updates the GUI elements based on the game model,
+ * and communicates with the game logic through the GameViewEventHandler interface.
+ */
 public class GuiGameController implements GameGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
@@ -32,7 +39,7 @@ public class GuiGameController implements GameGateway {
 
     private static final String indexPath = "index.fxml";
 
-    private static int col = 0;
+    private static final int col = 0;
     private final List<Tile> orderedTiles = new ArrayList<>();
     private final Set<Coordinate> selectedCoordinates = new HashSet<>();
 
@@ -97,6 +104,13 @@ public class GuiGameController implements GameGateway {
     private Game model;
     private String owner;
 
+    /**
+     * Initializes the game model, event handler, and owner for the GUI controller.
+     *
+     * @param model   The game model.
+     * @param handler The event handler for game events.
+     * @param owner   The owner of the GUI controller.
+     */
     public void initModel(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
@@ -128,6 +142,9 @@ public class GuiGameController implements GameGateway {
     }
 
 
+    /**
+     * Called when the game is created. It initializes the GUI elements and starts the game.
+     */
     @Override
     public void onGameCreated() {
         //game starting
@@ -166,6 +183,11 @@ public class GuiGameController implements GameGateway {
 
     }
 
+    /**
+     * Updates the game model and refreshes the GUI elements based on the updated model.
+     *
+     * @param game The updated game model.
+     */
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
@@ -207,7 +229,11 @@ public class GuiGameController implements GameGateway {
 
     }
 
-
+    /**
+     * Handles the game selection reply and updates the GUI elements based on the result.
+     *
+     * @param turnResult The result of the tile selection operation.
+     */
     @Override
     public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
         switch (turnResult) {
@@ -229,12 +255,15 @@ public class GuiGameController implements GameGateway {
                     }
                 }
             }
-            case SingleResult.Success<TileSelectionFailures> success -> {
-                Status.setOpacity(0);
-            }
+            case SingleResult.Success<TileSelectionFailures> success -> Status.setOpacity(0);
         }
     }
 
+    /**
+     * Handles the game insertion reply and updates the GUI elements based on the result.
+     *
+     * @param turnResult The result of the bookshelf insertion operation.
+     */
     @Override
     public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
         switch (turnResult) {
@@ -271,16 +300,16 @@ public class GuiGameController implements GameGateway {
                     }
                 }
             }
-            case SingleResult.Success<BookshelfInsertionFailure> success -> {
-                insertionStatus.setOpacity(0);
-
-            }
+            case SingleResult.Success<BookshelfInsertionFailure> success -> insertionStatus.setOpacity(0);
         }
 
 
     }
 
-
+    /**
+     * Event handler for the selectingButton click event. Initiates the insertion process and
+     * switches to the index scene.
+     */
     @FXML
     public void onSelectingButtonClick() {
         handler.onViewInsertion(col, orderedTiles);

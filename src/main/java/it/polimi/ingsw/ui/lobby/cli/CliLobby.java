@@ -16,6 +16,10 @@ import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CliLobby class represents the CLI implementation of the lobby gateway, which allows players to interact
+ * with the lobby and join/create games.
+ */
 public class CliLobby implements LobbyGateway {
 
     private final LobbyViewEventHandler handler;
@@ -30,11 +34,21 @@ public class CliLobby implements LobbyGateway {
 
     boolean isKilled = false;
 
+    /**
+     * Constructs a CliLobby instance with the specified LobbyViewEventHandler.
+     *
+     * @param handler the LobbyViewEventHandler to handle lobby events
+     */
     public CliLobby(LobbyViewEventHandler handler) {
         this.handler = handler;
     }
 
-
+    /**
+     * Notifies the CliLobby instance about a server status update, including the current status and player information.
+     *
+     * @param status     the updated server status
+     * @param playerInfo the list of player information
+     */
     @Override
     public synchronized void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
         if (isKilled)
@@ -46,6 +60,11 @@ public class CliLobby implements LobbyGateway {
         renderModelUpdate();
     }
 
+    /**
+     * Notifies the CliLobby instance about a server creation reply, including the result of the game creation request.
+     *
+     * @param result the typed result of the game creation request
+     */
     @Override
     public synchronized void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         if (isKilled)
@@ -78,6 +97,11 @@ public class CliLobby implements LobbyGateway {
         }
     }
 
+    /**
+     * Notifies the CliLobby instance about a server connection reply, including the result of the game connection request.
+     *
+     * @param result the typed result of the game connection request
+     */
     @Override
     public synchronized void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         if (isKilled)
@@ -107,7 +131,9 @@ public class CliLobby implements LobbyGateway {
         renderModelUpdate();
     }
 
-
+    /**
+     * Renders the model update based on the current state and owner information.
+     */
     private void renderModelUpdate() {
         if (isKilled)
             return;
@@ -168,7 +194,9 @@ public class CliLobby implements LobbyGateway {
         }
     }
 
-
+    /**
+     * Kills the CliLobby instance and stops further processing.
+     */
     @Override
     public void kill() {
         isKilled = true;

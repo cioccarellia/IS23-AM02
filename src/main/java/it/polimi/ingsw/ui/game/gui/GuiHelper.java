@@ -11,18 +11,28 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
+import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-
+/**
+ * The GuiHelper class provides helper methods for generating and updating GUI elements
+ * in the game graphical user interface (GUI).
+ */
 public class GuiHelper {
 
     private final static int rows = BookshelfConfiguration.getInstance().rows();
     private final static int cols = BookshelfConfiguration.getInstance().cols();
     private final static int dimension = BoardConfiguration.getInstance().getDimension();
 
+    /**
+     * Regenerates the GridPane representing the game board in the GUI based on the provided game model.
+     *
+     * @param game The game model.
+     * @return The regenerated GridPane representing the game board.
+     */
     public static GridPane regenerateBoardGridPage(Game game) {
         GridPane matrix = new GridPane();
 
@@ -38,15 +48,28 @@ public class GuiHelper {
         return matrix;
     }
 
+    /**
+     * Generates an ImageView representing a tile in the GUI.
+     *
+     * @param tile The tile to generate the ImageView for.
+     * @return The ImageView representing the tile.
+     */
     public static ImageView generateImageViewForTile(Tile tile) {
         Image tileImage = GuiResources.getTile(tile);
 
         ImageView tileImageView = new ImageView();
+
         tileImageView.setImage(tileImage);
 
         return tileImageView;
     }
 
+    /**
+     * Regenerates the GridPane representing a bookshelf in the GUI based on the provided bookshelf.
+     *
+     * @param bookshelf The bookshelf to regenerate the GridPane for.
+     * @return The regenerated GridPane representing the bookshelf.
+     */
     public static GridPane regenerateBookshelfGridPane(Bookshelf bookshelf) {
         GridPane matrix = new GridPane();
 
@@ -63,36 +86,72 @@ public class GuiHelper {
         return matrix;
     }
 
+    /**
+     * Generates an ImageView representing a personal goal card in the GUI.
+     *
+     * @param game  The game model.
+     * @param owner The owner of the personal goal card.
+     * @return The ImageView representing the personal goal card.
+     */
     public static ImageView generatePersonalGoalCardImageView(Game game, String owner) {
-        ImageView image = new ImageView();
+        ImageView personalGoalCardImageView = new ImageView();
+
         PersonalGoalCard id = game.getSessions().getByUsername(owner).getPersonalGoalCard();
 
-        image.setImage(GuiResources.getPersonalGC(id));
-        return image;
+        Image personalGoalCardImage = GuiResources.getPersonalGC(id);
+
+        personalGoalCardImageView.setImage(personalGoalCardImage);
+
+        return personalGoalCardImageView;
     }
 
+    /**
+     * Generates an ImageView representing a common goal card in the GUI.
+     *
+     * @param commonGoalCard The common goal card to generate the ImageView for.
+     * @return The ImageView representing the common goal card.
+     */
     public static ImageView generateCommonGoalCardImageView(CommonGoalCard commonGoalCard) {
-        ImageView image = new ImageView();
+        ImageView commonGoalCardImageView = new ImageView();
+
         CommonGoalCardIdentifier id = commonGoalCard.getId();
 
-        image.setImage(GuiResources.getCommonGC((id)));
+        Image commonGoalCardImage = GuiResources.getCommonGC(id);
 
-        return image;
+        commonGoalCardImageView.setImage(commonGoalCardImage);
+
+        return commonGoalCardImageView;
     }
 
+    /**
+     * Generates an ImageView representing a token in the GUI based on the provided common goal card status.
+     *
+     * @param commonGoalCard The common goal card status containing the token.
+     * @return The ImageView representing the token.
+     */
     public static ImageView generateTokenImageView(CommonGoalCardStatus commonGoalCard) {
-        ImageView image = new ImageView();
+        ImageView tokenImageView = new ImageView();
+
         Token id = commonGoalCard.getCardTokens().get(commonGoalCard.getCardTokens().size() - 1);
 
-        image.setImage(GuiResources.getToken(id));
+        Image tokenImage = GuiResources.getToken(id);
 
-        return image;
+        tokenImageView.setImage(tokenImage);
+
+        return tokenImageView;
     }
 
+    /**
+     * Retrieves the coordinates of a selected tile node in the GUI.
+     *
+     * @param tileNode The Node representing the selected tile.
+     * @return The coordinates of the selected tile.
+     */
     public static Coordinate getSelectedCoordinates(Node tileNode) {
         Coordinate coordinate;
 
         Integer col = GridPane.getColumnIndex(tileNode);
+
         Integer row = GridPane.getRowIndex(tileNode);
 
         coordinate = new Coordinate(row, col);

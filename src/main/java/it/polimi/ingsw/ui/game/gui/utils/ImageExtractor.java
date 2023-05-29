@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.game.gui;
+package it.polimi.ingsw.ui.game.gui.utils;
 
 import it.polimi.ingsw.model.board.Tile;
 import javafx.scene.image.Image;
@@ -8,9 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The ImageExtractor class is responsible for extracting images for different tile types.
+ * It provides a static method to extract an image based on the given tile type.
+ */
 public class ImageExtractor {
     private static final List<Image> state = new ArrayList<>(GuiResources.tilesDomain);
 
+    /**
+     * Extracts an image for the specified tile type.
+     *
+     * @param tileType the tile type
+     * @return the extracted image
+     * @throws IllegalStateException if the tile type is unexpected
+     */
     public static Image extract(@NotNull Tile tileType) {
         switch (tileType) {
             case BOOK -> {

@@ -23,10 +23,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-@SuppressWarnings("FieldCanBeLocal")
+/**
+ * The RunnableGuiLobby class is responsible for launching and managing the graphical user interface (GUI) for the lobby.
+ * It extends the JavaFX Application class and implements the LobbyGateway interface.
+ * It provides methods for initializing the lobby view event handler, starting the lobby stage, and handling server status updates,
+ * server creation replies, server connection replies, and terminating the lobby.
+ */
 public class RunnableGuiLobby extends Application implements LobbyGateway {
 
     private final URL fxmlURL = getClass().getResource("/fxml/lobby/logIn.fxml");
+
+    private final Image icon = new Image("img/publisher_material/publisher.png");
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
 
@@ -37,11 +44,21 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
         Application.launch(args);
     }
 
+    /**
+     * Initializes the lobby view event handler.
+     *
+     * @param handler The lobby view event handler.
+     */
     public void initHandler(LobbyViewEventHandler handler) {
         this.handler = handler;
     }
-    
 
+    /**
+     * Starts the lobby stage and loads the lobby GUI from the FXML file.
+     *
+     * @param lobbyStage The stage for the lobby GUI.
+     * @throws Exception if an error occurs while loading the lobby XML.
+     */
     @Override
     public void start(Stage lobbyStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(fxmlURL);
@@ -65,25 +82,44 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
 
 
         lobbyStage.setTitle("Login page");
-        lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
+        lobbyStage.getIcons().add(icon);
         lobbyStage.show();
     }
 
+    /**
+     * Notifies the lobby controller of a server status update.
+     *
+     * @param status     The updated server status.
+     * @param playerInfo The list of player information.
+     */
     @Override
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
         lobbyController.onServerStatusUpdate(status, playerInfo);
     }
 
+    /**
+     * Notifies the lobby controller of a server creation reply.
+     *
+     * @param result The typed result containing either a game creation success or a game creation error.
+     */
     @Override
     public void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         lobbyController.onServerCreationReply(result);
     }
 
+    /**
+     * Notifies the lobby controller of a server connection reply.
+     *
+     * @param result The typed result containing either a game connection success or a game connection error.
+     */
     @Override
     public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         lobbyController.onServerConnectionReply(result);
     }
 
+    /**
+     * Terminates the lobby by notifying the lobby controller.
+     */
     @Override
     public void kill() {
         lobbyController.kill();

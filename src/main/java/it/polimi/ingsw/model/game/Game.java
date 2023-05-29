@@ -388,7 +388,8 @@ public class Game implements ModelService {
         getCurrentPlayerSession().setPlayerCurrentGamePhase(IDLE);
     }
 
-    /**˙
+    /**
+     * ˙
      * Updates the current player's tokens, if needed, checks if the board needs refilling and sets the player's status
      * as IDLE
      */
@@ -455,10 +456,8 @@ public class Game implements ModelService {
     public void onForcedNextTurn(String nextPlayer) {
         // conditioned rollback
         switch (getCurrentPlayerSession().getPlayerCurrentGamePhase()) {
-            case IDLE, SELECTING -> {
-                // normal phase, no changes required, switching
-                onNextTurn(nextPlayer);
-            }
+            case IDLE, SELECTING -> // normal phase, no changes required, switching
+                    onNextTurn(nextPlayer);
             case INSERTING -> {
                 // rollback model to pre-selection stage and forward turns
                 // todo

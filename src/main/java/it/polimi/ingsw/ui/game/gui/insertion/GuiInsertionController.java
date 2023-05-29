@@ -1,10 +1,8 @@
-package it.polimi.ingsw.ui.insertion;
+package it.polimi.ingsw.ui.game.gui.insertion;
 
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.ui.game.GameGateway;
-import it.polimi.ingsw.ui.game.gui.GuiResources;
+import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -14,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The controller class for the GUI tile insertion screen.
+ */
 public class GuiInsertionController {
     private static int col = 0;
     private final List<Tile> orderedTiles = new ArrayList<>();
@@ -60,8 +61,10 @@ public class GuiInsertionController {
 
     }
 
+    /**
+     * Event handler for radio button click.
+     */
     public void onRadioButtonClick() {
-
         List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
 
         for (int i = 0; i < columnButtons.size(); i++) {
@@ -75,6 +78,9 @@ public class GuiInsertionController {
 
     }
 
+    /**
+     * Event handler for ordered tile insertion.
+     */
     public void onOrderedTileInsertion() {
         /* se dovesse funzionare con il for loop
         List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
@@ -100,16 +106,16 @@ public class GuiInsertionController {
         */
 
 
-            if (orderedTiles.size() == 0) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(1));
-            } else if (orderedTiles.size() == 1) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(2));
-            } else if (orderedTiles.size() == 2) {
-                orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-                label1.setText(String.valueOf(3));
-            }
+        if (orderedTiles.size() == 0) {
+            orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
+            label1.setText(String.valueOf(1));
+        } else if (orderedTiles.size() == 1) {
+            orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
+            label1.setText(String.valueOf(2));
+        } else if (orderedTiles.size() == 2) {
+            orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
+            label1.setText(String.valueOf(3));
+        }
 
 
     }

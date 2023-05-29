@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.ranking;
+package it.polimi.ingsw.ui.game.gui.ranking;
 
 import it.polimi.ingsw.model.game.Game;
 import javafx.application.Application;
@@ -9,9 +9,13 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * The RankingController class is responsible for displaying the game rankings in the GUI.
+ * It extends the JavaFX Application class.
+ */
 public class RankingController extends Application {
     @FXML
     public Label winnerPlayer;
@@ -23,7 +27,6 @@ public class RankingController extends Application {
     public Label Player3;
     @FXML
     public Label Player4;
-    public List<Label> players = List.of(Player1, Player2, Player3, Player4);
     @FXML
     public Label Total1;
     @FXML
@@ -32,7 +35,6 @@ public class RankingController extends Application {
     public Label Total3;
     @FXML
     public Label Total4;
-    public List<Label> totals = List.of(Total1, Total2, Total3, Total4);
     @FXML
     public Label Token1;
     @FXML
@@ -41,7 +43,6 @@ public class RankingController extends Application {
     public Label Token3;
     @FXML
     public Label Token4;
-    public List<Label> tokens = List.of(Token1, Token2, Token3, Token4);
     @FXML
     public Label Bookshelf1;
     @FXML
@@ -50,7 +51,6 @@ public class RankingController extends Application {
     public Label Bookshelf3;
     @FXML
     public Label Bookshelf4;
-    public List<Label> bookshelves = List.of(Bookshelf1, Bookshelf2, Bookshelf3, Bookshelf4);
     @FXML
     public Label Personal1;
     @FXML
@@ -59,14 +59,43 @@ public class RankingController extends Application {
     public Label Personal3;
     @FXML
     public Label Personal4;
-    public List<Label> personals = List.of(Personal1, Personal2, Personal3, Personal4);
+
+    private List<Label> players() {
+        return Arrays.asList(Player1, Player2, Player3, Player4);
+    }
+
+    private List<Label> totals() {
+        return Arrays.asList(Total1, Total2, Total3, Total4);
+    }
+
+    private List<Label> tokens() {
+        return Arrays.asList(Token1, Token2, Token3, Token4);
+    }
+
+    private List<Label> bookshelves() {
+        return Arrays.asList(Bookshelf1, Bookshelf2, Bookshelf3, Bookshelf4);
+    }
+
+    private List<Label> personals() {
+        return Arrays.asList(Personal1, Personal2, Personal3, Personal4);
+    }
 
     private final Game model;
 
+    /**
+     * Constructs a RankingController with the specified game model.
+     *
+     * @param game the game model
+     */
     public RankingController(Game game) {
         this.model = game;
     }
 
+    /**
+     * Starts the ranking stage and initializes the GUI components.
+     *
+     * @param rankingStage the ranking stage
+     */
     @Override
     public void start(Stage rankingStage) {
 
@@ -89,7 +118,7 @@ public class RankingController extends Application {
         }
 
         rankingStage.setScene(rootLayout.getScene());
-        rankingStage.setTitle("RANKING PAGE");
+        rankingStage.setTitle("Game rankings!");
         rankingStage.show();
 
         //Setting winner player

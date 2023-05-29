@@ -149,11 +149,7 @@ public class CliApp implements GameGateway {
         switch (turnResult) {
             case SingleResult.Failure<TileSelectionFailures> failure -> {
                 switch (failure.error()) {
-                    case WRONG_GAME_PHASE:
-                        break;
-                    case UNAUTHORIZED_SELECTION:
-                        break;
-                    case UNAUTHORIZED_PLAYER:
+                    case WRONG_GAME_PHASE, UNAUTHORIZED_PLAYER, UNAUTHORIZED_SELECTION:
                         break;
                 }
 

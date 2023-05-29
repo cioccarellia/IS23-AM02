@@ -9,6 +9,5 @@ public abstract class Message implements Serializable {
     /**
      * Used for deserialization class lookup (for the {@code Message} class hierarchy)
      */
-    @SuppressWarnings("unused")
     protected final String CLASS_META_FIELD = getClass().getName();
 }

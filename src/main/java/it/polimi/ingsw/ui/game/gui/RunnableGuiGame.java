@@ -11,19 +11,25 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javafx.scene.SceneAntialiasing;
 
+/**
+ * The RunnableGuiGame class represents the entry point for running the graphical user interface (GUI) version of the game.
+ * It extends the JavaFX Application class and implements the GameGateway interface.
+ */
 public class RunnableGuiGame extends Application implements GameGateway {
 
     private final URL fxmlURL = getClass().getResource("/fxml/game/index.fxml");
+
+    private final Image icon = new Image("img/publisher_material/title_2000x2000px.png");
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiGame.class);
 
@@ -37,12 +43,25 @@ public class RunnableGuiGame extends Application implements GameGateway {
         Application.launch(args);
     }
 
+    /**
+     * Initializes the model, handler, and owner for the GUI game.
+     *
+     * @param model   The game model.
+     * @param handler The game view event handler.
+     * @param owner   The owner of the game.
+     */
     public void initModel(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
     }
 
+    /**
+     * Starts the GUI game by loading the FXML file and initializing the game controller.
+     *
+     * @param primaryStage The primary stage of the JavaFX application.
+     * @throws IOException If an error occurs while loading the FXML file.
+     */
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(fxmlURL);
@@ -71,31 +90,47 @@ public class RunnableGuiGame extends Application implements GameGateway {
         primaryStage.setScene(loadedScene);
 
         primaryStage.setTitle("My shelfie: the game");
-        primaryStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
+        primaryStage.getIcons().add(icon);
         primaryStage.show();
 
-        Platform.runLater(() -> {
-            gameController.modelUpdate(model);
-        });
+        Platform.runLater(() -> gameController.modelUpdate(model));
     }
 
+    /**
+     * Notifies the game controller that the game has been created.
+     */
     @Override
     public void onGameCreated() {
-
+        gameController.onGameCreated();
     }
 
+    /**
+     * Updates the game model in the game controller.
+     *
+     * @param game The updated game model.
+     */
     @Override
     public void modelUpdate(Game game) {
-
+        gameController.modelUpdate(game);
     }
 
+    /**
+     * Notifies the game controller about the result of a tile selection in the game.
+     *
+     * @param turnResult The result of the tile selection.
+     */
     @Override
     public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
-
+        gameController.onGameSelectionReply(turnResult);
     }
 
+    /**
+     * Notifies the game controller about the result of a bookshelf insertion in the game.
+     *
+     * @param turnResult The result of the bookshelf insertion.
+     */
     @Override
     public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
-
+        gameController.onGameInsertionReply(turnResult);
     }
 }

@@ -393,7 +393,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         return connectionsManager;
     }
 
-    @SuppressWarnings("IfStatementWithIdenticalBranches")
     @Override
     public void onConnectionChange() {
         try {
@@ -409,14 +408,14 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
             if (connectionsManager.isAnyClientDisconnected()) {
-                /**  Server Status Update  ***/
+                // Server Status Update
                 // there are clients disconnected
                 router.broadcastExcluding(
                         connectionsManager.getDisconnectedClientUsernames()
                 ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
-                /**  Model Update  ***/
+                // Model Update
                 // we have to check if the current player is disconnected.
                 // if it is, and we are not in standby, we need to move forward
                 String currentPlayerUsername = game.getCurrentPlayerSession().getUsername();

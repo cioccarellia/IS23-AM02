@@ -19,8 +19,12 @@ import javafx.scene.control.TextField;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.ingsw.model.game.GameMode.*;
+
 
 /**
+ * The controller class for the GUI lobby.
+ * It manages the user interface elements and communicates with the server through the LobbyGateway interface.
  * Keeps a reference to the owner (which can be null at the beginning) of this client instance.
  */
 public class GuiLobbyController implements LobbyGateway {
@@ -52,6 +56,11 @@ public class GuiLobbyController implements LobbyGateway {
     private GameMode gameMode;
     private String username;
 
+    /**
+     * Initializes the controller with the given LobbyViewEventHandler.
+     *
+     * @param handler The event handler for the lobby view.
+     */
     public void init(LobbyViewEventHandler handler) {
         this.handler = handler;
 
@@ -60,6 +69,9 @@ public class GuiLobbyController implements LobbyGateway {
         renderModelUpdate();
     }
 
+    /**
+     * Updates the UI with the current server status and player information.
+     */
     @Override
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
         if (isKilled)
@@ -71,6 +83,9 @@ public class GuiLobbyController implements LobbyGateway {
         renderModelUpdate();
     }
 
+    /**
+     * Handles the server reply for game creation request.
+     */
     @Override
     public void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         if (isKilled)
@@ -84,9 +99,7 @@ public class GuiLobbyController implements LobbyGateway {
 
                         handler.sendStatusUpdateRequest();
                     }
-                    case GAME_ALREADY_RUNNING -> {
-                        loginStatus.setText("loginError: Game running.\n");
-                    }
+                    case GAME_ALREADY_RUNNING -> loginStatus.setText("loginError: Game running.\n");
                     case INVALID_USERNAME -> {
                         loginStatus.setText("loginError: Invalid Username.\n");
                         renderModelUpdate();
@@ -101,6 +114,9 @@ public class GuiLobbyController implements LobbyGateway {
         }
     }
 
+    /**
+     * Handles the server reply for game connection request.
+     */
     @Override
     public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         if (isKilled)
@@ -109,49 +125,35 @@ public class GuiLobbyController implements LobbyGateway {
         switch (result) {
             case TypedResult.Failure<GameConnectionSuccess, GameConnectionError> failure -> {
                 switch (failure.error()) {
-                    case ALREADY_CONNECTED_PLAYER -> {
-                        loginStatus.setText("loginError: You are already connected to this game");
-                    }
+                    case ALREADY_CONNECTED_PLAYER -> loginStatus.setText("loginError: You are already connected to this game");
                     case USERNAME_ALREADY_IN_USE -> {
                         loginStatus.setText("loginError: Username already in use");
-                        loginButton.setOnMouseClicked(mouseEvent -> {
-                            handler.sendGameConnectionRequest(username);
-                        });
+                        loginButton.setOnMouseClicked(mouseEvent -> handler.sendGameConnectionRequest(username));
 
                     }
                     case MAX_PLAYER_AMOUNT_EACHED -> {
                         loginStatus.setText("loginError: max player amount reached");
                         loginButton.setText("QUIT");
-                        loginButton.setOnMouseClicked(mouseEvent -> {
-                            kill();
-                        });
+                        loginButton.setOnMouseClicked(mouseEvent -> kill());
                     }
                     case NO_GAME_TO_JOIN -> {
                         loginStatus.setText("loginError: no game to join");
                         loginButton.setText("QUIT");
-                        loginButton.setOnMouseClicked(mouseEvent -> {
-                            kill();
-                        });
+                        loginButton.setOnMouseClicked(mouseEvent -> kill());
                     }
                     case GAME_ALREADY_STARTED -> {
                         loginStatus.setText("loginError: game already started");
                         loginButton.setText("QUIT");
-                        loginButton.setOnMouseClicked(mouseEvent -> {
-                            kill();
-                        });
+                        loginButton.setOnMouseClicked(mouseEvent -> kill());
                     }
                     case GAME_ALREADY_ENDED -> {
                         loginStatus.setText("loginError: game already ended");
                         loginButton.setText("QUIT");
-                        loginButton.setOnMouseClicked(mouseEvent -> {
-                            kill();
-                        });
+                        loginButton.setOnMouseClicked(mouseEvent -> kill());
                     }
                     case INVALID_USERNAME -> {
                         loginStatus.setText("loginError: invalid username");
-                        loginButton.setOnMouseClicked(mouseEvent -> {
-                            handler.sendGameConnectionRequest(username);
-                        });
+                        loginButton.setOnMouseClicked(mouseEvent -> handler.sendGameConnectionRequest(username));
                     }
                 }
 
@@ -166,7 +168,9 @@ public class GuiLobbyController implements LobbyGateway {
 
     }
 
-
+    /**
+     * Renders the UI based on the current server status.
+     */
     private void renderModelUpdate() {
         if (isKilled) {
             loginStatus.setText("Game killed");
@@ -183,9 +187,7 @@ public class GuiLobbyController implements LobbyGateway {
         }
 
         switch (currentState) {
-            case NO_GAME_STARTED -> {
-                loginStatus.setText("Pick username and select game mode to create the game");
-            }
+            case NO_GAME_STARTED -> loginStatus.setText("Pick username and select game mode to create the game");
             case GAME_INITIALIZING -> {
                 nplayers.setOpacity(0);
 
@@ -201,33 +203,31 @@ public class GuiLobbyController implements LobbyGateway {
 
                 loginStatus.setText("Pick username to connect");
             }
-            case GAME_RUNNING -> {
-                loginStatus.setText("Game already running");
-            }
-            case GAME_OVER -> {
-                loginStatus.setText("Game over");
-            }
+            case GAME_RUNNING -> loginStatus.setText("Game already running");
+            case GAME_OVER -> loginStatus.setText("Game over");
         }
     }
 
+    /**
+     * Sets the click listeners for the radio buttons.
+     */
     private void setRadioButtonsClickListeners() {
-        twoplayers.setOnMouseClicked(mouseEvent -> {
-            gameMode = GameMode.GAME_MODE_2_PLAYERS;
-        });
-        threeplayers.setOnMouseClicked(mouseEvent -> {
-            gameMode = GameMode.GAME_MODE_3_PLAYERS;
-        });
-        threeplayers.setOnMouseClicked(mouseEvent -> {
-            gameMode = GameMode.GAME_MODE_4_PLAYERS;
-        });
+        twoplayers.setOnMouseClicked(mouseEvent -> gameMode = GAME_MODE_2_PLAYERS);
+        threeplayers.setOnMouseClicked(mouseEvent -> gameMode = GAME_MODE_3_PLAYERS);
+        threeplayers.setOnMouseClicked(mouseEvent -> gameMode = GAME_MODE_4_PLAYERS);
     }
 
-
+    /**
+     * Marks the controller as killed.
+     */
     @Override
     public void kill() {
         isKilled = true;
     }
 
+    /**
+     * Handles the submit button click event.
+     */
     @FXML
     public void onSubmitButtonClick() {
         if (currentState == null) {
@@ -235,13 +235,9 @@ public class GuiLobbyController implements LobbyGateway {
         }
 
         switch (currentState) {
-            case NO_GAME_STARTED -> {
-                handler.sendGameStartRequest(usernameField.getText(), gameMode);
-            }
+            case NO_GAME_STARTED -> handler.sendGameStartRequest(usernameField.getText(), gameMode);
 
-            case GAME_INITIALIZING -> {
-                handler.sendGameConnectionRequest(usernameField.getText());
-            }
+            case GAME_INITIALIZING -> handler.sendGameConnectionRequest(usernameField.getText());
 
             case GAME_RUNNING -> {
                 // no

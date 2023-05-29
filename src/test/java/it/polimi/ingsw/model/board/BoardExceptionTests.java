@@ -11,7 +11,6 @@ import static it.polimi.ingsw.model.board.Tile.CAT;
 import static it.polimi.ingsw.model.game.GameMode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings("UnnecessaryLocalVariable")
 public class BoardExceptionTests {
 
     @Test

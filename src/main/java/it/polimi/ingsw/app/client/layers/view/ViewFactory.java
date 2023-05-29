@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.CliApp;
-import it.polimi.ingsw.ui.game.gui.GuiGameController;
 import it.polimi.ingsw.ui.game.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
@@ -37,9 +36,7 @@ public class ViewFactory {
                 var gui = new RunnableGuiGame();
                 gui.initModel(model, handler, owner);
 
-                Platform.runLater(() -> {
-                    Application.launch(RunnableGuiGame.class, "");
-                });
+                Platform.runLater(() -> Application.launch(RunnableGuiGame.class, ""));
                 return gui;
 
             }
@@ -63,9 +60,7 @@ public class ViewFactory {
                 RunnableGuiLobby lobby = new RunnableGuiLobby();
                 lobby.initHandler(handler);
 
-                Platform.runLater(() -> {
-                    Application.launch(RunnableGuiLobby.class, "");
-                });
+                Platform.runLater(() -> Application.launch(RunnableGuiLobby.class, ""));
                 return lobby;
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
