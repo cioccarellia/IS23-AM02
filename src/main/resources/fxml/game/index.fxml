@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 <VBox fx:controller="it.polimi.ingsw.ui.game.gui.GuiGameController" xmlns:fx="http://javafx.com/fxml/1">
     <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
           prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
@@ -440,11 +440,15 @@
                        GridPane.columnIndex="3">
                 <Image url="@../../img/tiles/book1.1.png"/>
             </ImageView>
-            <ImageView id="boardTile04" fitHeight="49.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true"
-                       GridPane.columnIndex="4"/>
-            <ImageView id="boardTile13" fitHeight="48.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true"
+            <ImageView id="boardTile04" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"
+                       GridPane.columnIndex="4">
+                <Image url="@../../img/tiles/book1.1.png"/>
+            </ImageView>
+
+
+            <ImageView id="boardTile13" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"
                        GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-            <ImageView id="boardTile14" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true"
+            <ImageView id="boardTile14" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"
                        GridPane.columnIndex="4" GridPane.rowIndex="1"/>
             <ImageView id="boardTile15" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"
                        GridPane.columnIndex="5" GridPane.rowIndex="1"/>

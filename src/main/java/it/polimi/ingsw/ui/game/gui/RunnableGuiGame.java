@@ -29,8 +29,6 @@ public class RunnableGuiGame extends Application implements GameGateway {
 
     private final URL fxmlURL = getClass().getResource("/fxml/game/index.fxml");
 
-    private final Image icon = new Image("img/publisher_material/title_2000x2000px.png");
-
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiGame.class);
 
     private GuiGameController gameController;
@@ -90,7 +88,7 @@ public class RunnableGuiGame extends Application implements GameGateway {
         primaryStage.setScene(loadedScene);
 
         primaryStage.setTitle("My shelfie: the game");
-        primaryStage.getIcons().add(icon);
+        primaryStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
         primaryStage.show();
 
         Platform.runLater(() -> gameController.modelUpdate(model));

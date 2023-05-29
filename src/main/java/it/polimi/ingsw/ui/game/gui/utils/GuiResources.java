@@ -19,7 +19,7 @@ import static it.polimi.ingsw.ui.game.gui.utils.ImageExtractor.extract;
 
 /**
  * The GuiResources class provides access to various graphical resources used in the GUI.
- * It includes images for tiles, tokens, personal goal cards, common goal cards, and more.
+ * It includes Images for tiles, tokens, personal goal cards, common goal cards, and more.
  */
 public class GuiResources {
 
@@ -27,71 +27,71 @@ public class GuiResources {
 
     }
 
-    // Tiles
-    public static final Image book1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/book1.1.png")));
-    public static final Image book2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/book1.2.png")));
-    public static final Image book3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/book1.3.png")));
-    public static final Image cat1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/cat1.1.png")));
-    public static final Image cat2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/cat1.2.png")));
-    public static final Image cat3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/cat1.3.png")));
-    public static final Image frame1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/frame1.1.png")));
-    public static final Image frame2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/frame1.2.png")));
-    public static final Image frame3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/frame1.3.png")));
-    public static final Image game1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/game1.1.png")));
-    public static final Image game2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/game1.2.png")));
-    public static final Image game3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/game1.3.png")));
-    public static final Image plant1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/plant1.1.png")));
-    public static final Image plant2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/plant1.2.png")));
-    public static final Image plant3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/plant1.3.png")));
-    public static final Image trophy1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/trophy1.1.png")));
-    public static final Image trophy2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/trophy1.2.png")));
-    public static final Image trophy3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tiles/trophy1.3.png")));
+    //Tile:
+    public static final Image book1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/book1.1.png"))));
+    public static final Image book2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/book1.2.png"))));
+    public static final Image book3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/book1.3.png"))));
+    public static final Image cat1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/cat1.1.png"))));
+    public static final Image cat2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/cat1.2.png"))));
+    public static final Image cat3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/cat1.3.png"))));
+    public static final Image frame1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/frame1.1.png"))));
+    public static final Image frame2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/frame1.2.png"))));
+    public static final Image frame3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/frame1.3.png"))));
+    public static final Image game1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/game1.1.png"))));
+    public static final Image game2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/game1.2.png"))));
+    public static final Image game3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/game1.3.png"))));
+    public static final Image plant1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/plant1.1.png"))));
+    public static final Image plant2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/plant1.2.png"))));
+    public static final Image plant3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/plant1.3.png"))));
+    public static final Image trophy1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/trophy1.1.png"))));
+    public static final Image trophy2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/trophy1.2.png"))));
+    public static final Image trophy3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tiles/trophy1.3.png"))));
 
     // Tokens
-    public static final Image token_2_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_2.jpg")));
-    public static final Image token_4_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_4.jpg")));
-    public static final Image token_6_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_6.jpg")));
-    public static final Image token_8_points = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/scoring_8.jpg")));
-    public static final Image token_full_bookshelf = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/tokens/first_full_bookshelf_token.jpg")));
+    public static final Image token_2_points = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tokens/scoring_2.jpg"))));
+    public static final Image token_4_points = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tokens/scoring_4.jpg"))));
+    public static final Image token_6_points = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tokens/scoring_6.jpg"))));
+    public static final Image token_8_points = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tokens/scoring_8.jpg"))));
+    public static final Image token_full_bookshelf = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/tokens/first_full_bookshelf_token.jpg"))));
 
     // Personal goal cards
-    public static final Image personal_GC1 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_1.png")));
-    public static final Image personal_GC2 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_2.png")));
-    public static final Image personal_GC3 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_3.png")));
-    public static final Image personal_GC4 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_4.png")));
-    public static final Image personal_GC5 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_5.png")));
-    public static final Image personal_GC6 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_6.png")));
-    public static final Image personal_GC7 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_7.png")));
-    public static final Image personal_GC8 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_8.png")));
-    public static final Image personal_GC9 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_9.png")));
-    public static final Image personal_GC10 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_10.png")));
-    public static final Image personal_GC11 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_11.png")));
-    public static final Image personal_GC12 = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/personal_goal_cards/personal_goal_card_12.png")));
+    public static final Image personal_GC1 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_1.png"))));
+    public static final Image personal_GC2 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_2.png"))));
+    public static final Image personal_GC3 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_3.png"))));
+    public static final Image personal_GC4 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_4.png"))));
+    public static final Image personal_GC5 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_5.png"))));
+    public static final Image personal_GC6 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_6.png"))));
+    public static final Image personal_GC7 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_7.png"))));
+    public static final Image personal_GC8 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_8.png"))));
+    public static final Image personal_GC9 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_9.png"))));
+    public static final Image personal_GC10 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_10.png"))));
+    public static final Image personal_GC11 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_11.png"))));
+    public static final Image personal_GC12 = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/personal_goal_cards/personal_goal_card_12.png"))));
 
     // Common goal cards
-    public static final Image common_diagonal = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/diagonal.jpg")));
-    public static final Image common_eight_tiles = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/eight_tiles.jpg")));
-    public static final Image common_four_corners = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/four_corners.jpg")));
-    public static final Image common_four_group_four = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/four_group_four.jpg")));
-    public static final Image common_four_max3diff_lines = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/four_max3diff_line.jpg")));
-    public static final Image common_six_pairs = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/six_pairs/six_pairs.jpg")));
-    public static final Image common_stairs = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/stairs.jpg")));
-    public static final Image common_three_max3diff_columns = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/three_max3diff_columns.jpg")));
-    public static final Image common_two_diff_columns = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/two_diff_columns.jpg")));
-    public static final Image common_two_diff_lines = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/two_diff_lines.jpg")));
-    public static final Image common_two_squares = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/two_squares.jpg")));
-    public static final Image common_x_tiles = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/common_goal_cards/x_tiles.jpg")));
+    public static final Image common_diagonal = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/diagonal.jpg"))));
+    public static final Image common_eight_tiles = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/eight_tiles.jpg"))));
+    public static final Image common_four_corners = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/four_corners.jpg"))));
+    public static final Image common_four_group_four = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/four_group_four.jpg"))));
+    public static final Image common_four_max3diff_lines = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/four_max3diff_line.jpg"))));
+    public static final Image common_six_pairs = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/six_pairs/six_pairs.jpg"))));
+    public static final Image common_stairs = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/stairs.jpg"))));
+    public static final Image common_three_max3diff_columns = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/three_max3diff_columns.jpg"))));
+    public static final Image common_two_diff_columns = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/two_diff_columns.jpg"))));
+    public static final Image common_two_diff_lines = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/two_diff_lines.jpg"))));
+    public static final Image common_two_squares = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/two_squares.jpg"))));
+    public static final Image common_x_tiles = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/common_goal_cards/x_tiles.jpg"))));
 
     // Boards tutte
-    public static final Image bookshelf_image = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/boards/bookshelf.png")));
-    public static final Image bookshelf_orth_image = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/boards/bookshelf_orth.png")));
-    public static final Image board_image = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/boards/living_room.png")));
+    public static final Image bookshelf_Image = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/boards/bookshelf.png"))));
+    public static final Image bookshelf_orth_Image = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/boards/bookshelf_orth.png"))));
+    public static final Image board_Image = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/boards/living_room.png"))));
 
     // misc wood background
-    public static final Image wood_background = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/misc/wood_background.jpg")));
+    public static final Image wood_background = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/misc/wood_background.jpg"))));
 
     // publisher material title 618
-    public static final Image title = new Image(Objects.requireNonNull(GuiResources.class.getResourceAsStream("img/publisher_material/title_2000x618px.png")));
+    public static final Image title = new Image(String.valueOf(Objects.requireNonNull(GuiResources.class.getResource("/img/publisher_material/title_2000x618px.png"))));
 
 
     // maps
@@ -129,63 +129,63 @@ public class GuiResources {
     //Get resources
 
     /**
-     * Retrieves the image associated with a specific tile.
+     * Retrieves the Image associated with a specific tile.
      *
      * @param tile The tile type.
-     * @return The image representing the tile.
+     * @return The Image representing the tile.
      */
     public static Image getTile(Tile tile) {
         return tileImageMap.get(tile);
     }
 
     /**
-     * Retrieves the image associated with a specific token.
+     * Retrieves the Image associated with a specific token.
      *
      * @param token The token type.
-     * @return The image representing the token.
+     * @return The Image representing the token.
      */
     public static Image getToken(Token token) {
         return tokenImageMap.get(token);
     }
 
     /**
-     * Retrieves the image associated with a specific common goal card.
+     * Retrieves the Image associated with a specific common goal card.
      *
      * @param card The common goal card identifier.
-     * @return The image representing the common goal card.
+     * @return The Image representing the common goal card.
      */
     public static Image getCommonGC(CommonGoalCardIdentifier card) {
         return commonGCImageMap.get(card);
     }
 
     /**
-     * Retrieves the image associated with a specific personal goal card.
+     * Retrieves the Image associated with a specific personal goal card.
      *
      * @param card The personal goal card.
-     * @return The image representing the personal goal card.
+     * @return The Image representing the personal goal card.
      */
     public static Image getPersonalGC(PersonalGoalCard card) {
         return personalGCImageMap.get(card);
     }
 
     /**
-     * Determines the tile type based on the provided image.
+     * Determines the tile type based on the provided Image.
      *
-     * @param image The image representing a tile.
+     * @param Image The Image representing a tile.
      * @return The corresponding tile type.
      */
-    public static Tile getTileType(Image image) {
-        if (image.equals(book1) || image.equals(book2) || image.equals(book3)) {
+    public static Tile getTileType(Image Image) {
+        if (Image.equals(book1) || Image.equals(book2) || Image.equals(book3)) {
             return BOOK;
-        } else if (image.equals(cat1) || image.equals(cat2) || image.equals(cat3)) {
+        } else if (Image.equals(cat1) || Image.equals(cat2) || Image.equals(cat3)) {
             return CAT;
-        } else if (image.equals(frame1) || image.equals(frame2) || image.equals(frame3)) {
+        } else if (Image.equals(frame1) || Image.equals(frame2) || Image.equals(frame3)) {
             return FRAME;
-        } else if (image.equals(game1) || image.equals(game2) || image.equals(game3)) {
+        } else if (Image.equals(game1) || Image.equals(game2) || Image.equals(game3)) {
             return GAME;
-        } else if (image.equals(plant1) || image.equals(plant2) || image.equals(plant3)) {
+        } else if (Image.equals(plant1) || Image.equals(plant2) || Image.equals(plant3)) {
             return PLANT;
-        } else if (image.equals(trophy1) || image.equals(trophy2) || image.equals(trophy3)) {
+        } else if (Image.equals(trophy1) || Image.equals(trophy2) || Image.equals(trophy3)) {
             return TROPHY;
         }
         return null;

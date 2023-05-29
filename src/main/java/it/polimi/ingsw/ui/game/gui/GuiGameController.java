@@ -150,13 +150,15 @@ public class GuiGameController implements GameGateway {
         //game starting
         model.onGameStarted();
 
+        //board Update
+        board = GuiHelper.regenerateBoardGridPage(model);
+
         //GUI initialization:
         //index GuiHelper
 
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
             playersButtons().get(i).setText(model.getSessions().playerSessions().get(i).getUsername());
         }
-
         //PGC + CGC initialization
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             commonGoalCards().set(i, GuiHelper.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
@@ -225,7 +227,6 @@ public class GuiGameController implements GameGateway {
 
         //bookshelf update
         insertionBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf());
-
 
     }
 

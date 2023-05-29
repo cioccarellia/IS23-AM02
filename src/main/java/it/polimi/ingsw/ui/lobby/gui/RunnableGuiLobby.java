@@ -33,8 +33,6 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
 
     private final URL fxmlURL = getClass().getResource("/fxml/lobby/logIn.fxml");
 
-    private final Image icon = new Image("img/publisher_material/publisher.png");
-
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
 
     private GuiLobbyController lobbyController;
@@ -82,7 +80,7 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
 
 
         lobbyStage.setTitle("Login page");
-        lobbyStage.getIcons().add(icon);
+        lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
         lobbyStage.show();
     }
 
