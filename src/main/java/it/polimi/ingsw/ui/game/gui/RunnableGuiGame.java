@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -46,9 +47,10 @@ public class RunnableGuiGame extends Application implements GameGateway {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(fxmlURL);
 
-        model = new Game(GameMode.GAME_MODE_2_PLAYERS);
+        model = new Game(GameMode.GAME_MODE_3_PLAYERS);
         model.addPlayer("Fornaciari");
         model.addPlayer("Reghenzani");
+        model.addPlayer("Margara");
         model.onGameStarted();
         owner = "Fornaciari";
 
@@ -72,7 +74,9 @@ public class RunnableGuiGame extends Application implements GameGateway {
         primaryStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
         primaryStage.show();
 
-        gameController.modelUpdate(model);
+        Platform.runLater(() -> {
+            gameController.modelUpdate(model);
+        });
     }
 
     @Override

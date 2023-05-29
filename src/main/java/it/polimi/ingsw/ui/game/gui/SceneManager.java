@@ -27,9 +27,9 @@ public class SceneManager {
     }
 
     /**
-     * Returns the actual scene
+     * Returns the actual guiHelper
      *
-     * @return actual scene
+     * @return actual guiHelper
      */
     public static Scene getActualScene() {
         return actualScene;

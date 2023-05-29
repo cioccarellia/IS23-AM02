@@ -30,6 +30,8 @@ public class GuiGameController implements GameGateway {
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
 
+    private static final String indexPath = "index.fxml";
+
     private static int col = 0;
     private final List<Tile> orderedTiles = new ArrayList<>();
     private final Set<Coordinate> selectedCoordinates = new HashSet<>();
@@ -37,7 +39,7 @@ public class GuiGameController implements GameGateway {
     @FXML
     public GridPane board;
     @FXML
-    public GridPane myBookShelf;
+    public GridPane ownerBookshelf;
     @FXML
     public GridPane player1BookShelf;
     @FXML
@@ -109,92 +111,103 @@ public class GuiGameController implements GameGateway {
     @FXML
     public GridPane insertionBookshelf;
 
-    private GameViewEventHandler server;
+    private GameViewEventHandler handler;
     private Game model;
     private String owner;
 
-    public Scene scene;
-    public Scene insertionScene; //to remember that insertion scene needs an initialization
-
-
     public void initModel(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
-        this.server = handler;
+        this.handler = handler;
         this.owner = owner;
     }
 
+
+    private List<ImageView> selectedTileList() {
+        return Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
+    }
+
+    private List<ImageView> insertionCommonGoalCard() {
+        return Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
+    }
+
+    private List<GridPane> bookshelves() {
+        return Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
+    }
+
+    private List<ImageView> topTokens() {
+        return Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
+    }
+
+    private List<ImageView> commonGoalCards() {
+        return Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
+    }
+
+    private List<Tab> playersButtons() {
+        return Arrays.asList(player1Button, player2Button, player3Button, player4Button);
+    }
+
+    private List<RadioButton> columnButtons() {
+        return Arrays.asList(column1, column2, column3, column4, column5);
+    }
+
+    private List<Label> labels() {
+        return Arrays.asList(label1, label2, label3);
+    }
+
+
     @Override
     public void onGameCreated() {
-        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
-        List<ImageView> insertionCommonGoalCard = Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
-        List<GridPane> bookshelves = Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
-        List<ImageView> topTokens = Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
-        List<ImageView> commonGoalCards = Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
-        List<Tab> playersButtons = Arrays.asList(player1Button, player2Button, player3Button, player4Button);
-        List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
-        List<Label> labels = Arrays.asList(label1, label2, label3);
-
-
-
         //game starting
         model.onGameStarted();
 
         //GUI initialization:
-        //index scene
+        //index GuiHelper
 
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            playersButtons.get(i).setText(model.getSessions().playerSessions().get(i).getUsername());
+            playersButtons().get(i).setText(model.getSessions().playerSessions().get(i).getUsername());
         }
 
         //PGC + CGC initialization
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            commonGoalCards.set(i, scene.commonGoalCardUpdate(model.getCommonGoalCards().get(i).getCommonGoalCard()));
+            commonGoalCards().set(i, GuiHelper.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
         }
 
-        personalGoalCard = scene.personalGoalCardUpdate(model, owner);
+        personalGoalCard = GuiHelper.generatePersonalGoalCardImageView(model, owner);
 
-        //insertion scene:
+        //insertion GuiHelper:
 
-        // PGC +CGC initialization
+        // PGC + CGC initialization
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            insertionCommonGoalCard.set(i, insertionScene.commonGoalCardUpdate(model.getCommonGoalCards().get(i).getCommonGoalCard()));
+            insertionCommonGoalCard().set(i, GuiHelper.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
         }
 
-        insertionPersonalGoalCard = insertionScene.personalGoalCardUpdate(model, owner);
+        insertionPersonalGoalCard = GuiHelper.generatePersonalGoalCardImageView(model, owner);
 
-        //owner's bookshelf inizialization
-        insertionBookshelf = insertionScene.bookshelfUpdate(model.getSessions().getByUsername(owner).getBookshelf());
+        //owner's bookshelf initialization
+        insertionBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf());
 
 
         //model update
         modelUpdate(model);
 
+
     }
 
     @Override
     public void modelUpdate(Game game) {
-        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
-        List<ImageView> insertionCommonGoalCard = Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
-        List<GridPane> bookshelves = Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
-        List<ImageView> topTokens = Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
-        List<ImageView> commonGoalCards = Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
-        List<Tab> playersButtons = Arrays.asList(player1Button, player2Button, player3Button, player4Button);
-        List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
-        List<Label> labels = Arrays.asList(label1, label2, label3);
-
         this.model = game;
 
         //INDEX UPDATE:
 
         //board Update
-        board = scene.boardUpdate(model);
+        board = GuiHelper.regenerateBoardGridPage(model);
 
         //owner's bookshelf update
-        myBookShelf = scene.bookshelfUpdate(model.getCurrentPlayerSession().getBookshelf());
+        ownerBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf());
 
         //player's bookshelf update
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            bookshelves.set(i, scene.bookshelfUpdate(model.getSessions().playerSessions().get(i).getBookshelf()));
+            bookshelves().set(i, GuiHelper.regenerateBookshelfGridPane(model.getSessions().playerSessions().get(i).getBookshelf()));
         }
 
 
@@ -202,20 +215,22 @@ public class GuiGameController implements GameGateway {
         endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
 
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            topTokens.set(i, scene.CommonGoalCardTokenUpdate(model.getCommonGoalCards().get(i)));
+            topTokens().set(i, GuiHelper.generateTokenImageView(model.getCommonGoalCards().get(i)));
         }
 
         CurrentPlayer.setText(model.getCurrentPlayerSession().getUsername());
+
 
         //INSERTION UPDATE:
 
         //tile update
         for (int i = 0; i < model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().size(); i++) {
-            selectedTiles.get(i).setImage(GuiResources.getTile(model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
+            selectedTileList().get(i).setImage(GuiResources.getTile(model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
         }
 
         //bookshelf update
-        insertionBookshelf = insertionScene.bookshelfUpdate(model.getSessions().getByUsername(owner).getBookshelf());
+        insertionBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf());
+
 
     }
 
@@ -244,9 +259,7 @@ public class GuiGameController implements GameGateway {
             case SingleResult.Success<TileSelectionFailures> success -> {
                 Status.setOpacity(0);
             }
-
         }
-
     }
 
     @Override
@@ -257,32 +270,31 @@ public class GuiGameController implements GameGateway {
                     case WRONG_SELECTION -> {
                         insertionStatus.setOpacity(1);
                         insertionStatus.setText("Error, wrong selection");
-
                     }
+
                     case ILLEGAL_COLUMN -> {
                         insertionStatus.setOpacity(1);
                         insertionStatus.setText("Error, column out of bounds");
-
                     }
+
                     case TOO_MANY_TILES -> {
                         insertionStatus.setOpacity(1);
                         insertionStatus.setText("Error, too many tiles selected");
-
                     }
+
                     case NO_FIT -> {
                         insertionStatus.setOpacity(1);
                         insertionStatus.setText("Error, selected tiles can't fit in this columns");
-
                     }
+
                     case WRONG_PLAYER -> {
                         insertionStatus.setOpacity(1);
                         insertionStatus.setText("Error, unauthorized action from non active player");
-
                     }
+
                     case WRONG_GAME_PHASE -> {
                         insertionStatus.setOpacity(1);
                         insertionStatus.setText("Error, wrong game phase");
-
                     }
                 }
             }
@@ -296,51 +308,25 @@ public class GuiGameController implements GameGateway {
     }
 
 
-    public void setInsertionButtonListener() {
-        insertingButton.setOnMouseClicked(mouseEvent -> {
-            server.onViewInsertion(col, orderedTiles);
-            SceneManager.changeScene(SceneManager.getActualController(), "index.fxml");
-        });
+    @FXML
+    public void onSelectingButtonClick() {
+        handler.onViewInsertion(col, orderedTiles);
+        SceneManager.changeScene(SceneManager.getActualController(), indexPath);
     }
 
-    public void setRadioButtonInsertionListeners() {
-        /* se dovesse funzionare con il for loop
-        List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
-        for (int i = 0; i < columnButtons.size(); i++) {
-            RadioButton columnButton = columnButtons.get(i);
-            int value = i;
-            columnButton.setOnMouseClicked(mouseEvent -> {
-                column.selectToggle(columnButton);
-                col = value;
-            });
-        }
-        */
+     public void onRadioButtonClick() {
 
-        column1.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column1);
-            col = 0;
-        });
+         List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
+         for (int i = 0; i < columnButtons.size(); i++) {
+             RadioButton columnButton = columnButtons.get(i);
+             int value = i;
+             columnButton.setOnMouseClicked(mouseEvent -> {
+                 column.selectToggle(columnButton);
+                 col = value;
+             });
+         }
 
-        column2.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column2);
-            col = 1;
-        });
-
-        column3.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column3);
-            col = 2;
-        });
-
-        column4.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column4);
-            col = 3;
-        });
-
-        column5.setOnMouseClicked(mouseEvent -> {
-            column.selectToggle(column5);
-            col = 4;
-        });
-    }
+     }
 
     public void setOrderedSelectionTIleInsertionListeners() {
         /* se dovesse funzionare con il for loop

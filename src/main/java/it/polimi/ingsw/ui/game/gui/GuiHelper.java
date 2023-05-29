@@ -17,36 +17,37 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 
-public class Scene {
+public class GuiHelper {
 
-    private final int rows = BookshelfConfiguration.getInstance().rows();
-    private final int cols = BookshelfConfiguration.getInstance().cols();
-    private final int dimension = BoardConfiguration.getInstance().getDimension();
+    private final static int rows = BookshelfConfiguration.getInstance().rows();
+    private final static int cols = BookshelfConfiguration.getInstance().cols();
+    private final static int dimension = BoardConfiguration.getInstance().getDimension();
 
-    public GridPane boardUpdate(Game game) {
+    public static GridPane regenerateBoardGridPage(Game game) {
         GridPane matrix = new GridPane();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                Tile tile = game.getGameMatrix()[i][j];
-
-                if (tile != null) {
-                    matrix.add(createImageMatrix(String.valueOf(GuiResources.getTile(tile))), i, j);
+                Tile currentTile = game.getGameMatrix()[i][j];
+                if (currentTile != null) {
+                    ImageView tileImageView = generateImageViewForTile(currentTile);
+                    matrix.add(tileImageView, i, j);
                 }
-
             }
         }
         return matrix;
     }
 
-    public ImageView createImageMatrix(String name) {
-        ImageView book = new ImageView();
-        book.setImage(new Image(name));
+    public static ImageView generateImageViewForTile(Tile tile) {
+        Image tileImage = GuiResources.getTile(tile);
 
-        return book;
+        ImageView tileImageView = new ImageView();
+        tileImageView.setImage(tileImage);
+
+        return tileImageView;
     }
 
-    public GridPane bookshelfUpdate(Bookshelf bookshelf) {
+    public static GridPane regenerateBookshelfGridPane(Bookshelf bookshelf) {
         GridPane matrix = new GridPane();
 
         for (int i = 0; i < rows; i++) {
@@ -54,7 +55,7 @@ public class Scene {
                 Tile tile = bookshelf.getShelfMatrix()[i][j];
 
                 if (tile != null) {
-                    matrix.add(createImageMatrix(String.valueOf(GuiResources.getTile(tile))), i, j);
+                    matrix.add(generateImageViewForTile(tile), i, j);
                 }
             }
         }
@@ -62,9 +63,7 @@ public class Scene {
         return matrix;
     }
 
-    public ImageView personalGoalCardUpdate(Game game, String owner) {
-
-        GuiResources resources = new GuiResources();
+    public static ImageView generatePersonalGoalCardImageView(Game game, String owner) {
         ImageView image = new ImageView();
         PersonalGoalCard id = game.getSessions().getByUsername(owner).getPersonalGoalCard();
 
@@ -72,7 +71,7 @@ public class Scene {
         return image;
     }
 
-    public ImageView commonGoalCardUpdate(CommonGoalCard commonGoalCard) {
+    public static ImageView generateCommonGoalCardImageView(CommonGoalCard commonGoalCard) {
         ImageView image = new ImageView();
         CommonGoalCardIdentifier id = commonGoalCard.getId();
 
@@ -81,7 +80,7 @@ public class Scene {
         return image;
     }
 
-    public ImageView CommonGoalCardTokenUpdate(CommonGoalCardStatus commonGoalCard) {
+    public static ImageView generateTokenImageView(CommonGoalCardStatus commonGoalCard) {
         ImageView image = new ImageView();
         Token id = commonGoalCard.getCardTokens().get(commonGoalCard.getCardTokens().size() - 1);
 
@@ -90,8 +89,7 @@ public class Scene {
         return image;
     }
 
-    public Coordinate getSelectedCoordinates(Node tileNode) {
-
+    public static Coordinate getSelectedCoordinates(Node tileNode) {
         Coordinate coordinate;
 
         Integer col = GridPane.getColumnIndex(tileNode);

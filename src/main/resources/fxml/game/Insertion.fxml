@@ -106,10 +106,10 @@
          <toggleGroup>
             <ToggleGroup fx:id="column" />
          </toggleGroup></RadioButton>
-        <RadioButton fx:id="column2" layoutX="259.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" />
-        <RadioButton fx:id="column3" layoutX="307.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" />
-        <RadioButton fx:id="column4" layoutX="350.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" />
-        <RadioButton fx:id="column5" layoutX="392.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" />
+        <RadioButton fx:id="column2" layoutX="259.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" onMouseClicked="#onRadioButtonClick" />
+        <RadioButton fx:id="column3" layoutX="307.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" onMouseClicked="#onRadioButtonClick" />
+        <RadioButton fx:id="column4" layoutX="350.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" onMouseClicked="#onRadioButtonClick" />
+        <RadioButton fx:id="column5" layoutX="392.0" layoutY="101.0" mnemonicParsing="false" text="↓" textFill="#e06a2f" toggleGroup="$column" onMouseClicked="#onRadioButtonClick" />
         <ImageView fitHeight="34.0" fitWidth="136.0" layoutX="470.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../img/publisher_material/title_2000x618px.png" />

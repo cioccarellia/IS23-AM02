@@ -30,15 +30,12 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
 
-
     private GuiLobbyController lobbyController;
     private LobbyViewEventHandler handler;
-
 
     public static void main(String[] args) {
         Application.launch(args);
     }
-
 
     public void initHandler(LobbyViewEventHandler handler) {
         this.handler = handler;

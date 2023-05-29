@@ -24,13 +24,15 @@ import java.util.List;
  * Keeps a reference to the owner (which can be null at the beginning) of this client instance.
  */
 public class GuiLobbyController implements LobbyGateway {
+
+    private LobbyViewEventHandler handler;
+
+    private ServerStatus currentState = null;
+    private List<PlayerInfo> playerInfo = new ArrayList<>();
+
     private String owner = null;
 
-    private LobbyViewEventHandler server;
     private boolean isKilled = false;
-
-    private ServerStatus status = null;
-    private List<PlayerInfo> playerInfo = new ArrayList<>();
 
     @FXML
     public TextField usernameField;
@@ -47,13 +49,15 @@ public class GuiLobbyController implements LobbyGateway {
     @FXML
     public Label nplayers;
 
-    GameMode gameMode;
-    String username;
+    private GameMode gameMode;
+    private String username;
 
     public void init(LobbyViewEventHandler handler) {
-        this.server = handler;
+        this.handler = handler;
 
         setRadioButtonsClickListeners();
+
+        renderModelUpdate();
     }
 
     @Override
@@ -61,7 +65,7 @@ public class GuiLobbyController implements LobbyGateway {
         if (isKilled)
             return;
 
-        this.status = status;
+        currentState = status;
         this.playerInfo = playerInfo;
 
         renderModelUpdate();
@@ -76,21 +80,25 @@ public class GuiLobbyController implements LobbyGateway {
             case TypedResult.Failure<GameCreationSuccess, GameCreationError> failure -> {
                 switch (failure.error()) {
                     case GAME_ALREADY_INITIALIZING -> {
-                        loginStatus.setText("GAME ALREADY STARTED, insert Username!");
+                        loginStatus.setText("loginError: Game already initialized.");
+
+                        handler.sendStatusUpdateRequest();
+                    }
+                    case GAME_ALREADY_RUNNING -> {
+                        loginStatus.setText("loginError: Game running.\n");
                     }
                     case INVALID_USERNAME -> {
-
-                        loginStatus.setText("loginStatus: invalid Username");
+                        loginStatus.setText("loginError: Invalid Username.\n");
+                        renderModelUpdate();
                     }
                 }
             }
             case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
                 owner = success.value().username();
                 playerInfo = success.value().playerInfo();
+                renderModelUpdate();
             }
         }
-
-        renderModelUpdate();
     }
 
     @Override
@@ -102,47 +110,47 @@ public class GuiLobbyController implements LobbyGateway {
             case TypedResult.Failure<GameConnectionSuccess, GameConnectionError> failure -> {
                 switch (failure.error()) {
                     case ALREADY_CONNECTED_PLAYER -> {
-
+                        loginStatus.setText("loginError: You are already connected to this game");
                     }
                     case USERNAME_ALREADY_IN_USE -> {
-                        loginStatus.setText("loginStatus: Username already in use");
+                        loginStatus.setText("loginError: Username already in use");
                         loginButton.setOnMouseClicked(mouseEvent -> {
-                            server.sendGameConnectionRequest(username);
+                            handler.sendGameConnectionRequest(username);
                         });
 
                     }
                     case MAX_PLAYER_AMOUNT_EACHED -> {
-                        loginStatus.setText("loginStatus: max player amount reached");
+                        loginStatus.setText("loginError: max player amount reached");
                         loginButton.setText("QUIT");
                         loginButton.setOnMouseClicked(mouseEvent -> {
                             kill();
                         });
                     }
                     case NO_GAME_TO_JOIN -> {
-                        loginStatus.setText("loginStatus: no game to join");
+                        loginStatus.setText("loginError: no game to join");
                         loginButton.setText("QUIT");
                         loginButton.setOnMouseClicked(mouseEvent -> {
                             kill();
                         });
                     }
                     case GAME_ALREADY_STARTED -> {
-                        loginStatus.setText("loginStatus: game already started");
+                        loginStatus.setText("loginError: game already started");
                         loginButton.setText("QUIT");
                         loginButton.setOnMouseClicked(mouseEvent -> {
                             kill();
                         });
                     }
                     case GAME_ALREADY_ENDED -> {
-                        loginStatus.setText("loginStatus: game already ended");
+                        loginStatus.setText("loginError: game already ended");
                         loginButton.setText("QUIT");
                         loginButton.setOnMouseClicked(mouseEvent -> {
                             kill();
                         });
                     }
                     case INVALID_USERNAME -> {
-                        loginStatus.setText("loginStatus: invalid Username");
+                        loginStatus.setText("loginError: invalid username");
                         loginButton.setOnMouseClicked(mouseEvent -> {
-                            server.sendGameConnectionRequest(username);
+                            handler.sendGameConnectionRequest(username);
                         });
                     }
                 }
@@ -151,36 +159,37 @@ public class GuiLobbyController implements LobbyGateway {
             case TypedResult.Success<GameConnectionSuccess, GameConnectionError> success -> {
                 owner = success.value().username();
                 playerInfo = success.value().playerInfo();
+
+                renderModelUpdate();
             }
         }
 
-        renderModelUpdate();
     }
 
 
     private void renderModelUpdate() {
-        if (isKilled)
-            return;
-
-        if (status == null) {
+        if (isKilled) {
+            loginStatus.setText("Game killed");
             return;
         }
 
-        switch (status) {
+        if (currentState == null) {
+            loginStatus.setText("Fetching status from server...");
+            return;
+        }
 
+        if (owner != null) {
+            // mostrare la lista di giocatori al momento presenti
+        }
+
+        switch (currentState) {
             case NO_GAME_STARTED -> {
-
-                if (gameMode == null) {
-                    twoplayers.setSelected(true);
-                    gameMode = GameMode.GAME_MODE_2_PLAYERS;
-                }
-
-                // NO server.sendGameStartRequest(username, gameMode);
+                loginStatus.setText("Pick username and select game mode to create the game");
             }
             case GAME_INITIALIZING -> {
-
                 nplayers.setOpacity(0);
 
+                // removes radio buttons from view
                 twoplayers.setDisable(true);
                 twoplayers.setOpacity(0);
 
@@ -190,10 +199,13 @@ public class GuiLobbyController implements LobbyGateway {
                 fourplayers.setDisable(true);
                 fourplayers.setOpacity(0);
 
-                // NO server.sendGameConnectionRequest(username);
+                loginStatus.setText("Pick username to connect");
             }
             case GAME_RUNNING -> {
-                // no operation required, controller handles this case
+                loginStatus.setText("Game already running");
+            }
+            case GAME_OVER -> {
+                loginStatus.setText("Game over");
             }
         }
     }
@@ -210,14 +222,31 @@ public class GuiLobbyController implements LobbyGateway {
         });
     }
 
-    private void setTextFieldListener() {
-        username = usernameField.getText();
-    }
 
     @Override
     public void kill() {
         isKilled = true;
     }
 
+    @FXML
+    public void onSubmitButtonClick() {
+        if (currentState == null) {
+            return;
+        }
+
+        switch (currentState) {
+            case NO_GAME_STARTED -> {
+                handler.sendGameStartRequest(usernameField.getText(), gameMode);
+            }
+
+            case GAME_INITIALIZING -> {
+                handler.sendGameConnectionRequest(usernameField.getText());
+            }
+
+            case GAME_RUNNING -> {
+                // no
+            }
+        }
+    }
 
 }

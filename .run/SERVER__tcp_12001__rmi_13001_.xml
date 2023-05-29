@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SERVER [tcp=12000, rmi=13000]" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.App" />
+    <module name="shelfie" />
+    <option name="PROGRAM_PARAMETERS" value="--target SERVER --server-tcp-port 12000 --server-rmi-port 13000" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

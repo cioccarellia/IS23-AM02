@@ -11,6 +11,8 @@ import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
 import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
+import javafx.application.Application;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,6 +37,9 @@ public class ViewFactory {
                 var gui = new RunnableGuiGame();
                 gui.initModel(model, handler, owner);
 
+                Platform.runLater(() -> {
+                    Application.launch(RunnableGuiGame.class, "");
+                });
                 return gui;
 
             }
@@ -57,6 +62,10 @@ public class ViewFactory {
             case GUI -> {
                 RunnableGuiLobby lobby = new RunnableGuiLobby();
                 lobby.initHandler(handler);
+
+                Platform.runLater(() -> {
+                    Application.launch(RunnableGuiLobby.class, "");
+                });
                 return lobby;
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);

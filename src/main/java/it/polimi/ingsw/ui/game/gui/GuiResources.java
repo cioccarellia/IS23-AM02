@@ -20,7 +20,7 @@ import static it.polimi.ingsw.ui.game.gui.ImageExtractor.extract;
 public class GuiResources {
 
 
-    public GuiResources() {
+    private GuiResources() {
 
     }
 
