@@ -11,12 +11,10 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,14 +125,15 @@ public class GuiGameController implements GameGateway {
 
     @Override
     public void onGameCreated() {
-
-        List<ImageView> insertionTileSelected = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
-
+        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
         List<ImageView> insertionCommonGoalCard = Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
         List<GridPane> bookshelves = Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
         List<ImageView> topTokens = Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
         List<ImageView> commonGoalCards = Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
         List<Tab> playersButtons = Arrays.asList(player1Button, player2Button, player3Button, player4Button);
+        List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
+        List<Label> labels = Arrays.asList(label1, label2, label3);
+
 
 
         //game starting
@@ -174,13 +173,14 @@ public class GuiGameController implements GameGateway {
 
     @Override
     public void modelUpdate(Game game) {
-        List<ImageView> insertionTileSelected = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
+        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
         List<ImageView> insertionCommonGoalCard = Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
         List<GridPane> bookshelves = Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
         List<ImageView> topTokens = Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
         List<ImageView> commonGoalCards = Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
         List<Tab> playersButtons = Arrays.asList(player1Button, player2Button, player3Button, player4Button);
-
+        List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
+        List<Label> labels = Arrays.asList(label1, label2, label3);
 
         this.model = game;
 
@@ -211,8 +211,7 @@ public class GuiGameController implements GameGateway {
 
         //tile update
         for (int i = 0; i < model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().size(); i++) {
-            ImageView temporalImage;
-            insertionTileSelected.get(i).setImage(GuiResources.getTile(model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
+            selectedTiles.get(i).setImage(GuiResources.getTile(model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
         }
 
         //bookshelf update
@@ -238,7 +237,7 @@ public class GuiGameController implements GameGateway {
                     }
                     case UNAUTHORIZED_PLAYER -> {
                         Status.setOpacity(1);
-                        Status.setText("Error, unauthirized");
+                        Status.setText("Error, player not authorized");
                     }
                 }
             }
@@ -262,7 +261,7 @@ public class GuiGameController implements GameGateway {
                     }
                     case ILLEGAL_COLUMN -> {
                         insertionStatus.setOpacity(1);
-                        insertionStatus.setText("Error, illegeal column");
+                        insertionStatus.setText("Error, column out of bounds");
 
                     }
                     case TOO_MANY_TILES -> {
@@ -272,12 +271,12 @@ public class GuiGameController implements GameGateway {
                     }
                     case NO_FIT -> {
                         insertionStatus.setOpacity(1);
-                        insertionStatus.setText("Error, can't fit");
+                        insertionStatus.setText("Error, selected tiles can't fit in this columns");
 
                     }
                     case WRONG_PLAYER -> {
                         insertionStatus.setOpacity(1);
-                        insertionStatus.setText("Error, wrong player");
+                        insertionStatus.setText("Error, unauthorized action from non active player");
 
                     }
                     case WRONG_GAME_PHASE -> {
@@ -305,6 +304,17 @@ public class GuiGameController implements GameGateway {
     }
 
     public void setRadioButtonInsertionListeners() {
+        /* se dovesse funzionare con il for loop
+        List<RadioButton> columnButtons = Arrays.asList(column1, column2, column3, column4, column5);
+        for (int i = 0; i < columnButtons.size(); i++) {
+            RadioButton columnButton = columnButtons.get(i);
+            int value = i;
+            columnButton.setOnMouseClicked(mouseEvent -> {
+                column.selectToggle(columnButton);
+                col = value;
+            });
+        }
+        */
 
         column1.setOnMouseClicked(mouseEvent -> {
             column.selectToggle(column1);
@@ -333,6 +343,29 @@ public class GuiGameController implements GameGateway {
     }
 
     public void setOrderedSelectionTIleInsertionListeners() {
+        /* se dovesse funzionare con il for loop
+        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
+        List<Label> labels = Arrays.asList(label1, label2, label3);
+        for (int i = 0; i < selectedTiles.size(); i++) {
+            ImageView selTile = selectedTiles.get(i);
+            Label label = labels.get(i);
+            int value = i;
+
+            selTile.setOnMouseClicked(mouseEvent -> {
+                if (orderedTiles.size() == 0) {
+                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
+                    label.setText(String.valueOf(value + 1));
+                } else if (orderedTiles.size() == 1) {
+                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
+                    label.setText(String.valueOf(value + 2));
+                } else if (orderedTiles.size() == 2) {
+                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
+                    label.setText(String.valueOf(value + 3));
+                }
+            });
+        }
+        */
+
         tile1Selected.setOnMouseClicked(mouseEvent -> {
             if (orderedTiles.size() == 0) {
                 orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
@@ -369,8 +402,5 @@ public class GuiGameController implements GameGateway {
                 label3.setText(String.valueOf(3));
             }
         });
-
     }
-
-
 }

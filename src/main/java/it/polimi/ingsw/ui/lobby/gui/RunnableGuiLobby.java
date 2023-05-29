@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,7 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
 
     @Override
     public void start(Stage lobbyStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader(fxmlURL);
         loader.setLocation(fxmlURL);
 
         Parent rootLayout;
@@ -58,7 +59,6 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
             throw new IllegalStateException();
         }
 
-
         lobbyController = loader.getController();
         lobbyController.init(handler);
 
@@ -67,7 +67,8 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
         lobbyStage.setScene(loadedScene);
 
 
-        lobbyStage.setTitle("LOGIN PAGE");
+        lobbyStage.setTitle("Login page");
+        lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
         lobbyStage.show();
     }
 

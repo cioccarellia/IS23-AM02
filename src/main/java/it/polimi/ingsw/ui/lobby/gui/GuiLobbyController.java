@@ -112,7 +112,7 @@ public class GuiLobbyController implements LobbyGateway {
 
                     }
                     case MAX_PLAYER_AMOUNT_EACHED -> {
-                        loginStatus.setText("loginStatus: max player amount eached");
+                        loginStatus.setText("loginStatus: max player amount reached");
                         loginButton.setText("QUIT");
                         loginButton.setOnMouseClicked(mouseEvent -> {
                             kill();
@@ -165,7 +165,6 @@ public class GuiLobbyController implements LobbyGateway {
         if (status == null) {
             return;
         }
-
 
         switch (status) {
 

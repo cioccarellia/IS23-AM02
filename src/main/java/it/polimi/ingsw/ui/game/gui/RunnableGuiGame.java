@@ -10,6 +10,7 @@ import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -67,7 +68,8 @@ public class RunnableGuiGame extends Application implements GameGateway {
 
         primaryStage.setScene(loadedScene);
 
-        primaryStage.setTitle("LOGIN PAGE");
+        primaryStage.setTitle("My shelfie: the game");
+        primaryStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
         primaryStage.show();
 
         gameController.modelUpdate(model);
