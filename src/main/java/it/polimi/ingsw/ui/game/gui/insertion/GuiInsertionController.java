@@ -68,7 +68,7 @@ public class GuiInsertionController {
     /**
      * Event handler for ordered tile insertion.
      */
-    public void onOrderedTileInsertion(MouseEvent e){
+    public void onOrderedTileInsertion(MouseEvent e) {
         if (e.getSource().equals(tile1Selected)) {
             Tile tile = GuiResources.getTileType(tile1Selected.getImage().getUrl());
 
@@ -93,8 +93,8 @@ public class GuiInsertionController {
 
     @FXML
 
-    public void onInsertingButtonClick(){
-        handler.onViewInsertion(col,orderedTiles);
+    public void onInsertingButtonClick() {
+        handler.onViewInsertion(col, orderedTiles);
         SceneManager.changeScene(SceneManager.getActualController(), "index.fxml");
     }
 }

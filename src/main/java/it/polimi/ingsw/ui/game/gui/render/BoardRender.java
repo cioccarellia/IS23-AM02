@@ -12,8 +12,6 @@ import javafx.scene.layout.GridPane;
 public class BoardRender {
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
-
-
     public static Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         for (Node node : gridPane.getChildren()) {
             if (gridPane.getRowIndex(node) == row && gridPane.getColumnIndex(node) == column) {
@@ -44,7 +42,6 @@ public class BoardRender {
 
                     var matrix = model.getBoard().getTileMatrix();
                     Image gridNodeImage = generateImageViewForTile(matrix[i][j]).getImage();
-
 
                     if (n != null) {
                         n.setImage(gridNodeImage);

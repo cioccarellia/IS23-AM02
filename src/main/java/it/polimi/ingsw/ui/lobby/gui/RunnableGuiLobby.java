@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class RunnableGuiLobby extends Application implements LobbyGateway {
 
-    private final URL fxmlURL = getClass().getResource("/fxml/lobby/logIn.fxml");
+    private final URL fxmlURL = getClass().getResource("/fxml/lobby/login.fxml");
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
 

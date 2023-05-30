@@ -106,7 +106,7 @@ public class RankingController extends Application {
         // Load root layout from fxml file.
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/game/Ranking.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/game/ranking.fxml"));
 
         RankingController javaFxController = loader.getController();
         Parent rootLayout = null;

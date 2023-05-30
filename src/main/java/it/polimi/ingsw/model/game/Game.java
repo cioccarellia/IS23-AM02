@@ -146,6 +146,13 @@ public class Game implements ModelService {
         return sessions;
     }
 
+    public List<String> getPlayersUsernameList() {
+        return sessions
+                .playerSessions()
+                .stream()
+                .map(PlayerSession::getUsername).toList();
+    }
+
     /**
      * @return the {@link GameStatus}
      */

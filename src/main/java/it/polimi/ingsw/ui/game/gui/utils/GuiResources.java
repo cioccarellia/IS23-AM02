@@ -4,12 +4,10 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.goal.Token;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static it.polimi.ingsw.model.board.Tile.*;
 import static it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier.*;
@@ -28,74 +26,74 @@ public class GuiResources {
 
 
     //Tile:
-    public static final String book1 = "img/tiles/book1.1.png";
-    public static final String book2 = "img/tiles/book1.2.png";
-    public static final String book3 = "img/tiles/book1.3.png";
-    public static final String cat1 = "img/tiles/cat1.1.png";
-    public static final String cat2 = "img/tiles/cat1.2.png";
-    public static final String cat3 = "img/tiles/cat1.3.png";
-    public static final String frame1 = "img/tiles/frame1.1.png";
-    public static final String frame2 = "img/tiles/frame1.2.png";
-    public static final String frame3 = "img/tiles/frame1.3.png";
-    public static final String game1 = "img/tiles/game1.1.png";
-    public static final String game2 = "img/tiles/game1.2.png";
-    public static final String game3 = "img/tiles/game1.3.png";
-    public static final String plant1 = "img/tiles/plant1.1.png";
-    public static final String plant2 = "img/tiles/plant1.2.png";
-    public static final String plant3 = "img/tiles/plant1.3.png";
-    public static final String trophy1 = "img/tiles/trophy1.1.png";
-    public static final String trophy2 = "img/tiles/trophy1.2.png";
-    public static final String trophy3 = "img/tiles/trophy1.3.png";
+    public static final String book1 = "file:img/tiles/book1.1.png";
+    public static final String book2 = "file:img/tiles/book1.2.png";
+    public static final String book3 = "file:img/tiles/book1.3.png";
+    public static final String cat1 = "file:img/tiles/cat1.1.png";
+    public static final String cat2 = "file:img/tiles/cat1.2.png";
+    public static final String cat3 = "file:img/tiles/cat1.3.png";
+    public static final String frame1 = "file:img/tiles/frame1.1.png";
+    public static final String frame2 = "file:img/tiles/frame1.2.png";
+    public static final String frame3 = "file:img/tiles/frame1.3.png";
+    public static final String game1 = "file:img/tiles/game1.1.png";
+    public static final String game2 = "file:img/tiles/game1.2.png";
+    public static final String game3 = "file:img/tiles/game1.3.png";
+    public static final String plant1 = "file:img/tiles/plant1.1.png";
+    public static final String plant2 = "file:img/tiles/plant1.2.png";
+    public static final String plant3 = "file:img/tiles/plant1.3.png";
+    public static final String trophy1 = "file:img/tiles/trophy1.1.png";
+    public static final String trophy2 = "file:img/tiles/trophy1.2.png";
+    public static final String trophy3 = "file:img/tiles/trophy1.3.png";
 
     // Tokens
-    public static final String token_2_points = "img/tokens/scoring_2.jpg";
-    public static final String token_4_points = "img/tokens/scoring_4.jpg";
-    public static final String token_6_points = "img/tokens/scoring_6.jpg";
-    public static final String token_8_points = "img/tokens/scoring_8.jpg";
-    public static final String token_full_bookshelf = "img/tokens/first_full_bookshelf_token.jpg";
+    public static final String token_2_points = "file:img/tokens/scoring_2.jpg";
+    public static final String token_4_points = "file:img/tokens/scoring_4.jpg";
+    public static final String token_6_points = "file:img/tokens/scoring_6.jpg";
+    public static final String token_8_points = "file:img/tokens/scoring_8.jpg";
+    public static final String token_full_bookshelf = "file:img/tokens/first_full_bookshelf_token.jpg";
 
     // Personal goal cards
-    public static final String personal_GC1 = "img/personal_goal_cards/personal_goal_card_1.png";
-    public static final String personal_GC2 = "img/personal_goal_cards/personal_goal_card_2.png";
-    public static final String personal_GC3 = "img/personal_goal_cards/personal_goal_card_3.png";
-    public static final String personal_GC4 = "img/personal_goal_cards/personal_goal_card_4.png";
-    public static final String personal_GC5 = "img/personal_goal_cards/personal_goal_card_5.png";
-    public static final String personal_GC6 = "img/personal_goal_cards/personal_goal_card_6.png";
-    public static final String personal_GC7 = "img/personal_goal_cards/personal_goal_card_7.png";
-    public static final String personal_GC8 = "img/personal_goal_cards/personal_goal_card_8.png";
-    public static final String personal_GC9 = "img/personal_gol_cards/personal_goal_card_9.png";
-    public static final String personal_GC10 = "img/personal_goal_cards/personal_goal_card_10.png";
-    public static final String personal_GC11 = "img/personal_goal_cards/personal_goal_card_11.png";
-    public static final String personal_GC12 = "img/personal_goal_cards/personal_goal_card_12.png";
+    public static final String personal_GC1 = "file:img/personal_goal_cards/personal_goal_card_1.png";
+    public static final String personal_GC2 = "file:img/personal_goal_cards/personal_goal_card_2.png";
+    public static final String personal_GC3 = "file:img/personal_goal_cards/personal_goal_card_3.png";
+    public static final String personal_GC4 = "file:img/personal_goal_cards/personal_goal_card_4.png";
+    public static final String personal_GC5 = "file:img/personal_goal_cards/personal_goal_card_5.png";
+    public static final String personal_GC6 = "file:img/personal_goal_cards/personal_goal_card_6.png";
+    public static final String personal_GC7 = "file:img/personal_goal_cards/personal_goal_card_7.png";
+    public static final String personal_GC8 = "file:img/personal_goal_cards/personal_goal_card_8.png";
+    public static final String personal_GC9 = "file:img/personal_gol_cards/personal_goal_card_9.png";
+    public static final String personal_GC10 = "file:img/personal_goal_cards/personal_goal_card_10.png";
+    public static final String personal_GC11 = "file:img/personal_goal_cards/personal_goal_card_11.png";
+    public static final String personal_GC12 = "file:img/personal_goal_cards/personal_goal_card_12.png";
 
     // Common goal cards
-    public static final String common_diagonal = "img/common_goal_cards/diagonal.jpg";
-    public static final String common_eight_tiles = "img/common_goal_cards/eight_tiles.jpg";
-    public static final String common_four_corners = "img/common_goal_cards/four_corners.jpg";
-    public static final String common_four_group_four = "img/common_goal_cards/four_group_four.jpg";
-    public static final String common_four_max3diff_lines = "img/common_goal_cards/four_max3diff_line.jpg";
-    public static final String common_six_pairs = "img/common_goal_cards/six_pairs/six_pairs.jpg";
-    public static final String common_stairs = "img/common_goal_cards/stairs.jpg";
-    public static final String common_three_max3diff_columns = "img/common_goal_cards/three_max3diff_columns.jpg";
-    public static final String common_two_diff_columns = "img/common_goal_cards/two_diff_columns.jpg";
-    public static final String common_two_diff_lines = "img/common_goal_cards/two_diff_lines.jpg";
-    public static final String common_two_squares = "img/common_goal_cards/two_squares.jpg";
-    public static final String common_x_tiles = "img/common_goal_cards/x_tiles.jpg";
+    public static final String common_diagonal = "file:img/common_goal_cards/diagonal.jpg";
+    public static final String common_eight_tiles = "file:img/common_goal_cards/eight_tiles.jpg";
+    public static final String common_four_corners = "file:img/common_goal_cards/four_corners.jpg";
+    public static final String common_four_group_four = "file:img/common_goal_cards/four_group_four.jpg";
+    public static final String common_four_max3diff_lines = "file:img/common_goal_cards/four_max3diff_line.jpg";
+    public static final String common_six_pairs = "file:img/common_goal_cards/six_pairs/six_pairs.jpg";
+    public static final String common_stairs = "file:img/common_goal_cards/stairs.jpg";
+    public static final String common_three_max3diff_columns = "file:img/common_goal_cards/three_max3diff_columns.jpg";
+    public static final String common_two_diff_columns = "file:img/common_goal_cards/two_diff_columns.jpg";
+    public static final String common_two_diff_lines = "file:img/common_goal_cards/two_diff_lines.jpg";
+    public static final String common_two_squares = "file:img/common_goal_cards/two_squares.jpg";
+    public static final String common_x_tiles = "file:img/common_goal_cards/x_tiles.jpg";
 
     // Boards tutte
-    public static final String bookshelf_String = "img/boards/bookshelf.png";
-    public static final String bookshelf_orth_String = "img/boards/bookshelf_orth.png";
-    public static final String board_String = "img/boards/living_room.png";
+    public static final String bookshelf_String = "file:img/boards/bookshelf.png";
+    public static final String bookshelf_orth_String = "file:img/boards/bookshelf_orth.png";
+    public static final String board_String = "file:img/boards/living_room.png";
 
     // misc wood background
-    public static final String wood_background = "img/misc/wood_background.jpg";
+    public static final String wood_background = "file:img/misc/wood_background.jpg";
 
     // publisher material title 618
-    public static final String title = "img/publisher_material/title_2000x618px.png";
+    public static final String title = "file:img/publisher_material/title_2000x618px.png";
 
 
     // maps
-    private static final Map<Tile, String> tileStringMap = Map.of(BOOK, book1, CAT, cat1, PLANT, plant1, GAME, game1 ,TROPHY, trophy1);
+    private static final Map<Tile, String> tileStringMap = Map.of(BOOK, book1, CAT, cat1, FRAME, frame1, GAME, game1, PLANT, plant1, TROPHY, trophy1);
     private static final Map<Token, String> tokenStringMap = Map.of(COMMON_GOAL_TOKEN_2_POINTS, token_2_points,
             COMMON_GOAL_TOKEN_4_POINTS, token_4_points, COMMON_GOAL_TOKEN_6_POINTS, token_6_points, COMMON_GOAL_TOKEN_8_POINTS, token_8_points, FULL_SHELF_TOKEN, token_full_bookshelf);
     private static final Map<PersonalGoalCard, String> personalGCStringMap = Map.ofEntries(
@@ -191,8 +189,7 @@ public class GuiResources {
             book1, book2, book3, cat1, cat2, cat3, frame1, frame2, frame3, game1, game2, game3, plant1, plant2, plant3, trophy1, trophy2, trophy3
     );
 
-    /*
-    public static String extract(@NotNull Tile tileType) {
+    /*public static String extract(@NotNull Tile tileType) {
         if (tilesDomain != null) {
             switch (tileType) {
                 case BOOK -> {
@@ -217,6 +214,5 @@ public class GuiResources {
             }
         } else
             return null;
-    }
-    */
+    }*/
 }

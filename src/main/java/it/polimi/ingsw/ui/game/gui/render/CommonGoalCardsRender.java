@@ -12,13 +12,13 @@ public class CommonGoalCardsRender {
      * @param commonGoalCard The common goal card to generate the ImageView for.
      * @return The ImageView representing the common goal card.
      */
-    public static ImageView generateCommonGoalCardImageView(CommonGoalCard commonGoalCard) {
-        ImageView commonGoalCardImageView = new ImageView();
+    public static Image generateCommonGoalCardImageView(CommonGoalCard commonGoalCard) {
+        //ImageView commonGoalCardImageView = new ImageView();
 
-        Image commonGoalCardImage = new Image(GuiResources.getCommonGC(commonGoalCard.getId()));
+        return new Image(GuiResources.getCommonGC(commonGoalCard.getId()));
 
-        commonGoalCardImageView.setImage(commonGoalCardImage);
+        //commonGoalCardImageView.setImage(commonGoalCardImage);
 
-        return commonGoalCardImageView;
+        //return commonGoalCardImageView;
     }
 }

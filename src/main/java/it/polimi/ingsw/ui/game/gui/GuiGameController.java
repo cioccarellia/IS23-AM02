@@ -7,14 +7,15 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
+import it.polimi.ingsw.model.game.score.PlayerScore;
+import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.gui.render.*;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -22,14 +23,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.event.MouseEvent;
 import java.util.*;
 
-import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 
 /**
  * The GuiGameController class is responsible for managing the graphical user interface (GUI)
@@ -46,7 +46,7 @@ public class GuiGameController implements GameGateway {
 
     private static final int col = 0;
     private final List<Tile> orderedTiles = new ArrayList<>();
-    private static final Set<Coordinate> selectedCoordinates = new HashSet<>();
+    private final Set<Coordinate> selectedCoordinates = new HashSet<>();
 
     @FXML
     public GridPane board;
@@ -63,15 +63,15 @@ public class GuiGameController implements GameGateway {
     @FXML
     public ImageView endGameToken;
     @FXML
-    public ImageView firstCommonGoalCardTopToken;
+    public ImageView firstCommonGoalCardTopToken = new ImageView();
     @FXML
-    public ImageView secondCommonGoalCardTopToken;
+    public ImageView secondCommonGoalCardTopToken = new ImageView();
     @FXML
-    public ImageView firstCommonGoalCard;
+    public ImageView firstCommonGoalCard = new ImageView();
     @FXML
-    public ImageView secondCommonGoalCard;
+    public ImageView secondCommonGoalCard = new ImageView();
     @FXML
-    public ImageView personalGoalCard;
+    public ImageView personalGoalCard = new ImageView();
     @FXML
     public Tab player1Button;
     @FXML
@@ -82,14 +82,12 @@ public class GuiGameController implements GameGateway {
     public Tab player4Button;
     @FXML
     public Button selectingButton;
-
-
     @FXML
-    public ImageView insertionCommonGoalCard1;
+    public ImageView insertionCommonGoalCard1 = new ImageView();
     @FXML
-    public ImageView insertionCommonGoalCard2;
+    public ImageView insertionCommonGoalCard2 = new ImageView();
     @FXML
-    public ImageView insertionPersonalGoalCard;
+    public ImageView insertionPersonalGoalCard = new ImageView();
     @FXML
     public Label Status;
     @FXML
@@ -99,11 +97,11 @@ public class GuiGameController implements GameGateway {
     @FXML
     public GridPane insertionBookshelf;
     @FXML
-    public ImageView tile1Selected;
+    public ImageView tile1Selected = new ImageView();
     @FXML
-    public ImageView tile2Selected;
+    public ImageView tile2Selected = new ImageView();
     @FXML
-    public ImageView tile3Selected;
+    public ImageView tile3Selected = new ImageView();
 
     private GameViewEventHandler handler;
     private Game model;
@@ -120,8 +118,6 @@ public class GuiGameController implements GameGateway {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
-
-
     }
 
 
@@ -155,46 +151,12 @@ public class GuiGameController implements GameGateway {
      */
     @Override
     public void onGameCreated() {
-        //game starting
-        model.onGameStarted();
+        if (model == null)
+            return;
 
-        //board Update
-        BoardRender.renderBoard(model, board);
-
-        //GUI initialization:
-        //index GuiHelper
-
-        for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            playersButtons().get(i).setText(model.getSessions().playerSessions().get(i).getUsername());
-        }
-        //PGC + CGC initialization
-        for (int i = 0; i < commonGoalCardsAmount; i++) {
-            commonGoalCards().set(i, CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
-        }
-
-        personalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
-
-        //insertion GuiHelper:
-
-        // PGC + CGC initialization
-        for (int i = 0; i < commonGoalCardsAmount; i++) {
-            insertionCommonGoalCard().set(i, CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
-        }
-
-        insertionPersonalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
-        //END GAME TOKEN
-        Image endGameTokenImage = new Image(GuiResources.getToken(FULL_SHELF_TOKEN));
-        endGameToken.setImage(endGameTokenImage);
-
-        //owner's bookshelf initialization
-        BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
-
-
-        //model update
-        modelUpdate(model);
-
-
+        processModel();
     }
+
 
     /**
      * Updates the game model and refreshes the GUI elements based on the updated model.
@@ -204,44 +166,110 @@ public class GuiGameController implements GameGateway {
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
+        processModel();
+    }
 
-        //INDEX UPDATE:
 
-        //board Update
-        BoardRender.renderBoard(model, board);
-
-        //owner's bookshelf update
-        BookshelfRender.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf(), ownerBookshelf);
-
-        //player's bookshelf update
-        for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            BookshelfRender.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf(), bookshelves().get(i));
+    public void processModel() {
+        if (model == null) {
+            return;
         }
+        switch (model.getGameStatus()) {
+            case RUNNING, LAST_ROUND -> {
+                PlayerSession currentPlayer = model.getCurrentPlayerSession();
+
+                boolean isOwnerTurn = currentPlayer.getUsername().equals(owner);
+
+                //board
+                BoardRender.renderBoard(model, board);
 
 
-        // CGC token update
-        for (int i = 0; i < commonGoalCardsAmount; i++) {
-            topTokens().set(i, TokenRender.generateTokenImageView(model.getCommonGoalCards().get(i)));
-        }
+                //CGC
+                for (int i = 0; i < commonGoalCardsAmount; i++) {
+                    CommonGoalCard commonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
 
-        CurrentPlayer.setText(model.getCurrentPlayerSession().getUsername());
+                    //Image commonGoalCardImage = new Image(GuiResources.getCommonGC(commonGoalCard.getId()));
+
+                    //commonGoalCards().get(i).setImage(commonGoalCardImage);
+
+                    //commonGoalCards().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard).getImage());
+                    commonGoalCards().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard));
 
 
-        //INSERTION UPDATE:
+                }
 
-        PlayerTileSelection playerTiles = model.getSessions().getByUsername(owner).getPlayerTileSelection();
-        //tile update
-        if (playerTiles != null){
-            for (int i = 0; i < playerTiles.getSelectedTiles().size(); i++) {
-                Image selectedTileImage = new Image(GuiResources.getTile(playerTiles.getSelectedTiles().get(i)));
-                selectedTileList().get(i).setImage(selectedTileImage);
+                //firstCommonGoalCard = CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(0).getCommonGoalCard());
+                //secondCommonGoalCard = CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(1).getCommonGoalCard());
+
+
+                //PGC
+                personalGoalCard.setImage(new Image(GuiResources.getPersonalGC(model.getPlayerSession(owner).getPersonalGoalCard())));
+                //personalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
+
+                //players' bookshelf update
+                for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
+                    String username = model.getPlayersUsernameList().get(i);
+                    BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(username).getBookshelf(), bookshelves().get(i));
+                }
+
+                //players buttons
+                for (int i = 0; i < model.getSessions().size(); i++){
+                    playersButtons().get(i).setText(model.getPlayersUsernameList().get(i));
+                    //capire come svuotare i bottoni che non sono usati quando non ci sono 4 giocatori
+                    // settiamoli come invisibili nel fxml e rendiamo visibili qui quelli che servono
+                }
+
+                //tokens
+                endGameToken = EndGameTokenRender.generateEndTokenImageView();
+
+
+                for (int i = 0; i < commonGoalCardsAmount; i++) {
+                    topTokens().get(i).setImage(CommonGoalCardsTokenRender.generateTokenImageView(model.getCommonGoalCards().get(i)));
+                }
+
+                CurrentPlayer.setText(model.getCurrentPlayerSession().getUsername());
+
+                if (isOwnerTurn) {
+                    switch (currentPlayer.getPlayerCurrentGamePhase()) {
+                        case IDLE -> {
+                            //errore
+                        }
+                        case SELECTING -> {
+                            gameSelection();
+                        }
+                        case INSERTING -> {
+                            gameInsertion();
+                        }
+                    }
+                }
+            }
+            case ENDED -> {
+                onGameEnded();
+            }
+            case STANDBY -> {
+                onGameStandby();
             }
         }
+    }
 
-        //bookshelf update
+    public void gameSelection() {
+        onSelectingButtonClick();
+    }
+
+    public void gameInsertion() {
+        for (int i = 0; i < commonGoalCardsAmount; i++) {
+            CommonGoalCard commonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
+            insertionCommonGoalCard().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard));
+        }
+
+        insertionPersonalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
+
+
         BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
 
+        SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
+
 
     /**
      * Handles the game selection reply and updates the GUI elements based on the result.
@@ -323,10 +351,20 @@ public class GuiGameController implements GameGateway {
     @FXML
     public void onSelectingButtonClick() {
         handler.onViewSelection(selectedCoordinates);
-        SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
+        //SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
 
-    
+    public void onGameEnded() {
+        //todo
+        List<PlayerScore> playerRanking = model.getRankings();
+        SceneManager.changeScene(SceneManager.getActualController(), "ranking.fxml");
+    }
+
+    public void onGameStandby() {
+        //
+    }
+
+
     public void setSelectedCoordinatesListener(MouseEvent mouseEvent) {
         Coordinate coordinate;
 
