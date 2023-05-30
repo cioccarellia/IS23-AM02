@@ -219,6 +219,12 @@ public class GuiGameController implements GameGateway {
                     // settiamoli come invisibili nel fxml e rendiamo visibili qui quelli che servono
                 }
 
+                int j = model.getSessions().size();
+                while(j <= 4){
+                    playersButtons().get(j).setText("");
+                    //playersButtons().get(j).setOpacity(0);
+                }
+
                 //tokens
                 endGameToken = EndGameTokenRender.generateEndTokenImageView();
 
