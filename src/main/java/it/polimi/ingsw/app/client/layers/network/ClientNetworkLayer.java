@@ -13,7 +13,10 @@ public class ClientNetworkLayer {
 
     public static void scheduleReceiverExecutionThread(@NotNull ClientGateway clientGateway, @NotNull ExecutorService executorService) {
         switch (clientGateway) {
-            case TcpClientGateway tcpGateway -> executorService.execute(tcpGateway);
+            case TcpClientGateway tcpGateway -> {
+                // Execute TCP handler thread for message reception
+                executorService.execute(tcpGateway);
+            }
             case RmiClientGateway rmiGateway -> {
             }
             default -> throw new IllegalStateException();

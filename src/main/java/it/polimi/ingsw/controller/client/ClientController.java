@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
 
@@ -79,11 +80,18 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         this.gateway = gateway;
         this.config = config;
 
-        // try {
-        //     identity = (ClientService) UnicastRemoteObject.exportObject(this, 10292);
-        // } catch (RemoteException e) {
-        //     throw new RuntimeException(e);
-        // }
+        switch (config.protocol()) {
+            case RMI -> {
+                try {
+                    identity = (ClientService) UnicastRemoteObject.exportObject(this, 52947);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case TCP -> {
+                identity = this;
+            }
+        }
     }
 
 
@@ -95,13 +103,13 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     @Override
     public synchronized void initialize() {
         // initialize
-        lobby = ViewFactory.createLobbyUi(config.mode(), this);
+        lobby = ViewFactory.createLobbyUi(config.mode(), this, AppClient.clientExecutorService);
 
 
         //ViewLayer.scheduleLobbyExecutionThread(lobby, executorService);
 
         try {
-            gateway.serverStatusRequest(this);
+            gateway.serverStatusRequest(identity);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -121,7 +129,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         hasAuthenticatedWithServerAndExchangedUsername = true;
 
         // schedules ack thread
-        ClientNetworkLayer.scheduleKeepAliveThread(ownerUsername, gateway, AppClient.executorService);
+        ClientNetworkLayer.scheduleKeepAliveThread(ownerUsername, gateway, AppClient.clientExecutorService);
     }
 
     /**
@@ -233,7 +241,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     public synchronized void onGameStartedEvent(Game game) {
         lobby.kill();
 
-        ui = ViewFactory.createGameUi(config.mode(), game, this, ownerUsername);
+        ui = ViewFactory.createGameUi(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
 
         // schedules UI initialization on its own thread
         // ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);

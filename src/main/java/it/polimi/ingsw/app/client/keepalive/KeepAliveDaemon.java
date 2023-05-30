@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import org.jetbrains.annotations.NotNull;
 
 import java.rmi.RemoteException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Daemon thread responsible for sending keep-alive signals to the server at regular intervals.
@@ -48,8 +49,7 @@ public class KeepAliveDaemon implements Runnable {
     public void run() {
         while (isActive) {
             try {
-                Thread.sleep(5_000);
-
+                TimeUnit.SECONDS.sleep(5);
                 gateway.keepAlive(username);
             } catch (InterruptedException | RemoteException e) {
                 throw new RuntimeException(e);

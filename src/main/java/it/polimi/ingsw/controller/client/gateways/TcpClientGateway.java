@@ -50,7 +50,9 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
             throw new IllegalArgumentException("Wrong serverHost/port combination", e);
         } catch (IOException e) {
             logger.error("Can not acquire I/O to start client gateway, probably TcpServer not yet started [tried connecting to serverHost={}, serverPort={}]", serverHost, serverTcpPort);
-            throw new IllegalArgumentException("Impossible to acquire I/O for connection to server", e);
+            System.out.printf("No server started at the given address %s:%d", serverHost, serverTcpPort);
+            System.exit(-1);
+            throw new IllegalStateException();
         }
 
         logger.info("Started socket for TcpClientGateway, socket={}", socket);
@@ -101,6 +103,7 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
             }
         } finally {
             try {
+                isActivelyListeningOnSocket = false;
                 close();
             } catch (IOException e) {
                 logger.error("Error closing socket: socket={}, message={}", socket, e.getMessage());
@@ -111,8 +114,7 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
 
     public void mapEventToControllerMethodCall(@NotNull final Message incomingMessage) {
         switch (incomingMessage) {
-            case ConnectionAcceptanceEvent s ->
-                    controller.onAcceptConnectionAndFinalizeUsername(s.getUsername(), s.getModel());
+            case ConnectionAcceptanceEvent s -> controller.onAcceptConnectionAndFinalizeUsername(s.getUsername(), s.getModel());
             case GameConnectionRequestReply s -> controller.onGameConnectionReply(s.seal());
             case GameCreationRequestReply s -> controller.onGameCreationReply(s.seal());
             case ServerStatusRequestReply s -> controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());

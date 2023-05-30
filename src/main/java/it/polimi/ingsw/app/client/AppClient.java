@@ -43,7 +43,7 @@ public class AppClient implements Runnable {
     /**
      * Client-side executor
      */
-    public final static ExecutorService executorService = Executors.newCachedThreadPool();
+    public final static ExecutorService clientExecutorService = Executors.newCachedThreadPool();
 
 
     public AppClient(@NotNull ClientExhaustiveConfiguration config, String serverHost, int serverPort) {
@@ -67,7 +67,7 @@ public class AppClient implements Runnable {
     }
 
     private void initializeClientThreads() {
-        ClientNetworkLayer.scheduleReceiverExecutionThread(gateway, executorService);
+        ClientNetworkLayer.scheduleReceiverExecutionThread(gateway, clientExecutorService);
     }
 
     /**
