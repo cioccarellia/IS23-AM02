@@ -41,9 +41,6 @@ import java.util.Set;
  */
 public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
-    // @Serial
-    // private static final long serialVersionUID = -7833101767829378741L;
-
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     private final ClientExhaustiveConfiguration config;
@@ -103,16 +100,25 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     @Override
     public synchronized void initialize() {
         // initialize
-        lobby = ViewFactory.createLobbyUi(config.mode(), this, AppClient.clientExecutorService);
-
+        ViewFactory.createLobbyUiAsync(config.mode(), this, AppClient.clientExecutorService);
 
         //ViewLayer.scheduleLobbyExecutionThread(lobby, executorService);
+    }
+
+    @Override
+    public void onLobbyUiReady(LobbyGateway lobby) {
+        this.lobby = lobby;
 
         try {
             gateway.serverStatusRequest(identity);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void onGameUiReady(GameGateway ui) {
+        this.ui = ui;
     }
 
 
@@ -241,7 +247,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     public synchronized void onGameStartedEvent(Game game) {
         lobby.kill();
 
-        ui = ViewFactory.createGameUi(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
+        ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
 
         // schedules UI initialization on its own thread
         // ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);

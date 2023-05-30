@@ -11,8 +11,11 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.gui.render.BoardRender;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -115,7 +118,10 @@ public class GuiGameController implements GameGateway {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
+
+
     }
+
 
     private List<ImageView> selectedTileList() {
         return Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
@@ -151,7 +157,7 @@ public class GuiGameController implements GameGateway {
         model.onGameStarted();
 
         //board Update
-        board = GuiHelper.regenerateBoardGridPage(model);
+        BoardRender.renderBoard(model, board);
 
         //GUI initialization:
         //index GuiHelper

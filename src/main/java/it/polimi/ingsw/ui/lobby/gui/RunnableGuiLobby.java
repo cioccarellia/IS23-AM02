@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ui.lobby.gui;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
+import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -36,19 +37,28 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
 
     private GuiLobbyController lobbyController;
-    private LobbyViewEventHandler handler;
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
+
+
+    private static AppLifecycle lifecycle;
+    private static LobbyViewEventHandler handler;
+
     /**
      * Initializes the lobby view event handler.
      *
-     * @param handler The lobby view event handler.
+     * @param _handler The lobby view event handler.
      */
-    public void initHandler(LobbyViewEventHandler handler) {
-        this.handler = handler;
+    public static void initHandler(LobbyViewEventHandler _handler) {
+        handler = _handler;
+    }
+
+
+    public static void initLifecycle(AppLifecycle _appLifecycle) {
+        lifecycle = _appLifecycle;
     }
 
     /**
@@ -59,29 +69,39 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
      */
     @Override
     public void start(Stage lobbyStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(fxmlURL);
-        loader.setLocation(fxmlURL);
-
-        Parent rootLayout;
-
         try {
-            rootLayout = loader.load();
-        } catch (IOException e) {
-            logger.error("Error while loading lobby XML", e);
-            throw new IllegalStateException();
+            logger.info("RunnableGuiLobby.start(), handler={}", handler.toString());
+            logger.info("RunnableGuiLobby.start(), this={} ", this);
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            loader.setLocation(fxmlURL);
+
+            Parent rootLayout;
+
+            try {
+                rootLayout = loader.load();
+            } catch (IOException e) {
+                logger.error("Error while loading lobby XML", e);
+                throw new IllegalStateException();
+            }
+
+
+            lobbyController = loader.getController();
+            lobbyController.init(handler);
+
+            Scene loadedScene = new Scene(rootLayout, 600, 400, false, SceneAntialiasing.BALANCED);
+
+            lobbyStage.setScene(loadedScene);
+
+
+            lobbyStage.setTitle("Login page");
+            lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
+            lobbyStage.show();
+
+            lifecycle.onLobbyUiReady(this);
+        } catch (Exception e) {
+            logger.error("Exception in RunnableGuiLobby.start()", e);
         }
-
-        lobbyController = loader.getController();
-        lobbyController.init(handler);
-
-        Scene loadedScene = new Scene(rootLayout, 600, 400, false, SceneAntialiasing.BALANCED);
-
-        lobbyStage.setScene(loadedScene);
-
-
-        lobbyStage.setTitle("Login page");
-        lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
-        lobbyStage.show();
     }
 
     /**
@@ -92,6 +112,9 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
      */
     @Override
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
+        logger.info("onServerStatusUpdate, handler={}", handler.toString());
+        logger.info("onServerStatusUpdate, this={} ", this.toString());
+
         lobbyController.onServerStatusUpdate(status, playerInfo);
     }
 
