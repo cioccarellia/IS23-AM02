@@ -17,6 +17,7 @@ import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.gui.render.*;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.*;
 
 
@@ -36,7 +38,7 @@ import java.util.*;
  * for the game. It handles user interactions, updates the GUI elements based on the game model,
  * and communicates with the game logic through the GameViewEventHandler interface.
  */
-public class GuiGameController implements GameGateway {
+public class GuiGameController implements GameGateway, Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
 
@@ -62,6 +64,8 @@ public class GuiGameController implements GameGateway {
     public GridPane player4BookShelf;
     @FXML
     public ImageView endGameToken;
+
+
     @FXML
     public ImageView firstCommonGoalCardTopToken;
     @FXML
@@ -94,14 +98,9 @@ public class GuiGameController implements GameGateway {
     public Label CurrentPlayer;
     @FXML
     public Label insertionStatus;
+
     @FXML
-    public GridPane insertionBookshelf;
-    @FXML
-    public ImageView tile1Selected;
-    @FXML
-    public ImageView tile2Selected;
-    @FXML
-    public ImageView tile3Selected;
+    public Button quitButton;
 
     private GameViewEventHandler handler;
     private Game model;
@@ -121,8 +120,9 @@ public class GuiGameController implements GameGateway {
         this.owner = owner;
     }
 
-    private List<ImageView> selectedTileList() {
-        return Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 
     private List<ImageView> insertionCommonGoalCard() {
@@ -213,7 +213,7 @@ public class GuiGameController implements GameGateway {
                 }
 
                 //players buttons
-                for (int i = 0; i < model.getSessions().size(); i++){
+                for (int i = 0; i < model.getSessions().size(); i++) {
                     playersButtons().get(i).setText(model.getPlayersUsernameList().get(i));
                     //capire come svuotare i bottoni che non sono usati quando non ci sono 4 giocatori
                     // settiamoli come invisibili nel fxml e rendiamo visibili qui quelli che servono
@@ -256,7 +256,9 @@ public class GuiGameController implements GameGateway {
         onSelectingButtonClick();
     }
 
+
     public void gameInsertion() {
+        /*
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             CommonGoalCard commonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
             insertionCommonGoalCard().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard));
@@ -268,7 +270,10 @@ public class GuiGameController implements GameGateway {
         BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
 
         SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
+       */
     }
+
+
 
 
     /**
@@ -284,12 +289,10 @@ public class GuiGameController implements GameGateway {
                     case WRONG_GAME_PHASE -> {
                         Status.setOpacity(1);
                         Status.setText("Error, wrong game phase");
-
                     }
                     case UNAUTHORIZED_SELECTION -> {
                         Status.setOpacity(1);
                         Status.setText("Error, unauthorized selection");
-
                     }
                     case UNAUTHORIZED_PLAYER -> {
                         Status.setOpacity(1);
@@ -312,32 +315,32 @@ public class GuiGameController implements GameGateway {
             case Failure<BookshelfInsertionFailure> failure -> {
                 switch (failure.error()) {
                     case WRONG_SELECTION -> {
-                        insertionStatus.setOpacity(1);
+                        insertionStatus.setVisible(true);
                         insertionStatus.setText("Error, wrong selection");
                     }
 
                     case ILLEGAL_COLUMN -> {
-                        insertionStatus.setOpacity(1);
+                        insertionStatus.setVisible(true);
                         insertionStatus.setText("Error, column out of bounds");
                     }
 
                     case TOO_MANY_TILES -> {
-                        insertionStatus.setOpacity(1);
+                        insertionStatus.setVisible(true);
                         insertionStatus.setText("Error, too many tiles selected");
                     }
 
                     case NO_FIT -> {
-                        insertionStatus.setOpacity(1);
+                        insertionStatus.setVisible(true);
                         insertionStatus.setText("Error, selected tiles can't fit in this columns");
                     }
 
                     case WRONG_PLAYER -> {
-                        insertionStatus.setOpacity(1);
+                        insertionStatus.setVisible(true);
                         insertionStatus.setText("Error, unauthorized action from non active player");
                     }
 
                     case WRONG_GAME_PHASE -> {
-                        insertionStatus.setOpacity(1);
+                        insertionStatus.setVisible(true);
                         insertionStatus.setText("Error, wrong game phase");
                     }
                 }
@@ -350,6 +353,9 @@ public class GuiGameController implements GameGateway {
 
     @FXML
     public void onSelectingButtonClick() {
+        if (handler == null) {
+            logger.warn("onSelectingButtonClick(): handler is null");
+        }
         handler.onViewSelection(selectedCoordinates);
         //SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
