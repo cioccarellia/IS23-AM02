@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
-import it.polimi.ingsw.utils.resources.ResourceReader;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,7 +46,7 @@ public class BoardRender {
 
 
 
-                    n.setImage(generateImageViewForTile(matrix));
+                    // n.setImage(generateImageViewForTile(matrix));
 
                 } catch (NullPointerException ignored) {
 

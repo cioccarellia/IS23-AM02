@@ -11,6 +11,7 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -115,7 +116,7 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
         logger.info("onServerStatusUpdate, handler={}", handler.toString());
         logger.info("onServerStatusUpdate, this={} ", this.toString());
 
-        lobbyController.onServerStatusUpdate(status, playerInfo);
+        Platform.runLater(() -> lobbyController.onServerStatusUpdate(status, playerInfo));
     }
 
     /**
@@ -125,7 +126,7 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
      */
     @Override
     public void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        lobbyController.onServerCreationReply(result);
+        Platform.runLater(() -> lobbyController.onServerCreationReply(result));
     }
 
     /**
@@ -135,7 +136,7 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
      */
     @Override
     public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        lobbyController.onServerConnectionReply(result);
+        Platform.runLater(() -> lobbyController.onServerConnectionReply(result));
     }
 
     /**
@@ -143,6 +144,6 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
      */
     @Override
     public void kill() {
-        lobbyController.kill();
+        Platform.runLater(() -> lobbyController.kill());
     }
 }

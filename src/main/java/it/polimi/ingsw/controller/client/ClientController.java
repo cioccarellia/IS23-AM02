@@ -106,7 +106,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public void onLobbyUiReady(LobbyGateway lobby) {
+    public synchronized void onLobbyUiReady(LobbyGateway lobby) {
         this.lobby = lobby;
 
         try {
@@ -117,7 +117,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public void onGameUiReady(GameGateway ui) {
+    public synchronized void onGameUiReady(GameGateway ui) {
         this.ui = ui;
     }
 

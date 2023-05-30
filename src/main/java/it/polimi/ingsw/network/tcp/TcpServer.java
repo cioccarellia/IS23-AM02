@@ -37,7 +37,7 @@ public class TcpServer implements Runnable {
         this.wrapper = wrapper;
         this.serverTcpPort = serverTcpPort;
 
-        executorService = Executors.newFixedThreadPool(5);
+        executorService = Executors.newCachedThreadPool();
     }
 
     public void start() {
