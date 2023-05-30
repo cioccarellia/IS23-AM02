@@ -4,16 +4,17 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.goal.Token;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static it.polimi.ingsw.model.board.Tile.*;
 import static it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier.*;
 import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.*;
 import static it.polimi.ingsw.model.game.goal.Token.*;
-import static it.polimi.ingsw.ui.game.gui.utils.StringExtractor.extract;
 
 /**
  * The GuiResources class provides access to various graphical resources used in the GUI.
@@ -189,4 +190,30 @@ public class GuiResources {
     public static final List<String> tilesDomain = Arrays.asList(
             book1, book2, book3, cat1, cat2, cat3, frame1, frame2, frame3, game1, game2, game3, plant1, plant2, plant3, trophy1, trophy2, trophy3
     );
+
+    public static String extract(@NotNull Tile tileType) {
+        if (tilesDomain != null) {
+            switch (tileType) {
+                case BOOK -> {
+                    return tilesDomain.get(new Random().ints(0, 3).findAny().getAsInt());
+                }
+                case CAT -> {
+                    return tilesDomain.get(new Random().ints(3, 6).findAny().getAsInt());
+                }
+                case FRAME -> {
+                    return tilesDomain.get(new Random().ints(6, 9).findAny().getAsInt());
+                }
+                case GAME -> {
+                    return tilesDomain.get(new Random().ints(9, 12).findAny().getAsInt());
+                }
+                case PLANT -> {
+                    return tilesDomain.get(new Random().ints(12, 15).findAny().getAsInt());
+                }
+                case TROPHY -> {
+                    return tilesDomain.get(new Random().ints(15, 18).findAny().getAsInt());
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + tileType);
+            }
+        }
+    }
 }
