@@ -95,7 +95,7 @@ public class GuiResources {
 
 
     // maps
-    private static final Map<Tile, String> tileStringMap = Map.of(BOOK, extract(BOOK), CAT, extract(CAT), FRAME, extract(FRAME), GAME, extract(GAME), PLANT, extract(PLANT), TROPHY, extract(TROPHY));
+    private static final Map<Tile, String> tileStringMap = Map.of(BOOK, book1, CAT, cat1, PLANT, plant1, GAME, game1 ,TROPHY, trophy1);
     private static final Map<Token, String> tokenStringMap = Map.of(COMMON_GOAL_TOKEN_2_POINTS, token_2_points,
             COMMON_GOAL_TOKEN_4_POINTS, token_4_points, COMMON_GOAL_TOKEN_6_POINTS, token_6_points, COMMON_GOAL_TOKEN_8_POINTS, token_8_points, FULL_SHELF_TOKEN, token_full_bookshelf);
     private static final Map<PersonalGoalCard, String> personalGCStringMap = Map.ofEntries(
@@ -191,6 +191,7 @@ public class GuiResources {
             book1, book2, book3, cat1, cat2, cat3, frame1, frame2, frame3, game1, game2, game3, plant1, plant2, plant3, trophy1, trophy2, trophy3
     );
 
+    /*
     public static String extract(@NotNull Tile tileType) {
         if (tilesDomain != null) {
             switch (tileType) {
@@ -217,4 +218,5 @@ public class GuiResources {
         } else
             return null;
     }
+    */
 }

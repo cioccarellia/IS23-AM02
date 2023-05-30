@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.player.selection;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.CellInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,7 @@ public class PlayerTileSelection {
      */
     private List<CellInfo> selectedTiles;
 
-    public PlayerTileSelection() {
-        selectedTiles = null;
-    }
+    public PlayerTileSelection() {selectedTiles = null;}
 
     public PlayerTileSelection(List<CellInfo> tiles) {
         this.selectedTiles = tiles;

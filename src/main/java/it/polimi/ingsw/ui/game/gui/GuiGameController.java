@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.gui.render.*;
@@ -25,6 +26,7 @@ import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
@@ -44,7 +46,7 @@ public class GuiGameController implements GameGateway {
 
     private static final int col = 0;
     private final List<Tile> orderedTiles = new ArrayList<>();
-    private final Set<Coordinate> selectedCoordinates = new HashSet<>();
+    private static final Set<Coordinate> selectedCoordinates = new HashSet<>();
 
     @FXML
     public GridPane board;
@@ -180,6 +182,9 @@ public class GuiGameController implements GameGateway {
         }
 
         insertionPersonalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
+        //END GAME TOKEN
+        Image endGameTokenImage = new Image(GuiResources.getToken(FULL_SHELF_TOKEN));
+        endGameToken.setImage(endGameTokenImage);
 
         //owner's bookshelf initialization
         BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
@@ -210,14 +215,11 @@ public class GuiGameController implements GameGateway {
 
         //player's bookshelf update
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            BookshelfRender.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf(),bookshelves().get(i));
+            BookshelfRender.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf(), bookshelves().get(i));
         }
 
 
         // CGC token update
-        Image endGameTokenImage = new Image(GuiResources.getToken(FULL_SHELF_TOKEN));
-        endGameToken.setImage(endGameTokenImage);
-
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             topTokens().set(i, TokenRender.generateTokenImageView(model.getCommonGoalCards().get(i)));
         }
@@ -227,10 +229,13 @@ public class GuiGameController implements GameGateway {
 
         //INSERTION UPDATE:
 
+        PlayerTileSelection playerTiles = model.getSessions().getByUsername(owner).getPlayerTileSelection();
         //tile update
-        for (int i = 0; i < model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().size(); i++) {
-            Image selectedTileImage = new Image(GuiResources.getTile(model.getPlayerSession(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
-            selectedTileList().get(i).setImage(selectedTileImage);
+        if (playerTiles != null){
+            for (int i = 0; i < playerTiles.getSelectedTiles().size(); i++) {
+                Image selectedTileImage = new Image(GuiResources.getTile(playerTiles.getSelectedTiles().get(i)));
+                selectedTileList().get(i).setImage(selectedTileImage);
+            }
         }
 
         //bookshelf update
@@ -321,5 +326,15 @@ public class GuiGameController implements GameGateway {
         SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
 
+    
+    public void setSelectedCoordinatesListener(MouseEvent mouseEvent) {
+        Coordinate coordinate;
 
+        Integer col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
+
+        Integer row = GridPane.getRowIndex((Node) mouseEvent.getSource());
+
+        coordinate = new Coordinate(row, col);
+        selectedCoordinates.add(coordinate);
+    }
 }

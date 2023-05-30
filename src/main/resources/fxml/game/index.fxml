@@ -447,7 +447,7 @@
 
 
             <ImageView id="boardTile13" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"
-                       GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                       GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <ImageView id="boardTile14" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"
                        GridPane.columnIndex="4" GridPane.rowIndex="1"/>
             <ImageView id="boardTile15" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true"

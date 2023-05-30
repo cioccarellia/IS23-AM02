@@ -70,7 +70,6 @@ public class RunnableGuiGame extends Application implements GameGateway {
         model.addPlayer("Margara");
         model.onGameStarted();
         owner = "Fornaciari";
-
         Parent rootLayout;
 
         try {

@@ -17,26 +17,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import java.awt.event.MouseEvent;
+
 /**
  * The GuiHelper class provides helper methods for generating and updating GUI elements
  * in the game graphical user interface (GUI).
  */
 public class GuiHelper{
-    /**
-     * Retrieves the coordinates of a selected tile node in the GUI.
-     *
-     * @param tileNode The Node representing the selected tile.
-     * @return The coordinates of the selected tile.
-     */
-    public static Coordinate getSelectedCoordinates(Node tileNode) {
-        Coordinate coordinate;
 
-        Integer col = GridPane.getColumnIndex(tileNode);
-
-        Integer row = GridPane.getRowIndex(tileNode);
-
-        coordinate = new Coordinate(row, col);
-
-        return coordinate;
-    }
 }

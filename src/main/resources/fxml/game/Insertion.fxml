@@ -38,17 +38,17 @@
                 <Image url="@../../img/common_goal_cards/eight_tiles.jpg" />
             </image>
         </ImageView>
-        <ImageView fx:id="tile1Selected" fitHeight="61.0" fitWidth="55.0" layoutX="18.0" layoutY="48.0" onMouseClicked="#onOrderedTileInsertioni">
+        <ImageView fx:id="tile1Selected" fitHeight="61.0" fitWidth="55.0" layoutX="18.0" layoutY="48.0" onMouseClicked="#onInsertingButtonClick">
             <image>
                 <Image url="@../../img/tiles/game1.1.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="tile2selected" fitHeight="61.0" fitWidth="55.0" layoutX="73.0" layoutY="48.0" onMouseClicked="#onOrderedTileInsertion">
+        <ImageView fx:id="tile2selected" fitHeight="61.0" fitWidth="55.0" layoutX="73.0" layoutY="48.0" onMouseClicked="#onInsertingButtonClick">
             <image>
                 <Image url="@../../img/tiles/cat1.1.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="tile3selected" fitHeight="61.0" fitWidth="55.0" layoutX="129.0" layoutY="48.0" onMouseClicked="#onOrderedTileInsertion">
+        <ImageView fx:id="tile3selected" fitHeight="61.0" fitWidth="55.0" layoutX="129.0" layoutY="48.0" onMouseClicked="#onInsertingButtonClick">
             <image>
                 <Image url="@../../img/tiles/trophy1.1.png" />
             </image>
