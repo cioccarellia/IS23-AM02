@@ -63,15 +63,15 @@ public class GuiGameController implements GameGateway {
     @FXML
     public ImageView endGameToken;
     @FXML
-    public ImageView firstCommonGoalCardTopToken = new ImageView();
+    public ImageView firstCommonGoalCardTopToken;
     @FXML
-    public ImageView secondCommonGoalCardTopToken = new ImageView();
+    public ImageView secondCommonGoalCardTopToken;
     @FXML
-    public ImageView firstCommonGoalCard = new ImageView();
+    public ImageView firstCommonGoalCard;
     @FXML
-    public ImageView secondCommonGoalCard = new ImageView();
+    public ImageView secondCommonGoalCard;
     @FXML
-    public ImageView personalGoalCard = new ImageView();
+    public ImageView personalGoalCard;
     @FXML
     public Tab player1Button;
     @FXML
@@ -83,11 +83,11 @@ public class GuiGameController implements GameGateway {
     @FXML
     public Button selectingButton;
     @FXML
-    public ImageView insertionCommonGoalCard1 = new ImageView();
+    public ImageView insertionCommonGoalCard1;
     @FXML
-    public ImageView insertionCommonGoalCard2 = new ImageView();
+    public ImageView insertionCommonGoalCard2;
     @FXML
-    public ImageView insertionPersonalGoalCard = new ImageView();
+    public ImageView insertionPersonalGoalCard;
     @FXML
     public Label Status;
     @FXML
@@ -97,15 +97,16 @@ public class GuiGameController implements GameGateway {
     @FXML
     public GridPane insertionBookshelf;
     @FXML
-    public ImageView tile1Selected = new ImageView();
+    public ImageView tile1Selected;
     @FXML
-    public ImageView tile2Selected = new ImageView();
+    public ImageView tile2Selected;
     @FXML
-    public ImageView tile3Selected = new ImageView();
+    public ImageView tile3Selected;
 
     private GameViewEventHandler handler;
     private Game model;
     private String owner;
+
 
     /**
      * Initializes the game model, event handler, and owner for the GUI controller.
@@ -119,7 +120,6 @@ public class GuiGameController implements GameGateway {
         this.handler = handler;
         this.owner = owner;
     }
-
 
     private List<ImageView> selectedTileList() {
         return Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
