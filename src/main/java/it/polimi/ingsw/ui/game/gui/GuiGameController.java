@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.render.BoardRender;
+import it.polimi.ingsw.ui.game.gui.render.*;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
@@ -40,7 +41,6 @@ public class GuiGameController implements GameGateway {
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
 
-    private static final String indexPath = "index.fxml";
 
     private static final int col = 0;
     private final List<Tile> orderedTiles = new ArrayList<>();
@@ -167,22 +167,22 @@ public class GuiGameController implements GameGateway {
         }
         //PGC + CGC initialization
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            commonGoalCards().set(i, GuiHelper.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
+            commonGoalCards().set(i, CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
         }
 
-        personalGoalCard = GuiHelper.generatePersonalGoalCardImageView(model, owner);
+        personalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
 
         //insertion GuiHelper:
 
         // PGC + CGC initialization
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            insertionCommonGoalCard().set(i, GuiHelper.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
+            insertionCommonGoalCard().set(i, CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(i).getCommonGoalCard()));
         }
 
-        insertionPersonalGoalCard = GuiHelper.generatePersonalGoalCardImageView(model, owner);
+        insertionPersonalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
 
         //owner's bookshelf initialization
-        insertionBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf());
+        BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
 
 
         //model update
@@ -203,22 +203,23 @@ public class GuiGameController implements GameGateway {
         //INDEX UPDATE:
 
         //board Update
-        board = GuiHelper.regenerateBoardGridPage(model);
+        BoardRender.renderBoard(model, board);
 
         //owner's bookshelf update
-        ownerBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf());
+        BookshelfRender.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf(), ownerBookshelf);
 
         //player's bookshelf update
         for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-            bookshelves().set(i, GuiHelper.regenerateBookshelfGridPane(model.getSessions().playerSessions().get(i).getBookshelf()));
+            BookshelfRender.regenerateBookshelfGridPane(model.getPlayerSession(owner).getBookshelf(),bookshelves().get(i));
         }
 
 
         // CGC token update
-        endGameToken.setImage(GuiResources.getToken(FULL_SHELF_TOKEN));
+        Image endGameTokenImage = new Image(GuiResources.getToken(FULL_SHELF_TOKEN));
+        endGameToken.setImage(endGameTokenImage);
 
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            topTokens().set(i, GuiHelper.generateTokenImageView(model.getCommonGoalCards().get(i)));
+            topTokens().set(i, TokenRender.generateTokenImageView(model.getCommonGoalCards().get(i)));
         }
 
         CurrentPlayer.setText(model.getCurrentPlayerSession().getUsername());
@@ -228,11 +229,12 @@ public class GuiGameController implements GameGateway {
 
         //tile update
         for (int i = 0; i < model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().size(); i++) {
-            selectedTileList().get(i).setImage(GuiResources.getTile(model.getSessions().getByUsername(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
+            Image selectedTileImage = new Image(GuiResources.getTile(model.getPlayerSession(owner).getPlayerTileSelection().getSelectedTiles().get(i)));
+            selectedTileList().get(i).setImage(selectedTileImage);
         }
 
         //bookshelf update
-        insertionBookshelf = GuiHelper.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf());
+        BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
 
     }
 
@@ -313,14 +315,10 @@ public class GuiGameController implements GameGateway {
 
     }
 
-    /**
-     * Event handler for the selectingButton click event. Initiates the insertion process and
-     * switches to the index scene.
-     */
     @FXML
     public void onSelectingButtonClick() {
-        handler.onViewInsertion(col, orderedTiles);
-        SceneManager.changeScene(SceneManager.getActualController(), indexPath);
+        handler.onViewSelection(selectedCoordinates);
+        SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
 
 

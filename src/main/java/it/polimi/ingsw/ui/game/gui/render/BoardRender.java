@@ -25,7 +25,7 @@ public class BoardRender {
     }
 
     public static ImageView generateImageViewForTile(Tile tile) {
-        Image tileImage = GuiResources.getTile(tile);
+        Image tileImage = new Image(GuiResources.getTile(tile));
 
         ImageView tileImageView = new ImageView();
 
@@ -43,10 +43,12 @@ public class BoardRender {
                     ImageView n = (ImageView) getNodeByRowColumnIndex(i, j, boardPane);
 
                     var matrix = model.getBoard().getTileMatrix();
+                    Image gridNodeImage = generateImageViewForTile(matrix[i][j]).getImage();
 
 
-
-                    // n.setImage(generateImageViewForTile(matrix));
+                    if (n != null) {
+                        n.setImage(gridNodeImage);
+                    }
 
                 } catch (NullPointerException ignored) {
 

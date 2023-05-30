@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ui.game.gui.insertion;
 
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.gui.SceneManager;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,23 +46,7 @@ public class GuiInsertionController {
     @FXML
     public Label label3;
 
-    private List<ImageView> selectedTileList() {
-
-        return Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
-
-    }
-
-    private List<RadioButton> columnButtons() {
-
-        return Arrays.asList(column1, column2, column3, column4, column5);
-
-    }
-
-    private List<Label> labels() {
-
-        return Arrays.asList(label1, label2, label3);
-
-    }
+    private GameViewEventHandler handler;
 
     /**
      * Event handler for radio button click.
@@ -81,42 +68,33 @@ public class GuiInsertionController {
     /**
      * Event handler for ordered tile insertion.
      */
-    public void onOrderedTileInsertion() {
-        /* se dovesse funzionare con il for loop
-        List<ImageView> selectedTiles = Arrays.asList(tile1Selected, tile2Selected, tile3Selected);
-        List<Label> labels = Arrays.asList(label1, label2, label3);
-        for (int i = 0; i < selectedTiles.size(); i++) {
-            ImageView selTile = selectedTiles.get(i);
-            Label label = labels.get(i);
-            int value = i;
+    public void onOrderedTileInsertion(MouseEvent e){
+        if (e.getSource().equals(tile1Selected)) {
+            Tile tile = GuiResources.getTileType(tile1Selected.getImage().getUrl());
 
-            selTile.setOnMouseClicked(mouseEvent -> {
-                if (orderedTiles.size() == 0) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 1));
-                } else if (orderedTiles.size() == 1) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 2));
-                } else if (orderedTiles.size() == 2) {
-                    orderedTiles.add(GuiResources.getTileType(selTile.getImage()));
-                    label.setText(String.valueOf(value + 3));
-                }
-            });
-        }
-        */
+            orderedTiles.add(tile);
+            label1.setText(String.valueOf(orderedTiles.size()));
+        } else if (e.getSource().equals(tile2Selected)) {
+            Tile tile = GuiResources.getTileType(tile2Selected.getImage().getUrl());
 
+            orderedTiles.add(tile);
+            label2.setText(String.valueOf(orderedTiles.size()));
+        } else if (e.getSource().equals(tile3Selected)) {
+            Tile tile = GuiResources.getTileType(tile3Selected.getImage().getUrl());
 
-        if (orderedTiles.size() == 0) {
-            orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-            label1.setText(String.valueOf(1));
-        } else if (orderedTiles.size() == 1) {
-            orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-            label1.setText(String.valueOf(2));
-        } else if (orderedTiles.size() == 2) {
-            orderedTiles.add(GuiResources.getTileType(tile1Selected.getImage()));
-            label1.setText(String.valueOf(3));
+            orderedTiles.add(tile);
+            label3.setText(String.valueOf(orderedTiles.size()));
+        } else {
+            throw new IllegalStateException();
         }
 
 
+    }
+
+    @FXML
+
+    public void onInsertingButtonClick(){
+        handler.onViewInsertion(col,orderedTiles);
+        SceneManager.changeScene(SceneManager.getActualController(), "index.fxml");
     }
 }
