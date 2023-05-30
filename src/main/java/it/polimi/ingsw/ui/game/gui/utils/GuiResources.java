@@ -214,6 +214,7 @@ public class GuiResources {
                 }
                 default -> throw new IllegalStateException("Unexpected value: " + tileType);
             }
-        }
+        } else
+            return null;
     }
 }
