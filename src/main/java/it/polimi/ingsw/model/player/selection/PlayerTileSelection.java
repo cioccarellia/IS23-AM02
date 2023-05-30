@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.player.selection;
 
-import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import javafx.util.Pair;
+import it.polimi.ingsw.model.game.CellInfo;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,25 +13,25 @@ public class PlayerTileSelection {
     /**
      * The selection is kept in a set, since order does not matter
      */
-    private List<Pair<Coordinate, Tile>> selectedTiles;
+    private List<CellInfo> selectedTiles;
 
     public PlayerTileSelection() {
         selectedTiles = null;
     }
 
-    public PlayerTileSelection(List<Pair<Coordinate, Tile>> tiles) {
+    public PlayerTileSelection(List<CellInfo> tiles) {
         this.selectedTiles = tiles;
     }
 
     public List<Tile> getSelectedTiles() {
-        return selectedTiles.stream().map(Pair::getValue).collect(Collectors.toList());
+        return selectedTiles.stream().map(CellInfo::tile).collect(Collectors.toList());
     }
 
-    public void setSelectedTiles(List<Pair<Coordinate, Tile>> selectedTiles) {
+    public void setSelectedTiles(List<CellInfo> selectedTiles) {
         this.selectedTiles = selectedTiles;
     }
 
-    public List<Pair<Coordinate, Tile>> getSelection() {
+    public List<CellInfo> getSelection() {
         return selectedTiles;
     }
 

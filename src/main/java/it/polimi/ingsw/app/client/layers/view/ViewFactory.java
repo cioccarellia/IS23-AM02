@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
 import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
-import javafx.application.Application;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +71,7 @@ public class ViewFactory {
 
                 executorService.submit(() -> {
                     logger.info("Starting GUI lobby on dedicated thread");
-                    Application.launch(RunnableGuiLobby.class, "");
+                    RunnableGuiLobby.main(new String[]{});
                 });
 
             }

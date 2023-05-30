@@ -22,7 +22,6 @@ import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.utils.CollectionUtils;
 import it.polimi.ingsw.utils.model.CoordinatesHelper;
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
@@ -351,6 +350,7 @@ public class Game implements ModelService {
      *
      * @param coordinates set of the player's selected tiles' coordinates
      */
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public void onPlayerSelectionPhase(Set<Coordinate> coordinates) {
         if (!isSelectionValid(coordinates)) {
@@ -358,9 +358,12 @@ public class Game implements ModelService {
         }
 
         // we assume the selection is valid
-        List<Pair<Coordinate, Tile>> coordinatesAndValues = coordinates
+        List<CellInfo> coordinatesAndValues = coordinates
                 .stream()
-                .map(it -> new Pair<>(it, board.getTileAt(it).get())).toList();
+                .peek(it -> {
+                    assert board.getTileAt(it).isPresent();
+                })
+                .map(it -> new CellInfo(it, board.getTileAt(it).get())).toList();
 
         var tileSelection = new PlayerTileSelection(coordinatesAndValues);
 
@@ -461,10 +464,10 @@ public class Game implements ModelService {
             case INSERTING -> {
                 // rollback model to pre-selection stage and forward turns
                 // todo
-                List<Pair<Coordinate, Tile>> selectedTiles = getCurrentPlayerSession().getPlayerTileSelection().getSelection();
+                List<CellInfo> savedCellInfos = getCurrentPlayerSession().getPlayerTileSelection().getSelection();
 
-                for (Pair<Coordinate, Tile> selectedTile : selectedTiles) {
-                    board.setTile(selectedTile);
+                for (CellInfo savedInfoForSingleCell : savedCellInfos) {
+                    board.setTile(savedInfoForSingleCell);
                 }
 
                 getCurrentPlayerSession().clearTileSelection();

@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.DISCONNECTED;
 import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.OPEN;
@@ -76,6 +78,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      */
     private ServerStatus serverStatus = NO_GAME_STARTED;
 
+    private ExecutorService replyExecutor = Executors.newCachedThreadPool();
+
     public ServerController(ClientConnectionsManager manager) {
         connectionsManager = manager;
         router = new Router(connectionsManager);
@@ -115,13 +119,11 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
-        new Thread(() -> {
-            try {
-                remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
+        try {
+            remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
