@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,7 +57,11 @@ public class AppClient implements Runnable {
         // creates the gateway (to communicate with server) and the controller (which uses the gateway)
         this.gateway = ClientGatewayFactory.create(config.protocol(), serverHost, serverPort);
 
-        this.controller = new ClientController(gateway, config);
+        try {
+            this.controller = new ClientController(gateway, config);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         // injects the current controller inside the network reference for async callbacks
         this.gateway.linkController(controller);

@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
 
@@ -38,13 +39,13 @@ import java.util.Set;
  * Client-side controller.
  * Acts as an event hub, routing incoming network calls to their respective interfaces, and back to the server
  */
-public class ClientController implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
+public class ClientController extends UnicastRemoteObject implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-    private final ClientExhaustiveConfiguration config;
+    private ClientExhaustiveConfiguration config;
 
-    private final ClientGateway gateway;
+    private ClientGateway gateway;
 
     /**
      * Lobby waiting room.
@@ -72,7 +73,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param gateway The client gateway.
      * @param config  The exhaustive configuration for the client.
      */
-    public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) {
+    public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) throws RemoteException {
         this.gateway = gateway;
         this.config = config;
 
@@ -83,6 +84,9 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         }
     }
 
+    protected ClientController() throws RemoteException {
+    }
+
 
     // Lifecycle
 
@@ -90,7 +94,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * Initializes the client controller.
      */
     @Override
-    public synchronized void initialize() {
+    public void initialize() {
         // initialize
         ViewFactory.createLobbyUiAsync(config.mode(), this, AppClient.clientExecutorService);
 
@@ -98,7 +102,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public synchronized void onLobbyUiReady(LobbyGateway lobby) {
+    public void onLobbyUiReady(LobbyGateway lobby) {
         this.lobby = lobby;
 
         try {
@@ -109,7 +113,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
     }
 
     @Override
-    public synchronized void onGameUiReady(GameGateway ui) {
+    public void onGameUiReady(GameGateway ui) {
         this.ui = ui;
     }
 
@@ -121,7 +125,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param game     The game.
      */
     @Override
-    public synchronized void authorize(String username, Game game) {
+    public void authorize(String username, Game game) {
         // setup internal variables post-authorization
         ownerUsername = username;
         hasAuthenticatedWithServerAndExchangedUsername = true;
@@ -134,7 +138,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * Terminates the client controller.
      */
     @Override
-    public synchronized void terminate() {
+    public void terminate() {
 
     }
 
@@ -203,7 +207,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param playerInfo The list of player information.
      */
     @Override
-    public synchronized void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
+    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
 
         lobby.onServerStatusUpdate(status, playerInfo);
@@ -216,7 +220,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param result The result of the game creation, either a success or an error.
      */
     @Override
-    public synchronized void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
+    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         lobby.onServerCreationReply(result);
     }
 
@@ -226,7 +230,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param result The result of the game connection, either a success or an error.
      */
     @Override
-    public synchronized void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
+    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         lobby.onServerConnectionReply(result);
     }
 
@@ -236,7 +240,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param game The game.
      */
     @Override
-    public synchronized void onGameStartedEvent(Game game) {
+    public void onGameStartedEvent(Game game) {
         lobby.kill();
 
         ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
@@ -248,7 +252,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param game The game.
      */
     @Override
-    public synchronized void onModelUpdateEvent(Game game) {
+    public void onModelUpdateEvent(Game game) {
         ui.modelUpdate(game);
     }
 
@@ -258,7 +262,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param turnResult The result of the game selection turn, either a success or a failure.
      */
     @Override
-    public synchronized void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
         ui.onGameSelectionReply(turnResult);
     }
 
@@ -268,7 +272,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param turnResult The result of the game insertion turn, either a success or a failure.
      */
     @Override
-    public synchronized void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
         ui.onGameInsertionReply(turnResult);
     }
 
@@ -278,7 +282,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * @param usernames The list of player usernames.
      */
     @Override
-    public synchronized void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
         // not used
     }
 
@@ -286,7 +290,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
      * Handles the event when the game is ended.
      */
     @Override
-    public synchronized void onGameEndedEvent() {
+    public void onGameEndedEvent() {
         // not used
     }
 

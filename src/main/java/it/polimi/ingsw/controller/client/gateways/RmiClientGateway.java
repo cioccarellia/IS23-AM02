@@ -43,8 +43,12 @@ public class RmiClientGateway extends ClientGateway {
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
         try {
-            rmiServerStub.serverStatusRequest(remoteService);
-        } catch (RemoteException e) {
+            try {
+                rmiServerStub.serverStatusRequest(remoteService);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

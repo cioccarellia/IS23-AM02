@@ -119,11 +119,13 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
-        try {
-            remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        //new Thread(() -> {
+            try {
+                remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        //}).start();
     }
 
 
