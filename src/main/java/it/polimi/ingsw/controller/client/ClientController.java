@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
 
@@ -65,7 +64,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
 
     private String ownerUsername;
     private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
-    private ClientService identity;
+    private ClientController identity;
 
     /**
      * Constructs a ClientController object with the specified gateway and configuration.
@@ -78,14 +77,7 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         this.config = config;
 
         switch (config.protocol()) {
-            case RMI -> {
-                try {
-                    identity = (ClientService) UnicastRemoteObject.exportObject(this, 52947);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            case TCP -> {
+            case RMI, TCP -> {
                 identity = this;
             }
         }
@@ -248,9 +240,6 @@ public class ClientController implements AppLifecycle, ClientService, LobbyViewE
         lobby.kill();
 
         ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
-
-        // schedules UI initialization on its own thread
-        // ViewLayer.scheduleGameExecutionThread(ui, AppClient.executorService);
     }
 
     /**

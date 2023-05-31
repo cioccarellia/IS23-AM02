@@ -3,6 +3,7 @@ package it.polimi.ingsw.app.client.layers.view;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.ui.game.cli.CliApp;
 import it.polimi.ingsw.ui.game.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
 import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
@@ -33,7 +34,7 @@ public class ViewFactory {
         switch (mode) {
             case CLI -> {
                 logger.info("Starting CLI game");
-                // return new CliApp(model, controller, owner);
+                new CliApp(model, controller, owner);
             }
             case GUI -> {
                 logger.info("Starting GUI game");
