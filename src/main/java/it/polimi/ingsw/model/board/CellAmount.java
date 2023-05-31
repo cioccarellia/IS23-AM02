@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.board;
 
+import java.io.Serializable;
+
 /**
  * Enum stating the amount of cells for each CellPattern, and so each GameMode
  */
-public enum CellAmount {
+public enum CellAmount implements Serializable {
     /**
      * Number of cells for a two players game
      */

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.board.cell;
 
+import java.io.Serializable;
+
 /**
  * Defines the pattern of a cell
  */
-public enum CellPattern {
+public enum CellPattern implements Serializable {
     /**
      * Pattern of cell used in every game
      */

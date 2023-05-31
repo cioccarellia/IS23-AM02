@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.personal;
 
 import it.polimi.ingsw.model.board.Tile;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import static it.polimi.ingsw.model.board.Tile.*;
 /**
  * Personal goal cards archive
  */
-public class PersonalGoalCardMatrixContainer {
+public class PersonalGoalCardMatrixContainer implements Serializable {
 
     public static final Tile[][] m1 = {
             {null, null, null, null, GAME},

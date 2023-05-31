@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.game;
 
+import java.io.Serializable;
+
 /**
  * Encodes the current status of the game
  */
-public enum GameStatus {
+public enum GameStatus implements Serializable {
     /**
      * The game is currently being initialized and is not being played.
      * This state is kept until the designated amount of players has

@@ -1,10 +1,11 @@
 package it.polimi.ingsw.ui.game.gui;
 
 
-import it.polimi.ingsw.controller.server.result.SingleResult;
-import it.polimi.ingsw.controller.server.result.SingleResult.Failure;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
@@ -288,9 +289,9 @@ public class GuiGameController implements GameGateway, Initializable {
      * @param turnResult The result of the tile selection operation.
      */
     @Override
-    public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionReply(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         switch (turnResult) {
-            case Failure<TileSelectionFailures> failure -> {
+            case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE -> {
                         Status.setOpacity(1);
@@ -306,7 +307,7 @@ public class GuiGameController implements GameGateway, Initializable {
                     }
                 }
             }
-            case SingleResult.Success<TileSelectionFailures> success -> Status.setOpacity(0);
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> Status.setOpacity(0);
         }
     }
 
@@ -316,9 +317,9 @@ public class GuiGameController implements GameGateway, Initializable {
      * @param turnResult The result of the bookshelf insertion operation.
      */
     @Override
-    public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         switch (turnResult) {
-            case Failure<BookshelfInsertionFailure> failure -> {
+            case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
                 switch (failure.error()) {
                     case WRONG_SELECTION -> {
                         insertionStatus.setVisible(true);
@@ -351,7 +352,7 @@ public class GuiGameController implements GameGateway, Initializable {
                     }
                 }
             }
-            case SingleResult.Success<BookshelfInsertionFailure> success -> insertionStatus.setOpacity(0);
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> insertionStatus.setOpacity(0);
         }
 
 

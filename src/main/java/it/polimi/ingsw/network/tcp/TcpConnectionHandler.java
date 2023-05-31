@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.tcp;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -10,6 +9,8 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.controller.server.wrappers.ServerTcpWrapper;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.network.tcp.messages.Message;
@@ -167,7 +168,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         GameSelectionTurnResponse event = new GameSelectionTurnResponse(turnResult);
 
         SocketSystem.sendAsync(socketOut, event, GameSelectionTurnResponse.class);
@@ -175,7 +176,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         GameInsertionTurnResponse event = new GameInsertionTurnResponse(turnResult);
 
         SocketSystem.sendAsync(socketOut, event, GameInsertionTurnResponse.class);

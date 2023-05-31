@@ -1,9 +1,11 @@
 package it.polimi.ingsw.ui.game.gui;
 
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
-import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
@@ -127,7 +129,7 @@ public class RunnableGuiGame extends Application implements GameGateway {
      * @param turnResult The result of the tile selection.
      */
     @Override
-    public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionReply(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         gameController.onGameSelectionReply(turnResult);
     }
 
@@ -137,7 +139,7 @@ public class RunnableGuiGame extends Application implements GameGateway {
      * @param turnResult The result of the bookshelf insertion.
      */
     @Override
-    public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         gameController.onGameInsertionReply(turnResult);
     }
 }

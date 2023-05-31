@@ -7,7 +7,6 @@ import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -15,6 +14,8 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -253,7 +254,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     @ClientFunction
-    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         logger.warn("onGameSelectionTurnEvent(turnResult={})", turnResult);
 
         asyncExecutor.submit(() -> {
@@ -268,7 +269,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     @ClientFunction
-    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         logger.warn("onGameInsertionTurnEvent(turnResult={})", turnResult);
 
         asyncExecutor.submit(() -> {

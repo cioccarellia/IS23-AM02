@@ -5,8 +5,10 @@ import it.polimi.ingsw.model.board.Tile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
+
 public record CellInfo(
         @NotNull Coordinate coordinate,
         @Nullable Tile tile
-) {
+) implements Serializable {
 }

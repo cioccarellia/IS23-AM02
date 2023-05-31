@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.board.cell.CellPattern;
 import it.polimi.ingsw.model.config.Configuration;
 import it.polimi.ingsw.utils.resources.ResourceReader;
 
+import java.io.Serializable;
+
 import static it.polimi.ingsw.model.board.cell.CellPattern.*;
 
 /**
@@ -11,7 +13,7 @@ import static it.polimi.ingsw.model.board.cell.CellPattern.*;
  * the matching specification {@link BoardSpecifics}.
  * The parameters are dimension and cell pattern matrix.
  */
-public class BoardConfiguration extends Configuration<BoardSpecifics> {
+public class BoardConfiguration extends Configuration<BoardSpecifics> implements Serializable {
 
     // used for singleton pattern
     private static BoardConfiguration instance;

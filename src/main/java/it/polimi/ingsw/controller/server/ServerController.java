@@ -4,7 +4,6 @@ import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.connection.PeriodicConnectionAwareComponent;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -12,6 +11,8 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.controller.server.router.Router;
 import it.polimi.ingsw.controller.server.validator.Validator;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
@@ -287,24 +288,24 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         connectionsManager.registerInteraction(username);
 
         if (!isUsernameActivePlayer(username)) {
-            router.route(username).onGameSelectionTurnEvent(new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER));
+            router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER));
             return;
         }
 
         if (game.getCurrentPlayerSession().getPlayerCurrentGamePhase() != SELECTING) {
-            router.route(username).onGameSelectionTurnEvent(new SingleResult.Failure<>(TileSelectionFailures.WRONG_GAME_PHASE));
+            router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.WRONG_GAME_PHASE));
             return;
         }
 
         if (!game.isSelectionValid(selection)) {
-            router.route(username).onGameSelectionTurnEvent(new SingleResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION));
+            router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION));
             return;
         }
 
         game.onPlayerSelectionPhase(selection);
 
-        router.route(username).onGameSelectionTurnEvent(new SingleResult.Success<>());
-        router.broadcast().onModelUpdateEvent(game);
+        router.route(username).onGameSelectionTurnEvent(new TypedResult.Success<>(new TileSelectionSuccess(game)));
+        router.broadcastExcluding(username).onModelUpdateEvent(game);
     }
 
 
@@ -314,32 +315,32 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         connectionsManager.registerInteraction(username);
 
         if (!isUsernameActivePlayer(username)) {
-            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER));
+            router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER));
             return;
         }
 
         if (game.getCurrentPlayerSession().getPlayerCurrentGamePhase() != INSERTING) {
-            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_GAME_PHASE));
+            router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_GAME_PHASE));
             return;
         }
 
         if (!game.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles)) {
-            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION));
+            router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION));
             return;
         }
 
         if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
-            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN));
+            router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN));
             return;
         }
 
         if (tiles.size() > LogicConfiguration.getInstance().maxSelectionSize()) {
-            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES));
+            router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES));
             return;
         }
 
         if (!game.getCurrentPlayerSession().getBookshelf().canFit(column, tiles.size())) {
-            router.route(username).onGameInsertionTurnEvent(new SingleResult.Failure<>(BookshelfInsertionFailure.NO_FIT));
+            router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.NO_FIT));
             return;
         }
 
@@ -350,8 +351,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
         game.onNextTurn(nextPlayer.getUsername());
 
-        router.route(username).onGameInsertionTurnEvent(new SingleResult.Success<>());
-        router.broadcast().onModelUpdateEvent(game);
+        router.route(username).onGameInsertionTurnEvent(new TypedResult.Success<>(new TileInsertionSuccess(game)));
+        router.broadcastExcluding(username).onModelUpdateEvent(game);
     }
 
 

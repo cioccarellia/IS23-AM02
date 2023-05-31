@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.config;
 
+import java.io.Serializable;
+
 /**
  * Abstract class describing a configuration for a specific element in the game model.
  * This class contains the logic for extracting the correct specifics for the
@@ -7,7 +9,7 @@ package it.polimi.ingsw.model.config;
  *
  * @implNote {@link Specifics} is a marker interface.
  */
-abstract public class Configuration<T extends Specifics> {
+abstract public class Configuration<T extends Specifics> implements Serializable {
     /**
      * Produces (deserializes) an object implementing {@link Specifics},
      * meant to represent the raw form of the model specifics.

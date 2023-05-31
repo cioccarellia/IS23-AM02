@@ -120,8 +120,12 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
             case ServerStatusRequestReply s -> controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
             case GameStartedEvent e -> controller.onGameStartedEvent(e.getGame());
             case ModelUpdateEvent e -> controller.onModelUpdateEvent(e.getGame());
-            case GameSelectionTurnResponse r -> controller.onGameSelectionTurnEvent(r.seal());
-            case GameInsertionTurnResponse r -> controller.onGameInsertionTurnEvent(r.seal());
+            case GameSelectionTurnResponse r -> {
+                controller.onGameSelectionTurnEvent(r.seal());
+            }
+            case GameInsertionTurnResponse r -> {
+                controller.onGameInsertionTurnEvent(r.seal());
+            }
             case null, default ->
                     throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
         }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller.server.router;
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -11,6 +10,8 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
 
@@ -121,7 +122,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         forward(source -> {
             try {
                 source.onGameSelectionTurnEvent(turnResult);
@@ -132,7 +133,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         forward(source -> {
             try {
                 source.onGameInsertionTurnEvent(turnResult);

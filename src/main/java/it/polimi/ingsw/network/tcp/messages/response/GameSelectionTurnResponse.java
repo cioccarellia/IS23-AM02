@@ -1,19 +1,29 @@
 package it.polimi.ingsw.network.tcp.messages.response;
 
-import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
-import it.polimi.ingsw.network.tcp.messages.SingleSealable;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
+import it.polimi.ingsw.network.tcp.messages.TypedSealable;
 import org.jetbrains.annotations.Nullable;
 
-public class GameSelectionTurnResponse extends Response implements SingleSealable<TileSelectionFailures> {
+public class GameSelectionTurnResponse extends Response implements TypedSealable<TileSelectionSuccess, TileSelectionFailures> {
+
+
+    @Nullable
+    private final TileSelectionSuccess tileSelectionSuccess;
 
     @Nullable
     private final TileSelectionFailures tileSelectionFailures;
 
-    public GameSelectionTurnResponse(SingleResult<TileSelectionFailures> result) {
+    public GameSelectionTurnResponse(TypedResult<TileSelectionSuccess, TileSelectionFailures> result) {
+        tileSelectionSuccess = switch (result) {
+            case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> null;
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> success.value();
+        };
+
         tileSelectionFailures = switch (result) {
-            case SingleResult.Failure<TileSelectionFailures> failure -> failure.error();
-            case SingleResult.Success<TileSelectionFailures> success -> null;
+            case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> failure.error();
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> null;
         };
     }
 
@@ -21,17 +31,19 @@ public class GameSelectionTurnResponse extends Response implements SingleSealabl
         return tileSelectionFailures;
     }
 
+
     @Override
-    public String toString() {
-        return "GameSelectionTurnResponse{" +
-                "tileSelectionFailures=" + tileSelectionFailures +
-                '}';
+    public TypedResult<TileSelectionSuccess, TileSelectionFailures> seal() {
+        return tileSelectionFailures == null ?
+                new TypedResult.Success<>(tileSelectionSuccess) :
+                new TypedResult.Failure<>(tileSelectionFailures);
     }
 
     @Override
-    public SingleResult<TileSelectionFailures> seal() {
-        return tileSelectionFailures == null ?
-                new SingleResult.Success<>() :
-                new SingleResult.Failure<>(tileSelectionFailures);
+    public String toString() {
+        return "GameSelectionTurnResponse{" +
+                "tileSelectionSuccess=" + tileSelectionSuccess +
+                ", tileSelectionFailures=" + tileSelectionFailures +
+                '}';
     }
 }

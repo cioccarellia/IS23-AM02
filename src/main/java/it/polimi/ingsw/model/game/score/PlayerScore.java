@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game.score;
 
 import it.polimi.ingsw.model.game.goal.Token;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public record PlayerScore(
         String username,
         List<Token> tokens,
         ScoreBreakdown breakdown
-) {
+) implements Serializable {
 
     /**
      * Calculates the total score of the player by summing the points from different sources.

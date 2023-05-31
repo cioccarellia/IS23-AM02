@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.cards.common;
 
+import java.io.Serializable;
+
 /**
  * Uniquely identifies a {@link CommonGoalCard}.
  * The enum fields are declared in order, as given in the game manual
  */
-public enum CommonGoalCardIdentifier {
+public enum CommonGoalCardIdentifier implements Serializable {
 
     /**
      * Six groups each containing at least 2 tiles of the same type (not necessarily in the depicted shape).

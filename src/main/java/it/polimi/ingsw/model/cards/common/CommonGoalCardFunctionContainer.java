@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.common.CGCConfiguration;
 import org.apache.commons.lang.SerializationUtils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
  * 12: STAIRS
  */
 
-public class CommonGoalCardFunctionContainer {
+public class CommonGoalCardFunctionContainer implements Serializable {
 
     // bookshelf parameters
     private final static int rows = BookshelfConfiguration.getInstance().rows();

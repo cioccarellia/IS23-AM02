@@ -3,11 +3,13 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.utils.model.TurnHelper;
 
+import java.io.Serializable;
+
 /**
  * Enumeration representing the 4 possible player numbers.
  * It also finds the next player and previous player through a TurnHelper method
  */
-public enum PlayerNumber {
+public enum PlayerNumber implements Serializable {
     PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4;
 
     static public PlayerNumber fromInt(int playerCount) {

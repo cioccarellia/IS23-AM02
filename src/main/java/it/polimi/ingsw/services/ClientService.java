@@ -2,7 +2,6 @@ package it.polimi.ingsw.services;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -10,6 +9,8 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.game.Game;
 
 import java.rmi.Remote;
@@ -47,10 +48,10 @@ public interface ClientService extends Remote {
     void onModelUpdateEvent(Game game) throws RemoteException;
 
     @ClientFunction
-    void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) throws RemoteException;
+    void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) throws RemoteException;
 
     @ClientFunction
-    void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) throws RemoteException;
+    void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) throws RemoteException;
 
 
     // Connection - Disconnection

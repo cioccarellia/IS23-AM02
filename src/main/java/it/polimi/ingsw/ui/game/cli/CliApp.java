@@ -1,8 +1,10 @@
 package it.polimi.ingsw.ui.game.cli;
 
-import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
@@ -145,29 +147,31 @@ public class CliApp implements GameGateway {
 
 
     @Override
-    public void onGameSelectionReply(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionReply(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         switch (turnResult) {
-            case SingleResult.Failure<TileSelectionFailures> failure -> {
+            case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE, UNAUTHORIZED_PLAYER, UNAUTHORIZED_SELECTION:
                         break;
                 }
 
             }
-            case SingleResult.Success<TileSelectionFailures> success -> {
-
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> {
+                // implicit modelupdate
+                modelUpdate(success.value().model());
             }
         }
     }
 
     @Override
-    public void onGameInsertionReply(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         switch (turnResult) {
-            case SingleResult.Failure<BookshelfInsertionFailure> failure -> {
+            case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
 
             }
-            case SingleResult.Success<BookshelfInsertionFailure> success -> {
-
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> {
+                // implicit modelupdate
+                modelUpdate(success.value().model());
             }
         }
     }

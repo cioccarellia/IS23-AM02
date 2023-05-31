@@ -4,7 +4,6 @@ import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.connection.stash.ProtocolStash;
 import it.polimi.ingsw.controller.server.connection.stash.StashFactory;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
-import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -12,6 +11,8 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.services.ClientService;
@@ -168,7 +169,7 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+    public void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         try {
             service().onGameSelectionTurnEvent(turnResult);
         } catch (RemoteException e) {
@@ -177,7 +178,7 @@ public class ClientConnection implements ClientService {
     }
 
     @Override
-    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+    public void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         try {
             service().onGameInsertionTurnEvent(turnResult);
         } catch (RemoteException e) {

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.game;
 
+import java.io.Serializable;
+
 import static it.polimi.ingsw.model.board.CellAmount.*;
 
 /**
@@ -7,7 +9,7 @@ import static it.polimi.ingsw.model.board.CellAmount.*;
  * There are three possible configurations, depending on the number
  * of players in the game.
  */
-public enum GameMode {
+public enum GameMode implements Serializable {
     GAME_MODE_2_PLAYERS(2),
     GAME_MODE_3_PLAYERS(3),
     GAME_MODE_4_PLAYERS(4);

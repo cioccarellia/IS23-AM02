@@ -1,19 +1,28 @@
 package it.polimi.ingsw.network.tcp.messages.response;
 
-import it.polimi.ingsw.controller.server.result.SingleResult;
+import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
-import it.polimi.ingsw.network.tcp.messages.SingleSealable;
+import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
+import it.polimi.ingsw.network.tcp.messages.TypedSealable;
 import org.jetbrains.annotations.Nullable;
 
-public class GameInsertionTurnResponse extends Response implements SingleSealable<BookshelfInsertionFailure> {
+public class GameInsertionTurnResponse extends Response implements TypedSealable<TileInsertionSuccess, BookshelfInsertionFailure> {
+
+    @Nullable
+    private final TileInsertionSuccess tileInsertionSuccess;
 
     @Nullable
     private final BookshelfInsertionFailure bookshelfInsertionFailure;
 
-    public GameInsertionTurnResponse(SingleResult<BookshelfInsertionFailure> result) {
+    public GameInsertionTurnResponse(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> result) {
+        tileInsertionSuccess = switch (result) {
+            case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> null;
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> success.value();
+        };
+
         bookshelfInsertionFailure = switch (result) {
-            case SingleResult.Failure<BookshelfInsertionFailure> failure -> failure.error();
-            case SingleResult.Success<BookshelfInsertionFailure> success -> null;
+            case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> failure.error();
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> null;
         };
     }
 
@@ -22,16 +31,17 @@ public class GameInsertionTurnResponse extends Response implements SingleSealabl
     }
 
     @Override
-    public String toString() {
-        return "GameSelectionTurnResponse{" +
-                "tileSelectionFailures=" + bookshelfInsertionFailure +
-                '}';
+    public TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> seal() {
+        return bookshelfInsertionFailure == null ?
+                new TypedResult.Success<>(tileInsertionSuccess) :
+                new TypedResult.Failure<>(bookshelfInsertionFailure);
     }
 
     @Override
-    public SingleResult<BookshelfInsertionFailure> seal() {
-        return bookshelfInsertionFailure == null ?
-                new SingleResult.Success<>() :
-                new SingleResult.Failure<>(bookshelfInsertionFailure);
+    public String toString() {
+        return "GameInsertionTurnResponse{" +
+                "tileInsertionSuccess=" + tileInsertionSuccess +
+                ", bookshelfInsertionFailure=" + bookshelfInsertionFailure +
+                '}';
     }
 }
