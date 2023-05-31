@@ -114,7 +114,7 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
 
     public void mapEventToControllerMethodCall(@NotNull final Message incomingMessage) {
         switch (incomingMessage) {
-            case ConnectionAcceptanceEvent s -> controller.onAcceptConnectionAndFinalizeUsername(s.getUsername(), s.getModel());
+            case ConnectionAcceptanceEvent s -> controller.onAcceptConnectionAndFinalizeUsername(s.getUsername());
             case GameConnectionRequestReply s -> controller.onGameConnectionReply(s.seal());
             case GameCreationRequestReply s -> controller.onGameCreationReply(s.seal());
             case ServerStatusRequestReply s -> controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
@@ -140,8 +140,6 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         GameCreationRequest message = new GameCreationRequest(mode, username, protocol);
 
         SocketSystem.sendAsync(socketOut, message, GameCreationRequest.class);
-
-        // fixme return reply.getStatus() == null ? new SingleResult.Success<>() : new SingleResult.Failure<>(reply.getStatus());
     }
 
     @Override
@@ -149,7 +147,6 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         ServerStatusRequest message = new ServerStatusRequest();
 
         SocketSystem.sendAsync(socketOut, message, ServerStatusRequest.class);
-
     }
 
     @Override
@@ -157,8 +154,6 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         GameConnectionRequest message = new GameConnectionRequest(username, protocol);
 
         SocketSystem.sendAsync(socketOut, message, GameConnectionRequest.class);
-
-        // fixme return reply != null ? reply.getStatus() : null;
     }
 
     @Override
@@ -166,8 +161,6 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         GameSelectionTurnRequest message = new GameSelectionTurnRequest(username, selection);
 
         SocketSystem.sendAsync(socketOut, message, GameSelectionTurnRequest.class);
-
-        // fixme return reply.getTurnResult();
     }
 
     @Override
@@ -175,8 +168,6 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
         SocketSystem.sendAsync(socketOut, message, GameInsertionTurnRequest.class);
-
-        // fixme return reply.getTurnResult();
     }
 
     @Override

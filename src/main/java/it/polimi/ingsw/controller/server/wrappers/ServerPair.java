@@ -14,13 +14,17 @@ public class ServerPair {
     private static final Logger logger = LoggerFactory.getLogger(ServerPair.class);
 
     private final ServerTcpWrapper tcp;
-    private final ServerRmiWrapper rmi;
-
-    private final RmiServer rmiServer;
+    private final int tcpPort;
     private final TcpServer tcpServer;
+
+    private final ServerRmiWrapper rmi;
+    private final int rmiPort;
+    private final RmiServer rmiServer;
 
     public ServerPair(ServerController controller, ClientConnectionsManager manager, int tcpPort, int rmiPort) {
         this.tcp = new ServerTcpWrapper(controller);
+        this.tcpPort = tcpPort;
+        this.rmiPort = rmiPort;
 
         try {
             this.rmi = new ServerRmiWrapper(controller, manager);
@@ -29,13 +33,19 @@ public class ServerPair {
         }
 
         // TCP
-        logger.info("Starting up TCP server (+ listener thread), tcpPort {}", tcpPort);
         tcpServer = new TcpServer(tcp, tcpPort);
-        tcpServer.start();
 
         // RMI
-        logger.info("Starting up RMI server, rmiPort {}", rmiPort);
         rmiServer = new RmiServer(rmi, rmiPort);
+
+        logger.info("Server pair pre-initialization completed");
+    }
+
+    public void bindAndStartServers() {
+        logger.info("Starting up TCP server (+ listener thread), tcpPort {}", tcpPort);
+        tcpServer.start();
+
+        logger.info("Starting up RMI server, rmiPort {}", rmiPort);
         rmiServer.bind();
     }
 

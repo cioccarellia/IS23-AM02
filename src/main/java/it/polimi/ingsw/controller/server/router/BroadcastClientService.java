@@ -55,10 +55,10 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
+    public void onAcceptConnectionAndFinalizeUsername(String string) {
         forward(source -> {
             try {
-                source.onAcceptConnectionAndFinalizeUsername(string, game);
+                source.onAcceptConnectionAndFinalizeUsername(string);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

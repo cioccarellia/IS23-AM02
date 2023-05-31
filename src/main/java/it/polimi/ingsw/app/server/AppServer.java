@@ -32,8 +32,12 @@ public class AppServer {
         logger.info("Starting AppServer, serverAddress={}, tcpPort={}, rmiPort={}", serverAddress, tcpPort, rmiPort);
         pair = new ServerPair(controller, connectionsManager, tcpPort, rmiPort);
 
+        pair.bindAndStartServers();
+
         initializeServerThreads();
     }
+
+
 
 
     private void initializeServerThreads() {

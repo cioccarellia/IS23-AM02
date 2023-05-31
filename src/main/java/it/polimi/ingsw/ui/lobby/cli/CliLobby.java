@@ -50,7 +50,7 @@ public class CliLobby implements LobbyGateway {
      * @param playerInfo the list of player information
      */
     @Override
-    public synchronized void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
+    public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
         if (isKilled)
             return;
 
@@ -66,7 +66,7 @@ public class CliLobby implements LobbyGateway {
      * @param result the typed result of the game creation request
      */
     @Override
-    public synchronized void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
+    public void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         if (isKilled)
             return;
 
@@ -103,7 +103,7 @@ public class CliLobby implements LobbyGateway {
      * @param result the typed result of the game connection request
      */
     @Override
-    public synchronized void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
+    public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         if (isKilled)
             return;
 

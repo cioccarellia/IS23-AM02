@@ -11,6 +11,7 @@ import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static it.polimi.ingsw.model.board.cell.CellPattern.*;
@@ -19,7 +20,7 @@ import static it.polimi.ingsw.model.board.cell.CellPattern.*;
 /**
  * Implements the game board and its functionalities
  */
-public class Board {
+public class Board implements Serializable {
 
     // logger
     private static final Logger logger = LoggerFactory.getLogger(Board.class);
@@ -279,5 +280,13 @@ public class Board {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "dimension=" + dimension +
+                ", matrix=" + Arrays.toString(matrix) +
+                '}';
     }
 }

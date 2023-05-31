@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -28,13 +27,10 @@ public class App {
 
     private static ExhaustiveLaunchConfiguration finalConfig = null;
 
-    private final static List<AppClient> clients = new ArrayList<>();
-    private static AppServer server = null;
-
-    private final static ExecutorService executorService = Executors.newCachedThreadPool();
+    private final static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private static void startServer(@NotNull ExhaustiveLaunchConfiguration config) {
-        server = new AppServer(config.serverHost(), config.serverTcpPort(), config.serverRmiPort());
+        AppServer server = new AppServer(config.serverHost(), config.serverTcpPort(), config.serverRmiPort());
     }
 
     private static void startClient(@NotNull ExhaustiveLaunchConfiguration config) {

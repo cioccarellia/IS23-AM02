@@ -125,8 +125,8 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
-        ConnectionAcceptanceEvent reply = new ConnectionAcceptanceEvent(string, game);
+    public void onAcceptConnectionAndFinalizeUsername(String string) {
+        ConnectionAcceptanceEvent reply = new ConnectionAcceptanceEvent(string);
 
         SocketSystem.sendAsync(socketOut, reply, ConnectionAcceptanceEvent.class);
     }

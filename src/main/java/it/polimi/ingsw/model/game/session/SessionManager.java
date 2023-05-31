@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  * Class for managing and updating player sessions.
  * Provides independence between accessing a session with the player's username and game number.
  */
-public class SessionManager {
+public class SessionManager implements Serializable {
 
     private final Map<String, PlayerSession> map = new HashMap<>();
     private final GameMode mode;

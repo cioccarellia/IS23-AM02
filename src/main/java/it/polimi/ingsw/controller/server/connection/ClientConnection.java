@@ -113,9 +113,9 @@ public class ClientConnection implements ClientService {
 
 
     @Override
-    public void onAcceptConnectionAndFinalizeUsername(String string, Game game) {
+    public void onAcceptConnectionAndFinalizeUsername(String string) {
         try {
-            service().onAcceptConnectionAndFinalizeUsername(string, game);
+            service().onAcceptConnectionAndFinalizeUsername(string);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -126,6 +126,7 @@ public class ClientConnection implements ClientService {
         try {
             service().onServerStatusUpdateEvent(status, playerInfo);
         } catch (RemoteException e) {
+            // connection refused from host, remove, flag as dead and propagate
             throw new RuntimeException(e);
         }
     }

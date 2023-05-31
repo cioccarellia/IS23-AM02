@@ -3,12 +3,13 @@ package it.polimi.ingsw.model.game.extractors;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  *
  */
-public class TileExtractor extends ElementExtractor<Tile> {
+public class TileExtractor extends ElementExtractor<Tile> implements Serializable {
 
     private static final int maxTilesPerType = LogicConfiguration.getInstance().maxTilesPerType();
     private static final int tileTypesAmount = LogicConfiguration.getInstance().tileTypesAmount();

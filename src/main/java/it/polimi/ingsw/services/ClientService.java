@@ -27,7 +27,7 @@ public interface ClientService extends Remote {
      * Communicates to the client that it has received the username
      */
     @ClientFunction
-    void onAcceptConnectionAndFinalizeUsername(String string, Game game) throws RemoteException;
+    void onAcceptConnectionAndFinalizeUsername(String string) throws RemoteException;
 
     @ClientFunction
     void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) throws RemoteException;

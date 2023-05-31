@@ -1,8 +1,7 @@
 package it.polimi.ingsw.controller.client.lifecycle;
 
-import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.game.GameGateway;
+import it.polimi.ingsw.ui.lobby.LobbyGateway;
 
 public interface AppLifecycle {
 
@@ -21,7 +20,7 @@ public interface AppLifecycle {
     /**
      * The current game has been cleared to proceed using its given username.
      */
-    void authorize(String username, Game game);
+    void authorize(String username);
 
     /**
      * The app is terminated

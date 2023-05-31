@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.server.connection.PeriodicConnectionAwareComponent;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.SingleResult;
@@ -22,6 +21,7 @@ import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.network.tcp.TcpConnectionHandler;
@@ -31,11 +31,10 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Proxy;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.DISCONNECTED;
 import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.OPEN;
@@ -78,7 +77,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      */
     private ServerStatus serverStatus = NO_GAME_STARTED;
 
-    private ExecutorService replyExecutor = Executors.newCachedThreadPool();
 
     public ServerController(ClientConnectionsManager manager) {
         connectionsManager = manager;
@@ -103,29 +101,27 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) throws RemoteException {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
-        service.onAcceptConnectionAndFinalizeUsername(username, game);
+        service.onAcceptConnectionAndFinalizeUsername(username);
 
         // en-route parameters
         switch (service) {
             case TcpConnectionHandler handler -> {
                 handler.setUsername(username);
             }
-            case ClientController controller -> {
+            case Proxy controller -> {
             }
-            default -> throw new IllegalStateException("Unexpected value: " + service);
+            default -> throw new IllegalStateException("Unexpected client service value: " + service);
         }
     }
 
 
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
-        //new Thread(() -> {
-            try {
-                remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        //}).start();
+        try {
+            remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -156,15 +152,15 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         }
 
 
-        // accepting request and setting up game model
+        // accepting request and setting up the game model
         game = new Game(mode);
         game.addPlayer(username);
         maxPlayerAmount = mode.maxPlayerAmount();
 
-        // update server status
+        // update the server status
         serverStatus = GAME_INITIALIZING;
 
-        // synchronize
+        // synchronize client, sending permanent username to client and saving remote service to stash for callbacks
         connectionsManager.add(username, protocol, true, OPEN, remoteService);
         synchronizeConnectionLayer(username, remoteService);
 
@@ -234,35 +230,38 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return;
         }
 
-        // add username and connection status
-        connectionsManager.add(username, protocol, false, OPEN, remoteService);
-        synchronizeConnectionLayer(username, remoteService);
 
         // add player to game
         game.addPlayer(username);
 
-        // route a success to the caller
-        router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packPlayerInfo())));
-
-        // route the new status to everybody
-        router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-
-
-        boolean shouldStartGame = maxPlayerAmount == connectionsManager.size();
+        // whether the conditions for a new game are met at the time of executing this call
+        boolean shouldStartGame = maxPlayerAmount == game.getPlayerCount();
 
         if (shouldStartGame) {
-            logger.info("Conditions are met, starting game");
-
             // conditions for starting game are met
             serverStatus = GAME_RUNNING;
 
             // tell model to start its active game phase
             game.onGameStarted();
+        }
 
 
-            logger.info("Broadcasting game started event");
+        // synchronize client, sending permanent username to client and saving remote service to stash for callbacks
+        connectionsManager.add(username, protocol, false, OPEN, remoteService);
+        synchronizeConnectionLayer(username, remoteService);
 
-            // broadcast a game started event to everybody
+
+        // route a success response to the caller, since it connected successfully
+        router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packPlayerInfo())));
+
+
+        // route the new status to everybody, giving the details for the new connected player
+        router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+
+
+        if (shouldStartGame) {
+            // broadcast the game model with all users to everybody, only if the game has started.
+            // This will display the main game UI
             router.broadcast().onGameStartedEvent(game);
         }
 
@@ -425,37 +424,40 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
-                // Model Update
-                // we have to check if the current player is disconnected.
-                // if it is, and we are not in standby, we need to move forward
-                String currentPlayerUsername = game.getCurrentPlayerSession().getUsername();
 
-                if (connectionsManager.getDisconnectedClientUsernames().contains(currentPlayerUsername)) {
-                    // force-forward turn, rollback to pre-selection model
-                    PlayerSession nextPlayer = processNextPlayer();
-                    game.onForcedNextTurn(nextPlayer.getUsername());
-                }
+                if (game != null && game.getGameStatus() != GameStatus.INITIALIZATION) {
+                    // Model update: there is an active player, and the game is started/last round/standby
+                    // we have to check if the current player is disconnected.
+                    // if it is, and we are not in standby, we need to move forward
+                    String currentPlayerUsername = game.getCurrentPlayerSession().getUsername();
 
-
-                boolean shouldStandby = shouldStandbyGame();
-
-                if (shouldStandby) {
-                    // player(s) disconnected and game standby
-                    boolean hasModelStatusChanged = game.onStandby();
-
-                    if (hasModelStatusChanged) {
-                        router.broadcastExcluding(
-                                connectionsManager.getDisconnectedClientUsernames()
-                        ).onModelUpdateEvent(game);
+                    if (connectionsManager.getDisconnectedClientUsernames().contains(currentPlayerUsername)) {
+                        // force-forward turn, rollback to pre-selection model
+                        PlayerSession nextPlayer = processNextPlayer();
+                        game.onForcedNextTurn(nextPlayer.getUsername());
                     }
-                } else {
-                    // player(s) disconnected but game running
-                    boolean hasModelStatusChanged = game.onResume();
 
-                    if (hasModelStatusChanged) {
-                        router.broadcastExcluding(
-                                connectionsManager.getDisconnectedClientUsernames()
-                        ).onModelUpdateEvent(game);
+
+                    boolean shouldStandby = shouldStandbyGame();
+
+                    if (shouldStandby) {
+                        // player(s) disconnected and game standby
+                        boolean hasModelStatusChanged = game.onStandby();
+
+                        if (hasModelStatusChanged) {
+                            router.broadcastExcluding(
+                                    connectionsManager.getDisconnectedClientUsernames()
+                            ).onModelUpdateEvent(game);
+                        }
+                    } else {
+                        // player(s) disconnected but game running
+                        boolean hasModelStatusChanged = game.onResume();
+
+                        if (hasModelStatusChanged) {
+                            router.broadcastExcluding(
+                                    connectionsManager.getDisconnectedClientUsernames()
+                            ).onModelUpdateEvent(game);
+                        }
                     }
                 }
             } else {

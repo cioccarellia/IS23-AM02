@@ -2,12 +2,13 @@ package it.polimi.ingsw.model.cards.common;
 
 import it.polimi.ingsw.model.board.Tile;
 
+import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
  * Represents a shared objective among players
  */
-public class CommonGoalCard {
+public class CommonGoalCard implements Serializable {
     private final CommonGoalCardIdentifier id;
     private final Predicate<Tile[][]> f;
 
@@ -38,4 +39,11 @@ public class CommonGoalCard {
         return f.test(shelfMatrix);
     }
 
+    @Override
+    public String toString() {
+        return "CommonGoalCard{" +
+                "id=" + id +
+                ", f=" + f +
+                '}';
+    }
 }

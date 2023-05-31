@@ -2,6 +2,8 @@ package it.polimi.ingsw.app.model;
 
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 
+import java.io.Serializable;
+
 
 /**
  * Represents the information of a player in the game.
@@ -14,5 +16,5 @@ public record PlayerInfo(
         String username,
         ConnectionStatus status,
         boolean isHost
-) {
+) implements Serializable {
 }

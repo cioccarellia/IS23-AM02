@@ -3,14 +3,14 @@ package it.polimi.ingsw.model.player.selection;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.CellInfo;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Represents the current player selection of tiles from the board
  */
-public class PlayerTileSelection {
+public class PlayerTileSelection implements Serializable {
     /**
      * The selection is kept in a set, since order does not matter
      */

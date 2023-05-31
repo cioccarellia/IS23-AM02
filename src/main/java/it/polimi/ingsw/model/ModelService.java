@@ -13,19 +13,19 @@ import java.util.Set;
 public interface ModelService {
 
     /**
-     * Notifies the game that the game has started
+     * Notifies the model that the game has started
      */
     void onGameStarted();
 
     /**
-     * Notifies the game of the player selection phase with the specified coordinates.
+     * Notifies the model of the player selection phase with the specified coordinates.
      *
      * @param coordinates the coordinates selected by the player
      */
     void onPlayerSelectionPhase(Set<Coordinate> coordinates);
 
     /**
-     * Notifies the game of the player insertion phase with the specified column and tiles.
+     * Notifies the model of the player insertion phase with the specified column and tiles.
      *
      * @param column the column where the tiles are being inserted
      * @param tiles  the tiles being inserted
@@ -33,34 +33,34 @@ public interface ModelService {
     void onPlayerInsertionPhase(int column, List<Tile> tiles);
 
     /**
-     * Notifies the game that the current player's turn is ending.
+     * Notifies the model that the current player's turn is ending.
      */
     void onPlayerTurnEnding();
 
     /**
-     * Notifies the game that the next turn is starting for the specified player.
+     * Notifies the model that the next turn is naturally starting for the specified player.
      *
      * @param nextPlayerUsername the username of the next player
      */
     void onNextTurn(String nextPlayerUsername);
 
     /**
-     * Notifies the game that the next turn is forced for the specified player.
+     * Notifies the model that the next turn is forced for the specified player (i.e. due to disconnection).
      *
-     * @param nextPlayer the username of the player for the forced next turn
+     * @param nextPlayerUsername the username of the player for the forced next turn
      */
-    void onForcedNextTurn(String nextPlayer);
+    void onForcedNextTurn(String nextPlayerUsername);
 
     /**
-     * Checks if the game is currently in standby mode.
+     * Checks if the model is currently in standby mode.
      *
-     * @return true if the game is in standby mode, false otherwise
+     * @return true if the model is in standby mode, false otherwise
      */
     @CheckReturnValue
     boolean onStandby();
 
     /**
-     * Resumes the game from the standby mode.
+     * Resumes the model from the standby mode.
      *
      * @return true if the game was successfully resumed, false otherwise
      */
@@ -68,7 +68,7 @@ public interface ModelService {
     boolean onResume();
 
     /**
-     * Notifies the game that the game has ended.
+     * Notifies the model that the game has ended.
      */
     void onGameEnded();
 }

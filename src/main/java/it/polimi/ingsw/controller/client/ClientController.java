@@ -21,11 +21,13 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Client-side controller.
@@ -67,13 +71,15 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
     private ClientController identity;
 
+    private final ExecutorService asyncExecutor = Executors.newSingleThreadExecutor();
+
     /**
      * Constructs a ClientController object with the specified gateway and configuration.
      *
      * @param gateway The client gateway.
      * @param config  The exhaustive configuration for the client.
      */
-    public ClientController(ClientGateway gateway, ClientExhaustiveConfiguration config) throws RemoteException {
+    public ClientController(ClientGateway gateway, @NotNull ClientExhaustiveConfiguration config) throws RemoteException {
         this.gateway = gateway;
         this.config = config;
 
@@ -88,7 +94,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     }
 
 
-    // Lifecycle
+    ///////////////////////////////////////////////////////////////// Client Lifecycle
 
     /**
      * Initializes the client controller.
@@ -98,18 +104,22 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         // initialize
         ViewFactory.createLobbyUiAsync(config.mode(), this, AppClient.clientExecutorService);
 
-        //ViewLayer.scheduleLobbyExecutionThread(lobby, executorService);
+        // we will get a callback for onLobbyUiReady() to get the actual {@code LobbyGateway}
     }
 
     @Override
     public void onLobbyUiReady(LobbyGateway lobby) {
+        logger.warn("onLobbyUiReady() started");
         this.lobby = lobby;
 
         try {
+            logger.warn("onLobbyUiReady() sending RMI call serverStatusRequest()");
             gateway.serverStatusRequest(identity);
+            logger.warn("onLobbyUiReady() returned RMI call serverStatusRequest()");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+        logger.warn("onLobbyUiReady() ended");
     }
 
     @Override
@@ -122,15 +132,14 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      * Authorizes the client with the specified username and game.
      *
      * @param username The username of the client.
-     * @param game     The game.
      */
     @Override
-    public void authorize(String username, Game game) {
+    public void authorize(String username) {
         // setup internal variables post-authorization
         ownerUsername = username;
         hasAuthenticatedWithServerAndExchangedUsername = true;
 
-        // schedules ack thread
+        // schedules keep-alive thread
         ClientNetworkLayer.scheduleKeepAliveThread(ownerUsername, gateway, AppClient.clientExecutorService);
     }
 
@@ -139,8 +148,157 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void terminate() {
-
+        asyncExecutor.shutdown();
     }
+
+
+    ///////////////////////////////////////////////////////////////// ClientService (callbacks)
+
+    /**
+     * Handles the event when the connection is accepted and the username is finalized.
+     *
+     * @param username The username of the client.
+     */
+    @Override
+    @ClientFunction
+    public void onAcceptConnectionAndFinalizeUsername(String username) {
+        logger.warn("onAcceptConnectionAndFinalizeUsername(username={})", username);
+        asyncExecutor.submit(() -> {
+            authorize(username);
+        });
+    }
+
+    /**
+     * Handles the event when the server status is updated.
+     *
+     * @param status     The server status.
+     * @param playerInfo The list of player information.
+     */
+    @Override
+    @ClientFunction
+    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
+        logger.warn("onServerStatusUpdateEvent(status={}, playerInfo={})", status, playerInfo);
+        logger.info("Received status={}, playerInfo={}", status, playerInfo);
+
+        asyncExecutor.submit(() -> {
+            lobby.onServerStatusUpdate(status, playerInfo);
+        });
+    }
+
+    /**
+     * Handles the event when the game creation reply is received.
+     *
+     * @param result The result of the game creation, either a success or an error.
+     */
+    @Override
+    @ClientFunction
+    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
+        logger.warn("onGameCreationReply(result={})", result);
+        asyncExecutor.submit(() -> {
+            lobby.onServerCreationReply(result);
+        });
+    }
+
+    /**
+     * Handles the event when the game connection reply is received.
+     *
+     * @param result The result of the game connection, either a success or an error.
+     */
+    @Override
+    @ClientFunction
+    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
+        logger.warn("onGameConnectionReply(result={})", result);
+
+        asyncExecutor.submit(() -> {
+            lobby.onServerConnectionReply(result);
+        });
+    }
+
+    /**
+     * Handles the event when the game is started.
+     *
+     * @param game The game.
+     */
+    @Override
+    @ClientFunction
+    public void onGameStartedEvent(Game game) {
+        logger.warn("onGameStartedEvent(game={})", game);
+
+        asyncExecutor.submit(() -> {
+            lobby.kill();
+
+            ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
+        });
+    }
+
+    /**
+     * Handles the event when the model is updated.
+     *
+     * @param game The game.
+     */
+    @Override
+    @ClientFunction
+    public void onModelUpdateEvent(Game game) {
+        logger.warn("onModelUpdateEvent(game={})", game);
+
+        asyncExecutor.submit(() -> {
+            ui.modelUpdate(game);
+        });
+    }
+
+    /**
+     * Handles the event when the game selection turn event is received.
+     *
+     * @param turnResult The result of the game selection turn, either a success or a failure.
+     */
+    @Override
+    @ClientFunction
+    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
+        logger.warn("onGameSelectionTurnEvent(turnResult={})", turnResult);
+
+        asyncExecutor.submit(() -> {
+            ui.onGameSelectionReply(turnResult);
+        });
+    }
+
+    /**
+     * Handles the event when the game insertion turn event is received.
+     *
+     * @param turnResult The result of the game insertion turn, either a success or a failure.
+     */
+    @Override
+    @ClientFunction
+    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
+        logger.warn("onGameInsertionTurnEvent(turnResult={})", turnResult);
+
+        asyncExecutor.submit(() -> {
+            ui.onGameInsertionReply(turnResult);
+        });
+    }
+
+    /**
+     * Handles the event when the player connection status is updated.
+     *
+     * @param playerInfo The list of player playerInfo.
+     */
+    @Override
+    @ClientFunction
+    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> playerInfo) {
+        // logger.warn("onPlayerConnectionStatusUpdateEvent(turnResult={})", playerInfo);
+        // not used
+    }
+
+    /**
+     * Handles the event when the game is ended.
+     */
+    @Override
+    @ClientFunction
+    public void onGameEndedEvent() {
+        // not used
+    }
+
+
+    ///////////////////////////////////////////////////////////////// LobbyViewEventHandler
 
     /**
      * Sends a status update request to the server.
@@ -148,13 +306,13 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     public void sendStatusUpdateRequest() {
         try {
+            logger.warn("sendStatusUpdateRequest() sending RMI call serverStatusRequest()");
             gateway.serverStatusRequest(this);
+            logger.warn("sendStatusUpdateRequest() returning RMI call serverStatusRequest()");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
-
-    // Lobby
 
     /**
      * Sends a game start request with the specified username and game mode.
@@ -165,7 +323,9 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     public void sendGameStartRequest(String username, GameMode mode) {
         try {
+            logger.warn("sendGameStartRequest() sending RMI call gameStartRequest({}, {})", username, mode);
             gateway.gameStartRequest(username, mode, config.protocol(), this);
+            logger.warn("sendGameStartRequest() returning RMI call gameStartRequest({}, {})", username, mode);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -179,123 +339,17 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     public void sendGameConnectionRequest(String username) {
         try {
+            logger.warn("sendGameConnectionRequest() sending RMI call gameConnectionRequest({})", username);
             gateway.gameConnectionRequest(username, config.protocol(), this);
+
+            logger.warn("sendGameConnectionRequest() returning RMI call gameConnectionRequest({})", username);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
-
-    }
-
-    // ClientService
-
-    /**
-     * Handles the event when the connection is accepted and the username is finalized.
-     *
-     * @param username The username of the client.
-     * @param game     The game.
-     */
-    @Override
-    public void onAcceptConnectionAndFinalizeUsername(String username, Game game) {
-        authorize(username, game);
-    }
-
-    /**
-     * Handles the event when the server status is updated.
-     *
-     * @param status     The server status.
-     * @param playerInfo The list of player information.
-     */
-    @Override
-    public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
-        logger.info("Received status={}, playerInfo={}", status, playerInfo);
-
-        lobby.onServerStatusUpdate(status, playerInfo);
-
-    }
-
-    /**
-     * Handles the event when the game creation reply is received.
-     *
-     * @param result The result of the game creation, either a success or an error.
-     */
-    @Override
-    public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        lobby.onServerCreationReply(result);
-    }
-
-    /**
-     * Handles the event when the game connection reply is received.
-     *
-     * @param result The result of the game connection, either a success or an error.
-     */
-    @Override
-    public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        lobby.onServerConnectionReply(result);
-    }
-
-    /**
-     * Handles the event when the game is started.
-     *
-     * @param game The game.
-     */
-    @Override
-    public void onGameStartedEvent(Game game) {
-        lobby.kill();
-
-        ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
-    }
-
-    /**
-     * Handles the event when the model is updated.
-     *
-     * @param game The game.
-     */
-    @Override
-    public void onModelUpdateEvent(Game game) {
-        ui.modelUpdate(game);
-    }
-
-    /**
-     * Handles the event when the game selection turn event is received.
-     *
-     * @param turnResult The result of the game selection turn, either a success or a failure.
-     */
-    @Override
-    public void onGameSelectionTurnEvent(SingleResult<TileSelectionFailures> turnResult) {
-        ui.onGameSelectionReply(turnResult);
-    }
-
-    /**
-     * Handles the event when the game insertion turn event is received.
-     *
-     * @param turnResult The result of the game insertion turn, either a success or a failure.
-     */
-    @Override
-    public void onGameInsertionTurnEvent(SingleResult<BookshelfInsertionFailure> turnResult) {
-        ui.onGameInsertionReply(turnResult);
-    }
-
-    /**
-     * Handles the event when the player connection status is updated.
-     *
-     * @param usernames The list of player usernames.
-     */
-    @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
-        // not used
-    }
-
-    /**
-     * Handles the event when the game is ended.
-     */
-    @Override
-    public void onGameEndedEvent() {
-        // not used
     }
 
 
-    // ViewEventHandler
+    ///////////////////////////////////////////////////////////////// GameViewEventHandler
 
     /**
      * Handles the event when the view performs a selection.
@@ -341,13 +395,6 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void onViewQuitGame() {
-
-    }
-
-    /**
-     * Keeps the connection alive.
-     */
-    public void keepAlive() {
 
     }
 }

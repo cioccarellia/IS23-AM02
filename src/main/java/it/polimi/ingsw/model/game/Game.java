@@ -27,6 +27,7 @@ import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static it.polimi.ingsw.model.game.GameStatus.*;
@@ -37,7 +38,7 @@ import static java.util.Comparator.comparing;
 /**
  * Model class representing an instance of a game.
  */
-public class Game implements ModelService {
+public class Game implements ModelService, Serializable {
 
     // Game logger
     @Expose(serialize = false)
@@ -463,11 +464,11 @@ public class Game implements ModelService {
     }
 
     @Override
-    public void onForcedNextTurn(String nextPlayer) {
+    public void onForcedNextTurn(String nextPlayerUsername) {
         // conditioned rollback
         switch (getCurrentPlayerSession().getPlayerCurrentGamePhase()) {
             case IDLE, SELECTING -> // normal phase, no changes required, switching
-                    onNextTurn(nextPlayer);
+                    onNextTurn(nextPlayerUsername);
             case INSERTING -> {
                 // rollback model to pre-selection stage and forward turns
                 // todo
@@ -531,5 +532,23 @@ public class Game implements ModelService {
     @Override
     public void onGameEnded() {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "mode=" + mode +
+                ", board=" + board +
+                ", sessions=" + sessions +
+                ", tileExtractor=" + tileExtractor +
+                ", commonGoalCardExtractor=" + commonGoalCardExtractor +
+                ", personalGoalCardExtractor=" + personalGoalCardExtractor +
+                ", commonGoalCardStatuses=" + commonGoalCardStatuses +
+                ", config=" + config +
+                ", status=" + status +
+                ", startingPlayerNumber=" + startingPlayerNumber +
+                ", currentPlayerNumber=" + currentPlayerNumber +
+                ", preStandByGameStatus=" + preStandByGameStatus +
+                '}';
     }
 }

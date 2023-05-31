@@ -11,13 +11,14 @@ import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represent the game session for a given user.
  */
-public class PlayerSession {
+public class PlayerSession implements Serializable {
 
     private final static int rows = BookshelfConfiguration.getInstance().rows();
     private final static int cols = BookshelfConfiguration.getInstance().cols();
@@ -202,5 +203,20 @@ public class PlayerSession {
         }
 
         return points;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerSession{" +
+                "username='" + username + '\'' +
+                ", playerNumber=" + playerNumber +
+                ", personalGoalCard=" + personalGoalCard +
+                ", bookshelf=" + bookshelf +
+                ", playerCurrentGamePhase=" + playerCurrentGamePhase +
+                ", achievedCommonGoalCards=" + achievedCommonGoalCards +
+                ", noMoreTurns=" + noMoreTurns +
+                ", playerTileSelection=" + playerTileSelection +
+                ", acquiredTokens=" + acquiredTokens +
+                '}';
     }
 }

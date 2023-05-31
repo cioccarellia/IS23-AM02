@@ -3,11 +3,12 @@ package it.polimi.ingsw.model.board.cell;
 import it.polimi.ingsw.model.board.Tile;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import static it.polimi.ingsw.model.board.cell.CellPattern.NORMAL;
 
-public class Cell {
+public class Cell implements Serializable {
 
     private final CellPattern pattern;
     private final boolean isAlive;

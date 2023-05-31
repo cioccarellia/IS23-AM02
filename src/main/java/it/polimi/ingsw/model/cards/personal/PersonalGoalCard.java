@@ -4,7 +4,10 @@ import it.polimi.ingsw.model.board.Tile;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class PersonalGoalCard {
+import java.io.Serializable;
+import java.util.Arrays;
+
+public class PersonalGoalCard implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,4 +37,10 @@ public class PersonalGoalCard {
         return shelfPointsMatrix;
     }
 
+    @Override
+    public String toString() {
+        return "PersonalGoalCard{" +
+                "shelfPointsMatrix=" + Arrays.toString(shelfPointsMatrix) +
+                '}';
+    }
 }

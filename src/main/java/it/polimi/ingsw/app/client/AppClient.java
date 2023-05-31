@@ -42,7 +42,7 @@ public class AppClient implements Runnable {
     private final ClientController controller;
 
     /**
-     * Client-side executor
+     * Client-side thread pool executor
      */
     public final static ExecutorService clientExecutorService = Executors.newCachedThreadPool();
 

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCardFunctionContainer;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.game.GameMode;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -14,7 +15,7 @@ import static it.polimi.ingsw.model.game.goal.Token.*;
  * Represents the current status of a {@link it.polimi.ingsw.model.cards.common.CommonGoalCard} instance,
  * along with its associated possible {@link Token}s.
  */
-public class CommonGoalCardStatus {
+public class CommonGoalCardStatus implements Serializable {
 
     private final CommonGoalCardIdentifier commonGoalCardId;
 
