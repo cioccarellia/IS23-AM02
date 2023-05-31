@@ -3,6 +3,7 @@ package it.polimi.ingsw.app.client.layers.view;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.cli.CliApp;
 import it.polimi.ingsw.ui.game.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
@@ -34,16 +35,18 @@ public class ViewFactory {
         switch (mode) {
             case CLI -> {
                 logger.info("Starting CLI game");
-                new CliApp(model, controller, owner);
+                GameGateway game = new CliApp(model, controller, owner);
+
+                controller.onGameUiReady(game);
             }
             case GUI -> {
                 logger.info("Starting GUI game");
-                var gui = new RunnableGuiGame();
-                gui.initModel(model, controller, owner);
+                RunnableGuiGame.initModel(model, controller, owner);
+                RunnableGuiGame.initLifecycle(controller);
 
                 executorService.submit(() -> {
                     logger.info("Starting GUI game on dedicated thread");
-                    RunnableGuiGame.launch();
+                    RunnableGuiGame.main(new String[]{});
                 });
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);

@@ -1,10 +1,10 @@
 package it.polimi.ingsw.ui.game.gui;
 
+import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
 import it.polimi.ingsw.controller.server.result.SingleResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import javafx.application.Application;
@@ -33,9 +33,11 @@ public class RunnableGuiGame extends Application implements GameGateway {
 
     private GuiGameController gameController;
 
-    private Game model;
-    private GameViewEventHandler handler;
-    private String owner;
+    private static Game model;
+    private static String owner;
+
+    private static AppLifecycle lifecycle;
+    private static GameViewEventHandler handler;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -44,14 +46,18 @@ public class RunnableGuiGame extends Application implements GameGateway {
     /**
      * Initializes the model, handler, and owner for the GUI game.
      *
-     * @param model   The game model.
-     * @param handler The game view event handler.
-     * @param owner   The owner of the game.
+     * @param _model   The game model.
+     * @param _handler The game view event handler.
+     * @param _owner   The owner of the game.
      */
-    public void initModel(Game model, GameViewEventHandler handler, String owner) {
-        this.model = model;
-        this.handler = handler;
-        this.owner = owner;
+    public static void initModel(Game _model, GameViewEventHandler _handler, String _owner) {
+        model = _model;
+        handler = _handler;
+        owner = _owner;
+    }
+
+    public static void initLifecycle(AppLifecycle _appLifecycle) {
+        lifecycle = _appLifecycle;
     }
 
     /**
@@ -61,36 +67,40 @@ public class RunnableGuiGame extends Application implements GameGateway {
      * @throws IOException If an error occurs while loading the FXML file.
      */
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(fxmlURL);
-
-        model = new Game(GameMode.GAME_MODE_3_PLAYERS);
-        model.addPlayer("Fornaciari");
-        model.addPlayer("Reghenzani");
-        model.addPlayer("Margara");
-        model.onGameStarted();
-        owner = "Fornaciari";
-        Parent rootLayout;
-
         try {
-            rootLayout = loader.load();
-        } catch (IOException e) {
-            logger.error("Error while loading game XML", e);
-            throw new IllegalStateException();
+            logger.info("RunnableGuiGame.start(), model={}", model.toString());
+            logger.info("RunnableGuiGame.start(), handler={}", handler.toString());
+            logger.info("RunnableGuiGame.start(), this={} ", this);
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(fxmlURL);
+
+            Parent rootLayout;
+
+            try {
+                rootLayout = loader.load();
+            } catch (IOException e) {
+                logger.error("Error while loading game XML", e);
+                throw new IllegalStateException();
+            }
+
+            gameController = loader.getController();
+            gameController.initModel(model, handler, owner);
+
+            Scene loadedScene = new Scene(rootLayout, 1018, 809, false, SceneAntialiasing.BALANCED);
+
+            primaryStage.setScene(loadedScene);
+
+            primaryStage.setTitle("My shelfie: the game");
+            primaryStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
+            primaryStage.show();
+
+            Platform.runLater(() -> gameController.modelUpdate(model));
+
+            lifecycle.onGameUiReady(this);
+        } catch (Exception e) {
+            logger.error("Exception in RunnableGuiGame.start()", e);
         }
-
-        gameController = loader.getController();
-        gameController.initModel(model, handler, owner);
-
-        Scene loadedScene = new Scene(rootLayout, 1018, 809, false, SceneAntialiasing.BALANCED);
-
-        primaryStage.setScene(loadedScene);
-
-        primaryStage.setTitle("My shelfie: the game");
-        primaryStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
-        primaryStage.show();
-
-        Platform.runLater(() -> gameController.modelUpdate(model));
     }
 
     /**
