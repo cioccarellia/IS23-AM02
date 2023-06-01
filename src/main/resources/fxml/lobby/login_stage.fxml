@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.lobby.gui.GuiLobbyController">
+    <children>
+        <ImageView fitHeight="600.0" fitWidth="800.0">
+            <Image url="@../../img/misc/wood_background.jpg"/>
+        </ImageView>
+
+        <BorderPane prefHeight="600.0" prefWidth="800.0">
+            <top>
+                <HBox alignment="CENTER">
+                    <ImageView fitHeight="100.0" fitWidth="350.0" preserveRatio="true">
+                        <Image url="@../../img/publisher_material/title_2000x618px.png"/>
+                    </ImageView>
+                </HBox>
+            </top>
+
+
+            <center>
+                <VBox>
+                    <VBox fx:id="preLoginVBox" managed="true" visible="true">
+                        <VBox alignment="CENTER" prefHeight="174.0" prefWidth="800.0">
+
+                            <padding>
+                                <Insets bottom="25" left="25" right="25" top="25"/>
+                            </padding>
+
+
+                            <HBox alignment="CENTER">
+                                <Label text="Username:">
+                                    <HBox.margin>
+                                        <Insets right="8.0"/>
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Monospaced Regular" size="25.0"/>
+                                    </font>
+                                </Label>
+
+                                <TextField/>
+                                <VBox.margin>
+                                    <Insets top="30.0"/>
+                                </VBox.margin>
+                            </HBox>
+
+
+                            <VBox alignment="CENTER">
+
+                                <RadioButton fx:id="twoPlayersRadioButton" layoutX="193.0" layoutY="192.0"
+                                             text="2 Players"
+                                             textFill="WHITE">
+
+                                    <ToggleGroup fx:id="group"/>
+                                    <padding>
+                                        <Insets bottom="10.0" top="10.0"/>
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                    <font>
+                                        <Font name="Monospaced Regular" size="20.0"/>
+                                    </font>
+                                </RadioButton>
+                                <RadioButton fx:id="threePlayersRadioButton" layoutX="193.0" layoutY="223.0"
+                                             text="3 Players" textFill="WHITE" toggleGroup="$group">
+
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets bottom="10.0" top="10.0"/>
+                                    </padding>
+                                    <font>
+                                        <Font name="Monospaced Regular" size="20.0"/>
+                                    </font>
+                                </RadioButton>
+                                <RadioButton fx:id="fourPlayersRadioButton" layoutX="193.0" layoutY="255.0"
+                                             text="4 Players"
+                                             textFill="WHITE" toggleGroup="$group">
+
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets bottom="10.0" top="10.0"/>
+                                    </padding>
+                                    <font>
+                                        <Font name="Monospaced Regular" size="20.0"/>
+                                    </font>
+                                </RadioButton>
+                                <padding>
+                                    <Insets top="20.0"/>
+                                </padding>
+                                <VBox.margin>
+                                    <Insets bottom="20.0"/>
+                                </VBox.margin>
+                            </VBox>
+
+                            <HBox alignment="CENTER">
+                                <HBox alignment="CENTER">
+
+                                    <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
+                                        <Image url="@../../img/misc/closed_tiles_bag.png"/>
+                                    </ImageView>
+                                    <Button id="quitButton" prefHeight="33.0" prefWidth="118.0" text="LOGIN"
+                                            textAlignment="CENTER" textFill="#e06a2f">
+                                        <font>
+                                            <Font name="Consolas" size="18.0"/>
+                                        </font>
+                                        <HBox.margin>
+                                            <Insets bottom="10.0" top="10.0"/>
+                                        </HBox.margin>
+                                    </Button>
+
+                                    <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
+                                        <Image url="@../../img/misc/closed_tiles_bag.png"/>
+                                    </ImageView>
+                                </HBox>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+
+                    <VBox fx:id="postLoginVBox" managed="false" visible="false">
+
+                        <VBox alignment="CENTER">
+
+                            <Label text="Current game status">
+                                <font>
+                                    <Font name="Monospaced Regular" size="20.0"/>
+                                </font>
+                                <VBox.margin>
+                                    <Insets top="60.0"/>
+                                </VBox.margin>
+                            </Label>
+
+
+                            <GridPane prefWidth="624.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="15.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                </rowConstraints>
+                                <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Role"
+                                           GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                        <font>
+                                            <Font name="Monospaced Bold" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player's username"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                        <font>
+                                            <Font name="Monospaced Bold" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Connection status"
+                                           GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                        <font>
+                                            <Font name="Monospaced Bold" size="18.0"/>
+                                        </font>
+                                    </Label>
+
+
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Host"
+                                           GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+
+
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player"
+                                           GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+
+
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player"
+                                           GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+
+
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player"
+                                           GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label"
+                                           GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                </children>
+                                <VBox.margin>
+                                    <Insets left="30.0" right="30.0" top="20.0"/>
+                                </VBox.margin>
+                            </GridPane>
+
+
+                        </VBox>
+
+                        <VBox alignment="CENTER">
+                            <ProgressIndicator>
+                                <VBox.margin>
+                                    <Insets top="40.0"/>
+                                </VBox.margin>
+                            </ProgressIndicator>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </center>
+
+
+            <bottom>
+                <HBox alignment="CENTER">
+                    <Label fx:id="statusTextLabel" alignment="CENTER" prefHeight="30.0" prefWidth="700.0"
+                           text="Placeholder status">
+                        <font>
+                            <Font name="Monospaced Regular" size="20.0"/>
+                        </font>
+                    </Label>
+
+                    <BorderPane.margin>
+                        <Insets bottom="30.0"/>
+                    </BorderPane.margin>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </children>
+</AnchorPane>
