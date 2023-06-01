@@ -27,8 +27,8 @@ public class CoordinatesParser {
 
         while (true) {
             Console.out("""
-                    Give me the coordinates of the tiles you want (at least one, at most three),
-                    in the format: x1, y1, x2, y2, ... (x are rows, y are columns)
+                    Give me the coordinates of the tiles you want (at least one tile, at most three),
+                    in the format: x1, y1, x2, y2, ... (x are rows, y are columns):
                     """);
 
             String input = Console.in();
@@ -38,7 +38,7 @@ public class CoordinatesParser {
             if (tokens.length < 2 || tokens.length > 2 * maxSelectionSize || tokens.length % 2 != 0) {
                 Console.out("""
                         You need to select at least one tile and at most three;
-                        also, you need both the x-coordinate and the y-coordinate1n
+                        also, you need both the x-coordinate and the y-coordinate.
                         """);
                 continue;
             }
@@ -48,6 +48,9 @@ public class CoordinatesParser {
             }
 
             Set<Coordinate> validCoordinates = new HashSet<>();
+
+            boolean check = true;
+
             for (int i = 0; i < tokens.length; i += 2) {
                 final String x = tokens[i];
                 final String y = tokens[i + 1];
@@ -60,9 +63,15 @@ public class CoordinatesParser {
                             Some of these coordinates are out of bounds, you need to select numbers
                             from 0 to 9.
                             """);
+                    check = false;
                     break;
                 }
             }
+
+            if (!check) {
+                continue;
+            }
+
             if (isSelectionValid(validCoordinates, game)) {
                 return validCoordinates;
             } else {

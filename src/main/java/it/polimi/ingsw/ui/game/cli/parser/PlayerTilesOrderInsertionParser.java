@@ -41,7 +41,7 @@ public class PlayerTilesOrderInsertionParser {
             });
 
             Console.outln();
-            Console.out(">Give me your insertion order (the first one is the first to go in the bookshelf).");
+            Console.out("Give me your insertion order (the first one is the first to go in the bookshelf).");
             Console.outln();
             Console.out("Format: Tile1, Tile2...");
             Console.outln();
@@ -53,7 +53,7 @@ public class PlayerTilesOrderInsertionParser {
 
             if (tokens.length != tiles.size()) {
                 Console.outln();
-                Console.out("Not valid, you need to order the selected tiles from before.");
+                Console.out("Tiles not valid, you need to order the selected tiles from before.");
                 Console.outln();
                 continue;
             }
@@ -63,6 +63,8 @@ public class PlayerTilesOrderInsertionParser {
             }
 
             List<Tile> orderedTiles = new ArrayList<>();
+            boolean check = true;
+
             for (String token : tokens) {
                 if (isStringValid(token)) {
                     switch (token) {
@@ -76,13 +78,20 @@ public class PlayerTilesOrderInsertionParser {
                 } else {
                     Console.out("You need to write at least one tile.");
                     Console.outln();
+                    check = false;
+                    break;
                 }
             }
+
+            if (!check) {
+                continue;
+            }
+
             if (orderedTiles.containsAll(tiles) && tiles.containsAll(orderedTiles)) {
                 return orderedTiles;
             } else {
                 Console.outln();
-                Console.out("Not valid, you need to order the selected tiles from before.");
+                Console.out("Tiles not valid, you need to order the selected tiles from before.");
                 Console.outln();
             }
         }
