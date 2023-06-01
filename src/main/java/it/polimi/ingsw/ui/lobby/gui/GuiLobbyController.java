@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ui.lobby.gui;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
+import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
@@ -74,6 +75,28 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
     @FXML
     public GridPane playerListTableGridPane;
 
+    @FXML
+    public Label HostUsername;
+    @FXML
+    public Label HostConnectionStatus;
+    @FXML
+    public Label player1Username;
+    @FXML
+    public Label player2Username;
+    @FXML
+    public Label player3Username;
+    @FXML
+    public Label player1ConnectionStatus;
+    @FXML
+    public Label player2ConnectionStatus;
+    @FXML
+    public Label player3ConnectionStatus;
+    @FXML
+    public Label player1Role;
+    @FXML
+    public Label player2Role;
+    @FXML
+    public Label player3Role;
 
     @FXML
     public Button actionButton;
@@ -115,6 +138,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
         this.playerInfo = playerInfo;
 
         renderModelUpdate();
+        renderUserInfoTable();
     }
 
     /**
@@ -307,7 +331,124 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
     }
 
     private void renderUserInfoTable() {
+        setUsername(playerInfo.get(0).username(), HostUsername);
+        setConnectionStatus(playerInfo.get(0).status(), HostConnectionStatus);
 
+
+        switch (playerInfo.size()) {
+            case 1 -> {
+
+                turnLabeltoInvible(player1Role, player1Username, player1ConnectionStatus);
+
+                turnLabeltoInvible(player2Role, player2Username, player2ConnectionStatus);
+
+                turnLabeltoInvible(player3Role, player3Username, player3ConnectionStatus);
+
+            }
+            case 2 -> {
+
+                turnLabeltoVisible(player1Role, player1Username, player1ConnectionStatus);
+                setUsername(playerInfo.get(1).username(), player1Username);
+                setConnectionStatus(playerInfo.get(1).status(), player1ConnectionStatus);
+
+                turnLabeltoInvible(player2Role, player2Username, player2ConnectionStatus);
+
+                turnLabeltoInvible(player3Role, player3Username, player3ConnectionStatus);
+            }
+            case 3 -> {
+
+                turnLabeltoVisible(player1Role, player1Username, player1ConnectionStatus);
+                setUsername(playerInfo.get(1).username(), player1Username);
+                setConnectionStatus(playerInfo.get(1).status(), player1ConnectionStatus);
+
+                turnLabeltoVisible(player2Role, player2Username, player2ConnectionStatus);
+                setUsername(playerInfo.get(2).username(), player2Username);
+                setConnectionStatus(playerInfo.get(2).status(), player2ConnectionStatus);
+
+                turnLabeltoInvible(player3Role, player3Username, player3ConnectionStatus);
+
+            }
+            case 4 -> {
+
+                turnLabeltoVisible(player1Role, player1Username, player1ConnectionStatus);
+                setUsername(playerInfo.get(1).username(), player1Username);
+                setConnectionStatus(playerInfo.get(1).status(), player1ConnectionStatus);
+
+                turnLabeltoVisible(player2Role, player2Username, player2ConnectionStatus);
+                setUsername(playerInfo.get(2).username(), player2Username);
+                setConnectionStatus(playerInfo.get(2).status(), player2ConnectionStatus);
+
+                turnLabeltoVisible(player3Role, player3Username, player3ConnectionStatus);
+                setUsername(playerInfo.get(3).username(), player3Username);
+                setConnectionStatus(playerInfo.get(3).status(), player3ConnectionStatus);
+
+            }
+        }
+    }
+
+    /**
+     * set the text of the given label to the given connection status
+     *
+     * @param status
+     * @param label
+     */
+    private void setConnectionStatus(ConnectionStatus status, Label label) {
+
+        switch (status) {
+
+            case OPEN -> {
+                label.setText("Connected");
+            }
+            case DISCONNECTED -> {
+                label.setText("Temporary Disconnected");
+
+            }
+            case CLOSED -> {
+                label.setText("Disconnected");
+
+            }
+        }
+    }
+
+    /**
+     * set the text of the given label to the gaven username
+     *
+     * @param username
+     * @param label
+     */
+    public void setUsername(String username, Label label) {
+
+        label.setText(username);
+
+    }
+
+    /**
+     * set the visibility of the given label to false
+     *
+     * @param role
+     * @param username
+     * @param connectionStatus
+     */
+    public void turnLabeltoInvible(Label role, Label username, Label connectionStatus) {
+
+        role.setVisible(false);
+        username.setVisible(false);
+        connectionStatus.setVisible(false);
+
+    }
+
+    /**
+     * set the visibility to the given label to true
+     *
+     * @param role
+     * @param username
+     * @param connectionStatus
+     */
+    public void turnLabeltoVisible(Label role, Label username, Label connectionStatus) {
+
+        role.setVisible(true);
+        username.setVisible(true);
+        connectionStatus.setVisible(true);
 
     }
 

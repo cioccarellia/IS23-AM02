@@ -51,7 +51,7 @@
 
                             <VBox fx:id="radioButtonVBox" alignment="CENTER">
 
-                                <RadioButton fx:id="twoPlayersRadioButton" layoutX="193.0" layoutY="192.0" text="2 Players game" textFill="WHITE">
+                                <RadioButton fx:id="twoPlayersRadioButton" layoutX="193.0" layoutY="192.0" text="2 Players game" textFill="WHITE" toggleGroup="$group">
 
                                     <ToggleGroup fx:id="group" />
                                     <padding>
@@ -165,68 +165,68 @@
                                     </Label>
 
 
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Host" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <Label  alignment="CENTER" contentDisplay="CENTER" text="Host" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Label fx:id="HostUsername" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                        <font>
-                                            <Font name="Monospaced Regular" size="18.0" />
-                                        </font>
-                                    </Label>
-
-
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                                        <font>
-                                            <Font name="Monospaced Regular" size="18.0" />
-                                        </font>
-                                    </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                        <font>
-                                            <Font name="Monospaced Regular" size="18.0" />
-                                        </font>
-                                    </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <Label fx:id="HostConnectionStatus" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
 
 
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                    <Label fx:id="player1Role" alignment="CENTER" contentDisplay="CENTER" text="Player 1" GridPane.columnIndex="0" GridPane.rowIndex="2">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <Label fx:id="player1Username" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                    <Label fx:id="player1ConnectionStatus" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
 
 
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Player" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                    <Label fx:id="player2Role" alignment="CENTER" contentDisplay="CENTER" text="Player 2" GridPane.columnIndex="0" GridPane.rowIndex="3">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                    <Label fx:id="player2Username" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
                                     </Label>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                    <Label fx:id="player2ConnectionStatus" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0" />
+                                        </font>
+                                    </Label>
+
+
+                                    <Label fx:id="player3Role" alignment="CENTER" contentDisplay="CENTER" text="Player 3" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0" />
+                                        </font>
+                                    </Label>
+                                    <Label fx:id="player3Username" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                        <font>
+                                            <Font name="Monospaced Regular" size="18.0" />
+                                        </font>
+                                    </Label>
+                                    <Label fx:id="player3ConnectionStatus" alignment="CENTER" contentDisplay="CENTER" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                         <font>
                                             <Font name="Monospaced Regular" size="18.0" />
                                         </font>
