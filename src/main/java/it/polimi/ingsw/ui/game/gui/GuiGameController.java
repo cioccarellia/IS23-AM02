@@ -64,6 +64,8 @@ public class GuiGameController implements GameGateway, Initializable {
     @FXML
     public GridPane player4BookShelf;
     @FXML
+    public GridPane insertionBookshelf;
+    @FXML
     public ImageView endGameToken;
 
 
@@ -216,8 +218,6 @@ public class GuiGameController implements GameGateway, Initializable {
                 //players buttons
                 for (int i = 0; i < model.getSessions().size(); i++) {
                     playersButtons().get(i).setText(model.getPlayersUsernameList().get(i));
-                    //capire come svuotare i bottoni che non sono usati quando non ci sono 4 giocatori
-                    // settiamoli come invisibili nel fxml e rendiamo visibili qui quelli che servono
                 }
 
                 int j = model.getSessions().size();
@@ -265,7 +265,7 @@ public class GuiGameController implements GameGateway, Initializable {
 
 
     public void gameInsertion() {
-        /*
+
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             CommonGoalCard commonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
             insertionCommonGoalCard().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard));
@@ -276,8 +276,7 @@ public class GuiGameController implements GameGateway, Initializable {
 
         BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
 
-        SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
-       */
+        //SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
 
 
@@ -364,7 +363,7 @@ public class GuiGameController implements GameGateway, Initializable {
             logger.warn("onSelectingButtonClick(): handler is null");
         }
         handler.onViewSelection(selectedCoordinates);
-        //SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
+        SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
 
     public void onGameEnded() {
