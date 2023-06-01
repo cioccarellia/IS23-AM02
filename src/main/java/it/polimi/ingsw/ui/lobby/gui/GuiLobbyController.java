@@ -330,10 +330,14 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
         }
     }
 
+    /**
+     * Renders the UI based on the current number of connected players.
+     */
     private void renderUserInfoTable() {
-        setUsername(playerInfo.get(0).username(), HostUsername);
-        setConnectionStatus(playerInfo.get(0).status(), HostConnectionStatus);
-
+        if(playerInfo.size()!=0) {
+            setUsername(playerInfo.get(0).username(), HostUsername);
+            setConnectionStatus(playerInfo.get(0).status(), HostConnectionStatus);
+        }
 
         switch (playerInfo.size()) {
             case 1 -> {
