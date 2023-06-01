@@ -308,6 +308,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
 
     private void renderUserInfoTable() {
 
+
     }
 
     /**

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.game.gui;
+package it.polimi.ingsw.ui.game.guiv2;
 
 
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -15,6 +15,7 @@ import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.gui.SceneManager;
 import it.polimi.ingsw.ui.game.gui.render.*;
 import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
 import javafx.fxml.FXML;
@@ -39,9 +40,9 @@ import java.util.*;
  * for the game. It handles user interactions, updates the GUI elements based on the game model,
  * and communicates with the game logic through the GameViewEventHandler interface.
  */
-public class GuiGameController implements GameGateway, Initializable {
+public class GuiGameControllerV2 implements GameGateway, Initializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
+    private static final Logger logger = LoggerFactory.getLogger(GuiGameControllerV2.class);
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
