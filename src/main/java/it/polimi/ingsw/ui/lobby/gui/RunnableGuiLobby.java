@@ -15,7 +15,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ import java.util.List;
  */
 public class RunnableGuiLobby extends Application implements LobbyGateway {
 
-    private final URL fxmlURL = getClass().getResource("/fxml/lobby/login.fxml");
+    private final URL fxmlURL = getClass().getResource("/fxml/lobby/login_stage.fxml");
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
 
@@ -88,12 +87,12 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
 
 
             lobbyController = loader.getController();
-            lobbyController.init(handler);
+            lobbyController.injectEventHandler(handler);
 
-            Scene loadedScene = new Scene(rootLayout, 600, 400, false, SceneAntialiasing.BALANCED);
+            Scene loadedScene = new Scene(rootLayout, 800, 600, false);
 
             lobbyStage.setScene(loadedScene);
-
+            lobbyStage.setResizable(false);
 
             lobbyStage.setTitle("Login page");
             lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
