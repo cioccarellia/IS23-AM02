@@ -12,6 +12,7 @@ import it.polimi.ingsw.controller.server.validator.Validator;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
+import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -38,6 +39,8 @@ import static it.polimi.ingsw.model.game.GameMode.*;
  */
 public class GuiLobbyController implements LobbyGateway, Initializable {
 
+    public static final int ROWS = 5;
+    public static final int COLUMNS = 3;
     private LobbyViewEventHandler handler;
 
     // controller data
@@ -78,28 +81,6 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
     @FXML
     public GridPane playerListTableGridPane;
 
-    @FXML
-    public Label HostUsername;
-    @FXML
-    public Label HostConnectionStatus;
-    @FXML
-    public Label player1Username;
-    @FXML
-    public Label player2Username;
-    @FXML
-    public Label player3Username;
-    @FXML
-    public Label player1ConnectionStatus;
-    @FXML
-    public Label player2ConnectionStatus;
-    @FXML
-    public Label player3ConnectionStatus;
-    @FXML
-    public Label player1Role;
-    @FXML
-    public Label player2Role;
-    @FXML
-    public Label player3Role;
 
     @FXML
     public Button actionButton;
@@ -117,13 +98,11 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
     public void injectEventHandler(LobbyViewEventHandler handler) {
         this.handler = handler;
 
-
         renderModelUpdate();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         setRadioButtonsClickListeners();
 
         renderModelUpdate();
@@ -365,33 +344,26 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
      * Renders the UI based on the current number of connected players.
      */
     private void renderUserInfoTable() {
-
         // matrix-ify nodes
-        Node[][] gridPaneNodes = new Node[5][3];
-        for (Node child : playerListTableGridPane.getChildren()) {
-            Integer column = GridPane.getColumnIndex(child);
-            Integer row = GridPane.getRowIndex(child);
-
-            if (column != null && row != null) {
-                gridPaneNodes[row][column] = child;
-            }
-        }
-
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(playerListTableGridPane, ROWS, COLUMNS);
 
         for (int i = 0; i < 4; i++) {
             int rowIndex = i + 1;
+
             Label roleLabel = (Label) gridPaneNodes[rowIndex][0];
             Label usernameLabel = (Label) gridPaneNodes[rowIndex][1];
             Label statusLabel = (Label) gridPaneNodes[rowIndex][2];
 
             try {
                 PlayerInfo player = playerInfo.get(i);
-
                 setVisible(true, roleLabel, usernameLabel, statusLabel);
 
-                roleLabel.setText(player.isHost() ? "Host" : "Player");
+                String roleText = player.isHost() ? "Host" : "Player";
+                String statusText = getConnectionStatusHumanReadable(player.status());
+
+                roleLabel.setText(roleText);
                 usernameLabel.setText(player.username());
-                statusLabel.setText(getConnectionStatusHumanReadable(player.status()));
+                statusLabel.setText(statusText);
             } catch (NullPointerException | IndexOutOfBoundsException ignored) {
                 setVisible(false, roleLabel, usernameLabel, statusLabel);
             }
@@ -400,18 +372,11 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
     }
 
     private String getConnectionStatusHumanReadable(ConnectionStatus status) {
-        switch (status) {
-            case OPEN -> {
-                return "Connected";
-            }
-            case DISCONNECTED -> {
-                return "Disconnected";
-            }
-            case CLOSED -> {
-                return "Quit";
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + status);
-        }
+        return switch (status) {
+            case OPEN -> "Connected";
+            case DISCONNECTED -> "Disconnected";
+            case CLOSED -> "Quit";
+        };
     }
 
     public void setVisible(boolean isVisible, Node... role) {
