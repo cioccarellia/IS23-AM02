@@ -12,6 +12,7 @@ import it.polimi.ingsw.network.tcp.messages.request.*;
 import it.polimi.ingsw.network.tcp.messages.response.*;
 import it.polimi.ingsw.network.tcp.messages.system.SocketSystem;
 import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.services.ServerService;
 import it.polimi.ingsw.utils.json.Parsers;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -41,6 +42,10 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
      */
     private boolean isActivelyListeningOnSocket = true;
 
+    @Override
+    public ServerService getS() {
+        return null;
+    }
 
     public TcpClientGateway(String serverHost, int serverTcpPort) {
         try {

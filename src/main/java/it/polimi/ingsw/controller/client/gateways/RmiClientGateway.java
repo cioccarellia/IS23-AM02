@@ -26,7 +26,16 @@ public class RmiClientGateway extends ClientGateway {
     /**
      * RMI stub object to forward the methods on
      */
-    final private ServerService rmiServerStub;
+    public ServerService rmiServerStub;
+
+    @Override
+    public ServerService getS() {
+        return rmiServerStub;
+    }
+
+    public void setRmiServerStub(ServerService rmiServerStub) {
+        this.rmiServerStub = rmiServerStub;
+    }
 
     public RmiClientGateway(String serverHost, int serverRmiPort) {
         Registry registry;

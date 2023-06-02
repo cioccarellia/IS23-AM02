@@ -8,11 +8,13 @@ import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
+import it.polimi.ingsw.controller.server.validator.Validator;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -22,6 +24,7 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -134,11 +137,10 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
         if (isKilled)
             return;
 
-        currentState = status;
+        this.currentState = status;
         this.playerInfo = playerInfo;
 
         renderModelUpdate();
-        renderUserInfoTable();
     }
 
     /**
@@ -238,13 +240,12 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
             disableView(preLoginVBox);
             enableView(postLoginVBox);
 
-            statusTextLabel.setText("Logged in as %s, waiting for game start".formatted(owner));
+            statusTextLabel.setText("Logged in as @%s, waiting for game start".formatted(owner));
 
             renderUserInfoTable();
         } else {
             enableView(preLoginVBox);
             disableView(postLoginVBox);
-
 
             switch (currentState) {
                 case NO_GAME_STARTED -> {
@@ -252,6 +253,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
                     radioButtonVBox.setVisible(true);
 
                     actionButton.setDisable(false);
+                    usernameTextField.setDisable(false);
                     actionButton.setText("CREATE GAME");
                 }
                 case GAME_INITIALIZING -> {
@@ -259,10 +261,14 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
                     statusTextLabel.setText("Pick username to connect to the game");
 
                     actionButton.setDisable(false);
+                    usernameTextField.setDisable(false);
                     actionButton.setText("CONNECT");
                 }
                 case GAME_RUNNING -> {
                     statusTextLabel.setText("Game already running, change server");
+
+                    usernameTextField.setDisable(true);
+                    radioButtonVBox.setVisible(false);
 
                     actionButton.setText("CONNECT");
                     actionButton.setDisable(true);
@@ -271,7 +277,14 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
                     statusTextLabel.setText("Game over");
 
                     actionButton.setText("CONNECT");
+                    usernameTextField.setDisable(true);
                     actionButton.setDisable(true);
+
+                    radioButtonVBox.setVisible(false);
+
+                    twoPlayersRadioButton.setDisable(true);
+                    threePlayersRadioButton.setDisable(true);
+                    fourPlayersRadioButton.setDisable(true);
                 }
             }
         }
@@ -307,21 +320,39 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
 
         switch (currentState) {
             case NO_GAME_STARTED -> {
-                handler.sendGameStartRequest(usernameTextField.getText(), currentlySelectedGameMode);
+                String username = usernameTextField.getText();
 
-                statusTextLabel.setText("Sending game start request...");
+                if (Validator.isValidUsername(username)) {
+                    statusTextLabel.setText("Sending game start request...");
 
-                actionButton.setText("WAIT");
-                actionButton.setDisable(true);
+                    actionButton.setText("WAIT");
+                    actionButton.setDisable(true);
+
+                    handler.sendGameStartRequest(username, currentlySelectedGameMode);
+                } else {
+                    statusTextLabel.setText("Invalid username [%s], try again".formatted(username));
+
+                    actionButton.setText("START");
+                    actionButton.setDisable(false);
+                }
             }
 
             case GAME_INITIALIZING -> {
-                handler.sendGameConnectionRequest(usernameTextField.getText());
+                String username = usernameTextField.getText();
 
-                statusTextLabel.setText("Sending connection request");
+                if (Validator.isValidUsername(username)) {
+                    statusTextLabel.setText("Sending game connection request...");
 
-                actionButton.setText("WAIT");
-                actionButton.setDisable(true);
+                    actionButton.setText("WAIT");
+                    actionButton.setDisable(true);
+
+                    handler.sendGameConnectionRequest(usernameTextField.getText());
+                } else {
+                    statusTextLabel.setText("Invalid username [%s], try again".formatted(username));
+
+                    actionButton.setText("CONNECT");
+                    actionButton.setDisable(false);
+                }
             }
 
             case GAME_RUNNING -> {
@@ -334,126 +365,57 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
      * Renders the UI based on the current number of connected players.
      */
     private void renderUserInfoTable() {
-        if(playerInfo.size()!=0) {
-            setUsername(playerInfo.get(0).username(), HostUsername);
-            setConnectionStatus(playerInfo.get(0).status(), HostConnectionStatus);
-        }
 
-        switch (playerInfo.size()) {
-            case 1 -> {
+        // matrix-ify nodes
+        Node[][] gridPaneNodes = new Node[5][3];
+        for (Node child : playerListTableGridPane.getChildren()) {
+            Integer column = GridPane.getColumnIndex(child);
+            Integer row = GridPane.getRowIndex(child);
 
-                turnLabeltoInvible(player1Role, player1Username, player1ConnectionStatus);
-
-                turnLabeltoInvible(player2Role, player2Username, player2ConnectionStatus);
-
-                turnLabeltoInvible(player3Role, player3Username, player3ConnectionStatus);
-
-            }
-            case 2 -> {
-
-                turnLabeltoVisible(player1Role, player1Username, player1ConnectionStatus);
-                setUsername(playerInfo.get(1).username(), player1Username);
-                setConnectionStatus(playerInfo.get(1).status(), player1ConnectionStatus);
-
-                turnLabeltoInvible(player2Role, player2Username, player2ConnectionStatus);
-
-                turnLabeltoInvible(player3Role, player3Username, player3ConnectionStatus);
-            }
-            case 3 -> {
-
-                turnLabeltoVisible(player1Role, player1Username, player1ConnectionStatus);
-                setUsername(playerInfo.get(1).username(), player1Username);
-                setConnectionStatus(playerInfo.get(1).status(), player1ConnectionStatus);
-
-                turnLabeltoVisible(player2Role, player2Username, player2ConnectionStatus);
-                setUsername(playerInfo.get(2).username(), player2Username);
-                setConnectionStatus(playerInfo.get(2).status(), player2ConnectionStatus);
-
-                turnLabeltoInvible(player3Role, player3Username, player3ConnectionStatus);
-
-            }
-            case 4 -> {
-
-                turnLabeltoVisible(player1Role, player1Username, player1ConnectionStatus);
-                setUsername(playerInfo.get(1).username(), player1Username);
-                setConnectionStatus(playerInfo.get(1).status(), player1ConnectionStatus);
-
-                turnLabeltoVisible(player2Role, player2Username, player2ConnectionStatus);
-                setUsername(playerInfo.get(2).username(), player2Username);
-                setConnectionStatus(playerInfo.get(2).status(), player2ConnectionStatus);
-
-                turnLabeltoVisible(player3Role, player3Username, player3ConnectionStatus);
-                setUsername(playerInfo.get(3).username(), player3Username);
-                setConnectionStatus(playerInfo.get(3).status(), player3ConnectionStatus);
-
+            if (column != null && row != null) {
+                gridPaneNodes[row][column] = child;
             }
         }
+
+
+        for (int i = 0; i < 4; i++) {
+            int rowIndex = i + 1;
+            Label roleLabel = (Label) gridPaneNodes[rowIndex][0];
+            Label usernameLabel = (Label) gridPaneNodes[rowIndex][1];
+            Label statusLabel = (Label) gridPaneNodes[rowIndex][2];
+
+            try {
+                PlayerInfo player = playerInfo.get(i);
+
+                setVisible(true, roleLabel, usernameLabel, statusLabel);
+
+                roleLabel.setText(player.isHost() ? "Host" : "Player");
+                usernameLabel.setText(player.username());
+                statusLabel.setText(getConnectionStatusHumanReadable(player.status()));
+            } catch (NullPointerException | IndexOutOfBoundsException ignored) {
+                setVisible(false, roleLabel, usernameLabel, statusLabel);
+            }
+        }
+
     }
 
-    /**
-     * set the text of the given label to the given connection status
-     *
-     * @param status
-     * @param label
-     */
-    private void setConnectionStatus(ConnectionStatus status, Label label) {
-
+    private String getConnectionStatusHumanReadable(ConnectionStatus status) {
         switch (status) {
-
             case OPEN -> {
-                label.setText("Connected");
+                return "Connected";
             }
             case DISCONNECTED -> {
-                label.setText("Temporary Disconnected");
-
+                return "Disconnected";
             }
             case CLOSED -> {
-                label.setText("Disconnected");
-
+                return "Quit";
             }
+            default -> throw new IllegalStateException("Unexpected value: " + status);
         }
     }
 
-    /**
-     * set the text of the given label to the gaven username
-     *
-     * @param username
-     * @param label
-     */
-    public void setUsername(String username, Label label) {
-
-        label.setText(username);
-
-    }
-
-    /**
-     * set the visibility of the given label to false
-     *
-     * @param role
-     * @param username
-     * @param connectionStatus
-     */
-    public void turnLabeltoInvible(Label role, Label username, Label connectionStatus) {
-
-        role.setVisible(false);
-        username.setVisible(false);
-        connectionStatus.setVisible(false);
-
-    }
-
-    /**
-     * set the visibility to the given label to true
-     *
-     * @param role
-     * @param username
-     * @param connectionStatus
-     */
-    public void turnLabeltoVisible(Label role, Label username, Label connectionStatus) {
-
-        role.setVisible(true);
-        username.setVisible(true);
-        connectionStatus.setVisible(true);
-
+    public void setVisible(boolean isVisible, Node... role) {
+        Arrays.stream(role).forEach(it -> it.setVisible(isVisible));
     }
 
     /**

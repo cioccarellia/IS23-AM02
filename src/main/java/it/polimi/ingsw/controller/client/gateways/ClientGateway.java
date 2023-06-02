@@ -13,6 +13,8 @@ public abstract class ClientGateway implements ServerService, Serializable {
 
     protected ClientController controller;
 
+    abstract public ServerService getS();
+
     public void linkController(final ClientController controller) {
         this.controller = controller;
     }
