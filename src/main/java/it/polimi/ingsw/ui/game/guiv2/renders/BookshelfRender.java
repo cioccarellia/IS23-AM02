@@ -1,8 +1,8 @@
 package it.polimi.ingsw.ui.game.guiv2.renders;
 
-import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.config.board.BoardConfiguration;
+import it.polimi.ingsw.model.bookshelf.Bookshelf;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.game.guiv2.resources.ResourcePathConstants;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import javafx.scene.Node;
@@ -10,19 +10,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-public class BoardRender {
-    private static final int dimension = BoardConfiguration.getInstance().getDimension();
+public class BookshelfRender {
+
+    private static final int rows = BookshelfConfiguration.getInstance().rows();
+    private static final int cols = BookshelfConfiguration.getInstance().cols();
 
     /**
-     * Renders the contents of the {@link Board} according to the given matrix
+     * Renders the contents of the {@link Bookshelf} according to the given matrix
      */
-    public static void renderBoard(GridPane gridBoard, Board board) {
+    public static void renderBookshelf(GridPane bookshelfGridPane, Bookshelf bookshelf) {
         // All nodes can be safely cast to ImageView(s)
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(bookshelfGridPane, rows, cols);
 
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                // if either no image is present or board doesn't have any content for (i,j)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // if either no image is present or bookshelf doesn't have any content for (i,j)
                 if (gridPaneNodes[i][j] == null) {
                     continue;
                 }
@@ -30,12 +32,12 @@ public class BoardRender {
                 // ImageView containing our bookshelf tile[i][j]
                 ImageView imageView = (ImageView) gridPaneNodes[i][j];
 
-                if (board.getTileAt(i, j).isEmpty()) {
+                if (bookshelf.getShelfMatrix()[i][j] == null) {
                     // no data, null image
                     imageView.setImage(null);
                 } else {
                     // get the matching tile
-                    Tile tile = board.getTileAt(i, j).get();
+                    Tile tile = bookshelf.getShelfMatrix()[i][j];
 
                     // we get the tile URL
                     String imageResource = ResourcePathConstants.Tiles.mapTileToImagePath(tile);

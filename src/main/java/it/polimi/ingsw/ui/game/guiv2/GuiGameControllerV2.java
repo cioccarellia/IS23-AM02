@@ -8,13 +8,15 @@ import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.guiv2.renders.BoardRender;
+import it.polimi.ingsw.ui.game.guiv2.renders.BookshelfRender;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
@@ -84,12 +86,36 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
     public Label statusLabel;
     @FXML
     public Label playerErrorLabel;
+
+    // Radio buttons for column selection
+    @FXML
+    public RadioButton columnSelection1RadioButton;
+    @FXML
+    public RadioButton columnSelection2RadioButton;
+    @FXML
+    public RadioButton columnSelection3RadioButton;
+    @FXML
+    public RadioButton columnSelection4RadioButton;
+    @FXML
+    public RadioButton columnSelection5RadioButton;
+
+
+    // Chat text fields
+    @FXML
+    public MenuButton chatSelectorMenuButton;
+    @FXML
+    public TextField chatTextField;
+
+
     // end region Main Layer
 
 
+    // Constant game variables
     private GameViewEventHandler handler;
-    private Game model;
     private String owner;
+
+    // Model data
+    private Game model;
 
 
     /**
@@ -125,7 +151,7 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
 
 
     /**
-     * Called when the game is created. It initializes the GUI elements and starts the game.
+     * Called when the game is created.
      */
     @Override
     public void onGameCreated() {
@@ -154,6 +180,18 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
             return;
         }
 
+        // enemies' buttons
+        for (int i = 0; i < model.getPlayerCount(); i++) {
+            enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
+            enemyButtons().get(i).setVisible(true);
+        }
+
+        // board
+        BoardRender.renderBoard(boardGridPane, model.getBoard());
+
+        // owner's bookshelf
+        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, model.getSessions().getByUsername(owner).getBookshelf());
+
     }
 
 
@@ -181,7 +219,8 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
                     }
                 }
             }
-            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> playerErrorLabel.setOpacity(0);
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success ->
+                    playerErrorLabel.setOpacity(0);
         }
     }
 
@@ -197,7 +236,7 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
                 switch (failure.error()) {
                     case WRONG_SELECTION -> {
                         playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, wrong selection");
+                        playerErrorLabel.setText("Error, illegal selection");
                     }
 
                     case ILLEGAL_COLUMN -> {
@@ -212,7 +251,7 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
 
                     case NO_FIT -> {
                         playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, selected tiles can't fit in this columns");
+                        playerErrorLabel.setText("Error, the selected tiles can't fit in this columns");
                     }
 
                     case WRONG_PLAYER -> {

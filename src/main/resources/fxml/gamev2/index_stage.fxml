@@ -3,8 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="900.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+<?import javafx.scene.text.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane prefHeight="900.0" prefWidth="1465.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.guiv2.GuiGameControllerV2">
 
 
@@ -178,7 +180,6 @@
                fitWidth="130.0" layoutX="856.0" layoutY="561.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../../img/common_goal_cards/back.jpg"/>
     </ImageView>
-
 
 
     <!-- Owner Bookshelf -->
@@ -369,10 +370,77 @@
 
     <!-- Player label -->
     <HBox layoutX="490.0" layoutY="850.0">
-        <Button fx:id="enemy1Button" text="Enemy 1"/>
-        <Button fx:id="enemy2Button" text="Enemy 1"/>
-        <Button fx:id="enemy3Button" text="Enemy 1"/>
+        <Button fx:id="enemy1Button" text="Enemy 1" visible="false"/>
+        <Button fx:id="enemy2Button" text="Enemy 2" visible="false"/>
+        <Button fx:id="enemy3Button" text="Enemy 3" visible="false"/>
     </HBox>
+
+    <!-- Chat Text Field -->
+    <TextField fx:id="chatTextField" layoutX="1100.0" layoutY="828.0" prefHeight="72.0" prefWidth="366.0"
+               promptText="Text here"/>
+
+    <!-- Chat List View -->
+    <ListView layoutX="1100.0" layoutY="-2.0" prefHeight="830.0" prefWidth="366.0"/>
+
+    <!-- Username selector for chat-->
+    <MenuButton fx:id="chatSelectorMenuButton" layoutX="1356.0" layoutY="850.0" prefHeight="25.0" prefWidth="96.0"
+                mnemonicParsing="false" text="Chat with">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Everyone"/>
+            <!-- <MenuItem mnemonicParsing="false" text="Player1" /> -->
+            <!-- <MenuItem mnemonicParsing="false" text="Player2" /> -->
+            <!-- <MenuItem mnemonicParsing="false" text="Player3" /> -->
+        </items>
+    </MenuButton>
+
+
+
+
+    <!-- Selection radio buttons -->
+    <RadioButton fx:id="columnSelection1RadioButton" layoutX="527.0" layoutY="75.0" prefWidth="0.0" toggleGroup="$groupTgChat">
+        <ToggleGroup fx:id="groupTgChat"/>
+        <padding>
+            <Insets bottom="10.0" top="10.0"/>
+        </padding>
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+    </RadioButton>
+    <RadioButton fx:id="columnSelection2RadioButton" layoutX="583.0" layoutY="75.0" prefWidth="0.0" toggleGroup="$groupTgChat">
+
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+        <padding>
+            <Insets bottom="10.0" top="10.0"/>
+        </padding>
+    </RadioButton>
+    <RadioButton fx:id="columnSelection3RadioButton" layoutX="639.0" layoutY="75.0" prefWidth="0.0" toggleGroup="$groupTgChat">
+
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+        <padding>
+            <Insets bottom="10.0" top="10.0"/>
+        </padding>
+    </RadioButton>
+    <RadioButton fx:id="columnSelection4RadioButton" layoutX="695.0" layoutY="75.0" prefWidth="0.0" toggleGroup="$groupTgChat">
+
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+        <padding>
+            <Insets bottom="10.0" top="10.0"/>
+        </padding>
+    </RadioButton>
+    <RadioButton fx:id="columnSelection5RadioButton" layoutX="751.0" layoutY="75.0" prefWidth="0.0" toggleGroup="$groupTgChat">
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+        <padding>
+            <Insets bottom="10.0" top="10.0"/>
+        </padding>
+    </RadioButton>
 
 
 </AnchorPane>

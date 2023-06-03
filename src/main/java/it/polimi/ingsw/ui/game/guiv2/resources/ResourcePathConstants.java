@@ -2,7 +2,13 @@ package it.polimi.ingsw.ui.game.guiv2.resources;
 
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
+import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.game.goal.Token;
+
+import java.util.Map;
+
+import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.*;
+import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.p12;
 
 /**
  * Contains constants and methods for managing and loading images/resources
@@ -113,6 +119,28 @@ public class ResourcePathConstants {
         public static final String PGC10 = "file:img/personal_goal_cards/personal_goal_card_10.png";
         public static final String PGC11 = "file:img/personal_goal_cards/personal_goal_card_11.png";
         public static final String PGC12 = "file:img/personal_goal_cards/personal_goal_card_12.png";
+
+        // mancano gli id per le personal
+        /*public static String mapPersonalToImagePath(PersonalGoalCard id) {
+            return switch (id) {
+
+                default -> throw new IllegalStateException("Unexpected value: " + id);
+            };
+        }*/
+
+        private static final Map<PersonalGoalCard, String> personalGCStringMap = Map.ofEntries(
+                Map.entry(p1, PGC1),
+                Map.entry(p2, PGC2),
+                Map.entry(p3, PGC3),
+                Map.entry(p4, PGC4),
+                Map.entry(p5, PGC5),
+                Map.entry(p6, PGC6),
+                Map.entry(p7, PGC7),
+                Map.entry(p8, PGC8),
+                Map.entry(p9, PGC9),
+                Map.entry(p10, PGC10),
+                Map.entry(p11, PGC11),
+                Map.entry(p12, PGC12));
     }
 
 }
