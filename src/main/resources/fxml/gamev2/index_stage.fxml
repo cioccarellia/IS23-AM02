@@ -370,9 +370,9 @@
 
     <!-- Player label -->
     <HBox layoutX="490.0" layoutY="850.0">
-        <Button fx:id="enemy1Button" text="Enemy 1" visible="false"/>
-        <Button fx:id="enemy2Button" text="Enemy 2" visible="false"/>
-        <Button fx:id="enemy3Button" text="Enemy 3" visible="false"/>
+        <Button fx:id="enemy1Button" text="Enemy 1" visible="false" onAction="#enemy1BookshelfButtonClick"/>
+        <Button fx:id="enemy2Button" text="Enemy 2" visible="false" onAction="#enemy2BookshelfButtonClick"/>
+        <Button fx:id="enemy3Button" text="Enemy 3" visible="false" onAction="#enemy3BookshelfButtonClick"/>
     </HBox>
 
     <!-- Chat Text Field -->

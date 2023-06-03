@@ -6,14 +6,16 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
+import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.guiv2.renders.BoardRender;
 import it.polimi.ingsw.ui.game.guiv2.renders.BookshelfRender;
+import it.polimi.ingsw.ui.game.guiv2.renders.CommonGoalCardRender;
+import it.polimi.ingsw.ui.game.guiv2.renders.PersonalGoalCardRender;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -129,11 +131,12 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
         this.model = model;
         this.handler = handler;
         this.owner = owner;
+        // no use
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        // no use
     }
 
 
@@ -155,8 +158,13 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
      */
     @Override
     public void onGameCreated() {
-        if (model == null)
-            return;
+        if (model == null) {
+            throw new IllegalStateException();
+        }
+
+        CommonGoalCardRender.renderCommonGoalCard(firstCommonGoalCardImageView, model.getCommonGoalCards().get(0).getCommonGoalCard());
+        CommonGoalCardRender.renderCommonGoalCard(secondCommonGoalCardImageView, model.getCommonGoalCards().get(1).getCommonGoalCard());
+        //PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, model.getCurrentPlayerSession().getPersonalGoalCard());
 
         render();
     }
@@ -268,5 +276,25 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
             case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success ->
                     playerErrorLabel.setOpacity(0);
         }
+    }
+
+    @FXML
+    public void enemy1BookshelfButtonClick() {
+        __enemyBookshelfButtonClick(enemy1Button.getText());
+    }
+
+    @FXML
+    public void enemy2BookshelfButtonClick() {
+        __enemyBookshelfButtonClick(enemy2Button.getText());
+    }
+
+    @FXML
+    public void enemy3BookshelfButtonClick() {
+        __enemyBookshelfButtonClick(enemy3Button.getText());
+    }
+
+    private void __enemyBookshelfButtonClick(String username) {
+        Bookshelf enemyBookshelfModel = model.getPlayerSession(username).getBookshelf();
+        BookshelfRender.renderBookshelf(enemyBookshelfGridPane, enemyBookshelfModel);
     }
 }

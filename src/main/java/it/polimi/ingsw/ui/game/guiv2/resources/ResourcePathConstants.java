@@ -120,13 +120,6 @@ public class ResourcePathConstants {
         public static final String PGC11 = "file:img/personal_goal_cards/personal_goal_card_11.png";
         public static final String PGC12 = "file:img/personal_goal_cards/personal_goal_card_12.png";
 
-        // mancano gli id per le personal
-        /*public static String mapPersonalToImagePath(PersonalGoalCard id) {
-            return switch (id) {
-
-                default -> throw new IllegalStateException("Unexpected value: " + id);
-            };
-        }*/
 
         private static final Map<PersonalGoalCard, String> personalGCStringMap = Map.ofEntries(
                 Map.entry(p1, PGC1),
