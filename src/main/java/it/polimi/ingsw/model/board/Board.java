@@ -78,9 +78,21 @@ public class Board implements Serializable {
      * @return the cell content (tile or null) at the given coordinates
      */
     public Optional<Tile> getTileAt(@NotNull Coordinate c) {
+        assert c.x() >= 0 && c.x() < dimension && c.y() >= 0 && c.y() < dimension;
         Cell required = matrix[c.x()][c.y()];
         return required.getContent();
     }
+
+
+    /**
+     * @return the cell content (tile or null) at the given coordinates
+     */
+    public Optional<Tile> getTileAt(int x, int y) {
+        assert x >= 0 && x < dimension && y >= 0 && y < dimension;
+        Cell required = matrix[x][y];
+        return required.getContent();
+    }
+
 
 
     /**

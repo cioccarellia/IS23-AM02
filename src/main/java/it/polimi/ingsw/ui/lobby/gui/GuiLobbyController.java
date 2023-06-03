@@ -10,6 +10,7 @@ import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.validator.Validator;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
@@ -37,7 +38,7 @@ import static it.polimi.ingsw.model.game.GameMode.*;
  * It manages the user interface elements and communicates with the server through the LobbyGateway interface.
  * Keeps a reference to the owner (which can be null at the beginning) of this client instance.
  */
-public class GuiLobbyController implements LobbyGateway, Initializable {
+public class GuiLobbyController implements LobbyGateway, Initializable, Renderable {
 
     public static final int ROWS = 5;
     public static final int COLUMNS = 3;
@@ -98,14 +99,14 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
     public void injectEventHandler(LobbyViewEventHandler handler) {
         this.handler = handler;
 
-        renderModelUpdate();
+        render();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setRadioButtonsClickListeners();
 
-        renderModelUpdate();
+        render();
     }
 
     /**
@@ -119,7 +120,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
         this.currentState = status;
         this.playerInfo = playerInfo;
 
-        renderModelUpdate();
+        render();
     }
 
     /**
@@ -143,14 +144,14 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
                     }
                     case INVALID_USERNAME -> {
                         statusTextLabel.setText("The username is invalid.");
-                        renderModelUpdate();
+                        render();
                     }
                 }
             }
             case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
                 owner = success.value().username();
                 playerInfo = success.value().playerInfo();
-                renderModelUpdate();
+                render();
             }
         }
     }
@@ -195,13 +196,14 @@ public class GuiLobbyController implements LobbyGateway, Initializable {
             }
         }
 
-        renderModelUpdate();
+        render();
     }
 
     /**
      * Renders the UI based on the current server status.
      */
-    private void renderModelUpdate() {
+    @Override
+    public void render() {
         if (isKilled) {
             statusTextLabel.setText("Game killed");
             return;

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CLIENT, GUI+RMI [tcp=13000]" type="Application" factoryName="Application" singleton="false">
     <envs>
-      <env name="PATH_TO_FX" value="$PATH_TO_FX$" />
+      <env name="PATH_TO_FX" value="$PROJECT_DIR$/../Desktop" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.App" />
     <module name="shelfie" />

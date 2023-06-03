@@ -9,7 +9,6 @@ import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.GuiGameController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -88,7 +87,7 @@ public class RunnableGuiGameV2 extends Application implements GameGateway {
             }
 
             gameController = loader.getController();
-            gameController.initModel(model, handler, owner);
+            gameController.injectModelData(model, handler, owner);
 
             Scene loadedScene = new Scene(rootLayout, 1018, 809, false, SceneAntialiasing.BALANCED);
 

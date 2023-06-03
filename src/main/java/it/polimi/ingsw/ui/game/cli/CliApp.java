@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
+import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.parser.ColumnParser;
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Set;
 
-public class CliApp implements GameGateway {
+public class CliApp implements GameGateway, Renderable {
 
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
@@ -40,7 +41,7 @@ public class CliApp implements GameGateway {
         this.handler = handler;
         this.owner = owner;
 
-        processModel();
+        render();
     }
 
     /**
@@ -52,9 +53,12 @@ public class CliApp implements GameGateway {
             return;
         }
 
+
+
+
         Console.out("Hi " + owner + "! Game has started, Enjoy the game and good luck!\n");
 
-        processModel();
+        render();
     }
 
     /**
@@ -65,14 +69,15 @@ public class CliApp implements GameGateway {
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
-        processModel();
+        render();
     }
 
     /**
      * Shows users' Bookshelves, updates Board, Common goal cards and Tokens, First Player and Current Player, Private
      * goal card
      */
-    public void processModel() {
+    @Override
+    public void render() {
         if (model == null) {
             Console.out("Void model.");
             return;

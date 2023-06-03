@@ -9,6 +9,7 @@ import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.cli.Console;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
@@ -20,7 +21,7 @@ import java.util.List;
  * The CliLobby class represents the CLI implementation of the lobby gateway, which allows players to interact
  * with the lobby and join/create games.
  */
-public class CliLobby implements LobbyGateway {
+public class CliLobby implements LobbyGateway, Renderable {
 
     private final LobbyViewEventHandler handler;
 
@@ -57,7 +58,7 @@ public class CliLobby implements LobbyGateway {
         currentState = status;
         this.playerInfo = playerInfo;
 
-        renderModelUpdate();
+        render();
     }
 
     /**
@@ -84,7 +85,7 @@ public class CliLobby implements LobbyGateway {
                     }
                     case INVALID_USERNAME -> {
                         Console.out("The username is invalid.\n");
-                        renderModelUpdate();
+                        render();
                     }
                 }
 
@@ -92,7 +93,7 @@ public class CliLobby implements LobbyGateway {
             case TypedResult.Success<GameCreationSuccess, GameCreationError> success -> {
                 owner = success.value().username();
                 playerInfo = success.value().playerInfo();
-                renderModelUpdate();
+                render();
             }
         }
     }
@@ -128,13 +129,14 @@ public class CliLobby implements LobbyGateway {
             }
         }
 
-        renderModelUpdate();
+        render();
     }
 
     /**
      * Renders the model update based on the current state and owner information.
      */
-    private void renderModelUpdate() {
+    @Override
+    public void render() {
         if (isKilled)
             return;
 
@@ -166,7 +168,7 @@ public class CliLobby implements LobbyGateway {
                 try {
                     playersAmount = Integer.parseInt(in);
                 } catch (NumberFormatException e) {
-                    renderModelUpdate();
+                    render();
                     return;
                 }
 
@@ -175,7 +177,7 @@ public class CliLobby implements LobbyGateway {
                     mode = GameMode.numberToMode(playersAmount);
                 } else {
                     Console.out("You need to select a number between 2 and 4.\n");
-                    renderModelUpdate();
+                    render();
                     return;
                 }
 
