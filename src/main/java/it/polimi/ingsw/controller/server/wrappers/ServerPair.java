@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 public class ServerPair {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerPair.class);
+    public static final String JAVA_RMI_SERVER_HOSTNAME_SYSTEM_PROPERTY = "java.rmi.server.hostname";
 
     private final ServerTcpWrapper tcp;
     private final int tcpPort;
@@ -21,7 +22,7 @@ public class ServerPair {
     private final int rmiPort;
     private final RmiServer rmiServer;
 
-    public ServerPair(ServerController controller, ClientConnectionsManager manager, int tcpPort, int rmiPort) {
+    public ServerPair(ServerController controller, ClientConnectionsManager manager, String serverHostname, int tcpPort, int rmiPort) {
         this.tcp = new ServerTcpWrapper(controller);
         this.tcpPort = tcpPort;
         this.rmiPort = rmiPort;
@@ -31,6 +32,9 @@ public class ServerPair {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
+        // Ror RMI LAN connections
+        System.setProperty(JAVA_RMI_SERVER_HOSTNAME_SYSTEM_PROPERTY, serverHostname);
 
         // TCP
         tcpServer = new TcpServer(tcp, tcpPort);

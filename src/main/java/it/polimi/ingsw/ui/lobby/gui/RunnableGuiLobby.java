@@ -8,17 +8,14 @@ import it.polimi.ingsw.controller.server.result.failures.GameConnectionError;
 import it.polimi.ingsw.controller.server.result.failures.GameCreationError;
 import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
-import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,6 +143,10 @@ public class RunnableGuiLobby extends Application implements LobbyGateway {
      */
     @Override
     public void kill() {
-        Platform.runLater(() -> lobbyController.kill());
+        Platform.exit();
+        // Platform.runLater(() -> {
+        //     lobbyController.kill();
+        //     Platform.exit();
+        // });
     }
 }

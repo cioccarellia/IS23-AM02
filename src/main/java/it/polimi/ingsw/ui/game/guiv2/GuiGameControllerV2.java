@@ -139,7 +139,6 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
     DynamicIterator iter = new DynamicIterator();
 
     public class DynamicIterator {
-
         private List<ImageView> topTokens() {
             return Arrays.asList(firstCommonGoalCardTopTokenImageView, secondCommonGoalCardTopTokenImageView);
         }

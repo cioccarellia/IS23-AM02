@@ -29,7 +29,7 @@ import java.net.URL;
  */
 public class RunnableGuiGame extends Application implements GameGateway {
 
-    private final URL fxmlURL = getClass().getResource("/fxml/game/index.fxml");
+    private final URL fxmlURL = getClass().getResource("/fxml/gamev2/index_stage.fxml");
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiGame.class);
 
@@ -68,7 +68,7 @@ public class RunnableGuiGame extends Application implements GameGateway {
      * @param primaryStage The primary stage of the JavaFX application.
      * @throws IOException If an error occurs while loading the FXML file.
      */
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) throws Exception {
         try {
             logger.info("RunnableGuiGameV2.start(), model={}", model.toString());
             logger.info("RunnableGuiGameV2.start(), handler={}", handler.toString());

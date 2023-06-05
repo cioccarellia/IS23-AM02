@@ -8,6 +8,7 @@ import it.polimi.ingsw.ui.game.cli.CliApp;
 import it.polimi.ingsw.ui.game.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
 import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +38,11 @@ public class ViewFactory {
                 logger.info("createGameUiAsync(): Starting CLI game");
 
                 //executorService.submit(() -> {
-                    logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
-                    GameGateway game = new CliApp(model, controller, owner);
+                logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
+                GameGateway game = new CliApp(model, controller, owner);
 
-                    logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
-                    controller.onGameUiReady(game);
+                logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
+                controller.onGameUiReady(game);
                 //});
             }
             case GUI -> {
@@ -49,10 +50,12 @@ public class ViewFactory {
                 RunnableGuiGame.initModel(model, controller, owner);
                 RunnableGuiGame.initLifecycle(controller);
 
-                executorService.submit(() -> {
+                // executorService.submit(() -> {
+                Platform.runLater(() -> {
                     logger.info("Starting GUI game on dedicated thread");
                     RunnableGuiGame.main(new String[]{});
                 });
+
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
@@ -71,8 +74,8 @@ public class ViewFactory {
                 logger.info("Starting CLI lobby");
 
                 //executorService.submit(() -> {
-                    CliLobby lobby = new CliLobby(controller);
-                    controller.onLobbyUiReady(lobby);
+                CliLobby lobby = new CliLobby(controller);
+                controller.onLobbyUiReady(lobby);
                 //});
             }
             case GUI -> {

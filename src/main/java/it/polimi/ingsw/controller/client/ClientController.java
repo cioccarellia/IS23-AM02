@@ -126,6 +126,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     public void onGameUiReady(GameGateway ui) {
         this.ui = ui;
+
+        ui.onGameCreated();
     }
 
 
