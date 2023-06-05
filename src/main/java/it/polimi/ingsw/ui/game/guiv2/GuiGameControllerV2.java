@@ -134,6 +134,29 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
     private Game model;
 
 
+
+
+    DynamicIterator iter = new DynamicIterator();
+
+    public class DynamicIterator {
+
+        private List<ImageView> topTokens() {
+            return Arrays.asList(firstCommonGoalCardTopTokenImageView, secondCommonGoalCardTopTokenImageView);
+        }
+
+        private List<ImageView> commonGoalCards() {
+            return Arrays.asList(firstCommonGoalCardImageView, secondCommonGoalCardImageView);
+        }
+
+        private List<Button> enemyButtons() {
+            return Arrays.asList(enemySelect1Button, enemySelect2Button, enemySelect3Button);
+        }
+    }
+
+
+
+
+
     /**
      * Initializes the game model, event handler, and owner for the GUI controller.
      *
@@ -150,21 +173,9 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // no use
+        // JavaFX app initialization
     }
 
-
-    private List<ImageView> topTokens() {
-        return Arrays.asList(firstCommonGoalCardTopTokenImageView, secondCommonGoalCardTopTokenImageView);
-    }
-
-    private List<ImageView> commonGoalCards() {
-        return Arrays.asList(firstCommonGoalCardImageView, secondCommonGoalCardImageView);
-    }
-
-    private List<Button> enemyButtons() {
-        return Arrays.asList(enemySelect1Button, enemySelect2Button, enemySelect3Button);
-    }
 
 
     /**
@@ -204,8 +215,8 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
 
         // enemies' buttons
         for (int i = 0; i < model.getPlayerCount(); i++) {
-            enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
-            enemyButtons().get(i).setVisible(true);
+            iter.enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
+            iter.enemyButtons().get(i).setVisible(true);
         }
 
         // board
