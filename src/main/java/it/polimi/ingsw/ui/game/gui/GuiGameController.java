@@ -51,6 +51,7 @@ public class GuiGameController implements GameGateway, Initializable {
     private final List<Tile> orderedTiles = new ArrayList<>();
     private final Set<Coordinate> selectedCoordinates = new HashSet<>();
 
+
     @FXML
     public GridPane board;
     @FXML
@@ -223,7 +224,7 @@ public class GuiGameController implements GameGateway, Initializable {
                 int j = model.getSessions().size();
                 while(j <= 4){
                     playersButtons().get(j).setText("");
-                    //playersButtons().get(j).setOpacity(0);
+                    //playersButtons().get(j).setVisible(false);
                 }
 
                 //tokens
@@ -293,20 +294,20 @@ public class GuiGameController implements GameGateway, Initializable {
             case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE -> {
-                        Status.setOpacity(1);
+                        Status.setVisible(true);
                         Status.setText("Error, wrong game phase");
                     }
                     case UNAUTHORIZED_SELECTION -> {
-                        Status.setOpacity(1);
+                        Status.setVisible(true);
                         Status.setText("Error, unauthorized selection");
                     }
                     case UNAUTHORIZED_PLAYER -> {
-                        Status.setOpacity(1);
+                        Status.setVisible(true);
                         Status.setText("Error, player not authorized");
                     }
                 }
             }
-            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> Status.setOpacity(0);
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> Status.setVisible(false);
         }
     }
 
@@ -351,7 +352,7 @@ public class GuiGameController implements GameGateway, Initializable {
                     }
                 }
             }
-            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> insertionStatus.setOpacity(0);
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> insertionStatus.setVisible(false);
         }
 
 

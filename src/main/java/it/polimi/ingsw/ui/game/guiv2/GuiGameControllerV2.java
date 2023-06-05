@@ -7,6 +7,7 @@ import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.Renderable;
@@ -15,7 +16,6 @@ import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.guiv2.renders.BoardRender;
 import it.polimi.ingsw.ui.game.guiv2.renders.BookshelfRender;
 import it.polimi.ingsw.ui.game.guiv2.renders.CommonGoalCardRender;
-import it.polimi.ingsw.ui.game.guiv2.renders.PersonalGoalCardRender;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -25,7 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 /**
@@ -71,25 +73,37 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
 
     // Enemy Buttons
     @FXML
-    public Button enemy1Button;
+    public Label enemyUsernameLabel;
     @FXML
-    public Button enemy2Button;
+    public Button enemySelect1Button;
     @FXML
-    public Button enemy3Button;
+    public Button enemySelect2Button;
+    @FXML
+    public Button enemySelect3Button;
+    @FXML
+    public CheckBox autoFollowCheckBox;
+    
+
+    // BUTTONS
+    @FXML
+    public Button quitButton;
+    @FXML
+    public Button sendMessageButton;
+    @FXML
+    public Button boardButton;
+    @FXML
+    public Button bookshelfButton;
 
 
-    // Action & Selection Buttons
+    // STATUS LABELS
     @FXML
-    public Button selectionButton;
+    public Label statusTitleLabel;
+    @FXML
+    public Label statusSubtitleLabel;
 
 
-    // Status Label
-    @FXML
-    public Label statusLabel;
-    @FXML
-    public Label playerErrorLabel;
-
-    // Radio buttons for column selection
+    // Radio buttons for column selection<
+    /*
     @FXML
     public RadioButton columnSelection1RadioButton;
     @FXML
@@ -99,16 +113,16 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
     @FXML
     public RadioButton columnSelection4RadioButton;
     @FXML
-    public RadioButton columnSelection5RadioButton;
+    public RadioButton columnSelection5RadioButton;*/
 
 
-    // Chat text fields
+    // CHAT
+    @FXML
+    public TextField chatTextField;
     @FXML
     public MenuButton chatSelectorMenuButton;
     @FXML
-    public TextField chatTextField;
-
-
+    public ListView<ChatTextMessage> chatMessagesListView;
     // end region Main Layer
 
 
@@ -149,7 +163,7 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
     }
 
     private List<Button> enemyButtons() {
-        return Arrays.asList(enemy1Button, enemy2Button, enemy3Button);
+        return Arrays.asList(enemySelect1Button, enemySelect2Button, enemySelect3Button);
     }
 
 
@@ -214,21 +228,21 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
             case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE -> {
-                        playerErrorLabel.setOpacity(1);
-                        playerErrorLabel.setText("Error, wrong game phase");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, wrong game phase");
                     }
                     case UNAUTHORIZED_SELECTION -> {
-                        playerErrorLabel.setOpacity(1);
-                        playerErrorLabel.setText("Error, unauthorized selection");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, unauthorized selection");
                     }
                     case UNAUTHORIZED_PLAYER -> {
-                        playerErrorLabel.setOpacity(1);
-                        playerErrorLabel.setText("Error, player not authorized");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, player not authorized");
                     }
                 }
             }
             case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success ->
-                    playerErrorLabel.setOpacity(0);
+                    statusSubtitleLabel.setVisible(false);
         }
     }
 
@@ -243,54 +257,54 @@ public class GuiGameControllerV2 implements GameGateway, Initializable, Renderab
             case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
                 switch (failure.error()) {
                     case WRONG_SELECTION -> {
-                        playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, illegal selection");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, illegal selection");
                     }
 
                     case ILLEGAL_COLUMN -> {
-                        playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, column out of bounds");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, column out of bounds");
                     }
 
                     case TOO_MANY_TILES -> {
-                        playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, too many tiles selected");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, too many tiles selected");
                     }
 
                     case NO_FIT -> {
-                        playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, the selected tiles can't fit in this columns");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, the selected tiles can't fit in this columns");
                     }
 
                     case WRONG_PLAYER -> {
-                        playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, unauthorized action from non active player");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, unauthorized action from non active player");
                     }
 
                     case WRONG_GAME_PHASE -> {
-                        playerErrorLabel.setVisible(true);
-                        playerErrorLabel.setText("Error, wrong game phase");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, wrong game phase");
                     }
                 }
             }
             case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success ->
-                    playerErrorLabel.setOpacity(0);
+                    statusSubtitleLabel.setVisible(false);
         }
     }
 
     @FXML
     public void enemy1BookshelfButtonClick() {
-        __enemyBookshelfButtonClick(enemy1Button.getText());
+        __enemyBookshelfButtonClick(enemySelect1Button.getText());
     }
 
     @FXML
     public void enemy2BookshelfButtonClick() {
-        __enemyBookshelfButtonClick(enemy2Button.getText());
+        __enemyBookshelfButtonClick(enemySelect2Button.getText());
     }
 
     @FXML
     public void enemy3BookshelfButtonClick() {
-        __enemyBookshelfButtonClick(enemy3Button.getText());
+        __enemyBookshelfButtonClick(enemySelect3Button.getText());
     }
 
     private void __enemyBookshelfButtonClick(String username) {
