@@ -17,6 +17,7 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
+import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
@@ -26,8 +27,11 @@ import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.cli.CliApp;
+import it.polimi.ingsw.ui.game.guiv2.RunnableGuiGameV2;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
+import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +55,46 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     private ClientExhaustiveConfiguration config;
 
     private ClientGateway gateway;
+
+
+    public static RunnableGuiLobby appRef;
+
+    /**
+     * Creates the UI view for the game based on the client UI mode.
+     *
+     * @param mode       The client UI mode.
+     * @param model      The game model.
+     * @param controller The game view event handler.
+     * @param owner      The owner of the game.
+     * @return The game UI view.
+     */
+    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final Game model, final ClientController controller, final String owner, ExecutorService executorService) {
+        switch (mode) {
+            case CLI -> {
+                logger.info("createGameUiAsync(): Starting CLI game");
+
+                //executorService.submit(() -> {
+                logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
+                GameGateway game = new CliApp(model, controller, owner);
+
+                logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
+                controller.onGameUiReady(game);
+                //});
+            }
+            case GUI -> {
+                logger.info("Starting GUI game");
+                RunnableGuiLobby.injectGameModelPostLogin(model, controller, owner);
+
+                executorService.submit(() -> {
+                    // Platform.runLater(() -> {
+                    logger.info("Starting GUI game on dedicated thread");
+                    RunnableGuiGameV2.main(new String[]{});
+                });
+
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + mode);
+        }
+    };
 
     /**
      * Lobby waiting room.
@@ -109,9 +153,11 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     }
 
     @Override
-    public void onLobbyUiReady(LobbyGateway lobby) {
+    public void onLobbyUiReady(RunnableGuiLobby starter, LobbyGateway lobby) {
         logger.warn("onLobbyUiReady() started");
         this.lobby = lobby;
+
+        appRef = starter;
 
         try {
             logger.warn("onLobbyUiReady() sending RMI call serverStatusRequest()");
@@ -230,7 +276,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         asyncExecutor.submit(() -> {
             lobby.kill();
 
-            ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
+            ViewFactory.createGameUiAsync(config.mode(), game, this, appRef, ownerUsername, AppClient.clientExecutorService);
         });
     }
 
