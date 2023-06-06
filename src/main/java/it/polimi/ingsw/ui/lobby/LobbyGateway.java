@@ -40,8 +40,5 @@ public interface LobbyGateway extends Serializable {
      */
     void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result);
 
-    /**
-     * Terminates the lobby and performs necessary cleanup operations.
-     */
-    void kill();
+    void inop();
 }

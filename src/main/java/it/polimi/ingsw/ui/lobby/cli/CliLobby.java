@@ -33,7 +33,7 @@ public class CliLobby implements LobbyGateway, Renderable {
      */
     private String owner = null;
 
-    boolean isKilled = false;
+    boolean inop = false;
 
     /**
      * Constructs a CliLobby instance with the specified LobbyViewEventHandler.
@@ -52,7 +52,7 @@ public class CliLobby implements LobbyGateway, Renderable {
      */
     @Override
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
-        if (isKilled)
+        if (inop)
             return;
 
         currentState = status;
@@ -68,7 +68,7 @@ public class CliLobby implements LobbyGateway, Renderable {
      */
     @Override
     public void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        if (isKilled)
+        if (inop)
             return;
 
         switch (result) {
@@ -105,7 +105,7 @@ public class CliLobby implements LobbyGateway, Renderable {
      */
     @Override
     public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        if (isKilled)
+        if (inop)
             return;
 
         switch (result) {
@@ -137,7 +137,7 @@ public class CliLobby implements LobbyGateway, Renderable {
      */
     @Override
     public void render() {
-        if (isKilled)
+        if (inop)
             return;
 
         if (owner != null) {
@@ -200,7 +200,7 @@ public class CliLobby implements LobbyGateway, Renderable {
      * Kills the CliLobby instance and stops further processing.
      */
     @Override
-    public void kill() {
-        isKilled = true;
+    public void inop() {
+        inop = true;
     }
 }

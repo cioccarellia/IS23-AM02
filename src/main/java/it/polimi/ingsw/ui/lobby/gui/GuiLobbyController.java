@@ -46,7 +46,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
 
     // controller data
     private String owner = null;
-    private boolean isKilled = false;
+    private boolean inop = false;
 
 
     // model game data
@@ -114,7 +114,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
      */
     @Override
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
-        if (isKilled)
+        if (inop)
             return;
 
         this.currentState = status;
@@ -128,7 +128,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
      */
     @Override
     public void onServerCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        if (isKilled)
+        if (inop)
             return;
 
         switch (result) {
@@ -161,7 +161,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
      */
     @Override
     public void onServerConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        if (isKilled)
+        if (inop)
             return;
 
         switch (result) {
@@ -204,8 +204,8 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
      */
     @Override
     public void render() {
-        if (isKilled) {
-            statusTextLabel.setText("Game killed");
+        if (inop) {
+            statusTextLabel.setText("Game inoperative");
             return;
         }
 
@@ -389,8 +389,8 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
      * Marks the controller as killed.
      */
     @Override
-    public void kill() {
-        isKilled = true;
+    public void inop() {
+        inop = true;
     }
 
 }

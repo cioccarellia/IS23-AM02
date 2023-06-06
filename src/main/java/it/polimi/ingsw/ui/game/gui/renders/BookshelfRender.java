@@ -1,9 +1,9 @@
-package it.polimi.ingsw.ui.game.guiv2.renders;
+package it.polimi.ingsw.ui.game.gui.renders;
 
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
-import it.polimi.ingsw.ui.game.guiv2.resources.ResourcePathConstants;
+import it.polimi.ingsw.ui.game.gui.resources.ResourcePathConstants;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import javafx.scene.Node;
 import javafx.scene.image.Image;

@@ -3,7 +3,7 @@
     <envs>
       <env name="PATH_TO_FX" value="$PROJECT_DIR$/../Desktop" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ui.game.gui.RunnableGuiGame" />
+    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ui.commons.gui.RunnableGuiGame" />
     <module name="shelfie" />
     <option name="PROGRAM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.fxml,javafx.controls,javafx.graphics" />
     <option name="VM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.fxml,javafx.controls,javafx.graphics" />

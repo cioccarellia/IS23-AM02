@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.game.guiv2.resources;
+package it.polimi.ingsw.ui.game.gui.resources;
 
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.game.goal.Token;
 import java.util.Map;
 
 import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.*;
-import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardMatrixContainer.p12;
 
 /**
  * Contains constants and methods for managing and loading images/resources

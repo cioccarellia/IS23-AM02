@@ -6,32 +6,28 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.board.Coordinate;
-import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.cards.common.CommonGoalCard;
+import it.polimi.ingsw.model.bookshelf.Bookshelf;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.score.PlayerScore;
-import it.polimi.ingsw.model.player.PlayerSession;
+import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.render.*;
-import it.polimi.ingsw.ui.game.gui.utils.GuiResources;
+import it.polimi.ingsw.ui.game.gui.renders.BoardRender;
+import it.polimi.ingsw.ui.game.gui.renders.BookshelfRender;
+import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardRender;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 /**
@@ -39,7 +35,7 @@ import java.util.*;
  * for the game. It handles user interactions, updates the GUI elements based on the game model,
  * and communicates with the game logic through the GameViewEventHandler interface.
  */
-public class GuiGameController implements GameGateway, Initializable {
+public class GuiGameController implements GameGateway, Initializable, Renderable {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
 
@@ -47,68 +43,115 @@ public class GuiGameController implements GameGateway, Initializable {
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
 
 
-    private static final int col = 0;
-    private final List<Tile> orderedTiles = new ArrayList<>();
-    private final Set<Coordinate> selectedCoordinates = new HashSet<>();
+    // region Main Layer
+    // GridPanes
+    @FXML
+    public GridPane boardGridPane;
+    @FXML
+    public GridPane ownerBookshelfGridPane;
+    @FXML
+    public GridPane enemyBookshelfGridPane;
 
 
+    // Tokens ImageViews
     @FXML
-    public GridPane board;
+    public ImageView firstCommonGoalCardTopTokenImageView;
     @FXML
-    public GridPane ownerBookshelf;
+    public ImageView secondCommonGoalCardTopTokenImageView;
     @FXML
-    public GridPane player1BookShelf;
-    @FXML
-    public GridPane player2BookShelf;
-    @FXML
-    public GridPane player3BookShelf;
-    @FXML
-    public GridPane player4BookShelf;
-    @FXML
-    public GridPane insertionBookshelf;
-    @FXML
-    public ImageView endGameToken;
+    public ImageView endGameTokenImageView;
 
 
+    // Personal + Common Goal Cards ImageViews
     @FXML
-    public ImageView firstCommonGoalCardTopToken;
+    public ImageView personalGoalCardImageView;
     @FXML
-    public ImageView secondCommonGoalCardTopToken;
+    public ImageView firstCommonGoalCardImageView;
     @FXML
-    public ImageView firstCommonGoalCard;
-    @FXML
-    public ImageView secondCommonGoalCard;
-    @FXML
-    public ImageView personalGoalCard;
-    @FXML
-    public Tab player1Button;
-    @FXML
-    public Tab player2Button;
-    @FXML
-    public Tab player3Button;
-    @FXML
-    public Tab player4Button;
-    @FXML
-    public Button selectingButton;
-    @FXML
-    public ImageView insertionCommonGoalCard1;
-    @FXML
-    public ImageView insertionCommonGoalCard2;
-    @FXML
-    public ImageView insertionPersonalGoalCard;
-    @FXML
-    public Label Status;
-    @FXML
-    public Label CurrentPlayer;
-    @FXML
-    public Label insertionStatus;
+    public ImageView secondCommonGoalCardImageView;
 
+
+    // Enemy Buttons
+    @FXML
+    public Label enemyUsernameLabel;
+    @FXML
+    public Button enemySelect1Button;
+    @FXML
+    public Button enemySelect2Button;
+    @FXML
+    public Button enemySelect3Button;
+    @FXML
+    public CheckBox autoFollowCheckBox;
+    
+
+    // BUTTONS
     @FXML
     public Button quitButton;
+    @FXML
+    public Button sendMessageButton;
+    @FXML
+    public Button boardButton;
+    @FXML
+    public Button bookshelfButton;
 
+
+    // STATUS LABELS
+    @FXML
+    public Label statusTitleLabel;
+    @FXML
+    public Label statusSubtitleLabel;
+
+
+    // Radio buttons for column selection<
+    /*
+    @FXML
+    public RadioButton columnSelection1RadioButton;
+    @FXML
+    public RadioButton columnSelection2RadioButton;
+    @FXML
+    public RadioButton columnSelection3RadioButton;
+    @FXML
+    public RadioButton columnSelection4RadioButton;
+    @FXML
+    public RadioButton columnSelection5RadioButton;*/
+
+
+    // CHAT
+    @FXML
+    public TextField chatTextField;
+    @FXML
+    public MenuButton chatSelectorMenuButton;
+    @FXML
+    public ListView<ChatTextMessage> chatMessagesListView;
+    // end region Main Layer
+
+
+    // Constant game variables
     private GameViewEventHandler handler;
-    private Game model;
     private String owner;
+
+    // Model data
+    private Game model;
+
+
+
+
+    DynamicIterator iter = new DynamicIterator();
+
+    public class DynamicIterator {
+        private List<ImageView> topTokens() {
+            return Arrays.asList(firstCommonGoalCardTopTokenImageView, secondCommonGoalCardTopTokenImageView);
+        }
+
+        private List<ImageView> commonGoalCards() {
+            return Arrays.asList(firstCommonGoalCardImageView, secondCommonGoalCardImageView);
+        }
+
+        private List<Button> enemyButtons() {
+            return Arrays.asList(enemySelect1Button, enemySelect2Button, enemySelect3Button);
+        }
+    }
+
 
 
     /**
@@ -118,7 +161,7 @@ public class GuiGameController implements GameGateway, Initializable {
      * @param handler The event handler for game events.
      * @param owner   The owner of the GUI controller.
      */
-    public void initModel(Game model, GameViewEventHandler handler, String owner) {
+    public void injectModelData(Game model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
@@ -126,39 +169,25 @@ public class GuiGameController implements GameGateway, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        // JavaFX app initialization
     }
 
-    private List<ImageView> insertionCommonGoalCard() {
-        return Arrays.asList(insertionCommonGoalCard1, insertionCommonGoalCard2);
-    }
-
-    private List<GridPane> bookshelves() {
-        return Arrays.asList(player1BookShelf, player2BookShelf, player3BookShelf, player4BookShelf);
-    }
-
-    private List<ImageView> topTokens() {
-        return Arrays.asList(firstCommonGoalCardTopToken, secondCommonGoalCardTopToken);
-    }
-
-    private List<ImageView> commonGoalCards() {
-        return Arrays.asList(firstCommonGoalCard, secondCommonGoalCard);
-    }
-
-    private List<Tab> playersButtons() {
-        return Arrays.asList(player1Button, player2Button, player3Button, player4Button);
-    }
 
 
     /**
-     * Called when the game is created. It initializes the GUI elements and starts the game.
+     * Called when the game is created.
      */
     @Override
     public void onGameCreated() {
-        if (model == null)
-            return;
+        if (model == null) {
+            throw new IllegalStateException();
+        }
 
-        processModel();
+        CommonGoalCardRender.renderCommonGoalCard(firstCommonGoalCardImageView, model.getCommonGoalCards().get(0).getCommonGoalCard());
+        CommonGoalCardRender.renderCommonGoalCard(secondCommonGoalCardImageView, model.getCommonGoalCards().get(1).getCommonGoalCard());
+        //PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, model.getCurrentPlayerSession().getPersonalGoalCard());
+
+        render();
     }
 
 
@@ -170,117 +199,29 @@ public class GuiGameController implements GameGateway, Initializable {
     @Override
     public void modelUpdate(Game game) {
         this.model = game;
-        processModel();
+        render();
     }
 
 
-    public void processModel() {
+    @Override
+    public void render() {
         if (model == null) {
             return;
         }
-        switch (model.getGameStatus()) {
-            case RUNNING, LAST_ROUND -> {
-                PlayerSession currentPlayer = model.getCurrentPlayerSession();
 
-                boolean isOwnerTurn = currentPlayer.getUsername().equals(owner);
-
-                //board
-                BoardRender.renderBoard(model, board);
-
-
-                //CGC
-                for (int i = 0; i < commonGoalCardsAmount; i++) {
-                    CommonGoalCard commonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
-
-                    //Image commonGoalCardImage = new Image(GuiResources.getCommonGC(commonGoalCard.getId()));
-
-                    //commonGoalCards().get(i).setImage(commonGoalCardImage);
-
-                    //commonGoalCards().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard).getImage());
-                    commonGoalCards().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard));
-
-
-                }
-
-                //firstCommonGoalCard = CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(0).getCommonGoalCard());
-                //secondCommonGoalCard = CommonGoalCardsRender.generateCommonGoalCardImageView(model.getCommonGoalCards().get(1).getCommonGoalCard());
-
-
-                //PGC
-                personalGoalCard.setImage(new Image(GuiResources.getPersonalGC(model.getPlayerSession(owner).getPersonalGoalCard())));
-                //personalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
-
-                //players' bookshelf update
-                for (int i = 0; i < model.getGameMode().maxPlayerAmount(); i++) {
-                    String username = model.getPlayersUsernameList().get(i);
-                    BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(username).getBookshelf(), bookshelves().get(i));
-                }
-
-                //players buttons
-                for (int i = 0; i < model.getSessions().size(); i++) {
-                    playersButtons().get(i).setText(model.getPlayersUsernameList().get(i));
-                }
-
-                int j = model.getSessions().size();
-                while(j <= 4){
-                    playersButtons().get(j).setText("");
-                    //playersButtons().get(j).setVisible(false);
-                }
-
-                //tokens
-                endGameToken = EndGameTokenRender.generateEndTokenImageView();
-
-
-                for (int i = 0; i < commonGoalCardsAmount; i++) {
-                    topTokens().get(i).setImage(CommonGoalCardsTokenRender.generateTokenImageView(model.getCommonGoalCards().get(i)));
-                }
-
-                CurrentPlayer.setText(model.getCurrentPlayerSession().getUsername());
-
-                if (isOwnerTurn) {
-                    switch (currentPlayer.getPlayerCurrentGamePhase()) {
-                        case IDLE -> {
-                            //errore
-                        }
-                        case SELECTING -> {
-                            gameSelection();
-                        }
-                        case INSERTING -> {
-                            gameInsertion();
-                        }
-                    }
-                }
-            }
-            case ENDED -> {
-                onGameEnded();
-            }
-            case STANDBY -> {
-                onGameStandby();
-            }
-        }
-    }
-
-    public void gameSelection() {
-        onSelectingButtonClick();
-    }
-
-
-    public void gameInsertion() {
-
-        for (int i = 0; i < commonGoalCardsAmount; i++) {
-            CommonGoalCard commonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
-            insertionCommonGoalCard().get(i).setImage(CommonGoalCardsRender.generateCommonGoalCardImageView(commonGoalCard));
+        // enemies' buttons
+        for (int i = 0; i < model.getPlayerCount(); i++) {
+            iter.enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
+            iter.enemyButtons().get(i).setVisible(true);
         }
 
-        insertionPersonalGoalCard = PersonalGoalCardRender.generatePersonalGoalCardImageView(model, owner);
+        // board
+        BoardRender.renderBoard(boardGridPane, model.getBoard());
 
+        // owner's bookshelf
+        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, model.getSessions().getByUsername(owner).getBookshelf());
 
-        BookshelfRender.regenerateBookshelfGridPane(model.getSessions().getByUsername(owner).getBookshelf(), insertionBookshelf);
-
-        //SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
     }
-
-
 
 
     /**
@@ -294,20 +235,21 @@ public class GuiGameController implements GameGateway, Initializable {
             case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE -> {
-                        Status.setVisible(true);
-                        Status.setText("Error, wrong game phase");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, wrong game phase");
                     }
                     case UNAUTHORIZED_SELECTION -> {
-                        Status.setVisible(true);
-                        Status.setText("Error, unauthorized selection");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, unauthorized selection");
                     }
                     case UNAUTHORIZED_PLAYER -> {
-                        Status.setVisible(true);
-                        Status.setText("Error, player not authorized");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, player not authorized");
                     }
                 }
             }
-            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> Status.setVisible(false);
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success ->
+                    statusSubtitleLabel.setVisible(false);
         }
     }
 
@@ -322,70 +264,58 @@ public class GuiGameController implements GameGateway, Initializable {
             case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
                 switch (failure.error()) {
                     case WRONG_SELECTION -> {
-                        insertionStatus.setVisible(true);
-                        insertionStatus.setText("Error, wrong selection");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, illegal selection");
                     }
 
                     case ILLEGAL_COLUMN -> {
-                        insertionStatus.setVisible(true);
-                        insertionStatus.setText("Error, column out of bounds");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, column out of bounds");
                     }
 
                     case TOO_MANY_TILES -> {
-                        insertionStatus.setVisible(true);
-                        insertionStatus.setText("Error, too many tiles selected");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, too many tiles selected");
                     }
 
                     case NO_FIT -> {
-                        insertionStatus.setVisible(true);
-                        insertionStatus.setText("Error, selected tiles can't fit in this columns");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, the selected tiles can't fit in this columns");
                     }
 
                     case WRONG_PLAYER -> {
-                        insertionStatus.setVisible(true);
-                        insertionStatus.setText("Error, unauthorized action from non active player");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, unauthorized action from non active player");
                     }
 
                     case WRONG_GAME_PHASE -> {
-                        insertionStatus.setVisible(true);
-                        insertionStatus.setText("Error, wrong game phase");
+                        statusSubtitleLabel.setVisible(true);
+                        statusSubtitleLabel.setText("Error, wrong game phase");
                     }
                 }
             }
-            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> insertionStatus.setVisible(false);
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success ->
+                    statusSubtitleLabel.setVisible(false);
         }
-
-
     }
 
     @FXML
-    public void onSelectingButtonClick() {
-        if (handler == null) {
-            logger.warn("onSelectingButtonClick(): handler is null");
-        }
-        handler.onViewSelection(selectedCoordinates);
-        SceneManager.changeScene(SceneManager.getActualController(), "inserting.fxml");
+    public void enemy1BookshelfButtonClick() {
+        __enemyBookshelfButtonClick(enemySelect1Button.getText());
     }
 
-    public void onGameEnded() {
-        //todo
-        List<PlayerScore> playerRanking = model.getRankings();
-        SceneManager.changeScene(SceneManager.getActualController(), "ranking.fxml");
+    @FXML
+    public void enemy2BookshelfButtonClick() {
+        __enemyBookshelfButtonClick(enemySelect2Button.getText());
     }
 
-    public void onGameStandby() {
-        //
+    @FXML
+    public void enemy3BookshelfButtonClick() {
+        __enemyBookshelfButtonClick(enemySelect3Button.getText());
     }
 
-
-    public void setSelectedCoordinatesListener(MouseEvent mouseEvent) {
-        Coordinate coordinate;
-
-        Integer col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
-
-        Integer row = GridPane.getRowIndex((Node) mouseEvent.getSource());
-
-        coordinate = new Coordinate(row, col);
-        selectedCoordinates.add(coordinate);
+    private void __enemyBookshelfButtonClick(String username) {
+        Bookshelf enemyBookshelfModel = model.getPlayerSession(username).getBookshelf();
+        BookshelfRender.renderBookshelf(enemyBookshelfGridPane, enemyBookshelfModel);
     }
 }

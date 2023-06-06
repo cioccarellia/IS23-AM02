@@ -3,11 +3,13 @@ package it.polimi.ingsw.app.client.layers.view;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.ui.commons.gui.AppManager;
+import it.polimi.ingsw.ui.commons.gui.GuiApp;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.cli.CliApp;
 import it.polimi.ingsw.ui.lobby.cli.CliLobby;
-import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
 import javafx.application.Platform;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,17 +38,17 @@ public class ViewFactory {
 
                 //executorService.submit(() -> {
                 CliLobby lobby = new CliLobby(controller);
-                controller.onLobbyUiReady(null, lobby);
+                controller.onLobbyUiReady(lobby);
                 //});
             }
             case GUI -> {
                 logger.info("Starting GUI lobby");
-                RunnableGuiLobby.initHandler(controller);
-                RunnableGuiLobby.initLifecycle(controller);
+                GuiApp.initLobbyHandler(controller);
+                GuiApp.initLifecycle(controller);
 
                 executorService.submit(() -> {
                     logger.info("Starting GUI lobby on dedicated thread");
-                    RunnableGuiLobby.main(new String[]{});
+                    GuiApp.main(new String[]{});
                 });
 
             }
@@ -67,7 +69,7 @@ public class ViewFactory {
      * @param owner      The owner of the game.
      * @return The game UI view.
      */
-    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final Game model, final ClientController controller, final RunnableGuiLobby uiRef, final String owner, ExecutorService executorService) {
+    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final Game model, final ClientController controller, final String owner, ExecutorService executorService) {
         switch (mode) {
             case CLI -> {
                 logger.info("createGameUiAsync(): Starting CLI game");
@@ -82,12 +84,11 @@ public class ViewFactory {
             }
             case GUI -> {
                 logger.info("Starting GUI game");
-                RunnableGuiLobby.injectGameModelPostLogin(model, controller, owner);
+                GuiApp.injectGameModelPostLogin(model, controller, owner);
 
-                // executorService.submit(() -> {
                 Platform.runLater(() -> {
                     try {
-                        uiRef.startPrimaryStage();
+                        AppManager.getAppInstance().setupPrimaryStage(new Stage());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

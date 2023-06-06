@@ -1,7 +1,7 @@
-package it.polimi.ingsw.ui.game.guiv2.renders;
+package it.polimi.ingsw.ui.game.gui.renders;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
-import it.polimi.ingsw.ui.game.guiv2.resources.ResourcePathConstants;
+import it.polimi.ingsw.ui.game.gui.resources.ResourcePathConstants;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;

@@ -25,13 +25,13 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
+import it.polimi.ingsw.ui.commons.gui.GuiApp;
+import it.polimi.ingsw.ui.commons.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.CliApp;
-import it.polimi.ingsw.ui.game.guiv2.RunnableGuiGameV2;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
-import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +55,6 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     private ClientExhaustiveConfiguration config;
 
     private ClientGateway gateway;
-
-
-    public static RunnableGuiLobby appRef;
 
     /**
      * Creates the UI view for the game based on the client UI mode.
@@ -83,12 +80,12 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
             }
             case GUI -> {
                 logger.info("Starting GUI game");
-                RunnableGuiLobby.injectGameModelPostLogin(model, controller, owner);
+                GuiApp.injectGameModelPostLogin(model, controller, owner);
 
                 executorService.submit(() -> {
                     // Platform.runLater(() -> {
                     logger.info("Starting GUI game on dedicated thread");
-                    RunnableGuiGameV2.main(new String[]{});
+                    RunnableGuiGame.main(new String[]{});
                 });
 
             }
@@ -153,11 +150,9 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     }
 
     @Override
-    public void onLobbyUiReady(RunnableGuiLobby starter, LobbyGateway lobby) {
+    public void onLobbyUiReady(LobbyGateway lobby) {
         logger.warn("onLobbyUiReady() started");
         this.lobby = lobby;
-
-        appRef = starter;
 
         try {
             logger.warn("onLobbyUiReady() sending RMI call serverStatusRequest()");
@@ -274,9 +269,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         logger.warn("onGameStartedEvent(game={})", game);
 
         asyncExecutor.submit(() -> {
-            lobby.kill();
-
-            ViewFactory.createGameUiAsync(config.mode(), game, this, appRef, ownerUsername, AppClient.clientExecutorService);
+            ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
         });
     }
 

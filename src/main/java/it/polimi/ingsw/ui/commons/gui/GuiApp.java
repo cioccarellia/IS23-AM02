@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.lobby.gui;
+package it.polimi.ingsw.ui.commons.gui;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
@@ -14,10 +14,13 @@ import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
+import it.polimi.ingsw.ui.game.GameUiConstants;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.guiv2.GuiGameControllerV2;
+import it.polimi.ingsw.ui.game.gui.GuiGameController;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
+import it.polimi.ingsw.ui.lobby.LobbyUiConstants;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
+import it.polimi.ingsw.ui.lobby.gui.GuiLobbyController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -33,41 +36,54 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static it.polimi.ingsw.ui.game.GameUiConstants.APP_HEIGHT;
+import static it.polimi.ingsw.ui.game.GameUiConstants.APP_WIDTH;
+import static it.polimi.ingsw.ui.lobby.LobbyUiConstants.LOBBY_HEIGHT;
+import static it.polimi.ingsw.ui.lobby.LobbyUiConstants.LOBBY_WIDTH;
+
 /**
  * The RunnableGuiLobby class is responsible for launching and managing the graphical user interface (GUI) for the lobby.
  * It extends the JavaFX Application class and implements the LobbyGateway interface.
  * It provides methods for initializing the lobby view event handler, starting the lobby stage, and handling server status updates,
  * server creation replies, server connection replies, and terminating the lobby.
  */
-public class RunnableGuiLobby extends Application implements LobbyGateway, GameGateway {
+public class GuiApp extends Application implements LobbyGateway, GameGateway {
 
-    private final URL fxmlURL = getClass().getResource("/fxml/lobby/login_stage.fxml");
-
-    private static final Logger logger = LoggerFactory.getLogger(RunnableGuiLobby.class);
+    private static final Logger logger = LoggerFactory.getLogger(GuiApp.class);
 
     private GuiLobbyController lobbyController;
-    private GuiGameControllerV2 gameController;
+    private GuiGameController gameController;
 
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-
-
+    // Lifecycle
     private static AppLifecycle lifecycle;
-    private static LobbyViewEventHandler loginHandler;
+
+    // Handlers
+    private static LobbyViewEventHandler lobbyHandler;
+    private static GameViewEventHandler gameHandler;
+
+    // Injected model data
+    private static Game model;
+    private static String owner;
+
+
+
+    public static void initLifecycle(AppLifecycle _appLifecycle) {
+        lifecycle = _appLifecycle;
+    }
 
     /**
      * Initializes the lobby view event handler.
      *
      * @param _handler The lobby view event handler.
      */
-    public static void initHandler(LobbyViewEventHandler _handler) {
-        loginHandler = _handler;
+    public static void initLobbyHandler(LobbyViewEventHandler _handler) {
+        lobbyHandler = _handler;
     }
 
 
-    public static void initLifecycle(AppLifecycle _appLifecycle) {
-        lifecycle = _appLifecycle;
+    @Override
+    public void start(Stage lobbyStage) throws Exception {
+        setupLobbyStage(lobbyStage);
     }
 
 
@@ -77,56 +93,44 @@ public class RunnableGuiLobby extends Application implements LobbyGateway, GameG
      * @param lobbyStage The stage for the lobby GUI.
      * @throws Exception if an error occurs while loading the lobby XML.
      */
-    @Override
-    public void start(Stage lobbyStage) throws Exception {
+    public void setupLobbyStage(Stage lobbyStage) throws Exception {
+        URL xmlURL = getClass().getResource(LobbyUiConstants.LOBBY_FXML_PATH);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(xmlURL);
+
+        Parent rootLayout;
 
         try {
-            logger.info("RunnableGuiLobby.start(), handler={}", loginHandler.toString());
-            logger.info("RunnableGuiLobby.start(), this={} ", this);
-
-            FXMLLoader loader = new FXMLLoader(fxmlURL);
-            loader.setLocation(fxmlURL);
-
-            Parent rootLayout;
-
-            try {
-                rootLayout = loader.load();
-            } catch (IOException e) {
-                logger.error("Error while loading lobby XML", e);
-                throw new IllegalStateException();
-            }
-
-
-            lobbyController = loader.getController();
-            lobbyController.injectEventHandler(loginHandler);
-
-            Scene loadedScene = new Scene(rootLayout, 800, 600, false);
-
-            lobbyStage.setScene(loadedScene);
-            lobbyStage.setResizable(false);
-
-            lobbyStage.setTitle("Login page");
-            lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
-            lobbyStage.show();
-
-            lifecycle.onLobbyUiReady((RunnableGuiLobby) this, this);
-        } catch (Exception e) {
-            logger.error("Exception in RunnableGuiLobby.start()", e);
+            rootLayout = loader.load();
+        } catch (IOException e) {
+            logger.error("Error while loading lobby XML", e);
+            throw new IllegalStateException();
         }
+
+
+        lobbyController = loader.getController();
+        lobbyController.injectEventHandler(lobbyHandler);
+
+        Scene loadedScene = new Scene(rootLayout, LOBBY_WIDTH, LOBBY_HEIGHT, false);
+
+        lobbyStage.setScene(loadedScene);
+        lobbyStage.setResizable(false);
+
+        lobbyStage.setTitle("Lobby");
+        lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
+        lobbyStage.show();
+
+        // notify the rest of the app
+        AppManager.setAppInstance(this);
+        lifecycle.onLobbyUiReady(this);
     }
 
-
-    private static GameViewEventHandler gameHandler;
-    private static Game model;
-    private static String owner;
-
-    private final URL fxmlURLGame = getClass().getResource("/fxml/gamev2/index_stage.fxml");
 
     /**
      * Initializes the model, handler, and owner for the GUI game.
      *
-     * @param _model   The game model.
-     * @param _owner   The owner of the game.
+     * @param _model The game model.
+     * @param _owner The owner of the game.
      */
     public static void injectGameModelPostLogin(Game _model, GameViewEventHandler _gameHandler, String _owner) {
         model = _model;
@@ -134,43 +138,37 @@ public class RunnableGuiLobby extends Application implements LobbyGateway, GameG
         gameHandler = _gameHandler;
     }
 
-    public void startPrimaryStage() throws Exception {
-        Stage newStage = new Stage();
+    public void setupPrimaryStage(Stage newStage) throws Exception {
+        URL xmlURL = getClass().getResource(GameUiConstants.GAME_FXML_PATH);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(xmlURL);
+
+        Parent rootLayout;
 
         try {
-            logger.info("RunnableGuiGameV2.start(), model={}", model.toString());
-            logger.info("RunnableGuiGameV2.start(), handler={}", loginHandler.toString());
-            logger.info("RunnableGuiGameV2.start(), this={} ", this);
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(fxmlURLGame);
-
-            Parent rootLayout;
-
-            try {
-                rootLayout = loader.load();
-            } catch (IOException e) {
-                logger.error("Error while loading game XML", e);
-                throw new IllegalStateException();
-            }
-
-            gameController = loader.getController();
-            gameController.injectModelData(model, gameHandler, owner);
-
-            Scene loadedScene = new Scene(rootLayout, 1100, 809, false, SceneAntialiasing.BALANCED);
-
-            newStage.setScene(loadedScene);
-
-            newStage.setTitle("MyShelfie");
-            newStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
-            newStage.showAndWait();
-
-            Platform.runLater(() -> gameController.modelUpdate(model));
-
-            lifecycle.onGameUiReady(this);
-        } catch (Exception e) {
-            logger.error("Exception in RunnableGuiGameV2.start()", e);
+            rootLayout = loader.load();
+        } catch (IOException e) {
+            logger.error("Error while loading game XML", e);
+            throw new IllegalStateException();
         }
+
+        gameController = loader.getController();
+        gameController.injectModelData(model, gameHandler, owner);
+
+        Scene loadedScene = new Scene(rootLayout, APP_WIDTH, APP_HEIGHT, false, SceneAntialiasing.BALANCED);
+
+        newStage.setScene(loadedScene);
+        newStage.setResizable(false);
+
+        newStage.setTitle("MyShelfie");
+        newStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
+        newStage.showAndWait();
+
+        Platform.runLater(() -> {
+            gameController.modelUpdate(model);
+        });
+
+        lifecycle.onGameUiReady(this);
     }
 
 
@@ -183,9 +181,6 @@ public class RunnableGuiLobby extends Application implements LobbyGateway, GameG
      */
     @Override
     public void onServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
-        logger.info("onServerStatusUpdate, handler={}", loginHandler.toString());
-        logger.info("onServerStatusUpdate, this={} ", this.toString());
-
         Platform.runLater(() -> lobbyController.onServerStatusUpdate(status, playerInfo));
     }
 
@@ -209,16 +204,9 @@ public class RunnableGuiLobby extends Application implements LobbyGateway, GameG
         Platform.runLater(() -> lobbyController.onServerConnectionReply(result));
     }
 
-    /**
-     * Terminates the lobby by notifying the lobby controller.
-     */
     @Override
-    public void kill() {
-        // Platform.exit();
-        // Platform.runLater(() -> {
-        //     lobbyController.kill();
-        //     Platform.exit();
-        // });
+    public void inop() {
+        Platform.runLater(() -> lobbyController.inop());
     }
 
 
@@ -258,5 +246,10 @@ public class RunnableGuiLobby extends Application implements LobbyGateway, GameG
     @Override
     public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         gameController.onGameInsertionReply(turnResult);
+    }
+
+
+    public static void main(String[] args) {
+        Application.launch(args);
     }
 }

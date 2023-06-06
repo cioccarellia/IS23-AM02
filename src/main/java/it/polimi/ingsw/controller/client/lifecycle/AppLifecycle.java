@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller.client.lifecycle;
 
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
-import it.polimi.ingsw.ui.lobby.gui.RunnableGuiLobby;
 
 public interface AppLifecycle {
 
@@ -13,7 +12,7 @@ public interface AppLifecycle {
     void initialize();
 
 
-    void onLobbyUiReady(RunnableGuiLobby starter, LobbyGateway gateway);
+    void onLobbyUiReady(LobbyGateway gateway);
 
     void onGameUiReady(GameGateway gateway);
 
@@ -27,5 +26,4 @@ public interface AppLifecycle {
      * The app is terminated
      */
     void terminate();
-
 }

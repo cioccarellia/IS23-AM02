@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ui.game.guiv2;
+package it.polimi.ingsw.ui.commons.gui;
 
 import it.polimi.ingsw.controller.client.lifecycle.AppLifecycle;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -9,6 +9,7 @@ import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.gui.GuiGameController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -27,13 +28,13 @@ import java.net.URL;
  * The RunnableGuiGameV2 class represents the entry point for running the graphical user interface (GUI) version of the game.
  * It extends the JavaFX Application class and implements the GameGateway interface.
  */
-public class RunnableGuiGameV2 extends Application implements GameGateway {
+public class RunnableGuiGame extends Application implements GameGateway {
 
     private final URL fxmlURL = getClass().getResource("/fxml/gamev2/index_stage.fxml");
 
-    private static final Logger logger = LoggerFactory.getLogger(RunnableGuiGameV2.class);
+    private static final Logger logger = LoggerFactory.getLogger(RunnableGuiGame.class);
 
-    private GuiGameControllerV2 gameController;
+    private GuiGameController gameController;
 
     private static Game model;
     private static String owner;
