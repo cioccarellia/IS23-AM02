@@ -6,6 +6,7 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
+import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
@@ -225,15 +226,18 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         PlayerSession ownerSession = model.getSessions().getByUsername(owner);
         PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
 
+        // common goal cards and their description
+        for (int i = 0; i < commonGoalCardsAmount; i++) {
+            CommonGoalCard currentCommonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
 
-        CommonGoalCardRender.renderCommonGoalCard(firstCommonGoalCardImageView, model.getCommonGoalCards().get(0).getCommonGoalCard());
-        firstCommonGoalCardDescriptionLabel.setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(model.getCommonGoalCards().get(0).getCommonGoalCard().getId()));
-        CommonGoalCardRender.renderCommonGoalCard(secondCommonGoalCardImageView, model.getCommonGoalCards().get(1).getCommonGoalCard());
-        secondCommonGoalCardDescriptionLabel.setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(model.getCommonGoalCards().get(1).getCommonGoalCard().getId()));
+            CommonGoalCardRender.renderCommonGoalCard(iter.commonGoalCards().get(i), currentCommonGoalCard);
+            iter.commonGoalCardsDescriptions().get(i).setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(currentCommonGoalCard.getId()));
+        }
 
+        // personal goal card
         PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession.getPersonalGoalCard());
 
-
+        // enemy buttons
         List<String> enemyList = model.getPlayersUsernameListExcluding(owner);
 
         for (int i = 0; i < enemyList.size(); i++) {
@@ -284,6 +288,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         // enemy username label
         enemyUsernameLabel.setText("@" + currentlySelectedUsername);
+
+        // tokens update
+
 
     }
 
