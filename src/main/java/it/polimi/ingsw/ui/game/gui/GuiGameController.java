@@ -6,16 +6,17 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.bookshelf.Bookshelf;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.gui.renders.BoardRender;
 import it.polimi.ingsw.ui.game.gui.renders.BookshelfRender;
 import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardRender;
+import it.polimi.ingsw.ui.game.gui.renders.PersonalGoalCardRender;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -44,6 +45,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
 
     // region Main Layer
+
     // GridPanes
     @FXML
     public GridPane boardGridPane;
@@ -70,8 +72,18 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public ImageView secondCommonGoalCardImageView;
 
+    // OWNER TOKENS
+    @FXML
+    public ImageView ownerFirstTokenImageView;
+    @FXML
+    public ImageView ownerSecondTokenImageView;
+    @FXML
+    public ImageView ownerThirdTokenImageView;
+
 
     // Enemy Buttons
+    @FXML
+    public Label enemyStatusLabel;
     @FXML
     public Label enemyUsernameLabel;
     @FXML
@@ -82,7 +94,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public Button enemySelect3Button;
     @FXML
     public CheckBox autoFollowCheckBox;
-    
+
+    // ENEMY TOKENS
+    @FXML
+    public ImageView enemyFirstTokenImageView;
+    @FXML
+    public ImageView enemySecondTokenImageView;
+    @FXML
+    public ImageView enemyThirdTokenImageView;
+
 
     // BUTTONS
     @FXML
@@ -100,6 +120,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public Label statusTitleLabel;
     @FXML
     public Label statusSubtitleLabel;
+    @FXML
+    public Label firstCommonGoalCardDescriptionLabel;
+    @FXML
+    public Label secondCommonGoalCardDescriptionLabel;
 
 
     // Radio buttons for column selection<
@@ -134,8 +158,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private Game model;
 
 
-
-
     DynamicIterator iter = new DynamicIterator();
 
     public class DynamicIterator {
@@ -147,11 +169,32 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             return Arrays.asList(firstCommonGoalCardImageView, secondCommonGoalCardImageView);
         }
 
+        private List<Label> commonGoalCardsDescriptions() {
+            return Arrays.asList(firstCommonGoalCardDescriptionLabel, secondCommonGoalCardDescriptionLabel);
+        }
+
         private List<Button> enemyButtons() {
             return Arrays.asList(enemySelect1Button, enemySelect2Button, enemySelect3Button);
         }
+
+        private List<ImageView> enemyObtainedTokens() {
+            return Arrays.asList(enemyFirstTokenImageView, enemySecondTokenImageView, enemyThirdTokenImageView);
+        }
+
+        private List<ImageView> ownerObtainedTokens() {
+            return Arrays.asList(ownerFirstTokenImageView, ownerSecondTokenImageView, ownerThirdTokenImageView);
+        }
+
+        /*
+        private List<RadioButton> columnRadioButtons() {
+            return Arrays.asList(columnSelection1RadioButton, columnSelection2RadioButton, columnSelection3RadioButton, columnSelection4RadioButton, columnSelection5RadioButton);
+        }
+        */
     }
 
+
+    private boolean hasInitializedUi = false;
+    private String currentlySelectedUsername = null;
 
 
     /**
@@ -173,7 +216,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-
     /**
      * Called when the game is created.
      */
@@ -183,10 +225,25 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             throw new IllegalStateException();
         }
 
+        PlayerSession ownerSession = model.getSessions().getByUsername(owner);
+        PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
+
+
         CommonGoalCardRender.renderCommonGoalCard(firstCommonGoalCardImageView, model.getCommonGoalCards().get(0).getCommonGoalCard());
         CommonGoalCardRender.renderCommonGoalCard(secondCommonGoalCardImageView, model.getCommonGoalCards().get(1).getCommonGoalCard());
-        //PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, model.getCurrentPlayerSession().getPersonalGoalCard());
+        PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession.getPersonalGoalCard());
 
+
+        for (int i = 0; i < model.getPlayerCount(); i++) {
+            iter.enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
+            iter.enemyButtons().get(i).setVisible(true);
+        }
+
+
+        currentlySelectedUsername = model.getPlayersUsernameListExcluding(owner).get(0);
+
+
+        hasInitializedUi = true;
         render();
     }
 
@@ -205,21 +262,26 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     @Override
     public void render() {
-        if (model == null) {
+        if (model == null || !hasInitializedUi) {
             return;
         }
 
-        // enemies' buttons
-        for (int i = 0; i < model.getPlayerCount(); i++) {
-            iter.enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
-            iter.enemyButtons().get(i).setVisible(true);
-        }
+        PlayerSession ownerSession = model.getSessions().getByUsername(owner);
+        PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
+        PlayerSession enemySession = model.getSessionFor(currentlySelectedUsername);
+
 
         // board
         BoardRender.renderBoard(boardGridPane, model.getBoard());
 
         // owner's bookshelf
-        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, model.getSessions().getByUsername(owner).getBookshelf());
+        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession.getBookshelf());
+
+        // selected enemy's bookshelf
+        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, enemySession.getBookshelf());
+
+        // enemy username label
+        enemyUsernameLabel.setText(currentlySelectedUsername);
 
     }
 
@@ -299,6 +361,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
+
     @FXML
     public void enemy1BookshelfButtonClick() {
         __enemyBookshelfButtonClick(enemySelect1Button.getText());
@@ -315,7 +378,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     private void __enemyBookshelfButtonClick(String username) {
-        Bookshelf enemyBookshelfModel = model.getPlayerSession(username).getBookshelf();
-        BookshelfRender.renderBookshelf(enemyBookshelfGridPane, enemyBookshelfModel);
+        currentlySelectedUsername = username;
+        modelUpdate(model);
     }
 }

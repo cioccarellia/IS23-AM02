@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
+
 <AnchorPane prefHeight="900.0" prefWidth="1465.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.gui.GuiGameController">
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BACKGROUND %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
@@ -110,11 +111,9 @@
 
     <!-- Common Goal Card -->
     <ImageView fx:id="firstCommonGoalCardImageView" fitHeight="111.0" fitWidth="158.0" layoutX="20.0" layoutY="640.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../../img/common_goal_cards/six_pairs.jpg" />
     </ImageView>
 
     <ImageView fx:id="secondCommonGoalCardImageView" fitHeight="111.0" fitWidth="158.0" layoutX="20.0" layoutY="775.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../../img/common_goal_cards/diagonal.jpg" />
     </ImageView>
 
     <Label fx:id="firstCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="640.0" prefHeight="105.0" prefWidth="229.0" text="first common goal card" wrapText="true">
@@ -171,42 +170,42 @@
             <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="184.5" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
         </rowConstraints>
-        <ImageView id="BookshelfTile23" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-        <ImageView id="BookshelfTile01" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-        <ImageView id="BookshelfTile02" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-        <ImageView id="BookshelfTile03" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-        <ImageView id="BookshelfTile04" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
-            <Image url="@../../img/tiles/book1.1.png" />
-        </ImageView>
-        <ImageView id="BookshelfTile10" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+        <!-- first row -->
+        <ImageView id="BookshelfTile00" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <ImageView id="BookshelfTile01" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <ImageView id="BookshelfTile02" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+        <ImageView id="BookshelfTile03" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+        <ImageView id="BookshelfTile04" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+        <!-- second row -->
+        <ImageView id="BookshelfTile10" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <ImageView id="BookshelfTile11" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <ImageView id="BookshelfTile12" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
         <ImageView id="BookshelfTile13" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
         <ImageView id="BookshelfTile14" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-        <ImageView id="BookshelfTile20" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+        <!-- third row -->
+        <ImageView id="BookshelfTile20" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <ImageView id="BookshelfTile21" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <ImageView id="BookshelfTile54" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5" />
         <ImageView id="BookshelfTile22" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <ImageView id="BookshelfTile23" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
         <ImageView id="BookshelfTile24" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-        <ImageView id="BookshelfTile30" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
-            <Image url="@../../img/tiles/book1.1.png" />
-        </ImageView>
+        <!-- fourth row -->
+        <ImageView id="BookshelfTile30" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="3" />
         <ImageView id="BookshelfTile31" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
         <ImageView id="BookshelfTile32" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
         <ImageView id="BookshelfTile33" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
         <ImageView id="BookshelfTile34" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-        <ImageView id="BookshelfTile40" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+        <!-- fifth row -->
+        <ImageView id="BookshelfTile40" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <ImageView id="BookshelfTile41" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         <ImageView id="BookshelfTile42" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
         <ImageView id="BookshelfTile43" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-        <ImageView id="BookshelfTile44" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4">
-            <Image url="@../../img/tiles/book1.1.png" />
-        </ImageView>
-        <ImageView id="BookshelfTile50" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
+        <ImageView id="BookshelfTile44" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+        <!-- sixth row -->
+        <ImageView id="BookshelfTile50" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="5" />
         <ImageView id="BookshelfTile51" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
         <ImageView id="BookshelfTile52" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
         <ImageView id="BookshelfTile53" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-        <ImageView id="BookshelfTile00" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView id="BookshelfTile54" fitHeight="53.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5" />
     </GridPane>
 
 
@@ -333,8 +332,8 @@
     <!-- Button group for selecting enemy player -->
     <HBox layoutX="490.0" layoutY="858.0">
         <Button fx:id="enemySelect1Button" onAction="#enemy1BookshelfButtonClick" text="Enemy 1" visible="true" />
-        <Button fx:id="enemySelect2Button" onAction="#enemy2BookshelfButtonClick" text="Enemy 2" visible="true" />
-        <Button fx:id="enemySelect3Button" onAction="#enemy3BookshelfButtonClick" text="Enemy 3" visible="true" />
+        <Button fx:id="enemySelect2Button" onAction="#enemy2BookshelfButtonClick" text="Enemy 2" visible="false" />
+        <Button fx:id="enemySelect3Button" onAction="#enemy3BookshelfButtonClick" text="Enemy 3" visible="false" />
     </HBox>
 
     <!-- Auto-Follow CheckBox -->
@@ -489,7 +488,7 @@
     <ListView fx:id="chatMessagesListView" layoutX="1100.0" layoutY="77.0" prefHeight="705.0" prefWidth="366.0" />
 
     <!-- Username selector for chat-->
-    <MenuButton fx:id="chatSelectorMenuButton" layoutX="1356.0" layoutY="850.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Chat with">
+    <MenuButton fx:id="chatSelectorMenuButton" layoutX="1116.0" layoutY="794.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Chat with">
         <items>
             <MenuItem mnemonicParsing="false" text="Everyone" />
             <!-- <MenuItem mnemonicParsing="false" text="Player1" /> -->

@@ -14,6 +14,7 @@ import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
+import it.polimi.ingsw.utils.javafx.UiUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -26,7 +27,6 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -199,6 +199,15 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
         render();
     }
 
+
+    /**
+     * Marks the controller as killed.
+     */
+    @Override
+    public void inop() {
+        inop = true;
+    }
+
     /**
      * Renders the UI based on the current server status.
      */
@@ -218,15 +227,15 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
         }
 
         if (owner != null) {
-            disableView(preLoginVBox);
-            enableView(postLoginVBox);
+            UiUtils.invisibleAndUnmanage(preLoginVBox);
+            UiUtils.visibleAndManage(postLoginVBox);
 
             statusTextLabel.setText("Logged in as @%s, waiting for game start".formatted(owner));
 
             renderUserInfoTable();
         } else {
-            enableView(preLoginVBox);
-            disableView(postLoginVBox);
+            UiUtils.visibleAndManage(preLoginVBox);
+            UiUtils.invisibleAndUnmanage(postLoginVBox);
 
             switch (currentState) {
                 case NO_GAME_STARTED -> {
@@ -269,17 +278,6 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
                 }
             }
         }
-    }
-
-    private void enableView(VBox vbox) {
-        vbox.setManaged(true);
-        vbox.setVisible(true);
-    }
-
-
-    private void disableView(VBox vbox) {
-        vbox.setManaged(false);
-        vbox.setVisible(false);
     }
 
 
@@ -358,7 +356,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
 
             try {
                 PlayerInfo player = playerInfo.get(i);
-                setVisible(true, roleLabel, usernameLabel, statusLabel);
+                UiUtils.setVisible(true, roleLabel, usernameLabel, statusLabel);
 
                 String roleText = player.isHost() ? "Host" : "Player";
                 String statusText = getConnectionStatusHumanReadable(player.status());
@@ -367,7 +365,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
                 usernameLabel.setText(player.username());
                 statusLabel.setText(statusText);
             } catch (NullPointerException | IndexOutOfBoundsException ignored) {
-                setVisible(false, roleLabel, usernameLabel, statusLabel);
+                UiUtils.setVisible(false, roleLabel, usernameLabel, statusLabel);
             }
         }
 
@@ -380,17 +378,4 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
             case CLOSED -> "Quit";
         };
     }
-
-    public void setVisible(boolean isVisible, Node... role) {
-        Arrays.stream(role).forEach(it -> it.setVisible(isVisible));
-    }
-
-    /**
-     * Marks the controller as killed.
-     */
-    @Override
-    public void inop() {
-        inop = true;
-    }
-
 }

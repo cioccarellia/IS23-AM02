@@ -66,7 +66,6 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
     private static String owner;
 
 
-
     public static void initLifecycle(AppLifecycle _appLifecycle) {
         lifecycle = _appLifecycle;
     }
@@ -161,12 +160,11 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
         newStage.setResizable(false);
 
         newStage.setTitle("MyShelfie");
-        newStage.getIcons().add(new Image("img/publisher_material/title_2000x2000px.png"));
-        newStage.showAndWait();
+        newStage.show();
 
-        Platform.runLater(() -> {
-            gameController.modelUpdate(model);
-        });
+        // Platform.runLater(() -> {
+        //     gameController.modelUpdate(model);
+        // });
 
         lifecycle.onGameUiReady(this);
     }

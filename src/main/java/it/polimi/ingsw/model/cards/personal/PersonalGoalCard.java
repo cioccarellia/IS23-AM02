@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class PersonalGoalCard implements Serializable {
+
+    private final PersonalGoalCardIdentifier id;
+    private final Tile[][] shelfPointsMatrix;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -19,15 +23,16 @@ public class PersonalGoalCard implements Serializable {
         return new EqualsBuilder().append(shelfPointsMatrix, that.shelfPointsMatrix).isEquals();
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(shelfPointsMatrix).toHashCode();
+    /**
+     * @return the id of the personal card
+     */
+    public PersonalGoalCardIdentifier getId() {
+        return id;
     }
 
-    private final Tile[][] shelfPointsMatrix;
-
-    public PersonalGoalCard(Tile[][] matrix) {
+    public PersonalGoalCard(Tile[][] matrix, PersonalGoalCardIdentifier identifier) {
         shelfPointsMatrix = matrix;
+        id = identifier;
     }
 
     /**
@@ -40,7 +45,13 @@ public class PersonalGoalCard implements Serializable {
     @Override
     public String toString() {
         return "PersonalGoalCard{" +
-                "shelfPointsMatrix=" + Arrays.toString(shelfPointsMatrix) +
+                "id=" + id +
+                ", shelfPointsMatrix=" + Arrays.toString(shelfPointsMatrix) +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(id).append(shelfPointsMatrix).toHashCode();
     }
 }

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static it.polimi.ingsw.model.board.Tile.*;
+import static it.polimi.ingsw.model.cards.personal.PersonalGoalCardIdentifier.*;
 
 /**
  * Personal goal cards archive
@@ -121,18 +122,18 @@ public class PersonalGoalCardMatrixContainer implements Serializable {
             {BOOK, null, null, null, null}
     };
 
-    public final static PersonalGoalCard p1 = new PersonalGoalCard(m1);
-    public final static PersonalGoalCard p2 = new PersonalGoalCard(m2);
-    public final static PersonalGoalCard p3 = new PersonalGoalCard(m3);
-    public final static PersonalGoalCard p4 = new PersonalGoalCard(m4);
-    public final static PersonalGoalCard p5 = new PersonalGoalCard(m5);
-    public final static PersonalGoalCard p6 = new PersonalGoalCard(m6);
-    public final static PersonalGoalCard p7 = new PersonalGoalCard(m7);
-    public final static PersonalGoalCard p8 = new PersonalGoalCard(m8);
-    public final static PersonalGoalCard p9 = new PersonalGoalCard(m9);
-    public final static PersonalGoalCard p10 = new PersonalGoalCard(m10);
-    public final static PersonalGoalCard p11 = new PersonalGoalCard(m11);
-    public final static PersonalGoalCard p12 = new PersonalGoalCard(m12);
+    public final static PersonalGoalCard p1 = new PersonalGoalCard(m1, PGC_1);
+    public final static PersonalGoalCard p2 = new PersonalGoalCard(m2, PGC_2);
+    public final static PersonalGoalCard p3 = new PersonalGoalCard(m3, PGC_3);
+    public final static PersonalGoalCard p4 = new PersonalGoalCard(m4, PGC_4);
+    public final static PersonalGoalCard p5 = new PersonalGoalCard(m5, PGC_5);
+    public final static PersonalGoalCard p6 = new PersonalGoalCard(m6, PGC_6);
+    public final static PersonalGoalCard p7 = new PersonalGoalCard(m7, PGC_7);
+    public final static PersonalGoalCard p8 = new PersonalGoalCard(m8, PGC_8);
+    public final static PersonalGoalCard p9 = new PersonalGoalCard(m9, PGC_9);
+    public final static PersonalGoalCard p10 = new PersonalGoalCard(m10, PGC_10);
+    public final static PersonalGoalCard p11 = new PersonalGoalCard(m11, PGC_11);
+    public final static PersonalGoalCard p12 = new PersonalGoalCard(m12, PGC_12);
 
 
     public static final List<PersonalGoalCard> personalGoalCardDomain = Arrays.asList(

@@ -88,4 +88,13 @@ public class Cell implements Serializable {
     public void clear() {
         content = null;
     }
+
+    @Override
+    public String toString() {
+        if (getContent().isEmpty()) {
+            return "[empty]";
+        } else {
+            return "[" + getContent().get() + "]";
+        }
+    }
 }

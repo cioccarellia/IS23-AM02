@@ -147,11 +147,23 @@ public class Game implements ModelService, Serializable {
         return sessions;
     }
 
+
     public List<String> getPlayersUsernameList() {
         return sessions
                 .playerSessions()
                 .stream()
-                .map(PlayerSession::getUsername).toList();
+                .map(PlayerSession::getUsername)
+                .toList();
+    }
+
+
+    public List<String> getPlayersUsernameListExcluding(String... usernames) {
+        return sessions
+                .playerSessions()
+                .stream()
+                .filter(it -> !Arrays.stream(usernames).toList().contains(it))
+                .map(PlayerSession::getUsername)
+                .toList();
     }
 
     /**

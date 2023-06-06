@@ -26,7 +26,6 @@ import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.ui.commons.gui.GuiApp;
-import it.polimi.ingsw.ui.commons.gui.RunnableGuiGame;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.CliApp;
@@ -85,7 +84,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
                 executorService.submit(() -> {
                     // Platform.runLater(() -> {
                     logger.info("Starting GUI game on dedicated thread");
-                    RunnableGuiGame.main(new String[]{});
+                    GuiApp.main(new String[]{});
                 });
 
             }

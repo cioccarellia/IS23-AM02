@@ -71,4 +71,11 @@ public class CommonGoalCardStatus implements Serializable {
         return Optional.ofNullable(tokenStack.pop());
     }
 
+    @Override
+    public String toString() {
+        return "CommonGoalCardStatus{" +
+                "commonGoalCardId=" + commonGoalCardId +
+                ", tokenStack=" + tokenStack +
+                '}';
+    }
 }
