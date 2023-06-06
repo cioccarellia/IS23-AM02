@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
@@ -28,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
+
 
 /**
  * The GuiGameControllerV2 class is responsible for managing the graphical user interface (GUI)
@@ -40,6 +43,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
+
+    private static final int maxTokensPerPlayer = 3;
 
 
     // region Main Layer
@@ -226,13 +231,19 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         PlayerSession ownerSession = model.getSessions().getByUsername(owner);
         PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
 
-        // common goal cards and their description
+        // common goal cards and their description and their token
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             CommonGoalCard currentCommonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
 
             CommonGoalCardRender.renderCommonGoalCard(iter.commonGoalCards().get(i), currentCommonGoalCard);
             iter.commonGoalCardsDescriptions().get(i).setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(currentCommonGoalCard.getId()));
+
+            Token topToken = model.getCommonGoalCards().get(i).getCardTokens().lastElement();
+            TokenRender.renderToken(iter.topTokens().get(i), topToken);
         }
+
+        // end game token
+        TokenRender.renderToken(endGameTokenImageView, FULL_SHELF_TOKEN);
 
         // personal goal card
         PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession.getPersonalGoalCard());
@@ -250,7 +261,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
 
         hasInitializedUi = true;
+
         render();
+
     }
 
 
@@ -290,7 +303,34 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         enemyUsernameLabel.setText("@" + currentlySelectedUsername);
 
         // tokens update
+        // owner's tokens
+        for (int i = 0; i < maxTokensPerPlayer; i++) {
+            List<Token> playerTokens = ownerSession.getAcquiredTokens();
+            Token token = null;
+            if (i < playerTokens.size()) {
+                token = playerTokens.get(i);
+            }
 
+            TokenRender.renderToken(iter.ownerObtainedTokens().get(i), token);
+        }
+
+        // enemy's token
+        for (int i = 0; i < maxTokensPerPlayer; i++) {
+            List<Token> playerTokens = enemySession.getAcquiredTokens();
+            Token token = null;
+            if (i < playerTokens.size()) {
+                token = playerTokens.get(i);
+            }
+
+            TokenRender.renderToken(iter.enemyObtainedTokens().get(i), token);
+        }
+
+
+        // end game token
+        boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag == true).toList().isEmpty();
+        if (hasSomeoneFinished) {
+            TokenRender.renderToken(endGameTokenImageView, null);
+        }
 
     }
 

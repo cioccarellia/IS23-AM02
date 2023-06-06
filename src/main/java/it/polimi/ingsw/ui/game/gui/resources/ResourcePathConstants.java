@@ -73,7 +73,7 @@ public class ResourcePathConstants {
 
 
     public static class Commons {
-        public static final String common_six_pairs = "/img/common_goal_cards/six_pairs/six_pairs.jpg";
+        public static final String common_six_pairs = "/img/common_goal_cards/six_pairs.jpg";
         public static final String common_diagonal = "/img/common_goal_cards/diagonal.jpg";
         public static final String common_eight_tiles = "/img/common_goal_cards/eight_tiles.jpg";
         public static final String common_four_corners = "/img/common_goal_cards/four_corners.jpg";
