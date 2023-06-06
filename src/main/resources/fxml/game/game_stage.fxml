@@ -102,36 +102,53 @@
     </GridPane>
 
 
-    <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TOKENS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-    <Pane layoutX="358.0" layoutY="311.0" prefHeight="50.0" prefWidth="54.0" rotate="10.0">
-        <ImageView id="endGameTokenImageView" fx:id="endGameTokenImageView" fitHeight="51.0" fitWidth="50.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
-        </ImageView>
-    </Pane>
-    <!-- todo reposition -->
-    <Pane layoutX="929.0" layoutY="478.0" prefHeight="42.0" prefWidth="42.0" rotate="-10.0">
-        <ImageView fx:id="firstCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="44.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-        </ImageView>
-    </Pane>
-    <!-- todo reposition -->
-    <Pane layoutX="931.0" layoutY="579.0" prefHeight="42.0" prefWidth="42.0" rotate="-10.0">
-        <ImageView fx:id="secondCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-        </ImageView>
-    </Pane>
-
-
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CARDS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- Personal Goal Card -->
-    <ImageView fx:id="personalGoalCardImageView" fitHeight="193.0" fitWidth="151.0" layoutX="888.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fx:id="personalGoalCardImageView" fitHeight="193.0" fitWidth="151.0" layoutX="901.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../../img/personal_goal_cards/personal_goal_card_1.png" />
     </ImageView>
 
     <!-- Common Goal Card -->
-    <ImageView fx:id="firstCommonGoalCardImageView" fitHeight="119.0" fitWidth="130.0" layoutX="20.0" layoutY="800.0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fx:id="firstCommonGoalCardImageView" fitHeight="111.0" fitWidth="158.0" layoutX="20.0" layoutY="640.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../img/common_goal_cards/six_pairs.jpg" />
+    </ImageView>
+
+    <ImageView fx:id="secondCommonGoalCardImageView" fitHeight="111.0" fitWidth="158.0" layoutX="20.0" layoutY="775.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../../img/common_goal_cards/diagonal.jpg" />
     </ImageView>
-    <ImageView fx:id="secondCommonGoalCardImageView" fitHeight="100.0" fitWidth="130.0" layoutX="270.0" layoutY="800.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../../img/common_goal_cards/back.jpg" />
-    </ImageView>
+
+    <Label fx:id="firstCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="640.0" prefHeight="105.0" prefWidth="229.0" text="first common goal card" wrapText="true">
+        <font>
+            <Font name="Droid Sans Mono" size="14.0" />
+        </font>
+    </Label>
+
+    <Label fx:id="secondCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="775.0" prefHeight="105.0" prefWidth="229.0" text="second common goal card" wrapText="true">
+        <font>
+            <Font name="Droid Sans Mono" size="14.0" />
+        </font>
+    </Label>
+
+
+
+
+    <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TOKENS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+    <Pane layoutX="359.0" layoutY="310.0" prefHeight="50.0" prefWidth="54.0" rotate="8.0">
+        <ImageView fx:id="endGameTokenImageView" fitHeight="51.0" fitWidth="50.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/first_full_bookshelf_token.jpg" />
+        </ImageView>
+    </Pane>
+    <Pane layoutX="110.0" layoutY="799.0" prefHeight="50.0" prefWidth="50.0" rotate="-8.0">
+        <ImageView fx:id="firstCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_back_EMPTY.jpg" />
+        </ImageView>
+    </Pane>
+    <Pane layoutX="110.0" layoutY="665.0" prefHeight="50.0" prefWidth="50.0" rotate="-8.0">
+        <ImageView fx:id="secondCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_back_EMPTY.jpg" />
+        </ImageView>
+    </Pane>
+
 
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OWNER AREA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
@@ -193,9 +210,31 @@
     </GridPane>
 
 
+    <!-- Owner Scored Tokens -->
+    <Pane layoutX="880.0" layoutY="370.0" prefHeight="50.0" prefWidth="50.0">
+        <ImageView fx:id="ownerFirstTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_4.jpg" />
+        </ImageView>
+    </Pane>
+
+    <Pane layoutX="940.0" layoutY="370.0" prefHeight="50.0" prefWidth="50.0">
+        <ImageView fx:id="ownerSecondTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_4.jpg" />
+        </ImageView>
+    </Pane>
+
+    <Pane layoutX="1000.0" layoutY="370.0" prefHeight="50.0" prefWidth="50.0">
+        <ImageView fx:id="ownerThirdTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_4.jpg" />
+        </ImageView>
+    </Pane>
+
+
+
+
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ENEMY AREA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- enemy username -->
-    <Label fx:id="enemyUsernameLabel" layoutX="481.0" layoutY="471.0" prefHeight="48.0" prefWidth="356.0" text="\@EnemyUsername">
+    <Label fx:id="enemyUsernameLabel" layoutX="481.0" layoutY="471.0" prefHeight="72.0" prefWidth="356.0" text="\@EnemyUsername">
         <font>
             <Font name="Droid Sans Mono" size="30.0" />
         </font>
@@ -284,6 +323,13 @@
         </GridPane>
     </AnchorPane>
 
+    <!-- enemy status label -->
+    <Label fx:id="enemyStatusLabel" alignment="TOP_LEFT" layoutX="775.0" layoutY="576.0" prefHeight="262.0" prefWidth="306.0" text="enemy text" wrapText="true">
+        <font>
+            <Font name="Droid Sans Mono" size="14.0" />
+        </font>
+    </Label>
+
     <!-- Button group for selecting enemy player -->
     <HBox layoutX="490.0" layoutY="858.0">
         <Button fx:id="enemySelect1Button" onAction="#enemy1BookshelfButtonClick" text="Enemy 1" visible="true" />
@@ -292,11 +338,32 @@
     </HBox>
 
     <!-- Auto-Follow CheckBox -->
-    <CheckBox fx:id="autoFollowCheckBox" layoutX="756.0" layoutY="862.0" mnemonicParsing="false" text="Auto-Follow">
+    <CheckBox fx:id="autoFollowCheckBox" layoutX="965.0" layoutY="862.0" mnemonicParsing="false" text="Auto-Follow">
         <font>
             <Font name="Droid Sans Mono" size="14.0" />
         </font>
     </CheckBox>
+
+
+    <!-- Enemy Scored Tokens -->
+    <Pane layoutX="880.0" layoutY="480.0" prefHeight="50.0" prefWidth="50.0">
+        <ImageView fx:id="enemyFirstTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_4.jpg" />
+        </ImageView>
+    </Pane>
+
+    <Pane layoutX="940.0" layoutY="480.0" prefHeight="50.0" prefWidth="50.0">
+        <ImageView fx:id="enemySecondTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_4.jpg" />
+        </ImageView>
+    </Pane>
+
+    <Pane layoutX="1000.0" layoutY="480.0" prefHeight="50.0" prefWidth="50.0">
+        <ImageView fx:id="enemyThirdTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../img/tokens/scoring_4.jpg" />
+        </ImageView>
+    </Pane>
+
 
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BUTTONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
@@ -386,7 +453,7 @@
 
 
     <!-- Board Button -->
-    <Button fx:id="bookshelfButton" layoutX="880.0" layoutY="46.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="141.0" text="INSERT">
+    <Button fx:id="bookshelfButton" layoutX="894.0" layoutY="46.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="141.0" text="INSERT">
         <font>
             <Font name="Droid Sans Mono" size="14.0" />
         </font>
@@ -434,19 +501,19 @@
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% STATUS LABELS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- Status title and content label -->
-    <Label fx:id="statusTitleLabel" layoutX="14.0" layoutY="470.0" prefHeight="48.0" prefWidth="412.0" text="Ideally Short Text">
+    <Label fx:id="statusTitleLabel" layoutX="14.0" layoutY="470.0" prefHeight="48.0" prefWidth="418.0" text="Ideally Short Text">
         <font>
             <Font name="Droid Sans Mono" size="26.0" />
         </font>
     </Label>
 
-    <Label fx:id="statusSubtitleLabel" alignment="TOP_LEFT" layoutX="15.0" layoutY="524.0" prefHeight="105.0" prefWidth="412.0" text="ideally long and detailed status text" wrapText="true">
+    <Label fx:id="statusSubtitleLabel" alignment="TOP_LEFT" layoutX="15.0" layoutY="524.0" prefHeight="104.0" prefWidth="418.0" text="ideally long and detailed status text" wrapText="true">
         <font>
             <Font name="Droid Sans Mono" size="14.0" />
         </font>
     </Label>
 
-    
+
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% RADIOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!--  <HBox fx:id="radioButtonHBox" alignment="CENTER">
         <RadioButton fx:id="columnSelection1RadioButton"

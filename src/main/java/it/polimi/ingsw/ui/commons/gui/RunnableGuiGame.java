@@ -30,7 +30,7 @@ import java.net.URL;
  */
 public class RunnableGuiGame extends Application implements GameGateway {
 
-    private final URL fxmlURL = getClass().getResource("/fxml/gamev2/index_stage.fxml");
+    private final URL fxmlURL = getClass().getResource("/fxml/gamev2/game_stage.fxml");
 
     private static final Logger logger = LoggerFactory.getLogger(RunnableGuiGame.class);
 
