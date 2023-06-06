@@ -13,10 +13,7 @@ import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.renders.BoardRender;
-import it.polimi.ingsw.ui.game.gui.renders.BookshelfRender;
-import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardRender;
-import it.polimi.ingsw.ui.game.gui.renders.PersonalGoalCardRender;
+import it.polimi.ingsw.ui.game.gui.renders.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -230,14 +227,17 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
 
         CommonGoalCardRender.renderCommonGoalCard(firstCommonGoalCardImageView, model.getCommonGoalCards().get(0).getCommonGoalCard());
+        firstCommonGoalCardDescriptionLabel.setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(model.getCommonGoalCards().get(0).getCommonGoalCard().getId()));
         CommonGoalCardRender.renderCommonGoalCard(secondCommonGoalCardImageView, model.getCommonGoalCards().get(1).getCommonGoalCard());
+        secondCommonGoalCardDescriptionLabel.setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(model.getCommonGoalCards().get(1).getCommonGoalCard().getId()));
+
         PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession.getPersonalGoalCard());
 
 
         List<String> enemyList = model.getPlayersUsernameListExcluding(owner);
 
         for (int i = 0; i < enemyList.size(); i++) {
-            iter.enemyButtons().get(i).setText(enemyList.get(i));
+            iter.enemyButtons().get(i).setText("@" + enemyList.get(i));
             iter.enemyButtons().get(i).setVisible(true);
         }
 
@@ -283,7 +283,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         BookshelfRender.renderBookshelf(enemyBookshelfGridPane, enemySession.getBookshelf());
 
         // enemy username label
-        enemyUsernameLabel.setText(currentlySelectedUsername);
+        enemyUsernameLabel.setText("@" + currentlySelectedUsername);
 
     }
 
