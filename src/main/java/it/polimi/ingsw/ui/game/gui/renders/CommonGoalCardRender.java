@@ -11,8 +11,12 @@ public class CommonGoalCardRender {
     public static void renderCommonGoalCard(@NotNull ImageView commonGoalCardImageView, @NotNull CommonGoalCard commonGoalCard) {
         String url = ResourcePathConstants.Commons.mapCommonsToImagePath(commonGoalCard.getId());
 
-        Image commonGoalCardImage = new Image(url);
-        commonGoalCardImageView.setImage(commonGoalCardImage);
+        try {
+            Image commonGoalCardImage = new Image(url);
+            commonGoalCardImageView.setImage(commonGoalCardImage);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
 }

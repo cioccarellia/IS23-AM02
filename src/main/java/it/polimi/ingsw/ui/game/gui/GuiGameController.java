@@ -234,13 +234,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession.getPersonalGoalCard());
 
 
-        for (int i = 0; i < model.getPlayerCount(); i++) {
-            iter.enemyButtons().get(i).setText(model.getPlayersUsernameList().get(i));
+        List<String> enemyList = model.getPlayersUsernameListExcluding(owner);
+
+        for (int i = 0; i < enemyList.size(); i++) {
+            iter.enemyButtons().get(i).setText(enemyList.get(i));
             iter.enemyButtons().get(i).setVisible(true);
         }
 
 
-        currentlySelectedUsername = model.getPlayersUsernameListExcluding(owner).get(0);
+        currentlySelectedUsername = enemyList.get(0);
 
 
         hasInitializedUi = true;
@@ -278,7 +280,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession.getBookshelf());
 
         // selected enemy's bookshelf
-        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, enemySession.getBookshelf());
+        BookshelfRender.renderBookshelf(enemyBookshelfGridPane, enemySession.getBookshelf());
 
         // enemy username label
         enemyUsernameLabel.setText(currentlySelectedUsername);
