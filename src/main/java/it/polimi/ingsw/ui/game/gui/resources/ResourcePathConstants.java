@@ -4,6 +4,10 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCardIdentifier;
 import it.polimi.ingsw.model.game.goal.Token;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+//import java.util.Random;
 
 /**
  * Contains constants and methods for managing and loading images/resources
@@ -11,42 +15,63 @@ import it.polimi.ingsw.model.game.goal.Token;
 public class ResourcePathConstants {
 
     public static class Tiles {
+
+        // books
         public static final String book1 = "/img/tiles/book1.1.png";
         public static final String book2 = "/img/tiles/book1.2.png";
         public static final String book3 = "/img/tiles/book1.3.png";
+        public static final List<String> books = List.of(book1, book2, book3);
 
+        // cats
         public static final String cat1 = "/img/tiles/cat1.1.png";
         public static final String cat2 = "/img/tiles/cat1.2.png";
         public static final String cat3 = "/img/tiles/cat1.3.png";
+        public static final List<String> cats = List.of(cat1, cat2, cat3);
 
+        // frames
         public static final String frame1 = "/img/tiles/frame1.1.png";
         public static final String frame2 = "/img/tiles/frame1.2.png";
         public static final String frame3 = "/img/tiles/frame1.3.png";
+        public static final List<String> frames = List.of(frame1, frame2, frame3);
 
+        // games
         public static final String game1 = "/img/tiles/game1.1.png";
         public static final String game2 = "/img/tiles/game1.2.png";
         public static final String game3 = "/img/tiles/game1.3.png";
+        public static final List<String> games = List.of(game1, game2, game3);
 
+        // plants
         public static final String plant1 = "/img/tiles/plant1.1.png";
         public static final String plant2 = "/img/tiles/plant1.2.png";
         public static final String plant3 = "/img/tiles/plant1.3.png";
+        public static final List<String> plants = List.of(plant1, plant2, plant3);
 
+        // trophies
         public static final String trophy1 = "/img/tiles/trophy1.1.png";
         public static final String trophy2 = "/img/tiles/trophy1.2.png";
         public static final String trophy3 = "/img/tiles/trophy1.3.png";
+        public static final List<String> trophies = List.of(trophy1, trophy2, trophy3);
 
 
         public static String mapTileToImagePath(Tile tile) {
             assert tile != null;
             return switch (tile) {
-                case BOOK -> book1;
-                case CAT -> cat1;
-                case GAME -> game1;
-                case TROPHY -> trophy1;
-                case PLANT -> plant1;
-                case FRAME -> frame1;
+                case BOOK -> book1; //randomizer(books);
+                case CAT -> cat1;//randomizer(cats);
+                case GAME -> game1;//randomizer(games);
+                case TROPHY -> trophy1;//randomizer(trophies);
+                case PLANT -> plant1;//randomizer(plants);
+                case FRAME -> frame1;//randomizer(frames);
             };
         }
+
+        /*
+        public static String randomizer(List<String> list){
+            Random random = new Random();
+            int select = random.nextInt(list.size());
+
+            return list.get(select);
+        }*/
     }
 
 

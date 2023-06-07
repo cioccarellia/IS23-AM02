@@ -161,8 +161,8 @@ public class Game implements ModelService, Serializable {
         return sessions
                 .playerSessions()
                 .stream()
-                .filter(it -> !Arrays.stream(usernames).toList().contains(it))
                 .map(PlayerSession::getUsername)
+                .filter(username -> !Arrays.stream(usernames).toList().contains(username))
                 .toList();
     }
 
@@ -325,6 +325,7 @@ public class Game implements ModelService, Serializable {
         PersonalGoalCard randomPersonalGoalCard = personalGoalCardExtractor.extract();
         PlayerSession newSession = new PlayerSession(username, newPlayerNumber, randomPersonalGoalCard);
 
+
         // Adding session
         sessions.put(newSession);
 
@@ -363,6 +364,9 @@ public class Game implements ModelService, Serializable {
 
         // Set first state
         getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
+        // Set everyone else as idle
+        getSessions().playerSessions().stream().filter(playerSession -> !playerSession.equals(getCurrentPlayerSession()))
+                .forEach(playerSession -> playerSession.setPlayerCurrentGamePhase(IDLE));
     }
 
     /**

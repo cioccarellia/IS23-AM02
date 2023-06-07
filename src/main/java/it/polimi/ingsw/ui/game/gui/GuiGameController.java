@@ -7,6 +7,7 @@ import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
+import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
@@ -190,9 +191,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         /*
         private List<RadioButton> columnRadioButtons() {
-            return Arrays.asList(columnSelection1RadioButton, columnSelection2RadioButton, columnSelection3RadioButton, columnSelection4RadioButton, columnSelection5RadioButton);
+            return Arrays.asList(columnSelection1RadioButton, columnSelection2RadioButton,
+                    columnSelection3RadioButton, columnSelection4RadioButton, columnSelection5RadioButton);
         }
         */
+
     }
 
 
@@ -264,6 +267,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         render();
 
+        // enemyStatusLabel
+
     }
 
 
@@ -304,32 +309,60 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         // tokens update
         // owner's tokens
-        for (int i = 0; i < maxTokensPerPlayer; i++) {
-            List<Token> playerTokens = ownerSession.getAcquiredTokens();
-            Token token = null;
-            if (i < playerTokens.size()) {
-                token = playerTokens.get(i);
-            }
-
-            TokenRender.renderToken(iter.ownerObtainedTokens().get(i), token);
-        }
+        tokenUpdate(ownerSession, iter.ownerObtainedTokens());
 
         // enemy's token
+        tokenUpdate(enemySession, iter.enemyObtainedTokens());
+
+        // end game token
+        boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
+
+        if (hasSomeoneFinished) {
+            TokenRender.renderToken(endGameTokenImageView, null);
+        }
+
+        // check if owner has obtained common goal card token
+        List<CommonGoalCardIdentifier> ownerAchievedCommonGoalCards = ownerSession.getAchievedCommonGoalCards();
+        List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream()
+                .map(card -> card.getCommonGoalCard().getId()).toList();
+
+        for (int i = 0; i < commonGoalCardsAmount && !ownerAchievedCommonGoalCards.isEmpty(); i++) {
+            if (ownerAchievedCommonGoalCards.contains(gameCommonGoalCards.get(i))) {
+                iter.commonGoalCardsDescriptions().get(i)
+                        .setText(iter.commonGoalCardsDescriptions().get(i).getText() +
+                                "\nYou already achieved the token for this card!");
+            }
+        }
+
+        // enemy label (enemyStatusLabel)
+
+
+        // statusTitleLabel and statusSubtitleLabel
+        switch (currentPlayerSession.getPlayerCurrentGamePhase()) {
+            case IDLE -> {
+            }
+            case SELECTING -> {
+                statusTitleLabel.setText("Selection");
+                statusSubtitleLabel.setText("The player @" + currentPlayerSession.getUsername()
+                        + " is selecting their tiles.");
+            }
+            case INSERTING -> {
+                statusTitleLabel.setText("Insertion");
+                statusSubtitleLabel.setText("The player @" + currentPlayerSession.getUsername()
+                        + " is inserting the selected tiles in their bookshelf.");
+            }
+        }
+    }
+
+    public void tokenUpdate(PlayerSession session, List<ImageView> obtainedTokens) {
         for (int i = 0; i < maxTokensPerPlayer; i++) {
-            List<Token> playerTokens = enemySession.getAcquiredTokens();
+            List<Token> playerTokens = session.getAcquiredTokens();
             Token token = null;
             if (i < playerTokens.size()) {
                 token = playerTokens.get(i);
             }
 
-            TokenRender.renderToken(iter.enemyObtainedTokens().get(i), token);
-        }
-
-
-        // end game token
-        boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag == true).toList().isEmpty();
-        if (hasSomeoneFinished) {
-            TokenRender.renderToken(endGameTokenImageView, null);
+            TokenRender.renderToken(obtainedTokens.get(i), token);
         }
 
     }
@@ -344,23 +377,22 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void onGameSelectionReply(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         switch (turnResult) {
             case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
+                statusTitleLabel.setText("Selection error");
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, wrong game phase");
                     }
                     case UNAUTHORIZED_SELECTION -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, unauthorized selection");
                     }
                     case UNAUTHORIZED_PLAYER -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, player not authorized");
                     }
                 }
             }
-            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success ->
-                    statusSubtitleLabel.setVisible(false);
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> {
+            }
+
         }
     }
 
@@ -373,40 +405,36 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         switch (turnResult) {
             case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
+                statusTitleLabel.setText("Insertion error");
                 switch (failure.error()) {
                     case WRONG_SELECTION -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, illegal selection");
                     }
 
                     case ILLEGAL_COLUMN -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, column out of bounds");
                     }
 
                     case TOO_MANY_TILES -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, too many tiles selected");
                     }
 
                     case NO_FIT -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, the selected tiles can't fit in this columns");
                     }
 
                     case WRONG_PLAYER -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, unauthorized action from non active player");
                     }
 
                     case WRONG_GAME_PHASE -> {
-                        statusSubtitleLabel.setVisible(true);
                         statusSubtitleLabel.setText("Error, wrong game phase");
                     }
                 }
             }
-            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success ->
-                    statusSubtitleLabel.setVisible(false);
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> {
+            }
+
         }
     }
 

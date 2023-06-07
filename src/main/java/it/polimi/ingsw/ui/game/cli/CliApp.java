@@ -162,7 +162,7 @@ public class CliApp implements GameGateway, Renderable {
 
             }
             case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> {
-                // implicit modelupdate
+                // implicit model update
                 modelUpdate(success.value().model());
             }
         }
