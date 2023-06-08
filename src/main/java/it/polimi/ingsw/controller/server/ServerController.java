@@ -425,7 +425,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
-
                 if (game != null && game.getGameStatus() != GameStatus.INITIALIZATION) {
                     // Model update: there is an active player, and the game is started/last round/standby
                     // we have to check if the current player is disconnected.

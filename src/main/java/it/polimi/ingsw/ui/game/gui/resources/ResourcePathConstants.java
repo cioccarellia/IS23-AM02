@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCardIdentifier;
 import it.polimi.ingsw.model.game.goal.Token;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 //import java.util.Random;

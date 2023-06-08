@@ -38,8 +38,6 @@ public class AppServer {
     }
 
 
-
-
     private void initializeServerThreads() {
         ServerNetworkLayer.scheduleTimeoutThread(controller);
     }

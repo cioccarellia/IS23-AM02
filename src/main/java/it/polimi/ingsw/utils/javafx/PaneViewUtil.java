@@ -7,7 +7,7 @@ public class PaneViewUtil {
 
     /**
      * Returns the matrix with the nodes contained in the gridPane
-     * */
+     */
     public static Node[][] matrixify(GridPane gridPane, int rows, int columns) {
         int rowCount = gridPane.getRowCount();
         int colCount = gridPane.getColumnCount();

@@ -25,7 +25,7 @@ public class Parsers {
 
     /**
      * Creates the tree hierarchy for the accepted (and deserializable) messages
-     * */
+     */
     private final static String META_CLASSNAME_JSON_FIELD = "CLASS_META_FIELD";
     private final static RuntimeTypeAdapterFactory<Message> runtimeTypeAdapterFactory =
             RuntimeTypeAdapterFactory

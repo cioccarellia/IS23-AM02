@@ -6,6 +6,7 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
+import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
@@ -17,6 +18,7 @@ import it.polimi.ingsw.ui.game.gui.renders.BoardRender;
 import it.polimi.ingsw.ui.game.gui.renders.BookshelfRender;
 import it.polimi.ingsw.ui.game.gui.renders.PersonalGoalCardRender;
 import it.polimi.ingsw.ui.game.gui.renders.TokenRender;
+import it.polimi.ingsw.utils.javafx.UiUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -34,6 +36,8 @@ import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
+import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 import static it.polimi.ingsw.ui.game.gui.utils.GuiGameControllerUtils.*;
 
 
@@ -60,6 +64,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public GridPane enemyBookshelfGridPane;
 
+    // Starting player chair ImageView
+    @FXML
+    public ImageView startingChair;
 
     // Tokens ImageViews
     @FXML
@@ -120,9 +127,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public Button sendMessageButton;
     @FXML
-    public Button boardButton;
+    public Button boardSelectionButton;
     @FXML
-    public Button bookshelfButton;
+    public Button bookshelfInsertionButton;
 
 
     // STATUS LABELS
@@ -153,6 +160,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public HBox radioButtonHBox;
 
+
     // ImageViews and HBox for selected tiles
     @FXML
     public HBox selectedTilesHBox;
@@ -171,6 +179,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public MenuButton chatSelectorMenuButton;
     @FXML
     public ListView<ChatTextMessage> chatMessagesListView;
+
     // end region Main Layer
 
 
@@ -180,6 +189,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // Model data
     private Game model;
+
+    private int currentlySelectedColumn;
+
+    private List<Tile> orderedTiles;
 
 
     DynamicIterator iter = new DynamicIterator();
@@ -213,6 +226,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             return Arrays.asList(columnSelection1RadioButton, columnSelection2RadioButton,
                     columnSelection3RadioButton, columnSelection4RadioButton, columnSelection5RadioButton);
         }
+
+        private List<ImageView> selectedTiles() {
+            return Arrays.asList(firstSelectedTile, secondSelectedTile, thirdSelectedTile);
+        }
     }
 
 
@@ -236,6 +253,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
+        setRadioButtonsClickListeners();
     }
 
 
@@ -250,6 +268,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         PlayerSession ownerSession = model.getSessions().getByUsername(owner);
         PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
+        PlayerSession startingPlayerSession = model.getStartingPlayerSession();
+
 
         // common goal cards and their description and their token
         commonGoalCardsOnCreation(model, iter.commonGoalCards(), iter.commonGoalCardsDescriptions(), iter.topTokens());
@@ -305,6 +325,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         PlayerSession ownerSession = model.getSessions().getByUsername(owner);
         PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
         PlayerSession enemySession = model.getSessionFor(currentlySelectedUsername);
+        PlayerSession startingPlayerSession = model.getStartingPlayerSession();
 
 
         // board
@@ -318,6 +339,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         // enemy username label
         enemyUsernameLabel.setText("@" + currentlySelectedUsername);
+
+        // enemy starting player chair
+        if (enemySession.getUsername().equals(startingPlayerSession.getUsername())) {
+            UiUtils.visible(startingChair);
+        }
 
         // tokens update
         // owner's tokens
@@ -339,7 +365,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // common goal cards token update
         topTokenUpdate(model, iter.topTokens());
 
+
         // enemy label (enemyStatusLabel)
+
+        // set selected tiles
+        setSelectedTiles(iter.selectedTiles(), ownerSession);
 
 
         // statusTitleLabel and statusSubtitleLabel
@@ -357,7 +387,35 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         + " is inserting the selected tiles in their bookshelf.");
             }
         }
+
+        // if it's owner's turn, the selection button appears
+        if (ownerSession.getPlayerCurrentGamePhase() == SELECTING) {
+            UiUtils.visible(boardSelectionButton);
+        } else
+            UiUtils.invisible(boardSelectionButton);
     }
+
+    public void gameSelection() {
+        PlayerSession ownerPlayerSession = model.getPlayerSession(owner); //current o owner? todo
+        UiUtils.visible(insertionVBox);
+
+
+        //handler.onViewSelection(//selected tiles);
+        UiUtils.visible(bookshelfInsertionButton);
+    }
+
+    public void gameInsertion() {
+        PlayerSession ownerPlayerSession = model.getPlayerSession(owner); // current o owner? todo
+
+        if (orderedTiles.size() != ownerPlayerSession.getPlayerTileSelection().getSelectedTiles().size()) {
+            statusTitleLabel.setText("Insertion error");
+            statusSubtitleLabel.setText("Player " + ownerPlayerSession.getUsername() + ", you have to select all the tiles.");
+        }
+
+        handler.onViewInsertion(currentlySelectedColumn, orderedTiles);
+        UiUtils.invisible(insertionVBox, bookshelfInsertionButton);
+    }
+
 
     /**
      * Handles the game selection reply and updates the GUI elements based on the result.
@@ -427,6 +485,48 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             }
 
         }
+    }
+
+
+    @FXML
+    public void onBookshelfInsertionButtonClick() {
+        if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING) { //current player o owner? todo
+            gameInsertion();
+        }
+    }
+
+    @FXML
+    public void onBoardSelectionButtonClick() {
+        if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) { // current player o owner? todo
+            gameSelection();
+        }
+    }
+
+    private void setRadioButtonsClickListeners() {
+        columnSelection1RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 0);
+        columnSelection2RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 1);
+        columnSelection3RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 2);
+        columnSelection4RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 3);
+        columnSelection5RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 4);
+    }
+
+    private void setImageViewClickListeners() {
+        //todo vogliamo gestire una possibile deselezione?
+        List<Tile> playerSelectedTiles = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles(); // current player o owner? todo
+        firstSelectedTile.setOnMouseClicked(mouseEvent -> {
+            firstSelectedTile.setEffect(null);
+            orderedTiles.add(playerSelectedTiles.get(0));
+        });
+
+        secondSelectedTile.setOnMouseClicked(mouseEvent -> {
+            firstSelectedTile.setEffect(null);
+            orderedTiles.add(playerSelectedTiles.get(1));
+        });
+
+        thirdSelectedTile.setOnMouseClicked(mouseEvent -> {
+            firstSelectedTile.setEffect(null);
+            orderedTiles.add(playerSelectedTiles.get(2));
+        });
     }
 
 

@@ -12,5 +12,5 @@ public enum PersonalGoalCardIdentifier {
     PGC_9,
     PGC_10,
     PGC_11,
-    PGC_12;
+    PGC_12
 }

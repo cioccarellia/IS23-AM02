@@ -94,7 +94,6 @@ public class Board implements Serializable {
     }
 
 
-
     /**
      * @param c are the coordinates at which we have to get the cell
      * @return the cell at the given coordinates

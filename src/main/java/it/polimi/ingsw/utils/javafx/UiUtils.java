@@ -13,13 +13,13 @@ public class UiUtils {
     }
 
 
-    public static void visible(@NotNull Node @NotNull ...nodeList) {
+    public static void visible(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setVisible(true);
         }
     }
 
-    public static void invisible(@NotNull Node @NotNull ...nodeList) {
+    public static void invisible(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setVisible(false);
         }
@@ -39,13 +39,13 @@ public class UiUtils {
     }
 
 
-    public static void enable(@NotNull Node @NotNull ...nodeList) {
+    public static void enable(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setDisable(false);
         }
     }
 
-    public static void disable(@NotNull Node @NotNull ...nodeList) {
+    public static void disable(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setDisable(true);
         }
@@ -65,13 +65,13 @@ public class UiUtils {
     }
 
 
-    public static void manage(@NotNull Node @NotNull ...nodeList) {
+    public static void manage(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setManaged(true);
         }
     }
 
-    public static void unmanage(@NotNull Node @NotNull ...nodeList) {
+    public static void unmanage(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setManaged(false);
         }
@@ -91,15 +91,14 @@ public class UiUtils {
     }
 
 
-
-    public static void visibleAndManage(@NotNull Node @NotNull ...nodeList) {
+    public static void visibleAndManage(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setManaged(true);
             node.setVisible(true);
         }
     }
 
-    public static void invisibleAndUnmanage(@NotNull Node @NotNull ...nodeList) {
+    public static void invisibleAndUnmanage(@NotNull Node @NotNull ... nodeList) {
         for (Node node : nodeList) {
             node.setManaged(false);
             node.setVisible(false);

@@ -54,8 +54,6 @@ public class CliApp implements GameGateway, Renderable {
         }
 
 
-
-
         Console.out("Hi " + owner + "! Game has started, Enjoy the game and good luck!\n");
 
         render();

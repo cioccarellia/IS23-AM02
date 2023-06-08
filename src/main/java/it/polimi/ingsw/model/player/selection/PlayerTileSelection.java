@@ -16,7 +16,9 @@ public class PlayerTileSelection implements Serializable {
      */
     private List<CellInfo> selectedTiles;
 
-    public PlayerTileSelection() {selectedTiles = null;}
+    public PlayerTileSelection() {
+        selectedTiles = null;
+    }
 
     public PlayerTileSelection(List<CellInfo> tiles) {
         this.selectedTiles = tiles;

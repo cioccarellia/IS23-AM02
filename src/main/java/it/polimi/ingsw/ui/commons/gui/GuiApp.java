@@ -170,7 +170,6 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
     }
 
 
-
     /**
      * Notifies the lobby controller of a server status update.
      *

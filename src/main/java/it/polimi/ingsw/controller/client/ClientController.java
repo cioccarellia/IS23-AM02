@@ -90,7 +90,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
-    };
+    }
 
     /**
      * Lobby waiting room.

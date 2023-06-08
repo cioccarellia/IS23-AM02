@@ -90,22 +90,30 @@ public class CommonGoalCardsPrinter {
     public static void setExampleMatrices(CommonGoalCardStatus card) {
 
         switch (card.getCommonGoalCard().getId()) {
-            case SIX_PAIRS -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.SIX_PAIRS_EXAMPLE, card));
-            case DIAGONAL -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.DIAGONAL_EXAMPLE, card));
+            case SIX_PAIRS ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.SIX_PAIRS_EXAMPLE, card));
+            case DIAGONAL ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.DIAGONAL_EXAMPLE, card));
             case FOUR_GROUP_FOUR ->
                     exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.FOUR_GROUP_FOUR_EXAMPLE, card));
             case FOUR_MAX3DIFF_LINES ->
                     exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.FOUR_MAX3DIFF_LINES_EXAMPLE, card));
-            case FOUR_CORNERS -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.FOUR_CORNERS_EXAMPLE, card));
+            case FOUR_CORNERS ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.FOUR_CORNERS_EXAMPLE, card));
             case TWO_DIFF_COLUMNS ->
                     exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.TWO_DIFF_COLUMNS_EXAMPLE, card));
-            case TWO_SQUARES -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.TWO_SQUARES_EXAMPLE, card));
-            case TWO_DIFF_LINES -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.TWO_DIFF_LINES_EXAMPLE, card));
+            case TWO_SQUARES ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.TWO_SQUARES_EXAMPLE, card));
+            case TWO_DIFF_LINES ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.TWO_DIFF_LINES_EXAMPLE, card));
             case THREE_MAX3DIFF_COLUMNS ->
                     exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.THREE_MAX3DIFF_COLUMNS_EXAMPLE, card));
-            case X_TILES -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.X_TILES_EXAMPLE, card));
-            case EIGHT_TILES -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.EIGHT_TILES_EXAMPLE, card));
-            case STAIRS -> exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.STAIRS_EXAMPLE, card));
+            case X_TILES ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.X_TILES_EXAMPLE, card));
+            case EIGHT_TILES ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.EIGHT_TILES_EXAMPLE, card));
+            case STAIRS ->
+                    exampleMatrices.add(new CommonGoalCardMatrixEntry(ExampleCommonGoalCards.STAIRS_EXAMPLE, card));
             default -> {
             }
         }

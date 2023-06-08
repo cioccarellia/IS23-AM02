@@ -57,9 +57,6 @@ public class ViewFactory {
     }
 
 
-
-
-
     /**
      * Creates the UI view for the game based on the client UI mode.
      *

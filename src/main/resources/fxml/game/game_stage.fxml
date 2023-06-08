@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
@@ -326,7 +327,7 @@
         </ImageView>
     </Pane>
 
-    <VBox fx:id="insertionVBox" layoutX="498.0" layoutY="10.0" prefHeight="93.0" prefWidth="300.0" visible="true"
+    <VBox fx:id="insertionVBox" layoutX="498.0" layoutY="10.0" prefHeight="93.0" prefWidth="300.0" visible="false"
           AnchorPane.bottomAnchor="871.0" AnchorPane.leftAnchor="498.0" AnchorPane.rightAnchor="668.0"
           AnchorPane.topAnchor="5.0">
         <!-- Selected tiles -->
@@ -337,6 +338,16 @@
                 <HBox.margin>
                     <Insets right="18.0"/>
                 </HBox.margin>
+                <effect>
+                    <Lighting>
+                        <bumpInput>
+                            <Shadow/>
+                        </bumpInput>
+                        <light>
+                            <Light.Distant/>
+                        </light>
+                    </Lighting>
+                </effect>
             </ImageView>
             <ImageView fx:id="secondSelectedTile" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
                        preserveRatio="true" visible="true">
@@ -344,6 +355,16 @@
                 <HBox.margin>
                     <Insets left="18.0" right="18.0"/>
                 </HBox.margin>
+                <effect>
+                    <Lighting>
+                        <bumpInput>
+                            <Shadow/>
+                        </bumpInput>
+                        <light>
+                            <Light.Distant/>
+                        </light>
+                    </Lighting>
+                </effect>
             </ImageView>
             <ImageView fx:id="thirdSelectedTile" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
                        preserveRatio="true" visible="true">
@@ -351,6 +372,16 @@
                 <HBox.margin>
                     <Insets left="18.0"/>
                 </HBox.margin>
+                <effect>
+                    <Lighting>
+                        <bumpInput>
+                            <Shadow/>
+                        </bumpInput>
+                        <light>
+                            <Light.Distant/>
+                        </light>
+                    </Lighting>
+                </effect>
             </ImageView>
             <VBox.margin>
                 <Insets top="5.0"/>
@@ -563,6 +594,12 @@
         </ImageView>
     </Pane>
 
+    <!-- Starting player chair -->
+    <ImageView fx:id="startingChair" fitHeight="50.0" fitWidth="50.0" layoutX="809.0" layoutY="482.0"
+               pickOnBounds="true" preserveRatio="true" visible="false">
+        <Image url="@../../img/misc/firstPlayerToken_chair.png"/>
+    </ImageView>
+
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BUTTONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- Quit button -->
@@ -624,8 +661,8 @@
     </Button>
 
     <!-- Board Button -->
-    <Button fx:id="boardButton" layoutX="24.0" layoutY="410.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="141.0" text="SELECT">
+    <Button fx:id="boardSelectionButton" layoutX="24.0" layoutY="410.0" mnemonicParsing="false"
+            onAction="#onBoardSelectionButtonClick" prefHeight="26.0" prefWidth="141.0" text="SELECT">
         <font>
             <Font name="Monospaced Bold" size="14.0"/>
         </font>
@@ -654,8 +691,9 @@
 
 
     <!-- Bookshelf insertion Button -->
-    <Button fx:id="bookshelfButton" layoutX="894.0" layoutY="46.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="141.0" text="INSERT">
+    <Button fx:id="bookshelfInsertionButton" layoutX="894.0" layoutY="46.0" mnemonicParsing="false"
+            onAction="#onBookshelfInsertionButtonClick" prefHeight="26.0" prefWidth="141.0" text="INSERT"
+            visible="false">
         <font>
             <Font name="Monospaced Bold" size="14.0"/>
         </font>
