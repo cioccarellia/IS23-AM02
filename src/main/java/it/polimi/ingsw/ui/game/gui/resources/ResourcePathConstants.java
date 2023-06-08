@@ -98,18 +98,19 @@ public class ResourcePathConstants {
 
 
     public static class Commons {
-        public static final String common_six_pairs = "/img/common_goal_cards/six_pairs.jpg";
         public static final String common_diagonal = "/img/common_goal_cards/diagonal.jpg";
         public static final String common_eight_tiles = "/img/common_goal_cards/eight_tiles.jpg";
         public static final String common_four_corners = "/img/common_goal_cards/four_corners.jpg";
         public static final String common_four_group_four = "/img/common_goal_cards/four_group_four.jpg";
-        public static final String common_four_max3diff_lines = "/img/common_goal_cards/four_max3diff_line.jpg";
+        public static final String common_four_max3diff_lines = "/img/common_goal_cards/four_max3diff_lines.jpg";
+        public static final String common_six_pairs = "/img/common_goal_cards/six_pairs.jpg";
         public static final String common_stairs = "/img/common_goal_cards/stairs.jpg";
         public static final String common_three_max3diff_columns = "/img/common_goal_cards/three_max3diff_columns.jpg";
         public static final String common_two_diff_columns = "/img/common_goal_cards/two_diff_columns.jpg";
         public static final String common_two_diff_lines = "/img/common_goal_cards/two_diff_lines.jpg";
         public static final String common_two_squares = "/img/common_goal_cards/two_squares.jpg";
         public static final String common_x_tiles = "/img/common_goal_cards/x_tiles.jpg";
+
 
         public static String mapCommonsToImagePath(CommonGoalCardIdentifier id) {
             assert id != null;
@@ -140,7 +141,7 @@ public class ResourcePathConstants {
         public static final String PGC6 = "/img/personal_goal_cards/personal_goal_card_6.png";
         public static final String PGC7 = "/img/personal_goal_cards/personal_goal_card_7.png";
         public static final String PGC8 = "/img/personal_goal_cards/personal_goal_card_8.png";
-        public static final String PGC9 = "/img/personal_gol_cards/personal_goal_card_9.png";
+        public static final String PGC9 = "/img/personal_goal_cards/personal_goal_card_9.png";
         public static final String PGC10 = "/img/personal_goal_cards/personal_goal_card_10.png";
         public static final String PGC11 = "/img/personal_goal_cards/personal_goal_card_11.png";
         public static final String PGC12 = "/img/personal_goal_cards/personal_goal_card_12.png";

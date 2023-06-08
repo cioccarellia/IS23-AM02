@@ -11,8 +11,8 @@ public class PersonalGoalCardRender {
     public static void renderPersonalGoalCard(@NotNull ImageView personalGoalCardImageView, @NotNull PersonalGoalCard personalGoalCard) {
         String url = ResourcePathConstants.Personals.mapPersonalsToImagePath(personalGoalCard.getId());
 
-        Image commonGoalCardImage = new Image(url);
-        personalGoalCardImageView.setImage(commonGoalCardImage);
+        Image personalGoalCardImage = new Image(url);
+        personalGoalCardImageView.setImage(personalGoalCardImage);
     }
 }
 

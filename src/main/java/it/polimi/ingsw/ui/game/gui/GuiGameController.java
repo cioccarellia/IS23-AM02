@@ -6,22 +6,24 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.cards.common.CommonGoalCard;
-import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.renders.*;
+import it.polimi.ingsw.ui.game.gui.renders.BoardRender;
+import it.polimi.ingsw.ui.game.gui.renders.BookshelfRender;
+import it.polimi.ingsw.ui.game.gui.renders.PersonalGoalCardRender;
+import it.polimi.ingsw.ui.game.gui.renders.TokenRender;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
+import static it.polimi.ingsw.ui.game.gui.utils.GuiGameControllerUtils.*;
 
 
 /**
@@ -44,8 +48,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
-
-    private static final int maxTokensPerPlayer = 3;
 
 
     // region Main Layer
@@ -66,6 +68,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public ImageView secondCommonGoalCardTopTokenImageView;
     @FXML
     public ImageView endGameTokenImageView;
+
+    // Owner Username Label
+    @FXML
+    public Label ownerUsernameLabel;
 
 
     // Personal + Common Goal Cards ImageViews
@@ -129,9 +135,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public Label secondCommonGoalCardDescriptionLabel;
 
+    // INSERTION VBox
+    @FXML
+    public VBox insertionVBox;
 
-    // Radio buttons for column selection<
-    /*
+    // RadioButtons and HBox for column selection
     @FXML
     public RadioButton columnSelection1RadioButton;
     @FXML
@@ -141,7 +149,19 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public RadioButton columnSelection4RadioButton;
     @FXML
-    public RadioButton columnSelection5RadioButton;*/
+    public RadioButton columnSelection5RadioButton;
+    @FXML
+    public HBox radioButtonHBox;
+
+    // ImageViews and HBox for selected tiles
+    @FXML
+    public HBox selectedTilesHBox;
+    @FXML
+    public ImageView firstSelectedTile;
+    @FXML
+    public ImageView secondSelectedTile;
+    @FXML
+    public ImageView thirdSelectedTile;
 
 
     // CHAT
@@ -189,13 +209,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             return Arrays.asList(ownerFirstTokenImageView, ownerSecondTokenImageView, ownerThirdTokenImageView);
         }
 
-        /*
         private List<RadioButton> columnRadioButtons() {
             return Arrays.asList(columnSelection1RadioButton, columnSelection2RadioButton,
                     columnSelection3RadioButton, columnSelection4RadioButton, columnSelection5RadioButton);
         }
-        */
-
     }
 
 
@@ -235,15 +252,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
 
         // common goal cards and their description and their token
-        for (int i = 0; i < commonGoalCardsAmount; i++) {
-            CommonGoalCard currentCommonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
-
-            CommonGoalCardRender.renderCommonGoalCard(iter.commonGoalCards().get(i), currentCommonGoalCard);
-            iter.commonGoalCardsDescriptions().get(i).setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(currentCommonGoalCard.getId()));
-
-            Token topToken = model.getCommonGoalCards().get(i).getCardTokens().lastElement();
-            TokenRender.renderToken(iter.topTokens().get(i), topToken);
-        }
+        commonGoalCardsOnCreation(model, iter.commonGoalCards(), iter.commonGoalCardsDescriptions(), iter.topTokens());
 
         // end game token
         TokenRender.renderToken(endGameTokenImageView, FULL_SHELF_TOKEN);
@@ -255,9 +264,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         List<String> enemyList = model.getPlayersUsernameListExcluding(owner);
 
         for (int i = 0; i < enemyList.size(); i++) {
-            iter.enemyButtons().get(i).setText("@" + enemyList.get(i));
+            iter.enemyButtons().get(i).setText(enemyList.get(i));
             iter.enemyButtons().get(i).setVisible(true);
         }
+
+        // owner username label
+        ownerUsernameLabel.setText("Hi " + ownerSession.getUsername());
 
 
         currentlySelectedUsername = enemyList.get(0);
@@ -317,28 +329,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // end game token
         boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
 
-        if (hasSomeoneFinished) {
+        if (hasSomeoneFinished && model.getGameStatus() == LAST_ROUND) { //todo volendo potremmo togliere hasSomeoneFinished perché è implicito nel fatto che lo status sia LAST_ROUND
             TokenRender.renderToken(endGameTokenImageView, null);
         }
 
         // check if owner has obtained common goal card token
-        List<CommonGoalCardIdentifier> ownerAchievedCommonGoalCards = ownerSession.getAchievedCommonGoalCards();
-        List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream()
-                .map(card -> card.getCommonGoalCard().getId()).toList();
+        checkAchievedCommonGoalCards(ownerSession, model, iter.commonGoalCardsDescriptions());
 
-        for (int i = 0; i < commonGoalCardsAmount && !ownerAchievedCommonGoalCards.isEmpty(); i++) {
-            if (ownerAchievedCommonGoalCards.contains(gameCommonGoalCards.get(i))) {
-                iter.commonGoalCardsDescriptions().get(i)
-                        .setText(iter.commonGoalCardsDescriptions().get(i).getText() +
-                                "\nYou already achieved the token for this card!");
-            }
-        }
+        // common goal cards token update
+        topTokenUpdate(model, iter.topTokens());
 
         // enemy label (enemyStatusLabel)
 
 
         // statusTitleLabel and statusSubtitleLabel
-        switch (currentPlayerSession.getPlayerCurrentGamePhase()) {
+        switch (currentPlayerSession.getPlayerCurrentGamePhase()) { //todo non si sta aggiornando
             case IDLE -> {
             }
             case SELECTING -> {
@@ -353,20 +358,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             }
         }
     }
-
-    public void tokenUpdate(PlayerSession session, List<ImageView> obtainedTokens) {
-        for (int i = 0; i < maxTokensPerPlayer; i++) {
-            List<Token> playerTokens = session.getAcquiredTokens();
-            Token token = null;
-            if (i < playerTokens.size()) {
-                token = playerTokens.get(i);
-            }
-
-            TokenRender.renderToken(obtainedTokens.get(i), token);
-        }
-
-    }
-
 
     /**
      * Handles the game selection reply and updates the GUI elements based on the result.
