@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
+import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
@@ -86,23 +87,30 @@ public class GuiGameControllerUtils {
     }
 
 
-    public static void setSelectedTiles(List<ImageView> selectedTiles, PlayerSession player) {
-        PlayerTileSelection playerTileSelection = player.getPlayerTileSelection();
-        List<Tile> playerSelectedTiles = null;
+    public static void setSelectedTiles(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, Game game) {
+        List<Tile> selectedTiles = null;
 
-        if (playerTileSelection != null) {
-            playerSelectedTiles = player.getPlayerTileSelection().getSelectedTiles();
+        if (selectedTilesCoordinates != null && !selectedTilesCoordinates.isEmpty()) {
+            List<CellInfo> coordinatesAndValues = selectedTilesCoordinates
+                    .stream()
+                    .peek(it -> {
+                        assert game.getBoard().getTileAt(it).isPresent();
+                    })
+                    .map(it -> new CellInfo(it, game.getBoard().getTileAt(it).get())).toList();
+
+            selectedTiles = new PlayerTileSelection(coordinatesAndValues).getSelectedTiles();
         }
 
         for (int i = 0; i < maxSelectionSize; i++) {
             Image tileImage = null;
-            if (playerSelectedTiles != null && playerSelectedTiles.size() < i) {
-                String url = ResourcePathConstants.Tiles.mapTileToImagePath(playerSelectedTiles.get(i));
+            if (selectedTiles != null && selectedTiles.size() > i) {
+                String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(i));
                 tileImage = new Image(url);
             }
 
-            selectedTiles.get(i).setImage(tileImage);
-            setDarkeningEffect(selectedTiles.get(i));
+            selectedTilesImageViews.get(i).setImage(tileImage);
+            UiUtils.visible(selectedTilesImageViews.get(i));
+            setDarkeningEffect(selectedTilesImageViews.get(i));
         }
 
     }
@@ -137,22 +145,19 @@ public class GuiGameControllerUtils {
                     setDarkeningEffect(imageView);
                 }
 
-                if (selectedCoordinates != null) {
-                    // todo needs fixing
-                    Set<Coordinate> temporarySelectedCoordinates = selectedCoordinates;
+                //todo needs fixing
+                if (selectedCoordinates != null && !selectedCoordinates.isEmpty()) {
+                    selectedCoordinates.add(currentCoordinate);
 
-                    if (!temporarySelectedCoordinates.isEmpty()) {
-                        temporarySelectedCoordinates.add(currentCoordinate);
-
-                        if (!game.isSelectionValid(temporarySelectedCoordinates)) {
-                            setDarkeningEffect(imageView);
-                        }
+                    if (!game.isSelectionValid(selectedCoordinates)) {
+                        setDarkeningEffect(imageView);
                     }
+
+                    selectedCoordinates.remove(currentCoordinate);
                 }
             }
         }
     }
-
 
     // insertion
 
