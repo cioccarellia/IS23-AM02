@@ -27,6 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 import java.util.List;
+import java.util.Set;
 
 public class GuiGameControllerUtils {
     private static final int maxTokensPerPlayer = 3;
@@ -114,8 +115,11 @@ public class GuiGameControllerUtils {
         selectedTile.setEffect(effect);
     }
 
-    public static void makeNonSelectableTilesDark(GridPane gridBoard, Board board) {
+
+    public static void makeNonSelectableTilesDark(GridPane gridBoard, Game game, Set<Coordinate> selectedCoordinates) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
+
+        Board board = game.getBoard();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -127,8 +131,23 @@ public class GuiGameControllerUtils {
                 // ImageView containing our bookshelf tile[i][j]
                 ImageView imageView = (ImageView) gridPaneNodes[i][j];
 
-                if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(new Coordinate(i, j))) {
+                Coordinate currentCoordinate = new Coordinate(i, j);
+
+                if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(currentCoordinate)) {
                     setDarkeningEffect(imageView);
+                }
+
+                if (selectedCoordinates != null) {
+                    // todo needs fixing
+                    Set<Coordinate> temporarySelectedCoordinates = selectedCoordinates;
+
+                    if (!temporarySelectedCoordinates.isEmpty()) {
+                        temporarySelectedCoordinates.add(currentCoordinate);
+
+                        if (!game.isSelectionValid(temporarySelectedCoordinates)) {
+                            setDarkeningEffect(imageView);
+                        }
+                    }
                 }
             }
         }

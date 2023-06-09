@@ -55,22 +55,29 @@ public class ResourcePathConstants {
         public static String mapTileToImagePath(Tile tile) {
             assert tile != null;
             return switch (tile) {
-                case BOOK -> book1; //randomizer(books);
-                case CAT -> cat1;//randomizer(cats);
-                case GAME -> game1;//randomizer(games);
-                case TROPHY -> trophy1;//randomizer(trophies);
-                case PLANT -> plant1;//randomizer(plants);
-                case FRAME -> frame1;//randomizer(frames);
+                case BOOK -> book1;
+                case CAT -> cat1;
+                case GAME -> game1;
+                case TROPHY -> trophy1;
+                case PLANT -> plant1;
+                case FRAME -> frame1;
             };
         }
 
-        /*
-        public static String randomizer(List<String> list){
-            Random random = new Random();
-            int select = random.nextInt(list.size());
 
-            return list.get(select);
-        }*/
+        public static String hashedMapTileToImagePath(Tile tile, int x, int y) {
+            assert tile != null;
+            int hashedIndex = (7 * (x + 1) + 11 * (y + 1)) % 3;
+
+            return switch (tile) {
+                case BOOK -> books.get(hashedIndex); //randomizer(books);
+                case CAT -> cats.get(hashedIndex);//randomizer(cats);
+                case GAME -> games.get(hashedIndex);//randomizer(games);
+                case TROPHY -> trophies.get(hashedIndex);//randomizer(trophies);
+                case PLANT -> plants.get(hashedIndex);//randomizer(plants);
+                case FRAME -> frames.get(hashedIndex);//randomizer(frames);
+            };
+        }
     }
 
 

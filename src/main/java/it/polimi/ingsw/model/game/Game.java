@@ -288,7 +288,7 @@ public class Game implements ModelService, Serializable {
      */
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
-        boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize() && coordinates.size() > 0;
+        boolean isSelectionAmountValid = coordinates.size() <= 3 && coordinates.size() > 0; //3 = config.maxSelectionSize()
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 
