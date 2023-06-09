@@ -38,7 +38,7 @@ public class BoardRender {
                     Tile tile = board.getTileAt(i, j).get();
 
                     // we get the tile URL
-                    String imageResource = ResourcePathConstants.Tiles.mapTileToImagePath(tile);
+                    String imageResource = ResourcePathConstants.Tiles.hashedMapTileToImagePath(tile, i, j);
 
                     // and set it as the active image
                     imageView.setImage(new Image(imageResource));

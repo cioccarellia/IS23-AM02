@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
+import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
@@ -27,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 import java.util.List;
+import java.util.Set;
 
 public class GuiGameControllerUtils {
     private static final int maxTokensPerPlayer = 3;
@@ -85,23 +87,30 @@ public class GuiGameControllerUtils {
     }
 
 
-    public static void setSelectedTiles(List<ImageView> selectedTiles, PlayerSession player) {
-        PlayerTileSelection playerTileSelection = player.getPlayerTileSelection();
-        List<Tile> playerSelectedTiles = null;
+    public static void setSelectedTiles(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, Game game) {
+        List<Tile> selectedTiles = null;
 
-        if (playerTileSelection != null) {
-            playerSelectedTiles = player.getPlayerTileSelection().getSelectedTiles();
+        if (selectedTilesCoordinates != null && !selectedTilesCoordinates.isEmpty()) {
+            List<CellInfo> coordinatesAndValues = selectedTilesCoordinates
+                    .stream()
+                    .peek(it -> {
+                        assert game.getBoard().getTileAt(it).isPresent();
+                    })
+                    .map(it -> new CellInfo(it, game.getBoard().getTileAt(it).get())).toList();
+
+            selectedTiles = new PlayerTileSelection(coordinatesAndValues).getSelectedTiles();
         }
 
         for (int i = 0; i < maxSelectionSize; i++) {
             Image tileImage = null;
-            if (playerSelectedTiles != null && playerSelectedTiles.size() < i) {
-                String url = ResourcePathConstants.Tiles.mapTileToImagePath(playerSelectedTiles.get(i));
+            if (selectedTiles != null && selectedTiles.size() > i) {
+                String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(i));
                 tileImage = new Image(url);
             }
 
-            selectedTiles.get(i).setImage(tileImage);
-            setDarkeningEffect(selectedTiles.get(i));
+            selectedTilesImageViews.get(i).setImage(tileImage);
+            UiUtils.visible(selectedTilesImageViews.get(i));
+            setDarkeningEffect(selectedTilesImageViews.get(i));
         }
 
     }
@@ -114,8 +123,11 @@ public class GuiGameControllerUtils {
         selectedTile.setEffect(effect);
     }
 
-    public static void makeNonSelectableTilesDark(GridPane gridBoard, Board board) {
+
+    public static void makeNonSelectableTilesDark(GridPane gridBoard, Game game, Set<Coordinate> selectedCoordinates) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
+
+        Board board = game.getBoard();
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -127,13 +139,25 @@ public class GuiGameControllerUtils {
                 // ImageView containing our bookshelf tile[i][j]
                 ImageView imageView = (ImageView) gridPaneNodes[i][j];
 
-                if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(new Coordinate(i, j))) {
+                Coordinate currentCoordinate = new Coordinate(i, j);
+
+                if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(currentCoordinate)) {
                     setDarkeningEffect(imageView);
+                }
+
+                //todo needs fixing
+                if (selectedCoordinates != null && !selectedCoordinates.isEmpty()) {
+                    selectedCoordinates.add(currentCoordinate);
+
+                    if (!game.isSelectionValid(selectedCoordinates)) {
+                        setDarkeningEffect(imageView);
+                    }
+
+                    selectedCoordinates.remove(currentCoordinate);
                 }
             }
         }
     }
-
 
     // insertion
 
