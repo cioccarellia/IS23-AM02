@@ -160,7 +160,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public HBox radioButtonHBox;
 
-
     // ImageViews and HBox for selected tiles
     @FXML
     public HBox selectedTilesHBox;
@@ -170,6 +169,16 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public ImageView secondSelectedTile;
     @FXML
     public ImageView thirdSelectedTile;
+
+    // Labels and HBox for selected tiles
+    @FXML
+    public HBox selectedTilesNumberedLabels;
+    @FXML
+    public Label firstSelectedTilesNumberedLabel;
+    @FXML
+    public Label secondSelectedTilesNumberedLabel;
+    @FXML
+    public Label thirdSelectedTilesNumberedLabel;
 
 
     // CHAT
@@ -230,6 +239,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         private List<ImageView> selectedTiles() {
             return Arrays.asList(firstSelectedTile, secondSelectedTile, thirdSelectedTile);
         }
+
+        private List<Label> selectedTilesLabels() {
+            return Arrays.asList(firstSelectedTilesNumberedLabel, secondSelectedTilesNumberedLabel, thirdSelectedTilesNumberedLabel);
+        }
     }
 
 
@@ -254,6 +267,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
         setRadioButtonsClickListeners();
+        setImageViewClickListeners();
     }
 
 
@@ -378,19 +392,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             }
             case SELECTING -> {
                 statusTitleLabel.setText("Selection");
-                statusSubtitleLabel.setText("The player @" + currentPlayerSession.getUsername()
+                statusSubtitleLabel.setText("Player @" + currentPlayerSession.getUsername()
                         + " is selecting their tiles.");
             }
             case INSERTING -> {
                 statusTitleLabel.setText("Insertion");
-                statusSubtitleLabel.setText("The player @" + currentPlayerSession.getUsername()
+                statusSubtitleLabel.setText("Player @" + currentPlayerSession.getUsername()
                         + " is inserting the selected tiles in their bookshelf.");
             }
         }
 
-        // if it's owner's turn, the selection button appears
+        // if it's owner's turn, the selection button appears and non-selectable tiles darken
         if (ownerSession.getPlayerCurrentGamePhase() == SELECTING) {
             UiUtils.visible(boardSelectionButton);
+            // non-selectable tiles darken
+            makeNonSelectableTilesDark(boardGridPane, model.getBoard());
         } else
             UiUtils.invisible(boardSelectionButton);
     }
@@ -398,6 +414,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void gameSelection() {
         PlayerSession ownerPlayerSession = model.getPlayerSession(owner); //current o owner? todo
         UiUtils.visible(insertionVBox);
+
+        // while selection is not right (between 1 and 3 and acceptable tiles) shows error
 
 
         //handler.onViewSelection(//selected tiles);
@@ -407,13 +425,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void gameInsertion() {
         PlayerSession ownerPlayerSession = model.getPlayerSession(owner); // current o owner? todo
 
-        if (orderedTiles.size() != ownerPlayerSession.getPlayerTileSelection().getSelectedTiles().size()) {
+        while (orderedTiles.size() != ownerPlayerSession.getPlayerTileSelection().getSelectedTiles().size()) {
             statusTitleLabel.setText("Insertion error");
             statusSubtitleLabel.setText("Player " + ownerPlayerSession.getUsername() + ", you have to select all the tiles.");
         }
 
         handler.onViewInsertion(currentlySelectedColumn, orderedTiles);
-        UiUtils.invisible(insertionVBox, bookshelfInsertionButton);
+        UiUtils.invisible(insertionVBox, bookshelfInsertionButton, selectedTilesNumberedLabels);
     }
 
 
@@ -511,21 +529,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     private void setImageViewClickListeners() {
-        //todo vogliamo gestire una possibile deselezione?
+        if (model == null)
+            return;
+
         List<Tile> playerSelectedTiles = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles(); // current player o owner? todo
+
         firstSelectedTile.setOnMouseClicked(mouseEvent -> {
-            firstSelectedTile.setEffect(null);
-            orderedTiles.add(playerSelectedTiles.get(0));
+            manageTileSelectionForInsertion(firstSelectedTilesNumberedLabel, firstSelectedTile, orderedTiles, playerSelectedTiles, iter.selectedTilesLabels(), 0);
         });
 
         secondSelectedTile.setOnMouseClicked(mouseEvent -> {
-            firstSelectedTile.setEffect(null);
-            orderedTiles.add(playerSelectedTiles.get(1));
+            manageTileSelectionForInsertion(secondSelectedTilesNumberedLabel, secondSelectedTile, orderedTiles, playerSelectedTiles, iter.selectedTilesLabels(), 1);
         });
 
         thirdSelectedTile.setOnMouseClicked(mouseEvent -> {
-            firstSelectedTile.setEffect(null);
-            orderedTiles.add(playerSelectedTiles.get(2));
+            manageTileSelectionForInsertion(thirdSelectedTilesNumberedLabel, thirdSelectedTile, orderedTiles, playerSelectedTiles, iter.selectedTilesLabels(), 2);
         });
     }
 
