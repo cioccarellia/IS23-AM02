@@ -1,16 +1,16 @@
 package it.polimi.ingsw.network.tcp.messages.response;
 
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
 
 public class GameStartedEvent extends Response {
 
-    private final Game game;
+    private final GameModel game;
 
-    public GameStartedEvent(Game game) {
+    public GameStartedEvent(GameModel game) {
         this.game = game;
     }
 
-    public Game getGame() {
+    public GameModel getGame() {
         return game;
     }
 

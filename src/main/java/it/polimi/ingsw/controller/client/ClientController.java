@@ -18,10 +18,10 @@ import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
@@ -64,7 +64,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      * @param owner      The owner of the game.
      * @return The game UI view.
      */
-    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final Game model, final ClientController controller, final String owner, ExecutorService executorService) {
+    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final GameModel model, final ClientController controller, final String owner, ExecutorService executorService) {
         switch (mode) {
             case CLI -> {
                 logger.info("createGameUiAsync(): Starting CLI game");
@@ -264,7 +264,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     @ClientFunction
-    public void onGameStartedEvent(Game game) {
+    public void onGameStartedEvent(GameModel game) {
         logger.warn("onGameStartedEvent(game={})", game);
 
         asyncExecutor.submit(() -> {
@@ -279,7 +279,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     @ClientFunction
-    public void onModelUpdateEvent(Game game) {
+    public void onModelUpdateEvent(GameModel game) {
         logger.warn("onModelUpdateEvent(game={})", game);
 
         asyncExecutor.submit(() -> {
@@ -324,9 +324,14 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     @ClientFunction
-    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> playerInfo) {
+    public void onPlayerConnectionStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
         // logger.warn("onPlayerConnectionStatusUpdateEvent(turnResult={})", playerInfo);
         // not used
+    }
+
+    @Override
+    public void onChatModelUpdate(List<ChatTextMessage> messages) throws RemoteException {
+        ui.chatModelUpdate(messages);
     }
 
     /**

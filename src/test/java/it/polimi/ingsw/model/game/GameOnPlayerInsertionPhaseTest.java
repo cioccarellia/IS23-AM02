@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,7 @@ public class GameOnPlayerInsertionPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerInsertionPhase, positively")
     public void test_onPlayerInsertionPhase_positively() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

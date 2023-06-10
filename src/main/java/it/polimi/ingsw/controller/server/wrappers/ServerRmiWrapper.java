@@ -4,6 +4,7 @@ import it.polimi.ingsw.app.server.ClientConnectionsManager;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.services.ServerService;
@@ -116,4 +117,12 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
         }
     }
 
+    @Override
+    public void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
+        try {
+            controller.sendTextMessage(sendingUsername, recipient, text);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

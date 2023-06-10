@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ public class GameOnGameStartedTest implements GameTester {
     @Test
     @DisplayName("Verify common goal card initialization #1")
     public void test_onGameStarted_1_positively() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -26,7 +27,7 @@ public class GameOnGameStartedTest implements GameTester {
     @Test
     @DisplayName("Verify personal goal card initialization #2")
     public void test_onGameStarted_2_positively() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

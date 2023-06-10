@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model.config.logic;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.config.Configuration;
 import it.polimi.ingsw.utils.resources.ResourceReader;
 
 /**
- * Manages configuration parameters for the {@link it.polimi.ingsw.model.game.Game} logic, according to
+ * Manages configuration parameters for the {@link GameModel} logic, according to
  * the matching specification {@link LogicSpecifics}.
  * The parameters are the amount of common goal cards.
  */

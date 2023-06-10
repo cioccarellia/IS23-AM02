@@ -2,7 +2,7 @@ package it.polimi.ingsw.app.client.layers.view;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.launcher.parameters.ClientUiMode;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.ui.commons.gui.AppManager;
 import it.polimi.ingsw.ui.commons.gui.GuiApp;
 import it.polimi.ingsw.ui.game.GameGateway;
@@ -66,7 +66,7 @@ public class ViewFactory {
      * @param owner      The owner of the game.
      * @return The game UI view.
      */
-    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final Game model, final ClientController controller, final String owner, ExecutorService executorService) {
+    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final GameModel model, final ClientController controller, final String owner, ExecutorService executorService) {
         switch (mode) {
             case CLI -> {
                 logger.info("createGameUiAsync(): Starting CLI game");

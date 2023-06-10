@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.client.gateways;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientService;
 import it.polimi.ingsw.services.ServerService;
@@ -102,6 +103,15 @@ public class RmiClientGateway extends ClientGateway {
     public void keepAlive(String username) {
         try {
             rmiServerStub.keepAlive(username);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
+        try {
+            rmiServerStub.sendTextMessage(sendingUsername, recipient, text);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -5,9 +5,10 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
@@ -30,13 +31,15 @@ public class CliApp implements GameGateway, Renderable {
 
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
-    public Game model;
+    private GameModel model;
 
-    public GameViewEventHandler handler;
+    private List<ChatTextMessage> messages;
 
-    public final String owner;
+    private GameViewEventHandler handler;
 
-    public CliApp(Game model, GameViewEventHandler handler, String owner) {
+    private final String owner;
+
+    public CliApp(GameModel model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
@@ -65,7 +68,7 @@ public class CliApp implements GameGateway, Renderable {
      * @param game model is passed to the function on order to update always the same model
      */
     @Override
-    public void modelUpdate(Game game) {
+    public void modelUpdate(GameModel game) {
         this.model = game;
         render();
     }
@@ -179,6 +182,11 @@ public class CliApp implements GameGateway, Renderable {
         }
     }
 
+
+    @Override
+    public void chatModelUpdate(List<ChatTextMessage> messages) {
+        this.messages = messages;
+    }
 
     /**
      * Shows ranking and announces the winner.

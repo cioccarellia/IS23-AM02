@@ -1,9 +1,9 @@
 package it.polimi.ingsw.controller.server.result.types;
 
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
 
 public record TileSelectionSuccess(
-        Game model
+        GameModel model
 ) implements RequestType {
 
 }

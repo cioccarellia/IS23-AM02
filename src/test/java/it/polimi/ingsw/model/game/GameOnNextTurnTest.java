@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ public class GameOnNextTurnTest implements GameTester {
     @Test
     @DisplayName("Verify the function of onNextTurn, positively ")
     public void test_onNextTurn_positively() {
-        Game testingGame = new Game(GAME_MODE_2_PLAYERS);
+        GameModel testingGame = new GameModel(GAME_MODE_2_PLAYERS);
         testingGame.addPlayer("Player_A");
         testingGame.addPlayer("Player_B");
 
@@ -26,7 +27,7 @@ public class GameOnNextTurnTest implements GameTester {
     @Test
     @DisplayName("Verify the function of onNextTurn, negatively ")
     public void test_onNextTurn_negatively() {
-        Game testingGame = new Game(GAME_MODE_2_PLAYERS);
+        GameModel testingGame = new GameModel(GAME_MODE_2_PLAYERS);
         testingGame.addPlayer("Player_A");
         testingGame.addPlayer("Player_B");
 

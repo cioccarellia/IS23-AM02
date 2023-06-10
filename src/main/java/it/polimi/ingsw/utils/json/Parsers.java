@@ -30,8 +30,8 @@ public class Parsers {
     private final static RuntimeTypeAdapterFactory<Message> runtimeTypeAdapterFactory =
             RuntimeTypeAdapterFactory
                     .of(Message.class, META_CLASSNAME_JSON_FIELD)
-                    .registerSubtype(ServerStatusRequest.class, ServerStatusRequest.class.getName())
                     .registerSubtype(ConnectionAcceptanceEvent.class, ConnectionAcceptanceEvent.class.getName())
+                    .registerSubtype(ServerStatusRequest.class, ServerStatusRequest.class.getName())
                     .registerSubtype(ServerStatusRequestReply.class, ServerStatusRequestReply.class.getName())
                     .registerSubtype(GameCreationRequest.class, GameCreationRequest.class.getName())
                     .registerSubtype(GameCreationRequestReply.class, GameCreationRequestReply.class.getName())
@@ -46,7 +46,10 @@ public class Parsers {
                     .registerSubtype(GameInsertionTurnResponse.class, GameInsertionTurnResponse.class.getName())
                     .registerSubtype(GameSelectionTurnRequest.class, GameSelectionTurnRequest.class.getName())
                     .registerSubtype(GameSelectionTurnRequestReply.class, GameSelectionTurnRequestReply.class.getName())
-                    .registerSubtype(GameSelectionTurnResponse.class, GameSelectionTurnResponse.class.getName());
+                    .registerSubtype(GameSelectionTurnResponse.class, GameSelectionTurnResponse.class.getName())
+                    .registerSubtype(ChatTextMessageRequest.class, ChatTextMessageRequest.class.getName())
+                    .registerSubtype(ChatModelUpdateEvent.class, ChatModelUpdateEvent.class.getName())
+                    .registerSubtype(GameEndedEventResponse.class, GameEndedEventResponse.class.getName());
 
 
     private static final Gson marshaledGson = new GsonBuilder()

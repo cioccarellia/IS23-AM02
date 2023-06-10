@@ -12,7 +12,8 @@ import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.services.ClientService;
 
 import java.rmi.RemoteException;
@@ -100,7 +101,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onGameStartedEvent(Game game) {
+    public void onGameStartedEvent(GameModel game) {
         forward(source -> {
             try {
                 source.onGameStartedEvent(game);
@@ -111,7 +112,7 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onModelUpdateEvent(Game game) {
+    public void onModelUpdateEvent(GameModel game) {
         forward(source -> {
             try {
                 source.onModelUpdateEvent(game);
@@ -144,10 +145,10 @@ public class BroadcastClientService implements ClientService {
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(ServerStatus status, List<PlayerInfo> usernames) {
         forward(source -> {
             try {
-                source.onPlayerConnectionStatusUpdateEvent(usernames);
+                source.onPlayerConnectionStatusUpdateEvent(status, usernames);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -160,6 +161,17 @@ public class BroadcastClientService implements ClientService {
         forward(clientService -> {
             try {
                 clientService.onGameEndedEvent();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void onChatModelUpdate(List<ChatTextMessage> messages) throws RemoteException {
+        forward(clientService -> {
+            try {
+                clientService.onChatModelUpdate(messages);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

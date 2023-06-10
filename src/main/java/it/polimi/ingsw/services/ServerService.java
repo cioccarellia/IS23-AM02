@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
 
 import java.rmi.Remote;
@@ -60,6 +61,13 @@ public interface ServerService extends Remote {
     @ServerFunction
     void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException;
 
+
+
+    /**
+     * Sends an acknowledgement message.
+     */
+    @ServerFunction
+    void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException;
 
     /**
      * Sends an acknowledgement message.

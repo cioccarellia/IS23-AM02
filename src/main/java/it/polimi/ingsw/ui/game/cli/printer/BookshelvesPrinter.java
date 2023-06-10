@@ -1,9 +1,9 @@
 package it.polimi.ingsw.ui.game.cli.printer;
 
 import com.github.tomaslanger.chalk.Chalk;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.game.cli.Console;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +22,7 @@ public class BookshelvesPrinter {
      *
      * @param game the game being played
      */
-    public static void print(Game game) {
+    public static void print(GameModel game) {
         int dim = game.getPlayerCount();
 
         List<Tile[][]> bookshelves = game

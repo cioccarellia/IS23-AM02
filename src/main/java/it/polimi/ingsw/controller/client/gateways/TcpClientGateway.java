@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.client.gateways;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.replies.GameConnectionRequestReply;
@@ -184,5 +185,12 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         KeepAlive keepAliveMessage = new KeepAlive(username);
 
         SocketSystem.sendAsync(socketOut, keepAliveMessage, KeepAlive.class);
+    }
+
+    @Override
+    public void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
+        ChatTextMessageRequest message = new ChatTextMessageRequest(sendingUsername, recipient, text);
+
+        SocketSystem.sendAsync(socketOut, message, ChatTextMessageRequest.class);
     }
 }

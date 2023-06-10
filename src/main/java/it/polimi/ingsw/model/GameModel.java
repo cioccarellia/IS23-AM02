@@ -1,13 +1,15 @@
-package it.polimi.ingsw.model.game;
+package it.polimi.ingsw.model;
 
 import com.google.gson.annotations.Expose;
-import it.polimi.ingsw.model.ModelService;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.personal.PersonalGoalCard;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
+import it.polimi.ingsw.model.game.CellInfo;
+import it.polimi.ingsw.model.game.GameMode;
+import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.game.extractors.CommonGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.PersonalGoalCardExtractor;
 import it.polimi.ingsw.model.game.extractors.TileExtractor;
@@ -38,11 +40,11 @@ import static java.util.Comparator.comparing;
 /**
  * Model class representing an instance of a game.
  */
-public class Game implements ModelService, Serializable {
+public class GameModel implements ModelService, Serializable {
 
     // Game logger
     @Expose(serialize = false)
-    private static final Logger logger = LoggerFactory.getLogger(Game.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameModel.class);
 
     /**
      * Basic game related data
@@ -90,7 +92,7 @@ public class Game implements ModelService, Serializable {
     private PlayerNumber startingPlayerNumber, currentPlayerNumber;
 
 
-    public Game(GameMode _mode) {
+    public GameModel(GameMode _mode) {
         mode = _mode;
         sessions = new SessionManager(mode);
 

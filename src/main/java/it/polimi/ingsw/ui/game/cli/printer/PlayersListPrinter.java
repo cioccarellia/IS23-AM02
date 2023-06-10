@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ui.game.cli.printer;
 
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.player.PlayerNumber;
 import it.polimi.ingsw.ui.game.cli.Console;
 import it.polimi.ingsw.utils.model.TurnHelper;
@@ -12,7 +12,7 @@ public class PlayersListPrinter {
      *
      * @param game from which we need to get the players
      */
-    public static void print(Game game) {
+    public static void print(GameModel game) {
 
         Console.out("List of players with their acquired tokens:");
         PlayerNumber currentPlayer = game.getCurrentPlayerSession().getPlayerNumber();

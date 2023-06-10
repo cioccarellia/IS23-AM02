@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,7 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerSelectionPhase, positively #1")
     public void test_onPlayerSelectionPhase_1_positively() {
-        Game game = new Game(GAME_MODE_4_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -48,7 +49,7 @@ public class GameOnPlayerSelectionPhaseTest implements GameTester {
     @DisplayName("Checks that calling onPlayerSelectionPhase(coordinates) actually saves the selection on" +
             "the user session upon successful execution")
     public void test_onPlayerSelectionPhase_assertSelectionSavesCoordinatesInUserSession() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

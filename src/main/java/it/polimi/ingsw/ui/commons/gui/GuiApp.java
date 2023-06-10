@@ -12,7 +12,8 @@ import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameUiConstants;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
@@ -62,7 +63,7 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
     private static GameViewEventHandler gameHandler;
 
     // Injected model data
-    private static Game model;
+    private static GameModel model;
     private static String owner;
 
 
@@ -131,7 +132,7 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
      * @param _model The game model.
      * @param _owner The owner of the game.
      */
-    public static void injectGameModelPostLogin(Game _model, GameViewEventHandler _gameHandler, String _owner) {
+    public static void injectGameModelPostLogin(GameModel _model, GameViewEventHandler _gameHandler, String _owner) {
         model = _model;
         owner = _owner;
         gameHandler = _gameHandler;
@@ -212,7 +213,9 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
      */
     @Override
     public void onGameCreated() {
-        gameController.onGameCreated();
+        Platform.runLater(() -> {
+            gameController.onGameCreated();
+        });
     }
 
     /**
@@ -221,8 +224,10 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
      * @param game The updated game model.
      */
     @Override
-    public void modelUpdate(Game game) {
-        gameController.modelUpdate(game);
+    public void modelUpdate(GameModel game) {
+        Platform.runLater(() -> {
+            gameController.modelUpdate(game);
+        });
     }
 
     /**
@@ -232,7 +237,9 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
      */
     @Override
     public void onGameSelectionReply(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
-        gameController.onGameSelectionReply(turnResult);
+        Platform.runLater(() -> {
+            gameController.onGameSelectionReply(turnResult);
+        });
     }
 
     /**
@@ -242,9 +249,17 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
      */
     @Override
     public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
-        gameController.onGameInsertionReply(turnResult);
+        Platform.runLater(() -> {
+            gameController.onGameInsertionReply(turnResult);
+        });
     }
 
+    @Override
+    public void chatModelUpdate(List<ChatTextMessage> messages) {
+        Platform.runLater(() -> {
+            gameController.chatModelUpdate(messages);
+        });
+    }
 
     public static void main(String[] args) {
         Application.launch(args);

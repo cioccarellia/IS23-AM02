@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that starting a game without enough players throws an exception")
     public void test_onGameStarted_throwsException_NoEnoughPlayers() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer("A");
 
@@ -32,7 +33,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that starting a game without enough players throws an exception")
     public void test_onGameStarted_throwsException_TooManyPlayers() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         final String PLAYER_A = "PlayerA", PLAYER_B = "PlayerB", PLAYER_C = "PlayerC", PLAYER_D = "PlayerD";
 
@@ -63,7 +64,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that players can not be added after number of players reached")
     public void test_onGameStarted_throwsException_PlayersAddedAfterGameStarted() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer("A");
         game.addPlayer("B");
@@ -80,7 +81,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("Tests that players can not be added after the game has started")
     public void test_onGameStarted_throwsException_PlayersAddedNotInInitializingGamePhase() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
         game.onGameStarted();
@@ -96,7 +97,7 @@ public class GameExceptionTests implements GameTester {
     @Test
     @DisplayName("verify the function onPlayerSelectionPhase, coordinates are not valid exception")
     public void test_onPlayerSelectionPhase_coordinates_not_valid_exception() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

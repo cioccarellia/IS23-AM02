@@ -11,7 +11,8 @@ import it.polimi.ingsw.controller.server.result.types.GameConnectionSuccess;
 import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -40,12 +41,12 @@ public interface ClientService extends Remote {
     void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) throws RemoteException;
 
     @ClientFunction
-    void onGameStartedEvent(Game game) throws RemoteException;
+    void onGameStartedEvent(GameModel game) throws RemoteException;
 
 
     // Running
     @ClientFunction
-    void onModelUpdateEvent(Game game) throws RemoteException;
+    void onModelUpdateEvent(GameModel game) throws RemoteException;
 
     @ClientFunction
     void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) throws RemoteException;
@@ -56,7 +57,10 @@ public interface ClientService extends Remote {
 
     // Connection - Disconnection
     @ClientFunction
-    void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) throws RemoteException;
+    void onPlayerConnectionStatusUpdateEvent(ServerStatus status, List<PlayerInfo> usernames) throws RemoteException;
+
+    @ClientFunction
+    void onChatModelUpdate(List<ChatTextMessage> messages) throws RemoteException;
 
     @ClientFunction
     void onGameEndedEvent() throws RemoteException;

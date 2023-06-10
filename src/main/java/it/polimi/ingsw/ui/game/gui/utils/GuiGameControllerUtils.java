@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.game.gui.utils;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -8,7 +9,6 @@ import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
@@ -38,7 +38,7 @@ public class GuiGameControllerUtils {
 
 
     // onGameCreated
-    public static void commonGoalCardsOnCreation(Game model, List<ImageView> commonGoalCards, List<Label> commonGoalCardDescriptions, List<ImageView> topTokens) {
+    public static void commonGoalCardsOnCreation(GameModel model, List<ImageView> commonGoalCards, List<Label> commonGoalCardDescriptions, List<ImageView> topTokens) {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             CommonGoalCard currentCommonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
 
@@ -65,7 +65,7 @@ public class GuiGameControllerUtils {
     }
 
 
-    public static void checkAchievedCommonGoalCards(PlayerSession session, Game model, List<Label> commonGoalCardDescriptions) {
+    public static void checkAchievedCommonGoalCards(PlayerSession session, GameModel model, List<Label> commonGoalCardDescriptions) {
         List<CommonGoalCardIdentifier> ownerAchievedCommonGoalCards = session.getAchievedCommonGoalCards();
         List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream()
                 .map(card -> card.getCommonGoalCard().getId()).toList();
@@ -79,7 +79,7 @@ public class GuiGameControllerUtils {
         }
     }
 
-    public static void topTokenUpdate(Game model, List<ImageView> topTokens) {
+    public static void topTokenUpdate(GameModel model, List<ImageView> topTokens) {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             Token topToken = model.getCommonGoalCards().get(i).getCardTokens().lastElement();
             TokenRender.renderToken(topTokens.get(i), topToken);
@@ -87,7 +87,7 @@ public class GuiGameControllerUtils {
     }
 
 
-    public static void setSelectedTiles(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, Game game) {
+    public static void setSelectedTiles(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, GameModel game) {
         List<Tile> selectedTiles = null;
 
         if (selectedTilesCoordinates != null && !selectedTilesCoordinates.isEmpty()) {
@@ -110,21 +110,21 @@ public class GuiGameControllerUtils {
 
             selectedTilesImageViews.get(i).setImage(tileImage);
             UiUtils.visible(selectedTilesImageViews.get(i));
-            setDarkeningEffect(selectedTilesImageViews.get(i));
+            enableDarkeningEffect(selectedTilesImageViews.get(i));
         }
 
     }
 
-    public static void setDarkeningEffect(ImageView selectedTile) {
+    public static void enableDarkeningEffect(ImageView selectedTile) {
         Light.Distant light = new Light.Distant();
-        light.setColor(Color.DARKGREY);
+        light.setColor(Color.valueOf("#444444"));
 
         Lighting effect = new Lighting(light);
         selectedTile.setEffect(effect);
     }
 
 
-    public static void makeNonSelectableTilesDark(GridPane gridBoard, Game game, Set<Coordinate> selectedCoordinates) {
+    public static void makeNonSelectableTilesDark(GridPane gridBoard, GameModel game, Set<Coordinate> selectedCoordinates) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
 
         Board board = game.getBoard();
@@ -142,7 +142,7 @@ public class GuiGameControllerUtils {
                 Coordinate currentCoordinate = new Coordinate(i, j);
 
                 if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(currentCoordinate)) {
-                    setDarkeningEffect(imageView);
+                    enableDarkeningEffect(imageView);
                 }
 
                 //todo needs fixing
@@ -150,7 +150,7 @@ public class GuiGameControllerUtils {
                     selectedCoordinates.add(currentCoordinate);
 
                     if (!game.isSelectionValid(selectedCoordinates)) {
-                        setDarkeningEffect(imageView);
+                        enableDarkeningEffect(imageView);
                     }
 
                     selectedCoordinates.remove(currentCoordinate);
@@ -191,7 +191,7 @@ public class GuiGameControllerUtils {
             orderedTiles.remove(playerSelectedTiles.get(0));
 
             // set the darkened effect to the ImageView
-            setDarkeningEffect(selectedTileImageView);
+            enableDarkeningEffect(selectedTileImageView);
 
             // make the label invisible and set it to 0 again
             UiUtils.invisible(selectedTileLabel);

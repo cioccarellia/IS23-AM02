@@ -1,9 +1,9 @@
 package it.polimi.ingsw.ui.game.cli.parser;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.ui.game.cli.Console;
 import it.polimi.ingsw.utils.model.CoordinatesHelper;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class CoordinatesParser {
      * @param game the game that is being played
      * @return the set of coordinates selected by the player, already checked for validity
      */
-    public static Set<Coordinate> scan(Game game) {
+    public static Set<Coordinate> scan(GameModel game) {
 
         while (true) {
             Console.out("""
@@ -101,7 +101,7 @@ public class CoordinatesParser {
      * @return if the selected coordinates are valid, checking if they all contain a tile, if the amount is within game
      * rules, if they all have at least one free edge and if they are in a straight line
      */
-    public static boolean isSelectionValid(@NotNull Set<Coordinate> coordinates, Game game) {
+    public static boolean isSelectionValid(@NotNull Set<Coordinate> coordinates, GameModel game) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates, game);
         boolean isSelectionAmountValid = coordinates.size() <= config.maxSelectionSize() && coordinates.size() > 0;
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> game.getBoard().countFreeEdges(coordinate) > 0);
@@ -115,7 +115,7 @@ public class CoordinatesParser {
      * @param game        the game that is being played
      * @return if the cells at the given coordinates all contain a tile
      */
-    private static boolean areAllCoordinatesPresent(@NotNull Collection<Coordinate> coordinates, Game game) {
+    private static boolean areAllCoordinatesPresent(@NotNull Collection<Coordinate> coordinates, GameModel game) {
         return coordinates.stream().allMatch(it -> game.getBoard().getTileAt(it).isPresent());
     }
 

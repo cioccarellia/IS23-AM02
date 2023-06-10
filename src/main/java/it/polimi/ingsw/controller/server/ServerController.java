@@ -16,11 +16,13 @@ import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.controller.server.router.Router;
 import it.polimi.ingsw.controller.server.validator.Validator;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
+import it.polimi.ingsw.model.ChatModel;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.model.game.GameStatus;
 import it.polimi.ingsw.model.player.PlayerNumber;
@@ -66,7 +68,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     /**
      * Game instance
      */
-    private Game game;
+    private GameModel gameModel;
+
+    private ChatModel chatModel = new ChatModel();
 
     /**
      *
@@ -154,8 +158,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // accepting request and setting up the game model
-        game = new Game(mode);
-        game.addPlayer(username);
+        gameModel = new GameModel(mode);
+        gameModel.addPlayer(username);
         maxPlayerAmount = mode.maxPlayerAmount();
 
         // update the server status
@@ -223,7 +227,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return;
         }
 
-        if (game.getGameStatus() == ENDED) {
+        if (gameModel.getGameStatus() == ENDED) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_ENDED);
 
             // anonymous routing
@@ -233,17 +237,17 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // add player to game
-        game.addPlayer(username);
+        gameModel.addPlayer(username);
 
         // whether the conditions for a new game are met at the time of executing this call
-        boolean shouldStartGame = maxPlayerAmount == game.getPlayerCount();
+        boolean shouldStartGame = maxPlayerAmount == gameModel.getPlayerCount();
 
         if (shouldStartGame) {
             // conditions for starting game are met
             serverStatus = GAME_RUNNING;
 
             // tell model to start its active game phase
-            game.onGameStarted();
+            gameModel.onGameStarted();
         }
 
 
@@ -263,7 +267,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         if (shouldStartGame) {
             // broadcast the game model with all users to everybody, only if the game has started.
             // This will display the main game UI
-            router.broadcast().onGameStartedEvent(game);
+            router.broadcast().onGameStartedEvent(gameModel);
         }
 
 
@@ -274,7 +278,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     // Game logic
     public synchronized boolean isUsernameActivePlayer(@NotNull String username) {
-        return username.equals(game.getCurrentPlayerSession().getUsername());
+        return username.equals(gameModel.getCurrentPlayerSession().getUsername());
     }
 
     public synchronized boolean shouldStandbyGame() {
@@ -292,20 +296,20 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return;
         }
 
-        if (game.getCurrentPlayerSession().getPlayerCurrentGamePhase() != SELECTING) {
+        if (gameModel.getCurrentPlayerSession().getPlayerCurrentGamePhase() != SELECTING) {
             router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.WRONG_GAME_PHASE));
             return;
         }
 
-        if (!game.isSelectionValid(selection)) {
+        if (!gameModel.isSelectionValid(selection)) {
             router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION));
             return;
         }
 
-        game.onPlayerSelectionPhase(selection);
+        gameModel.onPlayerSelectionPhase(selection);
 
-        router.route(username).onGameSelectionTurnEvent(new TypedResult.Success<>(new TileSelectionSuccess(game)));
-        router.broadcastExcluding(username).onModelUpdateEvent(game);
+        router.route(username).onGameSelectionTurnEvent(new TypedResult.Success<>(new TileSelectionSuccess(gameModel)));
+        router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
     }
 
 
@@ -319,12 +323,12 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return;
         }
 
-        if (game.getCurrentPlayerSession().getPlayerCurrentGamePhase() != INSERTING) {
+        if (gameModel.getCurrentPlayerSession().getPlayerCurrentGamePhase() != INSERTING) {
             router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_GAME_PHASE));
             return;
         }
 
-        if (!game.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles)) {
+        if (!gameModel.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles)) {
             router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION));
             return;
         }
@@ -339,20 +343,20 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return;
         }
 
-        if (!game.getCurrentPlayerSession().getBookshelf().canFit(column, tiles.size())) {
+        if (!gameModel.getCurrentPlayerSession().getBookshelf().canFit(column, tiles.size())) {
             router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.NO_FIT));
             return;
         }
 
-        game.onPlayerInsertionPhase(column, tiles);
-        game.onPlayerTurnEnding();
+        gameModel.onPlayerInsertionPhase(column, tiles);
+        gameModel.onPlayerTurnEnding();
 
         PlayerSession nextPlayer = processNextPlayer();
 
-        game.onNextTurn(nextPlayer.getUsername());
+        gameModel.onNextTurn(nextPlayer.getUsername());
 
-        router.route(username).onGameInsertionTurnEvent(new TypedResult.Success<>(new TileInsertionSuccess(game)));
-        router.broadcastExcluding(username).onModelUpdateEvent(game);
+        router.route(username).onGameInsertionTurnEvent(new TypedResult.Success<>(new TileInsertionSuccess(gameModel)));
+        router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
     }
 
 
@@ -368,16 +372,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
     private synchronized PlayerSession processNextPlayer() {
-        PlayerNumber currentPlayerNumber = game.getCurrentPlayerSession().getPlayerNumber();
+        PlayerNumber currentPlayerNumber = gameModel.getCurrentPlayerSession().getPlayerNumber();
 
         PlayerNumber next = next_rec(currentPlayerNumber);
 
-        return game.getPlayerSession(next);
+        return gameModel.getPlayerSession(next);
     }
 
     private synchronized PlayerNumber next_rec(@NotNull PlayerNumber current) {
-        PlayerNumber naturalNextNumber = current.next(game.getGameMode());
-        PlayerSession next = game.getPlayerSession(naturalNextNumber);
+        PlayerNumber naturalNextNumber = current.next(gameModel.getGameMode());
+        PlayerSession next = gameModel.getPlayerSession(naturalNextNumber);
 
         if (connectionsManager.isClientDisconnected(next.getUsername())) {
             return next_rec(next.getPlayerNumber());
@@ -397,6 +401,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         game.getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
     }*/
 
+
+
+    @Override
+    public synchronized void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
+        chatModel.addMessage(sendingUsername, recipient, text);
+
+        router.route(sendingUsername).onChatModelUpdate(
+                chatModel.getMessagesFor(sendingUsername)
+        );
+    }
 
     @Override
     public ClientConnectionsManager getConnectionsManager() {
@@ -425,16 +439,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 ).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
 
 
-                if (game != null && game.getGameStatus() != GameStatus.INITIALIZATION) {
+                if (gameModel != null && gameModel.getGameStatus() != GameStatus.INITIALIZATION) {
                     // Model update: there is an active player, and the game is started/last round/standby
                     // we have to check if the current player is disconnected.
                     // if it is, and we are not in standby, we need to move forward
-                    String currentPlayerUsername = game.getCurrentPlayerSession().getUsername();
+                    String currentPlayerUsername = gameModel.getCurrentPlayerSession().getUsername();
 
                     if (connectionsManager.getDisconnectedClientUsernames().contains(currentPlayerUsername)) {
                         // force-forward turn, rollback to pre-selection model
                         PlayerSession nextPlayer = processNextPlayer();
-                        game.onForcedNextTurn(nextPlayer.getUsername());
+                        gameModel.onForcedNextTurn(nextPlayer.getUsername());
                     }
 
 
@@ -442,32 +456,32 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
                     if (shouldStandby) {
                         // player(s) disconnected and game standby
-                        boolean hasModelStatusChanged = game.onStandby();
+                        boolean hasModelStatusChanged = gameModel.onStandby();
 
                         if (hasModelStatusChanged) {
                             router.broadcastExcluding(
                                     connectionsManager.getDisconnectedClientUsernames()
-                            ).onModelUpdateEvent(game);
+                            ).onModelUpdateEvent(gameModel);
                         }
                     } else {
                         // player(s) disconnected but game running
-                        boolean hasModelStatusChanged = game.onResume();
+                        boolean hasModelStatusChanged = gameModel.onResume();
 
                         if (hasModelStatusChanged) {
                             router.broadcastExcluding(
                                     connectionsManager.getDisconnectedClientUsernames()
-                            ).onModelUpdateEvent(game);
+                            ).onModelUpdateEvent(gameModel);
                         }
                     }
                 }
             } else {
                 // players all connected
-                boolean hasModelStatusChanged = game.onResume();
+                boolean hasModelStatusChanged = gameModel.onResume();
 
                 if (hasModelStatusChanged) {
                     router.broadcastExcluding(
                             connectionsManager.getDisconnectedClientUsernames()
-                    ).onModelUpdateEvent(game);
+                    ).onModelUpdateEvent(gameModel);
                 }
 
                 // all clients are back online, resend model and server status. Maybe make appropriate request

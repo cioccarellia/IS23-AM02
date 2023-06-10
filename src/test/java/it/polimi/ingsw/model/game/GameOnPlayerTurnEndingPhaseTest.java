@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
@@ -22,7 +23,7 @@ public class GameOnPlayerTurnEndingPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function OnPlayerTurnEndingPhase, positively")
     public void test_OnPlayerTurnEndingPhase_positively_1() {
-        Game game = new Game(GAME_MODE_4_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_4_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -56,7 +57,7 @@ public class GameOnPlayerTurnEndingPhaseTest implements GameTester {
     @Test
     @DisplayName("verify the function OnPlayerTurnEndingPhase, positively")
     public void test_OnPlayerTurnEndingPhase_positively_2() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
         Tile[][] shelfMatrix = {
                 {null, null, null, null, null},
                 {null, null, null, null, null},

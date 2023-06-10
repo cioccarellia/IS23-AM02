@@ -6,21 +6,21 @@ import java.util.Optional;
 
 public record ChatTextMessage(
         String senderUsername,
-        Recipient recipient,
+        MessageRecipient messageRecipient,
         String text,
         Timestamp stamp
 ) implements Serializable {
     public boolean isBroadcast() {
-        return switch (recipient) {
-            case Recipient.Broadcast broadcast -> true;
-            case Recipient.Direct direct -> false;
+        return switch (messageRecipient) {
+            case MessageRecipient.Broadcast broadcast -> true;
+            case MessageRecipient.Direct direct -> false;
         };
     }
 
     public Optional<String> directUsername() {
-        return switch (recipient) {
-            case Recipient.Broadcast broadcast -> Optional.empty();
-            case Recipient.Direct direct -> Optional.of(direct.username());
+        return switch (messageRecipient) {
+            case MessageRecipient.Broadcast broadcast -> Optional.empty();
+            case MessageRecipient.Direct direct -> Optional.of(direct.username());
         };
     }
 }

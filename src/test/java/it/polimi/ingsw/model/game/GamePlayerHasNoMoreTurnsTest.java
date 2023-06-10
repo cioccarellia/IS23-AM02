@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.GameModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ public class GamePlayerHasNoMoreTurnsTest implements GameTester {
     @Test
     @DisplayName("Verify the function of playerHasNoMoreTurns, positively")
     public void test_playerHasNoMoreTurns_positively() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);
@@ -26,7 +27,7 @@ public class GamePlayerHasNoMoreTurnsTest implements GameTester {
     @Test
     @DisplayName("Verify the function of playerHasNoMoreTurns, negatively #1")
     public void test_playerHasNoMoreTurns_negatively_1() {
-        Game game = new Game(GAME_MODE_2_PLAYERS);
+        GameModel game = new GameModel(GAME_MODE_2_PLAYERS);
 
         game.addPlayer(PLAYER_A);
         game.addPlayer(PLAYER_B);

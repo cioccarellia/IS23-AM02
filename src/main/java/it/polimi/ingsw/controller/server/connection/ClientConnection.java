@@ -14,7 +14,8 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientProtocol;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.services.ClientService;
 
 import java.rmi.RemoteException;
@@ -118,6 +119,7 @@ public class ClientConnection implements ClientService {
         try {
             service().onAcceptConnectionAndFinalizeUsername(string);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -127,6 +129,7 @@ public class ClientConnection implements ClientService {
         try {
             service().onServerStatusUpdateEvent(status, playerInfo);
         } catch (RemoteException e) {
+            System.exit(-1);
             // connection refused from host, remove, flag as dead and propagate
             throw new RuntimeException(e);
         }
@@ -137,6 +140,7 @@ public class ClientConnection implements ClientService {
         try {
             service().onGameCreationReply(result);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -146,24 +150,27 @@ public class ClientConnection implements ClientService {
         try {
             service().onGameConnectionReply(result);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void onGameStartedEvent(Game game) {
+    public void onGameStartedEvent(GameModel game) {
         try {
             service().onGameStartedEvent(game);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void onModelUpdateEvent(Game game) {
+    public void onModelUpdateEvent(GameModel game) {
         try {
             service().onModelUpdateEvent(game);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -173,6 +180,7 @@ public class ClientConnection implements ClientService {
         try {
             service().onGameSelectionTurnEvent(turnResult);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -182,21 +190,41 @@ public class ClientConnection implements ClientService {
         try {
             service().onGameInsertionTurnEvent(turnResult);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(ServerStatus status, List<PlayerInfo> usernames) {
         try {
-            service().onPlayerConnectionStatusUpdateEvent(usernames);
+            service().onPlayerConnectionStatusUpdateEvent(status, usernames);
         } catch (RemoteException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void onGameEndedEvent() {
-
+        try {
+            service().onGameEndedEvent();
+        } catch (RemoteException e) {
+            System.exit(-1);
+            throw new RuntimeException(e);
+        }
     }
+
+
+    @Override
+    public void onChatModelUpdate(List<ChatTextMessage> messages) throws RemoteException {
+        try {
+            service().onChatModelUpdate(messages);
+        } catch (RemoteException e) {
+            System.exit(-1);
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

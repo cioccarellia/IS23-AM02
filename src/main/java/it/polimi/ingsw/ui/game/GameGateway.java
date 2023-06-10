@@ -5,9 +5,11 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface GameGateway extends Serializable {
 
@@ -19,7 +21,13 @@ public interface GameGateway extends Serializable {
     /**
      * Called to notify an update in the game data model
      */
-    void modelUpdate(Game game);
+    void modelUpdate(GameModel game);
+
+
+    /**
+     * Called to notify an update in the game data model
+     */
+    void chatModelUpdate(List<ChatTextMessage> messages);
 
     /**
      * Calls to notify about a previously-submitted selection attempt

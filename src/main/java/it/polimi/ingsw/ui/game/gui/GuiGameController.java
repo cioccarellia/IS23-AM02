@@ -6,13 +6,13 @@ import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailu
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
+import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
@@ -204,7 +204,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private String owner;
 
     // Model data
-    private Game model;
+    private GameModel model;
+    private List<ChatTextMessage> messages;
 
     private int currentlySelectedColumn;
 
@@ -266,7 +267,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
      * @param handler The event handler for game events.
      * @param owner   The owner of the GUI controller.
      */
-    public void injectModelData(Game model, GameViewEventHandler handler, String owner) {
+    public void injectModelData(GameModel model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
@@ -284,17 +285,34 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
+
+    private PlayerSession currentPlayerSession() {
+        return model.getCurrentPlayerSession();
+    }
+    
+    private PlayerSession ownerSession() {
+        return model.getPlayerSession(owner);
+    }
+
+    private PlayerSession startingPlayerSession() {
+        return model.getStartingPlayerSession();
+    }
+
+    private PlayerSession selectedEnemySession() {
+        return model.getPlayerSession(currentlySelectedUsername);
+    }
+
+
+
     /**
      * Called when the game is created.
      */
     @Override
     public void onGameCreated() {
         if (model == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("JavaFX app launched without valid model");
         }
 
-        PlayerSession ownerSession = model.getSessions().getByUsername(owner);
-        PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
         PlayerSession startingPlayerSession = model.getStartingPlayerSession();
 
 
@@ -305,22 +323,23 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         TokenRender.renderToken(endGameTokenImageView, FULL_SHELF_TOKEN);
 
         // personal goal card
-        PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession.getPersonalGoalCard());
+        PersonalGoalCardRender.renderPersonalGoalCard(personalGoalCardImageView, ownerSession().getPersonalGoalCard());
 
         // enemy buttons
         List<String> enemyList = model.getPlayersUsernameListExcluding(owner);
-
         for (int i = 0; i < enemyList.size(); i++) {
             iter.enemyButtons().get(i).setText(enemyList.get(i));
             iter.enemyButtons().get(i).setVisible(true);
         }
 
         // owner username label
-        ownerUsernameLabel.setText("Hi " + ownerSession.getUsername());
+        ownerUsernameLabel.setText("Hi " + ownerSession().getUsername());
 
         // owner starting player chair
-        if (ownerSession.getUsername().equals(startingPlayerSession.getUsername())) {
+        if (ownerSession().getUsername().equals(startingPlayerSession.getUsername())) {
             UiUtils.visible(startingOwnerChair);
+        } else {
+            UiUtils.invisible(startingOwnerChair);
         }
 
 
@@ -330,7 +349,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         hasInitializedUi = true;
 
         // enemyStatusLabel
-
         render();
     }
 
@@ -341,11 +359,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
      * @param game The updated game model.
      */
     @Override
-    public void modelUpdate(Game game) {
+    public void modelUpdate(GameModel game) {
         this.model = game;
         render();
     }
 
+    @Override
+    public void chatModelUpdate(List<ChatTextMessage> messages) {
+        this.messages = messages;
+        renderChat();
+    }
+
+
+    void renderChat() {
+
+    }
 
     @Override
     public void render() {
@@ -355,35 +383,31 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
-                PlayerSession ownerSession = model.getSessions().getByUsername(owner);
-                PlayerSession currentPlayerSession = model.getCurrentPlayerSession();
-                PlayerSession enemySession = model.getSessionFor(currentlySelectedUsername);
-                PlayerSession startingPlayerSession = model.getStartingPlayerSession();
-
-
                 // board
                 BoardRender.renderBoard(boardGridPane, model.getBoard());
 
                 // owner's bookshelf
-                BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession.getBookshelf());
+                BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession().getBookshelf());
 
                 // selected enemy's bookshelf
-                BookshelfRender.renderBookshelf(enemyBookshelfGridPane, enemySession.getBookshelf());
+                BookshelfRender.renderBookshelf(enemyBookshelfGridPane, selectedEnemySession().getBookshelf());
 
                 // enemy username label
                 enemyUsernameLabel.setText("@" + currentlySelectedUsername);
 
                 // enemy starting player chair
-                if (enemySession.getUsername().equals(startingPlayerSession.getUsername())) {
+                if (selectedEnemySession().getUsername().equals(selectedEnemySession().getUsername())) {
                     UiUtils.visible(startingEnemyChair);
+                } else {
+                    UiUtils.invisible(startingEnemyChair);
                 }
 
                 // tokens update
                 // owner's tokens
-                tokenUpdate(ownerSession, iter.ownerObtainedTokens());
+                tokenUpdate(ownerSession(), iter.ownerObtainedTokens());
 
                 // enemy's token
-                tokenUpdate(enemySession, iter.enemyObtainedTokens());
+                tokenUpdate(selectedEnemySession(), iter.enemyObtainedTokens());
 
                 // end game token
                 boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
@@ -393,7 +417,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 }
 
                 // check if owner has obtained common goal card token
-                checkAchievedCommonGoalCards(ownerSession, model, iter.commonGoalCardsDescriptions());
+                checkAchievedCommonGoalCards(ownerSession(), model, iter.commonGoalCardsDescriptions());
 
                 // common goal cards token update
                 topTokenUpdate(model, iter.topTokens());
@@ -422,9 +446,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 //}
 
                 // managing the visibility and invisibility of everything needed in selecting and inserting phases
-                manageVisibilityInGamePhases(ownerSession);
+                manageVisibilityForGamePhases();
 
-                manageBoardDarkening();
+                checkAndApplyBoardDarkeningState();
             }
             case ENDED -> {
                 //gameEnded();
@@ -435,14 +459,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    public void manageVisibilityInGamePhases(PlayerSession ownerSession) {
-        switch (ownerSession.getPlayerCurrentGamePhase()) {
-            case IDLE -> {
-                UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton);
-            }
-            case SELECTING -> {
-                UiUtils.visible(boardSelectionButton, selectedTilesHBox);
-            }
+    public void manageVisibilityForGamePhases() {
+        switch (ownerSession().getPlayerCurrentGamePhase()) {
+            case IDLE -> UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton);
+            case SELECTING -> UiUtils.visible(boardSelectionButton, selectedTilesHBox);
             case INSERTING -> {
                 UiUtils.visible(insertionVBox, bookshelfInsertionButton);
                 UiUtils.invisible(boardSelectionButton);
@@ -450,14 +470,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    public void manageBoardDarkening() {
-        PlayerSession ownerSession = model.getPlayerSession(owner);
-
-        if (ownerSession.getPlayerCurrentGamePhase() == SELECTING) {
+    public void checkAndApplyBoardDarkeningState() {
+        if (ownerSession().getPlayerCurrentGamePhase() == SELECTING) {
             // non-selectable tiles darken
             Set<Coordinate> currentCoordinates;
-            if (ownerSession.getPlayerTileSelection() != null) {
-                currentCoordinates = ownerSession.getPlayerTileSelection().getSelection().stream().map(CellInfo::coordinate).collect(Collectors.toSet());
+            if (ownerSession().getPlayerTileSelection() != null) {
+                currentCoordinates = ownerSession().getPlayerTileSelection().getSelection().stream().map(CellInfo::coordinate).collect(Collectors.toSet());
             } else {
                 currentCoordinates = selectedCoordinates;
             }
@@ -466,13 +484,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     public void gameSelection() {
-        PlayerSession ownerSession = model.getPlayerSession(owner);
-        manageVisibilityInGamePhases(ownerSession);
+        manageVisibilityForGamePhases();
 
         // while selection is not right (between 1 and 3 and acceptable tiles) shows error
         while (!model.isSelectionValid(selectedCoordinates)) {
             statusTitleLabel.setText("Selection error");
-            statusSubtitleLabel.setText("Player " + ownerSession.getUsername() + " the tiles you selected are not valid.");
+            statusSubtitleLabel.setText("Player " + ownerSession().getUsername() + " the tiles you selected are not valid.");
         }
 
         setSelectedTiles(iter.selectedTiles(), selectedCoordinates, model);
@@ -481,12 +498,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     public void gameInsertion() {
-        PlayerSession ownerSession = model.getPlayerSession(owner);
-        manageVisibilityInGamePhases(ownerSession);
+        manageVisibilityForGamePhases();
 
-        while (orderedTiles.size() != ownerSession.getPlayerTileSelection().getSelectedTiles().size() && (currentlySelectedColumn < 0 || currentlySelectedColumn > 5)) {
+        while (orderedTiles.size() != ownerSession().getPlayerTileSelection().getSelectedTiles().size() && (currentlySelectedColumn < 0 || currentlySelectedColumn > 5)) {
             statusTitleLabel.setText("Insertion error");
-            statusSubtitleLabel.setText("Player " + ownerSession.getUsername() + ", you have to select all the tiles.");
+            statusSubtitleLabel.setText("Player " + ownerSession().getUsername() + ", you have to select all the tiles.");
         }
 
         handler.onViewInsertion(currentlySelectedColumn, orderedTiles);
@@ -506,18 +522,14 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
                 statusTitleLabel.setText("Selection error");
                 switch (failure.error()) {
-                    case WRONG_GAME_PHASE -> {
-                        statusSubtitleLabel.setText("Error, wrong game phase");
-                    }
-                    case UNAUTHORIZED_SELECTION -> {
-                        statusSubtitleLabel.setText("Error, unauthorized selection");
-                    }
-                    case UNAUTHORIZED_PLAYER -> {
-                        statusSubtitleLabel.setText("Error, player not authorized");
-                    }
+                    case WRONG_GAME_PHASE -> statusSubtitleLabel.setText("Error, wrong game phase");
+                    case UNAUTHORIZED_SELECTION -> statusSubtitleLabel.setText("Error, unauthorized selection");
+                    case UNAUTHORIZED_PLAYER -> statusSubtitleLabel.setText("Error, player not authorized");
                 }
             }
             case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> {
+                var data = success.value();
+                modelUpdate(data.model());
             }
 
         }
@@ -534,34 +546,18 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
                 statusTitleLabel.setText("Insertion error");
                 switch (failure.error()) {
-                    case WRONG_SELECTION -> {
-                        statusSubtitleLabel.setText("Error, illegal selection");
-                    }
-
-                    case ILLEGAL_COLUMN -> {
-                        statusSubtitleLabel.setText("Error, column out of bounds");
-                    }
-
-                    case TOO_MANY_TILES -> {
-                        statusSubtitleLabel.setText("Error, too many tiles selected");
-                    }
-
-                    case NO_FIT -> {
-                        statusSubtitleLabel.setText("Error, the selected tiles can't fit in this columns");
-                    }
-
-                    case WRONG_PLAYER -> {
-                        statusSubtitleLabel.setText("Error, unauthorized action from non active player");
-                    }
-
-                    case WRONG_GAME_PHASE -> {
-                        statusSubtitleLabel.setText("Error, wrong game phase");
-                    }
+                    case WRONG_SELECTION -> statusSubtitleLabel.setText("Error, illegal selection");
+                    case ILLEGAL_COLUMN -> statusSubtitleLabel.setText("Error, column out of bounds");
+                    case TOO_MANY_TILES -> statusSubtitleLabel.setText("Error, too many tiles selected");
+                    case NO_FIT -> statusSubtitleLabel.setText("Error, the selected tiles can't fit in this columns");
+                    case WRONG_PLAYER -> statusSubtitleLabel.setText("Error, unauthorized action from non active player");
+                    case WRONG_GAME_PHASE -> statusSubtitleLabel.setText("Error, wrong game phase");
                 }
             }
             case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> {
+                var data = success.value();
+                modelUpdate(data.model());
             }
-
         }
     }
 
@@ -585,11 +581,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     private void setRadioButtonsClickListeners() {
-        columnSelection1RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 0);
-        columnSelection2RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 1);
-        columnSelection3RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 2);
-        columnSelection4RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 3);
-        columnSelection5RadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = 4);
+        for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
+            final int finalizedIndex = i;
+            RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
+            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex + 1);
+        }
     }
 
     private void setImageViewClickListeners() {
@@ -648,48 +644,49 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                     Coordinate c = Coordinate.parse(positionField);
 
                     Optional<Tile> matchingTile = model.getBoard().getTileAt(c);
-                    boardClickHandler(c, matchingTile, matchingImageView);
+                    onBoardTileClickHandler(c, matchingTile, matchingImageView);
                 });
             }
         }
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private void boardClickHandler(Coordinate coordinate, Optional<Tile> t, ImageView currentImageView) {
-        PlayerSession ownerSession = model.getSessionFor(owner);
-
-        if (ownerSession.getPlayerCurrentGamePhase() != SELECTING) {
+    private void onBoardTileClickHandler(Coordinate coordinate, Optional<Tile> tile, ImageView currentImageView) {
+        if (ownerSession().getPlayerCurrentGamePhase() != SELECTING) {
             return;
         }
 
-        if (t.isEmpty()) {
+        if (tile.isEmpty()) {
             return;
         }
 
-        manageVisibilityInGamePhases(ownerSession);
+        manageVisibilityForGamePhases();
 
         // checks if c was already present in the set, in that case it is removed
-        //if (selectedCoordinates != null) {
+        // if (selectedCoordinates != null) {
         if (selectedCoordinates.contains(coordinate)) {
             selectedCoordinates.remove(coordinate);
             currentImageView.setEffect(null);
+            
             // removes from insertionVBox
             setSelectedTiles(iter.selectedTiles(), selectedCoordinates, model);
         } else {
             selectedCoordinates.add(coordinate);
 
             if (model.isSelectionValid(selectedCoordinates)) {
-                setDarkeningEffect(currentImageView);
+                enableDarkeningEffect(currentImageView);
 
                 // darken all the tiles that are not valid after this selection
-                manageBoardDarkening();
-                //adds them to insertionVBox
+                checkAndApplyBoardDarkeningState();
+
+                // adds them to insertionVBox
                 setSelectedTiles(iter.selectedTiles(), selectedCoordinates, model);
             } else {
                 selectedCoordinates.remove(coordinate);
                 statusTitleLabel.setText("Selection error");
-                statusSubtitleLabel.setText("Player " + ownerSession.getUsername() + " you can't select this tile.");
+                statusSubtitleLabel.setText("Player " + ownerSession().getUsername() + " you can't select this tile.");
             }
         }
     }
+
 }

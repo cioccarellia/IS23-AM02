@@ -12,7 +12,8 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.controller.server.wrappers.ServerTcpWrapper;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.network.tcp.messages.Message;
 import it.polimi.ingsw.network.tcp.messages.replies.GameConnectionRequestReply;
 import it.polimi.ingsw.network.tcp.messages.replies.GameCreationRequestReply;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -154,14 +156,14 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
     }
 
     @Override
-    public void onGameStartedEvent(Game game) {
+    public void onGameStartedEvent(GameModel game) {
         GameStartedEvent event = new GameStartedEvent(game);
 
         SocketSystem.sendAsync(socketOut, event, GameStartedEvent.class);
     }
 
     @Override
-    public void onModelUpdateEvent(Game game) {
+    public void onModelUpdateEvent(GameModel game) {
         ModelUpdateEvent event = new ModelUpdateEvent(game);
 
         SocketSystem.sendAsync(socketOut, event, ModelUpdateEvent.class);
@@ -180,16 +182,26 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
         GameInsertionTurnResponse event = new GameInsertionTurnResponse(turnResult);
 
         SocketSystem.sendAsync(socketOut, event, GameInsertionTurnResponse.class);
-
     }
 
     @Override
-    public void onPlayerConnectionStatusUpdateEvent(List<PlayerInfo> usernames) {
+    public void onPlayerConnectionStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
+        ServerStatusRequestReply event = new ServerStatusRequestReply(status, playerInfo);
 
+        SocketSystem.sendAsync(socketOut, event, ServerStatusRequestReply.class);
+    }
+
+    @Override
+    public void onChatModelUpdate(List<ChatTextMessage> messages) throws RemoteException {
+        ChatModelUpdateEvent event = new ChatModelUpdateEvent(messages);
+
+        SocketSystem.sendAsync(socketOut, event, ChatModelUpdateEvent.class);
     }
 
     @Override
     public void onGameEndedEvent() {
+        GameEndedEventResponse event = new GameEndedEventResponse();
 
+        SocketSystem.sendAsync(socketOut, event, GameEndedEventResponse.class);
     }
 }
