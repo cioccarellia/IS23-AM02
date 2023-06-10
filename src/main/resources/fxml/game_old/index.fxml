@@ -28,7 +28,7 @@
             <Tab id="Player1Button" fx:id="player1Button" text="Cookie">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="451.0">
                     <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../img/boards/bookshelf_orth.png" />
+                        <Image url="@../../img/boards/bookshelf.png" />
                     </ImageView>
                     <GridPane fx:id="player1BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                         <columnConstraints>
@@ -85,7 +85,7 @@
             <Tab id="Player2Button" fx:id="player2Button" text="GIulia">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="451.0">
                     <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../img/boards/bookshelf_orth.png" />
+                        <Image url="@../../img/boards/bookshelf.png" />
                     </ImageView>
                     <GridPane fx:id="player2BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                         <columnConstraints>
@@ -141,7 +141,7 @@
             <Tab id="Player3Button" fx:id="player3Button" text="Marco">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="451.0">
                     <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../img/boards/bookshelf_orth.png" />
+                        <Image url="@../../img/boards/bookshelf.png" />
                     </ImageView>
                     <GridPane fx:id="player3BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                         <columnConstraints>
@@ -195,7 +195,7 @@
             <Tab id="Player4Button" fx:id="player4Button" text="Alberto">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="451.0">
                     <ImageView fitHeight="270.0" fitWidth="287.0" layoutX="12.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../img/boards/bookshelf_orth.png" />
+                        <Image url="@../../img/boards/bookshelf.png" />
                     </ImageView>
                     <GridPane id="player4BookShelf" fx:id="player4BookShelf" layoutX="39.0" layoutY="36.0" prefHeight="231.0" prefWidth="215.0">
                         <columnConstraints>
