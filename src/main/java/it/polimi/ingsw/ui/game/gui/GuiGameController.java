@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
@@ -17,12 +18,12 @@ import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.gui.renders.BoardRender;
-import it.polimi.ingsw.ui.game.gui.renders.BookshelfRender;
-import it.polimi.ingsw.ui.game.gui.renders.PersonalGoalCardRender;
-import it.polimi.ingsw.ui.game.gui.renders.TokenRender;
+import it.polimi.ingsw.ui.game.gui.renders.*;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import it.polimi.ingsw.utils.javafx.UiUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -34,7 +35,11 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.ItemEvent;
 import java.net.URL;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -195,6 +200,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public MenuButton chatSelectorMenuButton;
     @FXML
     public ListView<ChatTextMessage> chatMessagesListView;
+    @FXML
+    public MenuItem player1ChatWith;
+    @FXML
+    public MenuItem player2ChatWith;
+    @FXML
+    public MenuItem player3ChatWith;
+    @FXML
+    public MenuItem everyoneChatWith;
+
 
     // end region Main Layer
 
@@ -212,6 +226,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private List<Tile> orderedTiles;
 
     private Set<Coordinate> selectedCoordinates = new HashSet<>();
+
+    private MessageRecipient chatWithSelectedName;
 
 
     DynamicIterator iter = new DynamicIterator();
@@ -253,6 +269,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         private List<Label> selectedTilesLabels() {
             return Arrays.asList(firstSelectedTilesNumberedLabel, secondSelectedTilesNumberedLabel, thirdSelectedTilesNumberedLabel);
         }
+
+        private List<MenuItem> chatWithMenuItem() {
+            return Arrays.asList(player1ChatWith, player2ChatWith, player3ChatWith);
+        }
     }
 
 
@@ -285,11 +305,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-
     private PlayerSession currentPlayerSession() {
         return model.getCurrentPlayerSession();
     }
-    
+
     private PlayerSession ownerSession() {
         return model.getPlayerSession(owner);
     }
@@ -301,7 +320,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private PlayerSession selectedEnemySession() {
         return model.getPlayerSession(currentlySelectedUsername);
     }
-
 
 
     /**
@@ -347,6 +365,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
 
         hasInitializedUi = true;
+        //chat initialization
+        List<String> chatEnemyList = model.getPlayersUsernameListExcluding(owner);
+
+        for (int i = 0; i < chatEnemyList.size(); i++) {
+
+            String enemyName = chatEnemyList.get(i);
+            ChatRender.renderChatWithMenuItemSelection(iter.chatWithMenuItem().get(i), enemyName);
+
+        }
 
         // enemyStatusLabel
         render();
@@ -371,9 +398,49 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-    void renderChat() {
+    public void renderChat() {
+        //Updating chat ListView
+        chatMessagesListView = new ListView<>();
+        ObservableList<ChatTextMessage> observableMessage = FXCollections.observableArrayList(messages);
+        chatMessagesListView.setItems(observableMessage);
+
 
     }
+
+    public void setChatWithSlectingListener() {
+        List<String> chatEnemyList = model.getPlayersUsernameListExcluding(owner);
+        player1ChatWith.setOnAction(mouseEvent -> {
+            chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(0));
+            chatSelectorMenuButton.setText(chatEnemyList.get(0));
+        });
+
+        player2ChatWith.setOnAction(mouseEvent -> {
+            chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(1));
+            chatSelectorMenuButton.setText(chatEnemyList.get(1));
+        });
+
+        player3ChatWith.setOnAction(mouseEvent -> {
+            chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(2));
+            chatSelectorMenuButton.setText(chatEnemyList.get(2));
+        });
+
+        everyoneChatWith.setOnAction(mouseEvent -> {
+            chatWithSelectedName = new MessageRecipient.Broadcast();
+            chatSelectorMenuButton.setText("Everyone");
+        });
+
+    }
+
+    public void setSendMessageButtonListener() {
+        sendMessageButton.setOnMouseClicked(mouseEvent -> {
+
+            Timestamp time = new Timestamp(System.currentTimeMillis());
+            ChatTextMessage textMessage = new ChatTextMessage(owner, chatWithSelectedName, chatTextField.getText(), time);
+            handler.onViewSendMessage(textMessage);
+            chatTextField.clear();
+        });
+    }
+
 
     @Override
     public void render() {
@@ -550,7 +617,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                     case ILLEGAL_COLUMN -> statusSubtitleLabel.setText("Error, column out of bounds");
                     case TOO_MANY_TILES -> statusSubtitleLabel.setText("Error, too many tiles selected");
                     case NO_FIT -> statusSubtitleLabel.setText("Error, the selected tiles can't fit in this columns");
-                    case WRONG_PLAYER -> statusSubtitleLabel.setText("Error, unauthorized action from non active player");
+                    case WRONG_PLAYER ->
+                            statusSubtitleLabel.setText("Error, unauthorized action from non active player");
                     case WRONG_GAME_PHASE -> statusSubtitleLabel.setText("Error, wrong game phase");
                 }
             }
@@ -667,7 +735,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         if (selectedCoordinates.contains(coordinate)) {
             selectedCoordinates.remove(coordinate);
             currentImageView.setEffect(null);
-            
+
             // removes from insertionVBox
             setSelectedTiles(iter.selectedTiles(), selectedCoordinates, model);
         } else {
