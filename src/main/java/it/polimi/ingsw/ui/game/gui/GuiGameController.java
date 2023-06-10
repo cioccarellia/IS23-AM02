@@ -396,7 +396,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 enemyUsernameLabel.setText("@" + currentlySelectedUsername);
 
                 // enemy starting player chair
-                if (selectedEnemySession().getUsername().equals(selectedEnemySession().getUsername())) {
+                if (selectedEnemySession().getUsername().equals(startingPlayerSession().getUsername())) {
                     UiUtils.visible(startingEnemyChair);
                 } else {
                     UiUtils.invisible(startingEnemyChair);
