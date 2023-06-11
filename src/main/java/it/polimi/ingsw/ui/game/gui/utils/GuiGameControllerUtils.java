@@ -138,26 +138,36 @@ public class GuiGameControllerUtils {
                     continue;
                 }
 
+                // checks that it is not the selected coordinate
+                Coordinate currentCoordinate = new Coordinate(i, j);
+                if (selectedCoordinates.stream().anyMatch(c -> c.equals(currentCoordinate))) {
+                    continue;
+                }
+
+                // checks if the tile is present
+                if (board.getTileAt(i, j).isEmpty()) {
+                    continue;
+                }
+
                 // ImageView containing our bookshelf tile[i][j]
                 ImageView imageView = (ImageView) gridPaneNodes[i][j];
 
-                Coordinate currentCoordinate = new Coordinate(i, j);
-
                 // darkens all the non-selectable ones that don't have a free edge
-                if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(currentCoordinate)) {
+                if (!board.hasAtLeastOneFreeEdge(currentCoordinate)) {
                     enableDarkeningEffect(imageView);
-                }
+                } else {
+                    // darkens all the tiles that can't be selected with the currently selected tile and removes the effect from the acceptable ones
+                    Set<Coordinate> copy = new HashSet<>(selectedCoordinates);
 
-                //todo needs fixing
+                    if (!copy.isEmpty()) {
+                        copy.add(currentCoordinate);
 
-                // darkens all the tiles that can't be selected with the currently selected tile
-                Set<Coordinate> copy = new HashSet<>(selectedCoordinates);
-
-                if (!copy.isEmpty()) {
-                    copy.add(currentCoordinate);
-
-                    if (!game.isSelectionValid(copy)) {
-                        enableDarkeningEffect(imageView);
+                        if (!game.isSelectionValid(copy)) {
+                            enableDarkeningEffect(imageView);
+                        } else if (game.isSelectionValid(copy))
+                            imageView.setEffect(null);
+                    } else {
+                        imageView.setEffect(null);
                     }
                 }
             }

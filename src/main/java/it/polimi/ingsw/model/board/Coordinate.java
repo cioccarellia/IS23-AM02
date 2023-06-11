@@ -29,4 +29,8 @@ public record Coordinate(int x, int y) implements Serializable {
             throw new IllegalArgumentException();
         }
     }
+
+    public boolean equals(Coordinate c) {
+        return this.x() == c.x() && this.y() == c.y();
+    }
 }

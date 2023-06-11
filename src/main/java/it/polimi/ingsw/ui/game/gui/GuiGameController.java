@@ -587,9 +587,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             // removes from insertionVBox
             setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
         } else {
-            selectedCoordinates.add(coordinate);
+            Set<Coordinate> copy = new HashSet<>(selectedCoordinates);
+            copy.add(coordinate);
 
-            if (model.isSelectionValid(selectedCoordinates)) {
+            if (model.isSelectionValid(copy)) {
+                selectedCoordinates.add(coordinate);
                 enableDarkeningEffect(currentImageView);
 
                 // darken all the tiles that are not valid anymore after the selection
@@ -598,7 +600,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 // adds them to insertionVBox
                 setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
             } else {
-                selectedCoordinates.remove(coordinate);
                 statusTitleLabel.setText("Selection error");
                 statusSubtitleLabel.setText("Player " + ownerSession().getUsername() + " you can't select this tile.");
             }
