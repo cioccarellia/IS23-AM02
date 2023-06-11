@@ -27,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -87,10 +88,10 @@ public class GuiGameControllerUtils {
     }
 
 
-    public static void setSelectedTiles(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, GameModel game) {
+    public static void setSelectedTilesFromCoordinates(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, GameModel game) {
         List<Tile> selectedTiles = null;
 
-        if (selectedTilesCoordinates != null && !selectedTilesCoordinates.isEmpty()) {
+        if (game.isSelectionValid(selectedTilesCoordinates)) {
             List<CellInfo> coordinatesAndValues = selectedTilesCoordinates
                     .stream()
                     .peek(it -> {
@@ -103,7 +104,8 @@ public class GuiGameControllerUtils {
 
         for (int i = 0; i < maxSelectionSize; i++) {
             Image tileImage = null;
-            if (selectedTiles != null && selectedTiles.size() > i) {
+
+            if (selectedTiles != null && i < selectedTiles.size()) {
                 String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(i));
                 tileImage = new Image(url);
             }
@@ -141,19 +143,22 @@ public class GuiGameControllerUtils {
 
                 Coordinate currentCoordinate = new Coordinate(i, j);
 
+                // darkens all the non-selectable ones that don't have a free edge
                 if (board.getTileAt(i, j).isPresent() && !board.hasAtLeastOneFreeEdge(currentCoordinate)) {
                     enableDarkeningEffect(imageView);
                 }
 
                 //todo needs fixing
-                if (selectedCoordinates != null && !selectedCoordinates.isEmpty()) {
-                    selectedCoordinates.add(currentCoordinate);
 
-                    if (!game.isSelectionValid(selectedCoordinates)) {
+                // darkens all the tiles that can't be selected with the currently selected tile
+                Set<Coordinate> copy = new HashSet<>(selectedCoordinates);
+
+                if (!copy.isEmpty()) {
+                    copy.add(currentCoordinate);
+
+                    if (!game.isSelectionValid(copy)) {
                         enableDarkeningEffect(imageView);
                     }
-
-                    selectedCoordinates.remove(currentCoordinate);
                 }
             }
         }

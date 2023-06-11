@@ -290,7 +290,7 @@ public class GameModel implements ModelService, Serializable {
      */
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
-        boolean isSelectionAmountValid = coordinates.size() <= 3 && coordinates.size() > 0; //3 = config.maxSelectionSize()
+        boolean isSelectionAmountValid = coordinates.size() <= 3 && coordinates.size() > 0; //3 = config.maxSelectionSize() todo
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 
