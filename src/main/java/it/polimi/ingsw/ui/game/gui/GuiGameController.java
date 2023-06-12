@@ -189,7 +189,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // CHAT
     @FXML
-    public TextField chatTextField;
+    public TextArea chatTextField;
     @FXML
     public MenuButton chatSelectorMenuButton;
     @FXML
@@ -213,17 +213,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // Model data
     private GameModel model;
-    private List<ChatTextMessage> messages;
-
     private int currentlySelectedColumn;
-
     private List<Tile> orderedTiles = new ArrayList<>();
-
     private Set<Coordinate> selectedCoordinates = new HashSet<>();
 
+    // chat data
     private MessageRecipient chatWithSelectedName;
 
     private List<String> chatEnemyList;
+    private List<ChatTextMessage> messages;
 
 
     DynamicIterator iter = new DynamicIterator();
@@ -369,10 +367,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         chatEnemyList = model.getPlayersUsernameListExcluding(owner);
 
         for (int i = 0; i < chatEnemyList.size(); i++) {
-
             String enemyName = chatEnemyList.get(i);
-            ChatRender.renderChatWithMenuItemSelection(iter.chatWithMenuItem().get(i), enemyName);
-
+            ChatRender.renderChatMenuItemOnSelection(iter.chatWithMenuItem().get(i), enemyName);
         }
 
         render();
@@ -706,6 +702,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             ChatTextMessage textMessage = new ChatTextMessage(owner, chatWithSelectedName, chatTextField.getText(), time);
 
             handler.onViewSendMessage(textMessage);
+            renderChat();
             chatTextField.clear();
         });
     }

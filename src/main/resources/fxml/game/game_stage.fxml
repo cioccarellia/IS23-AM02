@@ -687,35 +687,6 @@
         </textFill>
     </Button>
 
-    <!-- Send Message Button -->
-    <Button fx:id="sendMessageButton" layoutX="1312.0" layoutY="793.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="141.0" text="SEND MESSAGE">
-        <font>
-            <Font name="Monospaced Regular" size="14.0"/>
-        </font>
-        <textFill>
-            <LinearGradient endX="1.0" endY="1.0">
-                <stops>
-                    <Stop>
-                        <color>
-                            <Color red="0.8684210777282715" green="0.678118884563446" blue="0.2975146174430847"/>
-                        </color>
-                    </Stop>
-                    <Stop offset="0.007532956685499058">
-                        <color>
-                            <Color red="0.8684210777282715" green="0.678118884563446" blue="0.2975146174430847"/>
-                        </color>
-                    </Stop>
-                    <Stop offset="1.0">
-                        <color>
-                            <Color red="1.0" green="0.4147801399230957" blue="0.019999999552965164"/>
-                        </color>
-                    </Stop>
-                </stops>
-            </LinearGradient>
-        </textFill>
-    </Button>
-
     <!-- Board Button -->
     <Button fx:id="boardSelectionButton" layoutX="24.0" layoutY="410.0" mnemonicParsing="false" prefHeight="26.0"
             prefWidth="141.0" text="SELECT">
@@ -777,23 +748,74 @@
 
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-    <!-- Chat Text Field -->
-    <TextField fx:id="chatTextField" layoutX="1100.0" layoutY="828.0" prefHeight="72.0" prefWidth="366.0"
-               promptText="Write here"/>
+    <VBox layoutX="1101.0" layoutY="78.0" prefHeight="822.0" prefWidth="366.0">
+        <!-- Scrollable chat messages -->
+        <ScrollPane hbarPolicy="NEVER" prefHeight="703.0" prefWidth="366.0" vbarPolicy="AS_NEEDED">
+            <ListView fx:id="chatMessagesListView" layoutX="1100.0" layoutY="77.0" prefHeight="705.0"
+                      prefWidth="366.0"/>
+        </ScrollPane>
 
-    <!-- Chat Messages List View -->
-    <ListView fx:id="chatMessagesListView" layoutX="1100.0" layoutY="77.0" prefHeight="705.0" prefWidth="366.0"/>
+        <!-- HBox with username selector and send button -->
+        <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="366.0">
+            <!-- Username selector for chat-->
+            <MenuButton fx:id="chatSelectorMenuButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0"
+                        text="Chat with">
+                <items>
+                    <MenuItem fx:id="chatWithEveryone" mnemonicParsing="false" text="Everyone"/>
+                    <MenuItem fx:id="player1ChatWith" disable="true" mnemonicParsing="false" text="Player1"
+                              visible="false"/>
+                    <MenuItem fx:id="player2ChatWith" disable="true" mnemonicParsing="false" text="Player2"
+                              visible="false"/>
+                    <MenuItem fx:id="player3ChatWith" disable="true" mnemonicParsing="false" text="Player3"
+                              visible="false"/>
+                </items>
+                <HBox.margin>
+                    <Insets left="15.0"/>
+                </HBox.margin>
+            </MenuButton>
 
-    <!-- Username selector for chat-->
-    <MenuButton fx:id="chatSelectorMenuButton" layoutX="1116.0" layoutY="794.0" mnemonicParsing="false"
-                prefHeight="25.0" prefWidth="96.0" text="Chat with">
-        <items>
-            <MenuItem fx:id="chatWithEveryone" mnemonicParsing="false" text="Everyone"/>
-            <MenuItem fx:id="player1ChatWith" disable="true" mnemonicParsing="false" text="Player1" visible="false"/>
-            <MenuItem fx:id="player2ChatWith" disable="true" mnemonicParsing="false" text="Player2" visible="false"/>
-            <MenuItem fx:id="player3ChatWith" disable="true" mnemonicParsing="false" text="Player3" visible="false"/>
-        </items>
-    </MenuButton>
+            <!-- Send Message Button -->
+            <Button fx:id="sendMessageButton" mnemonicParsing="false" prefHeight="26.0" text="SEND">
+                <font>
+                    <Font name="Monospaced Regular" size="14.0"/>
+                </font>
+                <textFill>
+                    <LinearGradient endX="1.0" endY="1.0">
+                        <stops>
+                            <Stop>
+                                <color>
+                                    <Color red="0.8684210777282715" green="0.678118884563446"
+                                           blue="0.2975146174430847"/>
+                                </color>
+                            </Stop>
+                            <Stop offset="0.007532956685499058">
+                                <color>
+                                    <Color red="0.8684210777282715" green="0.678118884563446"
+                                           blue="0.2975146174430847"/>
+                                </color>
+                            </Stop>
+                            <Stop offset="1.0">
+                                <color>
+                                    <Color red="1.0" green="0.4147801399230957" blue="0.019999999552965164"/>
+                                </color>
+                            </Stop>
+                        </stops>
+                    </LinearGradient>
+                </textFill>
+                <HBox.margin>
+                    <Insets left="180.0"/>
+                </HBox.margin>
+            </Button>
+        </HBox>
+
+        <!-- Chat Text Field -->
+        <TextArea fx:id="chatTextField" layoutX="1100.0" layoutY="828.0" prefHeight="72.0" prefWidth="366.0"
+                  promptText="Write here">
+            <font>
+                <Font name="Monospaced Regular" size="15.0"/>
+            </font>
+        </TextArea>
+    </VBox>
 
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% STATUS LABELS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->

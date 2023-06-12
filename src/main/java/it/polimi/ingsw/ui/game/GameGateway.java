@@ -23,7 +23,6 @@ public interface GameGateway extends Serializable {
      */
     void modelUpdate(GameModel game);
 
-
     /**
      * Called to notify an update in the game data model
      */
