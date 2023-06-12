@@ -751,7 +751,7 @@
     <VBox layoutX="1101.0" layoutY="78.0" prefHeight="822.0" prefWidth="366.0">
         <!-- Scrollable chat messages -->
         <ScrollPane hbarPolicy="NEVER" prefHeight="703.0" prefWidth="366.0" vbarPolicy="AS_NEEDED">
-            <ListView fx:id="chatMessagesListView" layoutX="1100.0" layoutY="77.0" prefHeight="705.0"
+            <ListView fx:id="chatPane" layoutX="1100.0" layoutY="77.0" prefHeight="705.0"
                       prefWidth="366.0"/>
         </ScrollPane>
 

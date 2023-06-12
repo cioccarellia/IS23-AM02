@@ -22,6 +22,7 @@ import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import it.polimi.ingsw.utils.javafx.UiUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -193,7 +194,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public MenuButton chatSelectorMenuButton;
     @FXML
-    public ListView<ChatTextMessage> chatMessagesListView;
+    public ListView<String> chatPane;
     @FXML
     public MenuItem player1ChatWith;
     @FXML
@@ -398,9 +399,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // renders
     public void renderChat() {
         //Updating chat ListView
-        chatMessagesListView = new ListView<>();
-        ObservableList<ChatTextMessage> observableMessage = FXCollections.observableArrayList(messages);
-        chatMessagesListView.setItems(observableMessage);
+        ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatRender::renderMessage).toList());
+
+        chatPane.setItems(observableMessage);
     }
 
     @Override
@@ -671,7 +672,14 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-    // chat listeners
+    // chat
+    private void addToChat(ChatTextMessage chatTextMessage) {
+        chatPane.getItems().add(ChatRender.renderMessage(chatTextMessage));
+
+        handler.onViewSendMessage(chatTextMessage);
+        chatTextField.clear();
+    }
+
     public void setChatWithSelectingListeners() {
         player1ChatWith.setOnAction(mouseEvent -> {
             chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(0));
@@ -700,10 +708,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             Timestamp time = new Timestamp(System.currentTimeMillis());
 
             ChatTextMessage textMessage = new ChatTextMessage(owner, chatWithSelectedName, chatTextField.getText(), time);
-
-            handler.onViewSendMessage(textMessage);
-            renderChat();
-            chatTextField.clear();
+            addToChat(textMessage);
         });
     }
 
