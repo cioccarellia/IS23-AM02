@@ -748,7 +748,7 @@
 
     <!-- Bookshelf insertion Button -->
     <Button fx:id="bookshelfInsertionButton" layoutX="894.0" layoutY="46.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="141.0" text="INSERT" visible="false">
+            prefWidth="141.0" text="INSERT" visible="true">
         <font>
             <Font name="Monospaced Bold" size="14.0"/>
         </font>
@@ -779,7 +779,7 @@
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- Chat Text Field -->
     <TextField fx:id="chatTextField" layoutX="1100.0" layoutY="828.0" prefHeight="72.0" prefWidth="366.0"
-               promptText="Write a message"/>
+               promptText="Write here"/>
 
     <!-- Chat Messages List View -->
     <ListView fx:id="chatMessagesListView" layoutX="1100.0" layoutY="77.0" prefHeight="705.0" prefWidth="366.0"/>
@@ -788,7 +788,7 @@
     <MenuButton fx:id="chatSelectorMenuButton" layoutX="1116.0" layoutY="794.0" mnemonicParsing="false"
                 prefHeight="25.0" prefWidth="96.0" text="Chat with">
         <items>
-            <MenuItem fx:id="everyoneChatWith" mnemonicParsing="false" text="Everyone"/>
+            <MenuItem fx:id="chatWithEveryone" mnemonicParsing="false" text="Everyone"/>
             <MenuItem fx:id="player1ChatWith" disable="true" mnemonicParsing="false" text="Player1" visible="false"/>
             <MenuItem fx:id="player2ChatWith" disable="true" mnemonicParsing="false" text="Player2" visible="false"/>
             <MenuItem fx:id="player3ChatWith" disable="true" mnemonicParsing="false" text="Player3" visible="false"/>

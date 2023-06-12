@@ -201,7 +201,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public MenuItem player3ChatWith;
     @FXML
-    public MenuItem everyoneChatWith;
+    public MenuItem chatWithEveryone;
 
 
     // end region Main Layer
@@ -492,7 +492,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession());
     }
 
-    // render utils
+    // utils
     public void manageVisibilityForGamePhases() {
         switch (ownerSession().getPlayerCurrentGamePhase()) {
             case IDLE -> UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton);
@@ -501,7 +501,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);
             }
             case INSERTING -> {
-                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox);
+                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, selectedTilesHBox);
                 UiUtils.invisible(boardSelectionButton);
             }
         }
@@ -521,11 +521,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
         if (model.isSelectionValid(selectedCoordinates)) {
             handler.onViewSelection(selectedCoordinates);
-            setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
         } else {
             statusTitleLabel.setText("Selection error");
             statusSubtitleLabel.setText("Player " + ownerSession().getUsername() + " the tiles you selected are not valid.");
         }
+        setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
     }
 
     @FXML
@@ -587,11 +587,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             // removes from insertionVBox
             setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
         } else {
-            Set<Coordinate> copy = new HashSet<>(selectedCoordinates);
-            copy.add(coordinate);
+            selectedCoordinates.add(coordinate);
 
-            if (model.isSelectionValid(copy)) {
-                selectedCoordinates.add(coordinate);
+            if (model.isSelectionValid(selectedCoordinates)) {
                 enableDarkeningEffect(currentImageView);
 
                 // darken all the tiles that are not valid anymore after the selection
@@ -600,6 +598,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 // adds them to insertionVBox
                 setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
             } else {
+                selectedCoordinates.remove(coordinate);
                 statusTitleLabel.setText("Selection error");
                 statusSubtitleLabel.setText("Player " + ownerSession().getUsername() + " you can't select this tile.");
             }
@@ -612,7 +611,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         manageVisibilityForGamePhases();
 
         if (orderedTiles != null
-                && orderedTiles.size() == ownerSession().getPlayerTileSelection().getSelectedTiles().size()
+                && orderedTiles.size() == selectedCoordinates.size()
                 && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
             handler.onViewInsertion(currentlySelectedColumn, orderedTiles);
             orderedTiles.clear();
@@ -693,7 +692,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             chatSelectorMenuButton.setText(chatEnemyList.get(2));
         });
 
-        everyoneChatWith.setOnAction(mouseEvent -> {
+        chatWithEveryone.setOnAction(mouseEvent -> {
             chatWithSelectedName = new MessageRecipient.Broadcast();
             chatSelectorMenuButton.setText("Everyone");
         });

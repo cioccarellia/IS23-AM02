@@ -26,8 +26,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import org.apache.commons.lang.SerializationUtils;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -156,21 +157,26 @@ public class GuiGameControllerUtils {
                 if (!board.hasAtLeastOneFreeEdge(currentCoordinate)) {
                     enableDarkeningEffect(imageView);
                 } else {
-                    // darkens all the tiles that can't be selected with the currently selected tile and removes the effect from the acceptable ones
-                    Set<Coordinate> copy = new HashSet<>(selectedCoordinates);
-
-                    if (!copy.isEmpty()) {
-                        copy.add(currentCoordinate);
-
-                        if (!game.isSelectionValid(copy)) {
-                            enableDarkeningEffect(imageView);
-                        } else if (game.isSelectionValid(copy))
-                            imageView.setEffect(null);
-                    } else {
-                        imageView.setEffect(null);
-                    }
+                    checkSelectedCoordinates(imageView, currentCoordinate, selectedCoordinates, game);
+                    //imageView.setEffect(null);
                 }
             }
+        }
+    }
+
+    public static void checkSelectedCoordinates(ImageView imageView, Coordinate currentCoordinate, Set<Coordinate> selectedCoordinates, GameModel game) {
+        // darkens all the tiles that can't be selected with the currently selected tile and removes the effect from the acceptable ones
+        Set<Coordinate> copy = (Set<Coordinate>) SerializationUtils.clone((Serializable) selectedCoordinates);
+
+        if (!copy.isEmpty()) {
+            copy.add(currentCoordinate);
+
+            if (!game.isSelectionValid(copy)) {
+                enableDarkeningEffect(imageView);
+            } else if (game.isSelectionValid(copy))
+                imageView.setEffect(null);
+        } else {
+            imageView.setEffect(null);
         }
     }
 

@@ -3,6 +3,7 @@ package it.polimi.ingsw.utils.model;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class CoordinatesHelper {
@@ -25,7 +26,7 @@ public class CoordinatesHelper {
             return true;
         }
 
-
+        /*
         Coordinate first = coordinates.get(0);
         Coordinate last = coordinates.get(coordinates.size() - 1);
 
@@ -53,5 +54,44 @@ public class CoordinatesHelper {
             return false;
         }
         return true;
+        */
+
+        int sameXs = 1, sameYs = 1;
+
+        for (int i = 0; i < coordinates.size(); i++) {
+            int xi = coordinates.get(i).x();
+            int yi = coordinates.get(i).y();
+
+            for (int j = i + 1; j < coordinates.size(); j++) {
+                int xj = coordinates.get(j).x();
+                int yj = coordinates.get(j).y();
+
+                if (xi == xj)
+                    sameXs++;
+
+                if (yi == yj)
+                    sameYs++;
+            }
+        }
+
+        if (sameXs == coordinates.size()) {
+            List<Coordinate> orderedCoordinates = coordinates.stream().sorted(Comparator.comparing(Coordinate::y)).toList();
+
+            for (int i = 0; i < orderedCoordinates.size() - 1; i++) {
+                if (orderedCoordinates.get(i + 1).y() == orderedCoordinates.get(i).y() + 1)
+                    continue;
+                return false;
+            }
+        } else if (sameYs == coordinates.size()) {
+            List<Coordinate> orderedCoordinates = coordinates.stream().sorted(Comparator.comparing(Coordinate::x)).toList();
+
+            for (int i = 0; i < orderedCoordinates.size() - 1; i++) {
+                if (orderedCoordinates.get(i + 1).x() == orderedCoordinates.get(i).x() + 1)
+                    continue;
+                return false;
+            }
+        }
+
+        return sameXs == coordinates.size() || sameYs == coordinates.size();
     }
 }
