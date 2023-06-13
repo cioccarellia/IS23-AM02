@@ -30,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -403,6 +404,14 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void chatModelUpdate(List<ChatTextMessage> messages) {
         this.messages = messages;
         renderChat();
+    }
+    @TestOnly
+    public List<ChatTextMessage> getMessages(){
+        return messages;
+    }
+    @TestOnly
+    public void chatModelUpdateTest(List<ChatTextMessage> messages){
+        this.messages=messages;
     }
 
     // renders
