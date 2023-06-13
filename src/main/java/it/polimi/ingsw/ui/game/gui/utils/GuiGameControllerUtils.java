@@ -179,44 +179,4 @@ public class GuiGameControllerUtils {
             imageView.setEffect(null);
         }
     }
-
-    // insertion
-
-    public static void manageTileSelectionForInsertion(Label selectedTileLabel, ImageView selectedTileImageView, List<Tile> orderedTiles, List<Tile> playerSelectedTiles, List<Label> iterSelectedTilesLabel, int cursor) {
-        if (Integer.parseInt(selectedTileLabel.getText()) == 0) {
-            // if it still has the default value of 0
-
-            // remove tile darkened effect and make visible
-            selectedTileImageView.setEffect(null);
-            UiUtils.visible(selectedTileLabel);
-
-            // add the tile to the orderedTiles list
-            orderedTiles.add(playerSelectedTiles.get(cursor));
-
-            // set the label to the current orderedTiles size
-            selectedTileLabel.setText(String.valueOf(orderedTiles.size()));
-        } else {
-            // if it didn't have the default value, it means it's being deselected
-
-            // change all the other labels
-            int currentLabelValue = Integer.parseInt(selectedTileLabel.getText());
-
-            for (int i = 0; i < iterSelectedTilesLabel.size(); i++) {
-                int otherLabelValue = Integer.parseInt(iterSelectedTilesLabel.get(i).getText());
-                if (i != cursor && otherLabelValue > currentLabelValue) {
-                    iterSelectedTilesLabel.get(i).setText(String.valueOf(otherLabelValue - 1));
-                }
-            }
-
-            // remove the tile from the orderedTiles list
-            orderedTiles.remove(playerSelectedTiles.get(0));
-
-            // set the darkened effect to the ImageView
-            enableDarkeningEffect(selectedTileImageView);
-
-            // make the label invisible and set it to 0 again
-            UiUtils.invisible(selectedTileLabel);
-            selectedTileLabel.setText("0");
-        }
-    }
 }

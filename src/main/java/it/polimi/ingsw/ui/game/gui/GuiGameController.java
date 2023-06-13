@@ -22,7 +22,6 @@ import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import it.polimi.ingsw.utils.javafx.UiUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -169,7 +168,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // ImageViews and HBox for selected tiles
     @FXML
-    public HBox selectedTilesHBox;
+    public GridPane selectedTilesGridPane;
     @FXML
     public ImageView firstSelectedTile;
     @FXML
@@ -290,14 +289,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
+        // insertion listeners
         setRadioButtonsClickListeners();
         setImageViewClickListeners();
-        setEnemyButtonClickListeners();
-        setBoardSelectionButtonClickListener();
         setBookshelfInsertionButtonClickListener();
+
+        // selection listeners
+        setBoardSelectionButtonClickListener();
         setBoardImageViewsTileClickListener();
+
+        // chat listeners
         setChatWithSelectingListeners();
         setSendMessageButtonListener();
+
+        // enemy buttons listeners
+        setEnemyButtonClickListeners();
     }
 
     // useful player sessions
@@ -358,6 +364,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             UiUtils.invisible(startingOwnerChair);
         }
 
+        // set selected tiles as empty
+        setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
+
 
         currentlySelectedUsername = enemyList.get(0);
 
@@ -399,7 +408,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // renders
     public void renderChat() {
         //Updating chat ListView
-        ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatRender::renderMessage).toList());
+        ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatTextMessage::toString).toList());
 
         chatPane.setItems(observableMessage);
     }
@@ -434,9 +443,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 // common goal cards token update
                 topTokenUpdate(model, iter.topTokens());
-
-                // set selected tiles
-                setSelectedTilesFromCoordinates(iter.selectedTiles(), selectedCoordinates, model);
 
                 // statusTitleLabel and statusSubtitleLabel
                 //switch (currentPlayerSession.getPlayerCurrentGamePhase()) { //todo not updating
@@ -494,11 +500,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         switch (ownerSession().getPlayerCurrentGamePhase()) {
             case IDLE -> UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton);
             case SELECTING -> {
-                UiUtils.visible(boardSelectionButton, selectedTilesHBox, insertionVBox);
+                UiUtils.visible(boardSelectionButton, selectedTilesGridPane, insertionVBox);
                 UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);
             }
             case INSERTING -> {
-                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, selectedTilesHBox);
+                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, selectedTilesGridPane);
                 UiUtils.invisible(boardSelectionButton);
             }
         }
@@ -570,6 +576,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             return;
         }
 
+        //todo sometimes when adding a tile, it adds it to the end sometimes to the beginning
+
         manageVisibilityForGamePhases();
 
         // checks if c was already present in the set, in that case it is removed
@@ -619,6 +627,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
+    @FXML
     public void setBookshelfInsertionButtonClickListener() {
         bookshelfInsertionButton.setOnMouseClicked(mouseEvent -> {
                     if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING) {
@@ -628,7 +637,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         );
     }
 
-    private void setRadioButtonsClickListeners() {
+    @FXML
+    public void setRadioButtonsClickListeners() {
         for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
             final int finalizedIndex = i;
             RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
@@ -636,25 +646,75 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    private void setImageViewClickListeners() {
+    @FXML
+    public void setImageViewClickListeners() {
         if (model == null)
             return;
 
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
+
+        for (int j = 0; j < maxSelectionSize; j++) {
+            if (gridPaneNodes[0][j] == null) {
+                continue;
+            }
+
+            Node currentImage = gridPaneNodes[0][j];
+            ImageView matchingImageView = (ImageView) gridPaneNodes[0][j];
+
+            currentImage.setOnMouseClicked(mouseEvent -> {
+                Node k = (Node) mouseEvent.getSource();
+                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
+
+                onSelectedTilesClickHandler(positionField, matchingImageView);
+            });
+        }
+    }
+
+    private void onSelectedTilesClickHandler(int positionField, ImageView selectedTileImageView) {
         List<Tile> playerSelectedTiles = model.getPlayerSession(owner).getPlayerTileSelection().getSelectedTiles();
 
-        firstSelectedTile.setOnMouseClicked(mouseEvent ->
-                manageTileSelectionForInsertion(firstSelectedTilesNumberedLabel, firstSelectedTile, orderedTiles, playerSelectedTiles, iter.selectedTilesLabels(), 0));
+        if (Integer.parseInt(iter.selectedTilesLabels().get(positionField).getText()) == 0) {
+            // if it still has the default value of 0
 
-        secondSelectedTile.setOnMouseClicked(mouseEvent ->
-                manageTileSelectionForInsertion(secondSelectedTilesNumberedLabel, secondSelectedTile, orderedTiles, playerSelectedTiles, iter.selectedTilesLabels(), 1));
+            // remove tile darkened effect and make label visible
+            selectedTileImageView.setEffect(null);
+            UiUtils.visible(iter.selectedTilesLabels().get(positionField));
 
-        thirdSelectedTile.setOnMouseClicked(mouseEvent ->
-                manageTileSelectionForInsertion(thirdSelectedTilesNumberedLabel, thirdSelectedTile, orderedTiles, playerSelectedTiles, iter.selectedTilesLabels(), 2));
+            // add the tile to the orderedTiles list
+            orderedTiles.add(playerSelectedTiles.get(positionField));
+
+            // set the label to the current orderedTiles size
+            iter.selectedTilesLabels().get(positionField).setText(String.valueOf(orderedTiles.size()));
+        } else {
+            // if it didn't have the default value, it means it's being deselected
+
+            // change all the other labels
+            int currentLabelValue = Integer.parseInt(iter.selectedTilesLabels().get(positionField).getText());
+
+            for (int i = 0; i < iter.selectedTilesLabels().size(); i++) {
+                int otherLabelValue = Integer.parseInt(iter.selectedTilesLabels().get(i).getText());
+
+                if (i != positionField && otherLabelValue > currentLabelValue) {
+                    iter.selectedTilesLabels().get(i).setText(String.valueOf(otherLabelValue - 1));
+                }
+            }
+
+            // remove the tile from the orderedTiles list
+            orderedTiles.remove(playerSelectedTiles.get(0));
+
+            // set the darkened effect to the ImageView
+            enableDarkeningEffect(selectedTileImageView);
+
+            // make the label invisible and set it to 0 again
+            UiUtils.invisible(iter.selectedTilesLabels().get(positionField));
+            iter.selectedTilesLabels().get(positionField).setText("0");
+        }
     }
 
 
     // enemy buttons listener
-    private void setEnemyButtonClickListeners() {
+    @FXML
+    public void setEnemyButtonClickListeners() {
         enemySelect1Button.setOnMouseClicked(mouseEvent -> {
             currentlySelectedUsername = enemySelect1Button.getText();
             renderEnemySection();
@@ -674,12 +734,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // chat
     private void addToChat(ChatTextMessage chatTextMessage) {
-        chatPane.getItems().add(ChatRender.renderMessage(chatTextMessage));
+        chatPane.getItems().add(chatTextMessage.toString());
 
         handler.onViewSendMessage(chatTextMessage);
         chatTextField.clear();
     }
 
+    @FXML
     public void setChatWithSelectingListeners() {
         player1ChatWith.setOnAction(mouseEvent -> {
             chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(0));
@@ -703,12 +764,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     }
 
+    @FXML
     public void setSendMessageButtonListener() {
         sendMessageButton.setOnMouseClicked(mouseEvent -> {
             Timestamp time = new Timestamp(System.currentTimeMillis());
 
-            ChatTextMessage textMessage = new ChatTextMessage(owner, chatWithSelectedName, chatTextField.getText(), time);
-            addToChat(textMessage);
+            if (!chatTextField.getText().isEmpty()) {
+                ChatTextMessage textMessage = new ChatTextMessage(owner, chatWithSelectedName, chatTextField.getText(), time);
+                addToChat(textMessage);
+            }
         });
     }
 

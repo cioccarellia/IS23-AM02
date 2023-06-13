@@ -2,6 +2,7 @@ package it.polimi.ingsw.utils.javafx;
 
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 
 public class PaneViewUtil {
 
@@ -29,6 +30,4 @@ public class PaneViewUtil {
 
         return matrix;
     }
-
-
 }

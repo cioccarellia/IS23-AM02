@@ -26,36 +26,6 @@ public class CoordinatesHelper {
             return true;
         }
 
-        /*
-        Coordinate first = coordinates.get(0);
-        Coordinate last = coordinates.get(coordinates.size() - 1);
-
-        if (first.x() == last.x()) { // Horizontal line
-            int minY = Math.min(first.y(), last.y());
-            int maxY = Math.max(first.y(), last.y());
-
-            for (int i = minY + 1; i < maxY && i < dimension; i++) {
-                Coordinate curr = new Coordinate(first.x(), i);
-                if (!coordinates.contains(curr)) {
-                    return false;
-                }
-            }
-        } else if (first.y() == last.y()) { // Vertical line
-            int minX = Math.min(first.x(), last.x());
-            int maxX = Math.max(first.x(), last.x());
-
-            for (int i = minX + 1; i < maxX && i < dimension; i++) {
-                Coordinate curr = new Coordinate(i, first.y());
-                if (!coordinates.contains(curr)) {
-                    return false;
-                }
-            }
-        } else { // Not a straight line
-            return false;
-        }
-        return true;
-        */
-
         int sameXs = 1, sameYs = 1;
 
         for (int i = 0; i < coordinates.size(); i++) {
@@ -72,8 +42,51 @@ public class CoordinatesHelper {
                 if (yi == yj)
                     sameYs++;
             }
+
+
         }
 
+        int hasPlus1 = 0, hasPlus2 = 0;
+
+        if (sameXs == coordinates.size()) {
+            int minY = coordinates.stream().min(Comparator.comparing(Coordinate::y)).get().y();
+
+            for (Coordinate coordinate : coordinates) {
+                if (coordinate.y() == minY + 1) {
+                    hasPlus1++;
+                } else if (coordinate.y() == minY + 2) {
+                    hasPlus2++;
+                }
+            }
+
+            if (coordinates.size() == 2 && hasPlus1 == 1 && hasPlus2 == 0) {
+                return true;
+            } else if (coordinates.size() == 3 && hasPlus1 == 1 && hasPlus2 == 1)
+                return true;
+
+            return false;
+
+        } else if (sameYs == coordinates.size()) {
+            int minX = coordinates.stream().min(Comparator.comparing(Coordinate::x)).get().x();
+
+            for (Coordinate coordinate : coordinates) {
+                if (coordinate.x() == minX + 1) {
+                    hasPlus1++;
+                } else if (coordinate.x() == minX + 2) {
+                    hasPlus2++;
+                }
+            }
+
+            if (coordinates.size() == 2 && hasPlus1 == 1 && hasPlus2 == 0) {
+                return true;
+            } else if (coordinates.size() == 3 && hasPlus1 == 1 && hasPlus2 == 1)
+                return true;
+
+            return false;
+        }
+        return false;
+
+        /* //if we can make a copy that doesn't change the original, this one is better
         if (sameXs == coordinates.size()) {
             List<Coordinate> orderedCoordinates = coordinates.stream().sorted(Comparator.comparing(Coordinate::y)).toList();
 
@@ -93,5 +106,7 @@ public class CoordinatesHelper {
         }
 
         return sameXs == coordinates.size() || sameYs == coordinates.size();
+        */
+
     }
 }

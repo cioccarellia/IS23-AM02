@@ -9,10 +9,4 @@ public class ChatRender {
         item.setVisible(true);
         item.setText(name);
     }
-
-    public static String renderMessage(ChatTextMessage message) {
-        String time = message.stamp().toString().split(" ")[1];
-
-        return time + " " + message.senderUsername() + ": " + message.text();
-    }
 }

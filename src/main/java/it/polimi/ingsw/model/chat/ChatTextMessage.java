@@ -23,4 +23,10 @@ public record ChatTextMessage(
             case MessageRecipient.Direct direct -> Optional.of(direct.username());
         };
     }
+
+    public String toString() {
+        String time = this.stamp().toString().split(" ")[1];
+
+        return time + " " + this.senderUsername() + ": " + this.text();
+    }
 }
