@@ -60,7 +60,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
-    // region Main Layer
+    // region %%%%%%%%%%%%%%% Main Layer %%%%%%%%%%%%%%%%%%%
 
     // GridPanes
     @FXML
@@ -206,7 +206,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public MenuItem chatWithEveryone;
 
 
-    // end region Main Layer
+    // endregion %%%%%%%%%%%%%%% Main Layer %%%%%%%%%%%%%%%%%%%
 
 
     // Constant game variables
@@ -219,13 +219,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Status Variables %%%%%%%%%%%%%%%%%%%
     private int currentlySelectedColumn;
     private final List<Tile> orderedTileList = new ArrayList<>();
-    private final Set<Coordinate> selectedCoordinatesSet = new HashSet<>();
+    private final Set<CellInfo> selectedCoordinatesAndValuesSet = new HashSet<>();
     // endregion %%%%%%%%%%%% Status Variables %%%%%%%%%%%%%%%%%%%
 
     // chat data
-    private MessageRecipient chatWithSelectedName;
+    private MessageRecipient selectedMessageRecipient;
 
-    private List<String> chatEnemyList;
+    private List<String> chatEnemyUsernamesList;
     private List<ChatTextMessage> messages;
 
 
@@ -294,6 +294,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
+
         // insertion listeners
         setRadioButtonsClickListeners();
         setBookshelfInsertionButtonClickListener();
@@ -371,18 +372,18 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
 
         // set selected tiles as empty
-        renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesSet, model);
+        renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesAndValuesSet, model);
 
         // we set the currently selected enemy as the first one in the list
         currentlySelectedUsername = enemyList.get(0);
 
 
         // chat initialization
-        chatEnemyList = model.getPlayersUsernameListExcluding(owner);
+        chatEnemyUsernamesList = model.getPlayersUsernameListExcluding(owner);
 
         // we enable and set the present enemy players chat selection buttons
-        for (int i = 0; i < chatEnemyList.size(); i++) {
-            String enemyName = chatEnemyList.get(i);
+        for (int i = 0; i < chatEnemyUsernamesList.size(); i++) {
+            String enemyName = chatEnemyUsernamesList.get(i);
             ChatMenuRender.renderChatMenuItemSelectionButton(iter.chatWithMenuItemPlayerButtons().get(i), enemyName);
         }
 
@@ -481,20 +482,17 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         statusLabel.setText("Select up to 3 tiles from board");
                     }
                     case INSERTING -> {
-                        statusLabel.setText("Insert the selected tiles in the bookshelf");
-                        Set<Coordinate> ownerSelectedTileCoordinates = ownerSession()
-                                .getPlayerTileSelection()
-                                .getSelection()
-                                .stream()
-                                .map(CellInfo::coordinate)
-                                .collect(Collectors.toSet());
+                        statusLabel.setText("Insert selected tiles in the bookshelf");
+
+                        var selectedTiles = ownerSession().getPlayerTileSelection().getSelection();
+                        Set<CellInfo> ownerSelectedTileCoordinates = new HashSet<>(selectedTiles);
 
                         renderSelectedTiles(selectedTilesGridPane, ownerSelectedTileCoordinates, model);
                     }
                 }
 
                 // managing the visibility and invisibility of everything needed in selecting and inserting phases
-                autoManageVisibilityForGamePhases();
+                autoUpdateVisibility();
 
                 checkAndApplyBoardDarkeningState();
             }
@@ -529,7 +527,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     // utils
-    public void autoManageVisibilityForGamePhases() {
+    public void autoUpdateVisibility() {
         switch (ownerSession().getPlayerCurrentGamePhase()) {
             case IDLE -> UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton);
             case SELECTING -> {
@@ -545,14 +543,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     public void checkAndApplyBoardDarkeningState() {
         if (ownerSession().getPlayerCurrentGamePhase() == SELECTING) {
+            Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesSet.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
             // non-selectable tiles darken
             makeNonSelectableTilesDark(boardGridPane, model, selectedCoordinatesSet);
         }
     }
 
-    // game selection and related listeners
     public void onSelectionButtonClicked() {
-        autoManageVisibilityForGamePhases();
+        autoUpdateVisibility();
+        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesSet.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
 
         // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
         if (model.isSelectionValid(selectedCoordinatesSet)) {
@@ -563,56 +562,45 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-    @FXML
-    public void setBoardImageViewsTileClickListener() {
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(boardGridPane, dimension, dimension);
-
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                if (gridPaneNodes[i][j] == null) {
-                    continue;
-                }
-
-                Node currentImage = gridPaneNodes[i][j];
-                ImageView matchingImageView = (ImageView) gridPaneNodes[i][j];
-
-                currentImage.setOnMouseClicked(mouseEvent -> {
-                    Node k = (Node) mouseEvent.getSource();
-                    String positionField = (String) k.getUserData();
-                    Coordinate c = Coordinate.parse(positionField);
-
-                    Optional<Tile> matchingTile = model.getBoard().getTileAt(c);
-                    onBoardTileClickHandler(c, matchingTile, matchingImageView);
-                });
-            }
-        }
-    }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private void onBoardTileClickHandler(Coordinate coordinate, Optional<Tile> tile, ImageView currentImageView) {
+    private void onBoardTileClickHandler(Coordinate selectedCoordinate, Optional<Tile> optionalTileInSelectedCoordinate, ImageView currentImageView) {
         if (ownerSession().getPlayerCurrentGamePhase() != SELECTING) {
+            // the owner is stupid and clicks random tiles
             return;
         }
 
-        if (tile.isEmpty()) {
+        if (optionalTileInSelectedCoordinate.isEmpty()) {
+            // a blank tile has been selected
             return;
         }
 
-        autoManageVisibilityForGamePhases();
+        autoUpdateVisibility();
 
-        // checks if c was already present in the set, in that case it is removed
+
+        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesSet
+                .stream()
+                .map(CellInfo::coordinate)
+                .collect(Collectors.toSet());
+
+        Tile tile = optionalTileInSelectedCoordinate.get();
+
+        // checks if c was already present in theo set, in that case it is removed
         // if (selectedCoordinates != null) {
-        if (selectedCoordinatesSet.contains(coordinate)) {
-            selectedCoordinatesSet.remove(coordinate);
+        if (selectedCoordinatesSet.contains(selectedCoordinate)) {
+            selectedCoordinatesAndValuesSet.remove(new CellInfo(selectedCoordinate, tile));
+            selectedCoordinatesSet.remove(selectedCoordinate);
             currentImageView.setEffect(null);
 
             // darken all the tiles that are still valid after the deselection
             checkAndApplyBoardDarkeningState();
 
             // removes from insertionVBox, no check needed
-            renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesSet, model);
+            renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesAndValuesSet, model);
         } else {
-            selectedCoordinatesSet.add(coordinate);
+            selectedCoordinatesAndValuesSet.add(new CellInfo(selectedCoordinate, tile));
+            selectedCoordinatesSet.add(selectedCoordinate);
+
 
             if (model.isSelectionValid(selectedCoordinatesSet)) {
                 enableDarkeningEffect(currentImageView);
@@ -621,9 +609,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 checkAndApplyBoardDarkeningState();
 
                 // adds them to insertionVBox
-                renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesSet, model);
+                renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesAndValuesSet, model);
             } else {
-                selectedCoordinatesSet.remove(coordinate);
+                selectedCoordinatesAndValuesSet.remove(new CellInfo(selectedCoordinate, tile));
+                selectedCoordinatesSet.remove(selectedCoordinate);
                 statusLabel.setText("Selection error");
                 errorLabel.setText("Player " + ownerSession().getUsername() + " you can't select this tile.");
             }
@@ -631,60 +620,19 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-    // game insertion and related listeners
-    public void onInsertion() {
-        autoManageVisibilityForGamePhases();
+    public void onInsertionButtonClicked() {
+        autoUpdateVisibility();
 
-        if (orderedTileList != null && orderedTileList.size() == selectedCoordinatesSet.size()
-                && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
+        if (orderedTileList != null && orderedTileList.size() == selectedCoordinatesAndValuesSet.size()
+                                    && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
             handler.onViewInsertion(currentlySelectedColumn, orderedTileList);
             orderedTileList.clear();
-            selectedCoordinatesSet.clear();
+            selectedCoordinatesAndValuesSet.clear();
         } else {
             errorLabel.setText("You have to select all the tiles.");
         }
     }
 
-    @FXML
-    public void setBookshelfInsertionButtonClickListener() {
-        bookshelfInsertionButton.setOnMouseClicked(mouseEvent -> {
-                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING) {
-                        onInsertion();
-                    }
-                }
-        );
-    }
-
-
-
-    @FXML
-    public void setRadioButtonsClickListeners() {
-        for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
-            final int finalizedIndex = i;
-            RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
-            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex + 1);
-        }
-    }
-
-    public void setSelectedTilesImageViewClickListeners() {
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
-
-        for (int i = 0; i < maxSelectionSize; i++) {
-            if (gridPaneNodes[0][i] == null) {
-                continue;
-            }
-
-            Node currentImage = gridPaneNodes[0][i];
-            ImageView matchingImageView = (ImageView) gridPaneNodes[0][i];
-
-            currentImage.setOnMouseClicked(mouseEvent -> {
-                Node k = (Node) mouseEvent.getSource();
-                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
-
-                onSelectedTilesClickHandler(positionField, matchingImageView);
-            });
-        }
-    }
 
     private void onSelectedTilesClickHandler(int index, ImageView selectedTileImageView) {
         logger.info("onSelectedTilesClickHandler(index={}, selectedTileImageView={})", index, selectedTileImageView);
@@ -730,7 +678,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    // chat
     private void addToChat(ChatTextMessage chatTextMessage) {
         chatPane.getItems().add(chatTextMessage.toString());
 
@@ -739,80 +686,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-
-    // region ClickListeners
-
-
-
-    @FXML
-    public void setBoardSelectionButtonClickListener() {
-        boardSelectionButton.setOnMouseClicked(mouseEvent -> {
-                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
-                        onSelectionButtonClicked();
-                    }
-                }
-        );
-    }
-
-
-    // enemy buttons listener
-    @FXML
-    public void setEnemyButtonClickListeners() {
-        enemySelect1Button.setOnMouseClicked(mouseEvent -> {
-            currentlySelectedUsername = enemySelect1Button.getText();
-            renderEnemySection();
-        });
-
-        enemySelect2Button.setOnMouseClicked(mouseEvent -> {
-            currentlySelectedUsername = enemySelect2Button.getText();
-            renderEnemySection();
-        });
-
-        enemySelect3Button.setOnMouseClicked(mouseEvent -> {
-            currentlySelectedUsername = enemySelect3Button.getText();
-            renderEnemySection();
-        });
-    }
-
-
-    @FXML
-    public void setChatWithSelectingClickListeners() {
-        player1ChatWith.setOnAction(mouseEvent -> {
-            chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(0));
-            chatSelectorMenuButton.setText(chatEnemyList.get(0));
-        });
-
-        player2ChatWith.setOnAction(mouseEvent -> {
-            chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(1));
-            chatSelectorMenuButton.setText(chatEnemyList.get(1));
-        });
-
-        player3ChatWith.setOnAction(mouseEvent -> {
-            chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(2));
-            chatSelectorMenuButton.setText(chatEnemyList.get(2));
-        });
-
-        chatWithEveryone.setOnAction(mouseEvent -> {
-            chatWithSelectedName = new MessageRecipient.Broadcast();
-            chatSelectorMenuButton.setText("Everyone");
-        });
-
-    }
-
-    @FXML
-    public void setSendMessageButtonClickListener() {
-        sendMessageButton.setOnMouseClicked(mouseEvent -> {
-            Timestamp time = new Timestamp(System.currentTimeMillis());
-
-            if (!chatTextField.getText().isEmpty()) {
-                ChatTextMessage textMessage = new ChatTextMessage(owner, chatWithSelectedName, chatTextField.getText(), time);
-                addToChat(textMessage);
-            }
-        });
-    }
-
-
-    // replies
+    // region %%%%%%%%%%%%%%%%%%% Replies %%%%%%%%%%%%%%%%%%%
 
     /**
      * Handles the game selection reply and updates the GUI elements based on the result.
@@ -823,7 +697,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void onGameSelectionReply(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         switch (turnResult) {
             case TypedResult.Failure<TileSelectionSuccess, TileSelectionFailures> failure -> {
-                statusLabel.setText("Selection error");
                 switch (failure.error()) {
                     case WRONG_GAME_PHASE -> errorLabel.setText("Error, wrong game phase");
                     case UNAUTHORIZED_SELECTION -> errorLabel.setText("Error, unauthorized selection");
@@ -846,7 +719,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         switch (turnResult) {
             case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
-                statusLabel.setText("Insertion error");
                 switch (failure.error()) {
                     case WRONG_SELECTION -> errorLabel.setText("Error, illegal selection");
                     case ILLEGAL_COLUMN -> errorLabel.setText("Error, column out of bounds");
@@ -862,4 +734,136 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             }
         }
     }
+
+    // endregion %%%%%%%%%%%%%%%%%%% Replies %%%%%%%%%%%%%%%%%%%
+
+
+    // region %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%
+    public void setRadioButtonsClickListeners() {
+        for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
+            final int finalizedIndex = i;
+            RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
+            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex + 1);
+        }
+    }
+
+
+    public void setBookshelfInsertionButtonClickListener() {
+        bookshelfInsertionButton.setOnMouseClicked(mouseEvent -> {
+                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING) {
+                        onInsertionButtonClicked();
+                    }
+                }
+        );
+    }
+
+
+
+    public void setBoardSelectionButtonClickListener() {
+        boardSelectionButton.setOnMouseClicked(mouseEvent -> {
+                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
+                        onSelectionButtonClicked();
+                    }
+                }
+        );
+    }
+
+
+    public void setSelectedTilesImageViewClickListeners() {
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
+
+        for (int i = 0; i < maxSelectionSize; i++) {
+            if (gridPaneNodes[0][i] == null) {
+                continue;
+            }
+
+            Node currentImage = gridPaneNodes[0][i];
+            ImageView matchingImageView = (ImageView) gridPaneNodes[0][i];
+
+            currentImage.setOnMouseClicked(mouseEvent -> {
+                Node k = (Node) mouseEvent.getSource();
+                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
+
+                onSelectedTilesClickHandler(positionField, matchingImageView);
+            });
+        }
+    }
+
+
+    public void setBoardImageViewsTileClickListener() {
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(boardGridPane, dimension, dimension);
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                if (gridPaneNodes[i][j] == null) {
+                    continue;
+                }
+
+                Node currentImage = gridPaneNodes[i][j];
+                ImageView matchingImageView = (ImageView) gridPaneNodes[i][j];
+
+                currentImage.setOnMouseClicked(mouseEvent -> {
+                    Node k = (Node) mouseEvent.getSource();
+                    String positionField = (String) k.getUserData();
+                    Coordinate c = Coordinate.parse(positionField);
+
+                    Optional<Tile> matchingTile = model.getBoard().getTileAt(c);
+                    onBoardTileClickHandler(c, matchingTile, matchingImageView);
+                });
+            }
+        }
+    }
+
+    public void setChatWithSelectingClickListeners() {
+        player1ChatWith.setOnAction(mouseEvent -> {
+            selectedMessageRecipient = new MessageRecipient.Direct(chatEnemyUsernamesList.get(0));
+            chatSelectorMenuButton.setText(chatEnemyUsernamesList.get(0));
+        });
+
+        player2ChatWith.setOnAction(mouseEvent -> {
+            selectedMessageRecipient = new MessageRecipient.Direct(chatEnemyUsernamesList.get(1));
+            chatSelectorMenuButton.setText(chatEnemyUsernamesList.get(1));
+        });
+
+        player3ChatWith.setOnAction(mouseEvent -> {
+            selectedMessageRecipient = new MessageRecipient.Direct(chatEnemyUsernamesList.get(2));
+            chatSelectorMenuButton.setText(chatEnemyUsernamesList.get(2));
+        });
+
+        chatWithEveryone.setOnAction(mouseEvent -> {
+            selectedMessageRecipient = new MessageRecipient.Broadcast();
+            chatSelectorMenuButton.setText("Everyone");
+        });
+    }
+
+
+    public void setSendMessageButtonClickListener() {
+        sendMessageButton.setOnMouseClicked(mouseEvent -> {
+            Timestamp time = new Timestamp(System.currentTimeMillis());
+
+            if (!chatTextField.getText().isEmpty()) {
+                ChatTextMessage textMessage = new ChatTextMessage(owner, selectedMessageRecipient, chatTextField.getText(), time);
+                addToChat(textMessage);
+            }
+        });
+    }
+
+
+    public void setEnemyButtonClickListeners() {
+        enemySelect1Button.setOnMouseClicked(mouseEvent -> {
+            currentlySelectedUsername = enemySelect1Button.getText();
+            renderEnemySection();
+        });
+
+        enemySelect2Button.setOnMouseClicked(mouseEvent -> {
+            currentlySelectedUsername = enemySelect2Button.getText();
+            renderEnemySection();
+        });
+
+        enemySelect3Button.setOnMouseClicked(mouseEvent -> {
+            currentlySelectedUsername = enemySelect3Button.getText();
+            renderEnemySection();
+        });
+    }
+    // endregion %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%
 }

@@ -88,48 +88,15 @@ public class GuiGameControllerUtils {
         }
     }
 
-
-    public static void setSelectedTilesFromCoordinates(List<ImageView> selectedTilesImageViews, Set<Coordinate> selectedTilesCoordinates, GameModel game) {
-        List<Tile> selectedTiles = null;
-
-        if (game.isSelectionValid(selectedTilesCoordinates)) {
-            List<CellInfo> coordinatesAndValues = selectedTilesCoordinates
-                    .stream()
-                    .peek(it -> {
-                        assert game.getBoard().getTileAt(it).isPresent();
-                    })
-                    .map(it -> new CellInfo(it, game.getBoard().getTileAt(it).get())).toList();
-
-            selectedTiles = new PlayerTileSelection(coordinatesAndValues).getSelectedTiles();
-        }
-
-        for (int i = 0; i < maxSelectionSize; i++) {
-            Image tileImage = null;
-
-            if (selectedTiles != null && i < selectedTiles.size()) {
-                String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(i));
-                tileImage = new Image(url);
-            }
-
-            selectedTilesImageViews.get(i).setImage(tileImage);
-            UiUtils.visible(selectedTilesImageViews.get(i));
-            enableDarkeningEffect(selectedTilesImageViews.get(i));
-        }
-    }
-
-    public static void renderSelectedTiles(GridPane selectedTilesGridPane, Set<Coordinate> selectedTilesCoordinates, GameModel game) {
+    public static void renderSelectedTiles(GridPane selectedTilesGridPane, Set<CellInfo> coordinatesAndValues, GameModel game) {
         // All nodes can be safely cast to ImageView(s)
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
 
-        List<CellInfo> coordinatesAndValues = selectedTilesCoordinates
-                .stream()
-                .peek(it -> {
-                    assert game.getBoard().getTileAt(it).isPresent();
-                })
-                .map(it -> new CellInfo(it, game.getBoard().getTileAt(it).get())).toList();
+        List<Tile> selectedTiles = null;
 
-        List<Tile> selectedTiles = new PlayerTileSelection(coordinatesAndValues).getSelectedTiles();
-
+        if (!coordinatesAndValues.isEmpty()) {
+            selectedTiles = coordinatesAndValues.stream().map(CellInfo::tile).toList();
+        }
 
         for (int i = 0; i < maxSelectionSize; i++) {
             // if either no image is present or board doesn't have any content for (i,j)
