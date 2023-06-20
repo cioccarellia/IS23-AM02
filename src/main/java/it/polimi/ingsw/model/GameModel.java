@@ -42,6 +42,9 @@ import static java.util.Comparator.comparing;
  */
 public class GameModel implements ModelService, Serializable {
 
+    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
+
+
     // Game logger
     @Expose(serialize = false)
     private static final Logger logger = LoggerFactory.getLogger(GameModel.class);
@@ -290,7 +293,7 @@ public class GameModel implements ModelService, Serializable {
      */
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
-        boolean isSelectionAmountValid = coordinates.size() <= 3 && coordinates.size() > 0; //3 = config.maxSelectionSize() todo
+        boolean isSelectionAmountValid = coordinates.size() <= maxSelectionSize && coordinates.size() > 0;
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 

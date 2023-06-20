@@ -115,8 +115,45 @@ public class GuiGameControllerUtils {
             UiUtils.visible(selectedTilesImageViews.get(i));
             enableDarkeningEffect(selectedTilesImageViews.get(i));
         }
-
     }
+
+    public static void renderSelectedTiles(GridPane selectedTilesGridPane, Set<Coordinate> selectedTilesCoordinates, GameModel game) {
+        // All nodes can be safely cast to ImageView(s)
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
+
+        List<CellInfo> coordinatesAndValues = selectedTilesCoordinates
+                .stream()
+                .peek(it -> {
+                    assert game.getBoard().getTileAt(it).isPresent();
+                })
+                .map(it -> new CellInfo(it, game.getBoard().getTileAt(it).get())).toList();
+
+        List<Tile> selectedTiles = new PlayerTileSelection(coordinatesAndValues).getSelectedTiles();
+
+
+        for (int i = 0; i < maxSelectionSize; i++) {
+            // if either no image is present or board doesn't have any content for (i,j)
+            if (gridPaneNodes[0][i] == null) {
+                continue;
+            }
+
+            // ImageView containing our selected tile[0][i]
+            ImageView imageView = (ImageView) gridPaneNodes[0][i];
+
+            Image tileImage = null;
+
+            if (selectedTiles != null && i < selectedTiles.size()) {
+                String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(i));
+                tileImage = new Image(url);
+            }
+
+            imageView.setImage(tileImage);
+
+            UiUtils.visible(imageView);
+            enableDarkeningEffect(imageView);
+        }
+    }
+
 
     public static void enableDarkeningEffect(ImageView selectedTile) {
         Light.Distant light = new Light.Distant();

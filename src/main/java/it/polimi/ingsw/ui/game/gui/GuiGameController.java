@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
+import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
@@ -55,7 +57,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
-    private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
 
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
@@ -214,9 +215,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // Model data
     private GameModel model;
+
+    // region %%%%%%%%%%%%%%% Status Variables %%%%%%%%%%%%%%%%%%%
     private int currentlySelectedColumn;
-    private List<Tile> orderedTileList = new ArrayList<>();
-    private Set<Coordinate> selectedCoordinatesSet = new HashSet<>();
+    private final List<Tile> orderedTileList = new ArrayList<>();
+    private final Set<Coordinate> selectedCoordinatesSet = new HashSet<>();
+    // endregion %%%%%%%%%%%% Status Variables %%%%%%%%%%%%%%%%%%%
 
     // chat data
     private MessageRecipient chatWithSelectedName;
@@ -293,15 +297,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // insertion listeners
         setRadioButtonsClickListeners();
         setBookshelfInsertionButtonClickListener();
-        setImageViewClickListeners();
+        setSelectedTilesImageViewClickListeners();
 
         // selection listeners
         setBoardSelectionButtonClickListener();
         setBoardImageViewsTileClickListener();
 
         // chat listeners
-        setChatWithSelectingListeners();
-        setSendMessageButtonListener();
+        setChatWithSelectingClickListeners();
+        setSendMessageButtonClickListener();
 
         // enemy buttons listeners
         setEnemyButtonClickListeners();
@@ -367,7 +371,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
 
         // set selected tiles as empty
-        setSelectedTilesFromCoordinates(iter.selectedOwnerTiles(), selectedCoordinatesSet, model);
+        renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesSet, model);
 
         // we set the currently selected enemy as the first one in the list
         currentlySelectedUsername = enemyList.get(0);
@@ -457,7 +461,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 // common goal cards token update
                 topTokenUpdate(model, iter.topTokens());
 
-
+                // current player settings
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
                     case IDLE -> {
                     }
@@ -468,14 +472,24 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         statusLabel.setText("Insertion for @" + currentPlayerSession().getUsername());
                     }
                 }
+
+                // current owner actions
                 switch (ownerSession().getPlayerCurrentGamePhase()) {
                     case IDLE -> {
                     }
                     case SELECTING -> {
-                        statusLabel.setText("Selection for @" + currentPlayerSession().getUsername());
+                        statusLabel.setText("Select up to 3 tiles from board");
                     }
                     case INSERTING -> {
-                        statusLabel.setText("Insertion for @" + currentPlayerSession().getUsername());
+                        statusLabel.setText("Insert the selected tiles in the bookshelf");
+                        Set<Coordinate> ownerSelectedTileCoordinates = ownerSession()
+                                .getPlayerTileSelection()
+                                .getSelection()
+                                .stream()
+                                .map(CellInfo::coordinate)
+                                .collect(Collectors.toSet());
+
+                        renderSelectedTiles(selectedTilesGridPane, ownerSelectedTileCoordinates, model);
                     }
                 }
 
@@ -537,10 +551,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     // game selection and related listeners
-    public void onSelection() {
+    public void onSelectionButtonClicked() {
         autoManageVisibilityForGamePhases();
-
-
 
         // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
         if (model.isSelectionValid(selectedCoordinatesSet)) {
@@ -550,15 +562,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    @FXML
-    public void setBoardSelectionButtonClickListener() {
-        boardSelectionButton.setOnMouseClicked(mouseEvent -> {
-                if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
-                    onSelection();
-                }
-            }
-        );
-    }
 
     @FXML
     public void setBoardImageViewsTileClickListener() {
@@ -595,8 +598,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             return;
         }
 
-        //todo sometimes when adding a tile, it adds it to the end sometimes to the beginning
-
         autoManageVisibilityForGamePhases();
 
         // checks if c was already present in the set, in that case it is removed
@@ -608,8 +609,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             // darken all the tiles that are still valid after the deselection
             checkAndApplyBoardDarkeningState();
 
-            // removes from insertionVBox
-            setSelectedTilesFromCoordinates(iter.selectedOwnerTiles(), selectedCoordinatesSet, model);
+            // removes from insertionVBox, no check needed
+            renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesSet, model);
         } else {
             selectedCoordinatesSet.add(coordinate);
 
@@ -620,7 +621,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 checkAndApplyBoardDarkeningState();
 
                 // adds them to insertionVBox
-                setSelectedTilesFromCoordinates(iter.selectedOwnerTiles(), selectedCoordinatesSet, model);
+                renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesSet, model);
             } else {
                 selectedCoordinatesSet.remove(coordinate);
                 statusLabel.setText("Selection error");
@@ -634,15 +635,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void onInsertion() {
         autoManageVisibilityForGamePhases();
 
-        if (orderedTileList != null
-            && orderedTileList.size() == selectedCoordinatesSet.size()
-            && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
+        if (orderedTileList != null && orderedTileList.size() == selectedCoordinatesSet.size()
+                && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
             handler.onViewInsertion(currentlySelectedColumn, orderedTileList);
             orderedTileList.clear();
             selectedCoordinatesSet.clear();
         } else {
-            statusLabel.setText("Insertion error");
-            errorLabel.setText("Player " + ownerSession().getUsername() + ", you have to select all the tiles.");
+            errorLabel.setText("You have to select all the tiles.");
         }
     }
 
@@ -656,6 +655,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         );
     }
 
+
+
     @FXML
     public void setRadioButtonsClickListeners() {
         for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
@@ -665,7 +666,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    public void setImageViewClickListeners() {
+    public void setSelectedTilesImageViewClickListeners() {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
 
         for (int i = 0; i < maxSelectionSize; i++) {
@@ -677,13 +678,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             ImageView matchingImageView = (ImageView) gridPaneNodes[0][i];
 
             currentImage.setOnMouseClicked(mouseEvent -> {
-                Node k = (Node) mouseEvent.getSource();
-                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
-
-                onSelectedTilesClickHandler(positionField, matchingImageView);
-            });
-
-            matchingImageView.setOnMouseClicked(mouseEvent -> {
                 Node k = (Node) mouseEvent.getSource();
                 int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
 
@@ -736,6 +730,30 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
+    // chat
+    private void addToChat(ChatTextMessage chatTextMessage) {
+        chatPane.getItems().add(chatTextMessage.toString());
+
+        handler.onViewSendMessage(chatTextMessage);
+        chatTextField.clear();
+    }
+
+
+
+    // region ClickListeners
+
+
+
+    @FXML
+    public void setBoardSelectionButtonClickListener() {
+        boardSelectionButton.setOnMouseClicked(mouseEvent -> {
+                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
+                        onSelectionButtonClicked();
+                    }
+                }
+        );
+    }
+
 
     // enemy buttons listener
     @FXML
@@ -757,16 +775,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-    // chat
-    private void addToChat(ChatTextMessage chatTextMessage) {
-        chatPane.getItems().add(chatTextMessage.toString());
-
-        handler.onViewSendMessage(chatTextMessage);
-        chatTextField.clear();
-    }
-
     @FXML
-    public void setChatWithSelectingListeners() {
+    public void setChatWithSelectingClickListeners() {
         player1ChatWith.setOnAction(mouseEvent -> {
             chatWithSelectedName = new MessageRecipient.Direct(chatEnemyList.get(0));
             chatSelectorMenuButton.setText(chatEnemyList.get(0));
@@ -790,7 +800,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     @FXML
-    public void setSendMessageButtonListener() {
+    public void setSendMessageButtonClickListener() {
         sendMessageButton.setOnMouseClicked(mouseEvent -> {
             Timestamp time = new Timestamp(System.currentTimeMillis());
 
