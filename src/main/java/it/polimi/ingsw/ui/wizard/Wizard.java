@@ -44,8 +44,8 @@ public class Wizard {
                 serverHost = selectServerHost(serverHost);
 
                 switch (protocolPreselection) {
-                    case RMI -> serverRmiPort = selectTcpPort(serverRmiPort);
-                    case TCP -> serverTcpPort = selectRmiPort(serverTcpPort);
+                    case TCP -> serverTcpPort = selectTcpPort(serverTcpPort);
+                    case RMI -> serverRmiPort = selectRmiPort(serverRmiPort);
                 }
 
                 return new ExhaustiveLaunchConfiguration(target, serverHost, serverTcpPort, serverRmiPort, List.of(
@@ -169,7 +169,7 @@ public class Wizard {
      * @return the server IP address selected by the player
      */
     private static String selectServerHost(String defaultServerHost) {
-        if (defaultServerHost != null) {
+        if (defaultServerHost != null && !defaultServerHost.isBlank()) {
             return defaultServerHost;
         }
 
