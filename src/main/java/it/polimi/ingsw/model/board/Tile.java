@@ -18,14 +18,14 @@ public enum Tile implements Serializable {
     CAT,
 
     /**
+     * Color: dark blue
+     */
+    FRAME,
+
+    /**
      * Color: yellow
      */
     GAME,
-
-    /**
-     * Color: light blue
-     */
-    TROPHY,
 
     /**
      * Color: pink
@@ -33,7 +33,7 @@ public enum Tile implements Serializable {
     PLANT,
 
     /**
-     * Color: dark blue
+     * Color: light blue
      */
-    FRAME
+    TROPHY
 }

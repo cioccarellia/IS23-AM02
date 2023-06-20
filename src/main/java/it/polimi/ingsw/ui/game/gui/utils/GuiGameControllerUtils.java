@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
-import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardDescriptionRender;
 import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardRender;
 import it.polimi.ingsw.ui.game.gui.renders.TokenRender;
@@ -29,10 +28,8 @@ import javafx.scene.paint.Color;
 import org.apache.commons.lang.SerializationUtils;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GuiGameControllerUtils {
     private static final int maxTokensPerPlayer = 3;
@@ -92,7 +89,6 @@ public class GuiGameControllerUtils {
 
     public static void renderSelectedTiles(List<ImageView> selectedTilesImageViewsList, List<CellInfo> coordinatesAndValues) {
         // All nodes can be safely cast to ImageView(s)
-
         List<Tile> selectedTiles = null;
 
         if (!coordinatesAndValues.isEmpty()) {

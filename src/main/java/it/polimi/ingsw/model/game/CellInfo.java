@@ -10,7 +10,7 @@ import java.io.Serializable;
 public record CellInfo(
         @NotNull Coordinate coordinate,
         @Nullable Tile tile
-) implements Serializable {
+) implements Serializable, Comparable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -27,5 +27,11 @@ public record CellInfo(
         int result = coordinate.hashCode();
         result = 31 * result + (tile != null ? tile.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        assert ((CellInfo) o).tile != null;
+        return Integer.compare(((CellInfo) o).tile.ordinal(), tile.ordinal());
     }
 }
