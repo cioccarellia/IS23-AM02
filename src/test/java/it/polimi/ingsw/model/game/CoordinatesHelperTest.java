@@ -26,6 +26,44 @@ public class CoordinatesHelperTest {
     }
 
     @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for rows, edge case")
+    public void areCoordinatesInStraightLinePositivelyForRowsEdgeCaseTest() {
+        Coordinate testingCoordinate1 = new Coordinate(1, 3);
+        Coordinate testingCoordinate2 = new Coordinate(1, 4);
+
+        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2});
+
+
+        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    }
+
+    @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for columns, edge case")
+    public void areCoordinatesInStraightLinePositivelyForColumnsEdgeCaseTest() {
+        Coordinate testingCoordinate2 = new Coordinate(7, 4);
+        Coordinate testingCoordinate1 = new Coordinate(7, 5);
+
+
+        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
+
+
+        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    }
+
+    @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for columns, edge case")
+    public void areCoordinatesInStraightLinePositivelyForColumnsEdgeCaseTestX() {
+        Coordinate testingCoordinate1 = new Coordinate(4, 7);
+        Coordinate testingCoordinate2 = new Coordinate(5, 7);
+
+
+        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
+
+
+        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    }
+
+    @Test
     @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for Columns")
     public void areCoordinatesInStraightLinePositivelyForColumnsTest() {
         Coordinate testingCoordinate1 = new Coordinate(2, 3);
@@ -41,14 +79,14 @@ public class CoordinatesHelperTest {
     @Test
     @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively for Columns")
     public void areCoordinatesInStraightLineNegativelyForColumnsTest() {
-        Coordinate testingCoordinate1 = new Coordinate(2, 3);
+        Coordinate testingCoordinate1 = new Coordinate(2, 4);
         Coordinate testingCoordinate2 = new Coordinate(3, 3);
-        Coordinate testingCoordinate3 = new Coordinate(4, 3);
+        Coordinate testingCoordinate3 = new Coordinate(4, 4);
 
         List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2, testingCoordinate3});
 
 
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertFalse(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
     }
 
     @Test

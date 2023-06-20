@@ -47,15 +47,17 @@ public class CoordinatesHelper {
     }
 
     public static boolean consecutiveCoordinates(List<Coordinate> coordinates, boolean sameX, boolean sameY) {
-        List<Coordinate> orderedCoordinates = coordinates.stream().sorted(Comparator.comparing(Coordinate::y)).toList();
+
         if (!sameX && !sameY) return false;
         if (sameX) {
+            List<Coordinate> orderedCoordinates = coordinates.stream().sorted(Comparator.comparing(Coordinate::y)).toList();
             for (int i = 1; i < orderedCoordinates.size(); i++) {
-                if ((coordinates.get(i).y() - coordinates.get(i - 1).y()) != 1) return false;
+                if ((coordinates.get(i).y() - coordinates.get(i - 1).y()) > 1) return false;
             }
         } else if (sameY) {
+            List<Coordinate> orderedCoordinates = coordinates.stream().sorted(Comparator.comparing(Coordinate::x)).toList();
             for (int i = 1; i < orderedCoordinates.size(); i++) {
-                if ((coordinates.get(i).x() - coordinates.get(i - 1).x()) != 1) return false;
+                if ((coordinates.get(i).x() - coordinates.get(i - 1).x()) > 1) return false;
             }
         }
         return true;

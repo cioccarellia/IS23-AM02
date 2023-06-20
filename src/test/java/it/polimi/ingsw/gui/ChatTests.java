@@ -1,181 +1,203 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.model.ChatModel;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
-import it.polimi.ingsw.ui.game.gui.GuiGameController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ChatTests {
-    GameModel game = new GameModel(GameMode.GAME_MODE_2_PLAYERS);
 
     @Test
-    @DisplayName("Test the correct insertion of message sent directly inside an observable list of ChatTextMessage objects")
-    public void chatTestObservableListInsertionDirectPositively() {
-        game.addPlayer("Giulia");
+    @DisplayName("Chat Test: positive addiction of a message made of a single word, sent directly one to one")
+    public void addMessageTestPositivelySingleWordCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_2_PLAYERS);
+        game.addPlayer("Marco");
         game.addPlayer("Alberto");
         game.onGameStarted();
 
-        Timestamp time = new Timestamp(14);
-        MessageRecipient giuliaMessageRecipient = new MessageRecipient.Direct("Alberto");
-        ChatTextMessage giuliaToAlberto = new ChatTextMessage("Giulia", giuliaMessageRecipient, "Ciao", time);
-        List<ChatTextMessage> messages = new ArrayList<>();
-        messages.add(giuliaToAlberto);
+        MessageRecipient recipient = new MessageRecipient.Direct("Marco");
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient,"Hi",time);
 
-        ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatTextMessage::toString).toList());
-        String viewMessage = observableMessage.get(0);
+        ChatModel chatModel = new ChatModel();
 
-        assertEquals(giuliaToAlberto.toString(), viewMessage);
+        chatModel.addMessage("Alberto",recipient,"Hi");
+
+        assertEquals(1, chatModel.getMessagesFor("Marco").size());
+        assertEquals("Hi",chatModel.getMessagesFor("Marco").get(0).text());
+    }
+
+
+    @Test
+    @DisplayName("Chat Test: positive addiction of some messages made of a single word, sent directly one to one")
+    public void addMessageTestPositivelySingleWordMoreMessagesCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_2_PLAYERS);
+        game.addPlayer("Marco");
+        game.addPlayer("Alberto");
+        game.onGameStarted();
+
+        MessageRecipient recipient = new MessageRecipient.Direct("Marco");
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient,"Hi",time);
+        ChatTextMessage message2 = new ChatTextMessage("Alberto",recipient,"Bella",time);
+
+        ChatModel chatModel = new ChatModel();
+
+        chatModel.addMessage("Alberto",recipient,"Hi");
+        chatModel.addMessage("Alberto",recipient,"Bella");
+
+
+        assertEquals(2, chatModel.getMessagesFor("Marco").size());
+        assertEquals("Bella",chatModel.getMessagesFor("Marco").get(1).text());
     }
 
     @Test
-    @DisplayName("Test the correct insertion of message sent by broadcast inside an observable list of ChatTextMessage objects")
-    public void chatTestObservableListInsertionBroadcastPositively() {
+    @DisplayName("Chat Test: negative addiction of some messages made of a single word, sent directly one to one")
+    public void addMessageTestNegativelySingleWordMoreMessagesCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_2_PLAYERS);
+        game.addPlayer("Marco");
+        game.addPlayer("Alberto");
+        game.onGameStarted();
+
+        MessageRecipient recipient = new MessageRecipient.Direct("Marco");
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient,"Hi",time);
+        ChatTextMessage message2 = new ChatTextMessage("Alberto",recipient,"Bella",time);
+
+        ChatModel chatModel = new ChatModel();
+
+        chatModel.addMessage("Alberto",recipient,"Bella");
+
+
+        assertNotEquals(2, chatModel.getMessagesFor("Marco").size());
+        assertNotEquals("Balla",chatModel.getMessagesFor("Marco").get(0).text());
+    }
+
+    @Test
+    @DisplayName("Chat Test: positive addiction of some messages composed by phrases, sent directly one to one")
+    public void addMessageTestPositivelyComposedMessagesMoreMessagesCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_2_PLAYERS);
+        game.addPlayer("Marco");
+        game.addPlayer("Alberto");
+        game.onGameStarted();
+
+        MessageRecipient recipient = new MessageRecipient.Direct("Marco");
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient,"Alberto is making fun of marco",time);
+        ChatTextMessage message2 = new ChatTextMessage("Alberto",recipient,"Marco is trying to select the wrong tiles from the board",time);
+
+        ChatModel chatModel = new ChatModel();
+
+        chatModel.addMessage("Alberto",recipient,"Alberto is making fun of marco");
+        chatModel.addMessage("Alberto",recipient,"Marco is trying to select the wrong tiles from the board");
+
+
+        assertEquals(2, chatModel.getMessagesFor("Marco").size());
+        assertEquals("Marco is trying to select the wrong tiles from the board",chatModel.getMessagesFor("Marco").get(1).text());
+    }
+
+    @Test
+    @DisplayName("Chat Test: peer to peer chat message from two player with two messages made of different words")
+    public void addMessageTestPositivelyPeerToPeer(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_2_PLAYERS);
+        game.addPlayer("Marco");
+        game.addPlayer("Alberto");
+        game.onGameStarted();
+
+        MessageRecipient recipient1 = new MessageRecipient.Direct("Marco");
+        MessageRecipient recipient2 = new MessageRecipient.Direct("Alberto");
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient1,"Hi",time);
+        ChatTextMessage message2 = new ChatTextMessage("Marco",recipient2,"Hi",time);
+
+        ChatModel chatModel = new ChatModel();
+
+        chatModel.addMessage("Alberto",recipient1,"Hi");
+        chatModel.addMessage("Marco",recipient2,"Hi");
+
+
+        assertEquals(1, chatModel.getMessagesFor("Marco").size());
+        assertEquals(1, chatModel.getMessagesFor("Alberto").size());
+        assertEquals("Hi",chatModel.getMessagesFor("Marco").get(0).text());
+
+        ChatTextMessage message3 = new ChatTextMessage("Alberto",recipient1,"Come stai?",time);
+        ChatTextMessage message4 = new ChatTextMessage("Marco",recipient2,"Tutto apposto",time);
+
+        chatModel.addMessage("Alberto",recipient1,"Come stai?");
+        chatModel.addMessage("Marco",recipient2,"Tutto apposto");
+
+        assertEquals(2, chatModel.getMessagesFor("Marco").size());
+        assertEquals(2, chatModel.getMessagesFor("Alberto").size());
+        assertEquals("Come stai?",chatModel.getMessagesFor("Marco").get(1).text());
+
+
+    }
+
+    @Test
+    @DisplayName("Chat Test: positive addiction of a message made of a single word, sent by broadcast")
+    public void addMessageTestPositivelyByBroadcastSingleWordCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_4_PLAYERS);
+        game.addPlayer("Marco");
+        game.addPlayer("Alberto");
         game.addPlayer("Cookie");
         game.addPlayer("Giulia");
         game.onGameStarted();
 
-        Timestamp time = new Timestamp(14);
-        MessageRecipient broadcastMessageRecipient = new MessageRecipient.Broadcast();
-        ChatTextMessage cookieToAll = new ChatTextMessage("Cookie", broadcastMessageRecipient, "Ciao", time);
-        List<ChatTextMessage> messages = new ArrayList<>();
-        messages.add(cookieToAll);
+        MessageRecipient recipient = new MessageRecipient.Broadcast();
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient,"Hi",time);
 
-        ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatTextMessage::toString).toList());
-        String viewMessage = observableMessage.get(0);
+        ChatModel chatModel = new ChatModel();
 
-        assertEquals(cookieToAll.toString(), viewMessage);
+        chatModel.addMessage("Alberto",recipient,"Hi");
+
+        assertEquals(1, chatModel.getMessagesFor("Marco").size());
+        assertEquals(1, chatModel.getMessagesFor("Cookie").size());
+        assertEquals(1, chatModel.getMessagesFor("Giulia").size());
+
+        assertEquals("Hi",chatModel.getMessagesFor("Marco").get(0).text());
+        assertEquals("Hi",chatModel.getMessagesFor("Cookie").get(0).text());
+        assertEquals("Hi",chatModel.getMessagesFor("Giulia").get(0).text());
+
     }
 
     @Test
-    @DisplayName("Test the correct insertion of multiple messages sent by broadcast and directly inside an observable list of ChatTextMessage objects")
-    public void chatTestObservableListInsertionBroadcastAndDirectlyPositively() {
+    @DisplayName("Chat Test: positive addiction of a message made of a multiple words, sent by broadcast")
+    public void addMessageTestPositivelyByBroadcastMultipleWordCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_4_PLAYERS);
         game.addPlayer("Marco");
-        game.addPlayer("Giulia");
-        game.onGameStarted();
-
-        Timestamp time = new Timestamp(14);
-        MessageRecipient broadcastMessageRecipient = new MessageRecipient.Broadcast();
-        MessageRecipient marcoMessageRecipient = new MessageRecipient.Direct("Marco");
-        ChatTextMessage marcoToAll = new ChatTextMessage("Marco", broadcastMessageRecipient, "Ciao", time);
-        ChatTextMessage giuliaToMarco= new ChatTextMessage("Marco", marcoMessageRecipient, "Ciao", time);
-        List<ChatTextMessage> messages = new ArrayList<>();
-
-        messages.add(marcoToAll);
-        messages.add(giuliaToMarco);
-
-        ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatTextMessage::toString).toList());
-        String insertedBroadCastMessage = observableMessage.get(0);
-        String insertedDirectMessage = observableMessage.get(1);
-
-
-        assertEquals(marcoToAll.toString(), insertedBroadCastMessage);
-        assertEquals(giuliaToMarco.toString(), insertedDirectMessage);
-    }
-
-    @Test
-    @DisplayName("Test the correct update of multiple messages sent directly inside an observable list of ChatTextMessage objects")
-    public void chatTestObservableListUpdateDirectlyPositively() {
+        game.addPlayer("Alberto");
         game.addPlayer("Cookie");
-        game.addPlayer("Alberto");
-        game.onGameStarted();
-
-        Timestamp time = new Timestamp(14);
-        MessageRecipient cookieMessageRecipient = new MessageRecipient.Direct("Alberto");
-        MessageRecipient albertoMessageRecipient = new MessageRecipient.Direct("Cookie");
-
-        ChatTextMessage cookieToAlberto = new ChatTextMessage("Cookie", albertoMessageRecipient, "Ciao", time);
-        ChatTextMessage albertoToCookie = new ChatTextMessage("Alberto", cookieMessageRecipient, "Ciao a te", time);
-
-        List<ChatTextMessage> messages = new ArrayList<>();
-        GuiGameController controller = new GuiGameController();
-
-        messages.add(cookieToAlberto);
-        messages.add(albertoToCookie);
-
-
-        controller.chatModelUpdateTest(messages);
-
-        ChatTextMessage expectedMessage = controller.getMessages().get(0) ;
-        ChatTextMessage expectedMessage1 = controller.getMessages().get(1) ;
-
-
-        assertEquals(cookieToAlberto,expectedMessage);
-        assertEquals(albertoToCookie,expectedMessage1);
-
-    }
-
-    @Test
-    @DisplayName("Test the correct update of multiple messages sent by broadcast inside an observable list of ChatTextMessage objects")
-    public void chatTestObservableListUpdateBroadcastPositively() {
-        game.addPlayer("Marco");
         game.addPlayer("Giulia");
         game.onGameStarted();
 
-        Timestamp time = new Timestamp(14);
-        MessageRecipient broadcastRecipient = new MessageRecipient.Broadcast();
+        MessageRecipient recipient = new MessageRecipient.Broadcast();
+        Timestamp time = new Timestamp(System.currentTimeMillis());;
+        ChatTextMessage message = new ChatTextMessage("Alberto",recipient,"Alberto is trying to test this chat",time);
 
-        ChatTextMessage marcoToAll = new ChatTextMessage("Marco", broadcastRecipient, "Ciao", time);
-        ChatTextMessage giuliaToAll = new ChatTextMessage("Giulia", broadcastRecipient, "Ciao a te", time);
+        ChatModel chatModel = new ChatModel();
 
-        List<ChatTextMessage> messages = new ArrayList<>();
-        GuiGameController controller = new GuiGameController();
+        chatModel.addMessage("Alberto",recipient,"Alberto is trying to test this chat");
 
-        messages.add(marcoToAll);
-        messages.add(giuliaToAll);
+        assertEquals(1, chatModel.getMessagesFor("Marco").size());
+        assertEquals(1, chatModel.getMessagesFor("Cookie").size());
+        assertEquals(1, chatModel.getMessagesFor("Cookie").size());
 
-
-        controller.chatModelUpdateTest(messages);
-
-        ChatTextMessage expectedMessage = controller.getMessages().get(0) ;
-        ChatTextMessage expectedMessage1 = controller.getMessages().get(1) ;
-
-
-        assertEquals(marcoToAll,expectedMessage);
-        assertEquals(giuliaToAll,expectedMessage1);
+        assertEquals("Alberto is trying to test this chat",chatModel.getMessagesFor("Marco").get(0).text());
+        assertEquals("Alberto is trying to test this chat",chatModel.getMessagesFor("Cookie").get(0).text());
+        assertEquals("Alberto is trying to test this chat",chatModel.getMessagesFor("Giulia").get(0).text());
 
     }
 
-    @Test
-    @DisplayName("Test the correct update of multiple messages sent by broadcast and directly inside an observable list of ChatTextMessage objects")
-    public void chatTestObservableListUpdateBroadcastAndDirectlyPositively() {
-        game.addPlayer("Marco");
-        game.addPlayer("Alberto");
-        game.onGameStarted();
 
-        Timestamp time = new Timestamp(14);
-        MessageRecipient albertoMessageRecipient = new MessageRecipient.Direct("Marco");
-        MessageRecipient broadCastRecipient = new MessageRecipient.Broadcast();
-
-        ChatTextMessage marcoToAll = new ChatTextMessage("Marco", broadCastRecipient, "Ciao", time);
-        ChatTextMessage albertoToMarco = new ChatTextMessage("Alberto", albertoMessageRecipient, "Ciao a te", time);
-
-        List<ChatTextMessage> messages = new ArrayList<>();
-        GuiGameController controller = new GuiGameController();
-
-        messages.add(marcoToAll);
-        messages.add(albertoToMarco);
-
-
-        controller.chatModelUpdateTest(messages);
-
-        ChatTextMessage expectedMessage = controller.getMessages().get(0) ;
-        ChatTextMessage expectedMessage1 = controller.getMessages().get(1) ;
-
-
-        assertEquals(marcoToAll,expectedMessage);
-        assertEquals(albertoToMarco,expectedMessage1);
-
-    }
 
 }
+
