@@ -197,6 +197,42 @@ public class ChatTests {
 
     }
 
+    @Test
+    @DisplayName("Chat Test: positive addiction of a message made of a multiple words, sent by broadcast from different players")
+    public void addMessageTestPositivelyByBroadcastMultipleWordsFromDifferentPlayersCase(){
+        GameModel game = new GameModel(GameMode.GAME_MODE_4_PLAYERS);
+        game.addPlayer("Marco");
+        game.addPlayer("Alberto");
+        game.addPlayer("Cookie");
+        game.addPlayer("Giulia");
+        game.onGameStarted();
+
+        MessageRecipient recipient = new MessageRecipient.Broadcast();
+
+        ChatModel chatModel = new ChatModel();
+
+        chatModel.addMessage("Alberto",recipient,"Alberto is trying to test this chat");
+        chatModel.addMessage("Marco",recipient,"Marco is trying to test this chat");
+        chatModel.addMessage("Cookie",recipient,"Cookie is trying to test this chat");
+
+        assertEquals(3, chatModel.getMessagesFor("Marco").size());
+        assertEquals(3, chatModel.getMessagesFor("Cookie").size());
+        assertEquals(3, chatModel.getMessagesFor("Cookie").size());
+
+        assertEquals("Alberto is trying to test this chat",chatModel.getMessagesFor("Marco").get(0).text());
+        assertEquals("Alberto is trying to test this chat",chatModel.getMessagesFor("Cookie").get(0).text());
+        assertEquals("Alberto is trying to test this chat",chatModel.getMessagesFor("Giulia").get(0).text());
+
+        assertEquals("Marco is trying to test this chat",chatModel.getMessagesFor("Alberto").get(1).text());
+        assertEquals("Marco is trying to test this chat",chatModel.getMessagesFor("Cookie").get(1).text());
+        assertEquals("Marco is trying to test this chat",chatModel.getMessagesFor("Giulia").get(1).text());
+
+        assertEquals("Cookie is trying to test this chat",chatModel.getMessagesFor("Marco").get(2).text());
+        assertEquals("Cookie is trying to test this chat",chatModel.getMessagesFor("Alberto").get(2).text());
+        assertEquals("Cookie is trying to test this chat",chatModel.getMessagesFor("Giulia").get(2).text());
+
+    }
+
 
 
 }
