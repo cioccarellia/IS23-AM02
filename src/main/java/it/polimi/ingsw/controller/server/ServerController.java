@@ -70,7 +70,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      */
     private GameModel gameModel;
 
-    private ChatModel chatModel = new ChatModel();
+    private final ChatModel chatModel = new ChatModel();
 
     /**
      *

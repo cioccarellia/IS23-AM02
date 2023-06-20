@@ -132,6 +132,9 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
             case GameInsertionTurnResponse r -> {
                 controller.onGameInsertionTurnEvent(r.seal());
             }
+            case ChatModelUpdateEvent r -> {
+                controller.onChatModelUpdate(r.getMessages());
+            }
             case null, default ->
                     throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
         }

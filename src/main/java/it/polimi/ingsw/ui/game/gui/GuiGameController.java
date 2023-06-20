@@ -12,7 +12,6 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
-import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
@@ -190,17 +189,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public TextArea chatTextField;
     @FXML
-    public MenuButton chatSelectorMenuButton;
+    public ComboBox<String> chatSelectorComboBox;
     @FXML
     public ListView<String> chatPane;
-    @FXML
-    public MenuItem player1ChatWith;
-    @FXML
-    public MenuItem player2ChatWith;
-    @FXML
-    public MenuItem player3ChatWith;
-    @FXML
-    public MenuItem chatWithEveryone;
 
     @FXML
     public HBox xbox;
@@ -227,8 +218,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // endregion %%%%%%%%%%%% Status Variables - Insertion %%%%%%%%%%%%%%%%%%%
 
     // chat data
-    private MessageRecipient selectedMessageRecipient;
-
     private List<String> chatEnemyUsernamesList;
     private List<ChatTextMessage> messages;
 
@@ -272,10 +261,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         private List<Label> selectedOwnerTilesLabels() {
             return Arrays.asList(firstSelectedTilesNumberedLabel, secondSelectedTilesNumberedLabel, thirdSelectedTilesNumberedLabel);
         }
-
-        private List<MenuItem> chatWithMenuItemPlayerButtons() {
-            return Arrays.asList(player1ChatWith, player2ChatWith, player3ChatWith);
-        }
     }
 
     private boolean hasInitializedUi = false;
@@ -308,7 +293,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         setBoardImageViewsTileClickListener();
 
         // chat listeners
-        setChatWithSelectingClickListeners();
         setSendMessageButtonClickListener();
 
         // enemy buttons listeners
@@ -385,11 +369,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // chat initialization
         chatEnemyUsernamesList = model.getPlayersUsernameListExcluding(owner);
 
-        // we enable and set the present enemy players chat selection buttons
-        for (int i = 0; i < chatEnemyUsernamesList.size(); i++) {
-            String enemyName = chatEnemyUsernamesList.get(i);
-            ChatMenuRender.renderChatMenuItemSelectionButton(iter.chatWithMenuItemPlayerButtons().get(i), enemyName);
-        }
+        // set ComboBox items for chat
+        List<String> comboItems = new ArrayList<>();
+        comboItems.add("Everyone");
+
+        comboItems.addAll(enemyList);
+
+        ObservableList<String> options = FXCollections.observableArrayList(comboItems);
+        chatSelectorComboBox.setItems(options);
+        chatSelectorComboBox.getSelectionModel().selectFirst();
 
         hasInitializedUi = true;
 
@@ -823,26 +811,14 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-    public void setChatWithSelectingClickListeners() {
-        player1ChatWith.setOnAction(mouseEvent -> {
-            selectedMessageRecipient = new MessageRecipient.Direct(chatEnemyUsernamesList.get(0));
-            chatSelectorMenuButton.setText(chatEnemyUsernamesList.get(0));
-        });
+    public MessageRecipient parseRecipientFromComboBox() {
+        String currentlySelectedEntry = chatSelectorComboBox.getValue();
 
-        player2ChatWith.setOnAction(mouseEvent -> {
-            selectedMessageRecipient = new MessageRecipient.Direct(chatEnemyUsernamesList.get(1));
-            chatSelectorMenuButton.setText(chatEnemyUsernamesList.get(1));
-        });
-
-        player3ChatWith.setOnAction(mouseEvent -> {
-            selectedMessageRecipient = new MessageRecipient.Direct(chatEnemyUsernamesList.get(2));
-            chatSelectorMenuButton.setText(chatEnemyUsernamesList.get(2));
-        });
-
-        chatWithEveryone.setOnAction(mouseEvent -> {
-            selectedMessageRecipient = new MessageRecipient.Broadcast();
-            chatSelectorMenuButton.setText("Everyone");
-        });
+        if (currentlySelectedEntry.equals("Everyone")) {
+            return new MessageRecipient.Broadcast();
+        } else {
+            return new MessageRecipient.Direct(currentlySelectedEntry);
+        }
     }
 
 
@@ -851,7 +827,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             Timestamp time = new Timestamp(System.currentTimeMillis());
 
             if (!chatTextField.getText().isEmpty()) {
-                ChatTextMessage textMessage = new ChatTextMessage(owner, selectedMessageRecipient, chatTextField.getText(), time);
+                ChatTextMessage textMessage = new ChatTextMessage(owner, parseRecipientFromComboBox(), chatTextField.getText(), time);
                 addToChat(textMessage);
             }
         });
