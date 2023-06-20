@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.tcp.messages.request;
 
 import it.polimi.ingsw.model.chat.MessageRecipient;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ChatTextMessageRequest extends Request {
@@ -18,7 +19,7 @@ public class ChatTextMessageRequest extends Request {
     }
 
 
-    public ChatTextMessageRequest(String senderUsername, MessageRecipient recipient, String text) {
+    public ChatTextMessageRequest(String senderUsername, @NotNull MessageRecipient recipient, String text) {
         this.senderUsername = senderUsername;
         this.text = text;
 

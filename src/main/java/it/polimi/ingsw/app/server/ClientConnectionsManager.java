@@ -111,6 +111,15 @@ public class ClientConnectionsManager {
      *
      * @return A list of usernames for disconnected clients.
      */
+    public List<String> getUsernames() {
+        return connections.values().stream().map(ClientConnection::getUsername).toList();
+    }
+
+    /**
+     * Retrieves a list of usernames for disconnected clients.
+     *
+     * @return A list of usernames for disconnected clients.
+     */
     public List<String> getDisconnectedClientUsernames() {
         return connections.values().stream().filter(it -> it.getStatus() == ConnectionStatus.DISCONNECTED).map(ClientConnection::getUsername).toList();
     }

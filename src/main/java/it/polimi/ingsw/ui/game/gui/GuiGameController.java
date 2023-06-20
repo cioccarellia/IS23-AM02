@@ -32,7 +32,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
 
-    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
 
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
@@ -304,7 +302,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // insertion listeners
         setRadioButtonsClickListeners();
         setBookshelfInsertionButtonClickListener();
-        setSelectedTilesImageViewClickListeners();
 
         // selection listeners
         setBoardSelectionButtonClickListener();
@@ -350,9 +347,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             throw new IllegalStateException("JavaFX app launched without valid model");
         }
 
-
         PlayerSession startingPlayerSession = model.getStartingPlayerSession();
-
 
         // common goal cards and their description and their token
         commonGoalCardsOnCreation(model, iter.commonGoalCards(), iter.commonGoalCardsDescriptions(), iter.topTokens());
@@ -422,16 +417,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         renderChat();
     }
 
-    @TestOnly
-    public List<ChatTextMessage> getMessages() {
-        return messages;
-    }
-
-    @TestOnly
-    public void chatModelUpdateTest(List<ChatTextMessage> messages) {
-        this.messages = messages;
-    }
-
     // renders
     public void renderChat() {
         //Updating chat ListView
@@ -499,7 +484,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         List<CellInfo> selectedTiles = ownerSession().getPlayerTileSelection().getSelection().stream().toList();
 
                         renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedTiles);
-                        setSelectedTilesImageViewClickListeners();
                     }
                 }
 
@@ -697,8 +681,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     private void addToChat(ChatTextMessage chatTextMessage) {
-        chatPane.getItems().add(chatTextMessage.toString());
-
         handler.onViewSendMessage(chatTextMessage);
         chatTextField.clear();
     }
@@ -808,28 +790,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 });
             }
         }
-    }
-
-
-    public void setSelectedTilesImageViewClickListeners() {
-        /*
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
-
-        for (int i = 0; i < maxSelectionSize; i++) {
-            if (gridPaneNodes[0][i] == null) {
-                continue;
-            }
-
-            Node currentImage = gridPaneNodes[0][i];
-            ImageView matchingImageView = (ImageView) gridPaneNodes[0][i];
-
-            currentImage.setOnMouseClicked(mouseEvent -> {
-                Node k = (Node) mouseEvent.getSource();
-                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
-
-                onSelectedTilesClickHandler(positionField, matchingImageView);
-            });
-        }*/
     }
 
     @FXML

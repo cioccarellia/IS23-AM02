@@ -407,9 +407,12 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     public synchronized void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
         chatModel.addMessage(sendingUsername, recipient, text);
 
-        router.route(sendingUsername).onChatModelUpdate(
-                chatModel.getMessagesFor(sendingUsername)
-        );
+        for (String username : connectionsManager.getUsernames()) {
+            router.route(username).onChatModelUpdate(
+                    chatModel.getMessagesFor(username)
+            );
+        }
+
     }
 
     @Override

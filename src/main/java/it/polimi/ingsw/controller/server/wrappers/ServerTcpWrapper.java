@@ -38,8 +38,12 @@ public class ServerTcpWrapper extends ServerWrapper {
                         controller.gameConnectionRequest(s.getUsername(), s.getProtocol(), handler);
                 case GameSelectionTurnRequest s ->
                         controller.gameSelectionTurnResponse(s.getUsername(), s.getSelection());
-                case GameInsertionTurnRequest s ->
-                        controller.gameInsertionTurnResponse(s.getUsername(), s.getTiles(), s.getColumn());
+                case GameInsertionTurnRequest s -> {
+                    controller.gameInsertionTurnResponse(s.getUsername(), s.getTiles(), s.getColumn());
+                }
+                case ChatTextMessageRequest text -> {
+                    controller.sendTextMessage(text.senderUsername(), text.recipient(), text.text());
+                }
                 case KeepAlive r -> controller.keepAlive(r.getUsername());
                 case null, default -> throw new IllegalArgumentException("Message type not handled");
             }

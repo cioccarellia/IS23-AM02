@@ -331,7 +331,9 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
 
     @Override
     public void onChatModelUpdate(List<ChatTextMessage> messages) throws RemoteException {
-        ui.chatModelUpdate(messages);
+        asyncExecutor.submit(() -> {
+                ui.chatModelUpdate(messages);
+        });
     }
 
     /**
@@ -433,7 +435,11 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void onViewSendMessage(ChatTextMessage message) {
-
+        try {
+            gateway.sendTextMessage(message.senderUsername(), message.messageRecipient(), message.text());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
