@@ -35,6 +35,7 @@ import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
@@ -205,6 +206,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @FXML
     public MenuItem chatWithEveryone;
 
+    @FXML
+    public HBox xbox;
+
 
     // endregion %%%%%%%%%%%%%%% Main Layer %%%%%%%%%%%%%%%%%%%
 
@@ -219,7 +223,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Status Variables %%%%%%%%%%%%%%%%%%%
     private int currentlySelectedColumn;
     private final List<Tile> orderedTileList = new ArrayList<>();
-    private final Set<CellInfo> selectedCoordinatesAndValuesSet = new HashSet<>();
+    private final List<CellInfo> selectedCoordinatesAndValuesList = new ArrayList<>();
     // endregion %%%%%%%%%%%% Status Variables %%%%%%%%%%%%%%%%%%%
 
     // chat data
@@ -372,7 +376,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
 
         // set selected tiles as empty
-        renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesAndValuesSet, model);
+        renderSelectedTiles(iter.selectedOwnerTiles(), selectedCoordinatesAndValuesList);
 
         // we set the currently selected enemy as the first one in the list
         currentlySelectedUsername = enemyList.get(0);
@@ -487,7 +491,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         var selectedTiles = ownerSession().getPlayerTileSelection().getSelection();
                         Set<CellInfo> ownerSelectedTileCoordinates = new HashSet<>(selectedTiles);
 
-                        renderSelectedTiles(selectedTilesGridPane, ownerSelectedTileCoordinates, model);
+                        renderSelectedTiles(iter.selectedOwnerTiles(), selectedCoordinatesAndValuesList);
+                        setSelectedTilesImageViewClickListeners();
                     }
                 }
 
@@ -503,7 +508,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 //gameStandby();
             }
         }
+
+        renderEnemySection();
     }
+
 
     public void renderEnemySection() {
         // selected enemy's bookshelf
@@ -526,16 +534,18 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession());
     }
 
+
+
     // utils
     public void autoUpdateVisibility() {
         switch (ownerSession().getPlayerCurrentGamePhase()) {
-            case IDLE -> UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton);
+            case IDLE -> UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton, selectedTilesNumberedLabelsHBox);
             case SELECTING -> {
-                UiUtils.visible(boardSelectionButton, selectedTilesGridPane, insertionVBox);
+                UiUtils.visible(boardSelectionButton, xbox, insertionVBox);
                 UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);
             }
             case INSERTING -> {
-                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, selectedTilesGridPane);
+                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, xbox);
                 UiUtils.invisible(boardSelectionButton);
             }
         }
@@ -543,7 +553,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     public void checkAndApplyBoardDarkeningState() {
         if (ownerSession().getPlayerCurrentGamePhase() == SELECTING) {
-            Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesSet.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
+            Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
             // non-selectable tiles darken
             makeNonSelectableTilesDark(boardGridPane, model, selectedCoordinatesSet);
         }
@@ -551,16 +561,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     public void onSelectionButtonClicked() {
         autoUpdateVisibility();
-        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesSet.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
+        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
 
         // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
-        if (model.isSelectionValid(selectedCoordinatesSet)) {
+         if (model.isSelectionValid(selectedCoordinatesSet)) {
             handler.onViewSelection(selectedCoordinatesSet);
         } else {
             errorLabel.setText("The tiles you selected are not valid.");
         }
     }
-
 
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -578,7 +587,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         autoUpdateVisibility();
 
 
-        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesSet
+        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList
                 .stream()
                 .map(CellInfo::coordinate)
                 .collect(Collectors.toSet());
@@ -588,7 +597,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // checks if c was already present in theo set, in that case it is removed
         // if (selectedCoordinates != null) {
         if (selectedCoordinatesSet.contains(selectedCoordinate)) {
-            selectedCoordinatesAndValuesSet.remove(new CellInfo(selectedCoordinate, tile));
+            selectedCoordinatesAndValuesList.remove(new CellInfo(selectedCoordinate, tile));
             selectedCoordinatesSet.remove(selectedCoordinate);
             currentImageView.setEffect(null);
 
@@ -596,9 +605,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             checkAndApplyBoardDarkeningState();
 
             // removes from insertionVBox, no check needed
-            renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesAndValuesSet, model);
+            renderSelectedTiles(iter.selectedOwnerTiles(), selectedCoordinatesAndValuesList);
         } else {
-            selectedCoordinatesAndValuesSet.add(new CellInfo(selectedCoordinate, tile));
+            selectedCoordinatesAndValuesList.add(new CellInfo(selectedCoordinate, tile));
             selectedCoordinatesSet.add(selectedCoordinate);
 
 
@@ -609,9 +618,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 checkAndApplyBoardDarkeningState();
 
                 // adds them to insertionVBox
-                renderSelectedTiles(selectedTilesGridPane, selectedCoordinatesAndValuesSet, model);
+                renderSelectedTiles(iter.selectedOwnerTiles(), selectedCoordinatesAndValuesList);
             } else {
-                selectedCoordinatesAndValuesSet.remove(new CellInfo(selectedCoordinate, tile));
+                selectedCoordinatesAndValuesList.remove(new CellInfo(selectedCoordinate, tile));
                 selectedCoordinatesSet.remove(selectedCoordinate);
                 statusLabel.setText("Selection error");
                 errorLabel.setText("Player " + ownerSession().getUsername() + " you can't select this tile.");
@@ -619,49 +628,53 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
+    void resetSelectionLabels() {
+        iter.selectedOwnerTilesLabels().forEach(it -> it.setText(" "));
+    }
+
 
     public void onInsertionButtonClicked() {
         autoUpdateVisibility();
+        resetSelectionLabels();
 
-        if (orderedTileList != null && orderedTileList.size() == selectedCoordinatesAndValuesSet.size()
-                                    && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
+        if (orderedTileList.size() == selectedCoordinatesAndValuesList.size() && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
             handler.onViewInsertion(currentlySelectedColumn, orderedTileList);
             orderedTileList.clear();
-            selectedCoordinatesAndValuesSet.clear();
+            selectedCoordinatesAndValuesList.clear();
         } else {
             errorLabel.setText("You have to select all the tiles.");
         }
     }
 
 
-    private void onSelectedTilesClickHandler(int index, ImageView selectedTileImageView) {
+    private void onSelectedTilesClickHandler(int index, ImageView selectedTileImageView, Label selectedTextLabel) {
         logger.info("onSelectedTilesClickHandler(index={}, selectedTileImageView={})", index, selectedTileImageView);
         List<Tile> playerSelectedTiles = model.getPlayerSession(owner).getPlayerTileSelection().getSelectedTiles();
 
-        // 0, 1, 2 or 3
+        // " ", 1, 2 or 3
         String selectionLabelText = iter.selectedOwnerTilesLabels().get(index).getText();
 
-        if (Integer.parseInt(selectionLabelText) == 0) {
-            // if it still has the default value of 0
-            // remove tile darkened effect and make label visible
+        if (selectionLabelText.equals(" ")) {
+            // if it still has the default value of X
+            // remove tile darkened effect
             selectedTileImageView.setEffect(null);
-            UiUtils.visible(iter.selectedOwnerTilesLabels().get(index));
+            //     UiUtils.visible(iter.selectedOwnerTilesLabels().get(index));
 
             // add the tile to the orderedTiles list
             orderedTileList.add(playerSelectedTiles.get(index));
 
             // set the label to the current orderedTiles size
-            iter.selectedOwnerTilesLabels().get(index).setText(String.valueOf(orderedTileList.size()));
+            selectedTextLabel.setText(String.valueOf(orderedTileList.size()));
         } else {
             // if it didn't have the default value, it means it was already selected
-            // change all the other labels
+            // change all the other labelsa
             int currentLabelValue = Integer.parseInt(selectionLabelText);
 
             for (int i = 0; i < iter.selectedOwnerTilesLabels().size(); i++) {
-                int otherLabelValue = Integer.parseInt(iter.selectedOwnerTilesLabels().get(i).getText());
+                String otherLabelValue = iter.selectedOwnerTilesLabels().get(i).getText();
 
-                if (i != index && otherLabelValue > currentLabelValue) {
-                    String newText = String.valueOf(otherLabelValue - 1);
+                if (i != index && !otherLabelValue.equals(" ") && Integer.parseInt(otherLabelValue) > currentLabelValue) {
+                    String newText = String.valueOf(Integer.parseInt(otherLabelValue) - 1);
                     iter.selectedOwnerTilesLabels().get(i).setText(newText);
                 }
             }
@@ -673,8 +686,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             enableDarkeningEffect(selectedTileImageView);
 
             // make the label invisible and set it to 0 again
-            UiUtils.invisible(iter.selectedOwnerTilesLabels().get(index));
-            iter.selectedOwnerTilesLabels().get(index).setText("0");
+            //     UiUtils.invisible(iter.selectedOwnerTilesLabels().get(index));
+            iter.selectedOwnerTilesLabels().get(index).setText(" ");
         }
     }
 
@@ -743,7 +756,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
             final int finalizedIndex = i;
             RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
-            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex + 1);
+            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex);
         }
     }
 
@@ -758,7 +771,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
 
-
     public void setBoardSelectionButtonClickListener() {
         boardSelectionButton.setOnMouseClicked(mouseEvent -> {
                     if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
@@ -766,27 +778,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                     }
                 }
         );
-    }
-
-
-    public void setSelectedTilesImageViewClickListeners() {
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
-
-        for (int i = 0; i < maxSelectionSize; i++) {
-            if (gridPaneNodes[0][i] == null) {
-                continue;
-            }
-
-            Node currentImage = gridPaneNodes[0][i];
-            ImageView matchingImageView = (ImageView) gridPaneNodes[0][i];
-
-            currentImage.setOnMouseClicked(mouseEvent -> {
-                Node k = (Node) mouseEvent.getSource();
-                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
-
-                onSelectedTilesClickHandler(positionField, matchingImageView);
-            });
-        }
     }
 
 
@@ -813,6 +804,47 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             }
         }
     }
+
+
+    public void setSelectedTilesImageViewClickListeners() {
+        /*
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
+
+        for (int i = 0; i < maxSelectionSize; i++) {
+            if (gridPaneNodes[0][i] == null) {
+                continue;
+            }
+
+            Node currentImage = gridPaneNodes[0][i];
+            ImageView matchingImageView = (ImageView) gridPaneNodes[0][i];
+
+            currentImage.setOnMouseClicked(mouseEvent -> {
+                Node k = (Node) mouseEvent.getSource();
+                int positionField = Integer.parseInt(String.valueOf(k.getUserData()));
+
+                onSelectedTilesClickHandler(positionField, matchingImageView);
+            });
+        }*/
+    }
+
+    @FXML
+    public void onFirstSelectedOwnerTile(MouseEvent event) {
+        logger.warn("CLICK ON 1");
+        onSelectedTilesClickHandler(0, firstSelectedTile, firstSelectedTilesNumberedLabel);
+    }
+
+    @FXML
+    public void onSecondSelectedOwnerTile(MouseEvent event) {
+        logger.warn("CLICK ON 2");
+        onSelectedTilesClickHandler(1, secondSelectedTile, secondSelectedTilesNumberedLabel);
+    }
+
+    @FXML
+    public void onThirdSelectedOwnerTile(MouseEvent event) {
+        logger.warn("CLICK ON 3");
+        onSelectedTilesClickHandler(2, thirdSelectedTile, thirdSelectedTilesNumberedLabel);
+    }
+
 
     public void setChatWithSelectingClickListeners() {
         player1ChatWith.setOnAction(mouseEvent -> {

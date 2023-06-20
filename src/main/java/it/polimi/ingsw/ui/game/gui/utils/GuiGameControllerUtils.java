@@ -29,8 +29,10 @@ import javafx.scene.paint.Color;
 import org.apache.commons.lang.SerializationUtils;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GuiGameControllerUtils {
     private static final int maxTokensPerPlayer = 3;
@@ -88,9 +90,8 @@ public class GuiGameControllerUtils {
         }
     }
 
-    public static void renderSelectedTiles(GridPane selectedTilesGridPane, Set<CellInfo> coordinatesAndValues, GameModel game) {
+    public static void renderSelectedTiles(List<ImageView> selectedTilesImageViewsList, List<CellInfo> coordinatesAndValues) {
         // All nodes can be safely cast to ImageView(s)
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(selectedTilesGridPane, 1, maxSelectionSize);
 
         List<Tile> selectedTiles = null;
 
@@ -100,12 +101,12 @@ public class GuiGameControllerUtils {
 
         for (int i = 0; i < maxSelectionSize; i++) {
             // if either no image is present or board doesn't have any content for (i,j)
-            if (gridPaneNodes[0][i] == null) {
+            if (selectedTilesImageViewsList.get(i) == null) {
                 continue;
             }
 
             // ImageView containing our selected tile[0][i]
-            ImageView imageView = (ImageView) gridPaneNodes[0][i];
+            ImageView imageView = selectedTilesImageViewsList.get(i);
 
             Image tileImage = null;
 
