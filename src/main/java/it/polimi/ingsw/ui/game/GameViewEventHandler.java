@@ -3,6 +3,7 @@ package it.polimi.ingsw.ui.game;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public interface GameViewEventHandler {
     /**
      * User has sent a chat message
      */
-    void onViewSendMessage(ChatTextMessage message);
+    void onViewSendMessage(String senderUsername, MessageRecipient recipient, String text);
 
     /**
      * User has quit the game

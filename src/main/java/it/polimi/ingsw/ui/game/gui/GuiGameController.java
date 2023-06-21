@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
+import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.model.player.selection.PlayerTileSelection;
 import it.polimi.ingsw.ui.Renderable;
@@ -35,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -199,8 +199,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // endregion %%%%%%%%%%%%%%% Main Layer %%%%%%%%%%%%%%%%%%%
 
-
-    // Constant game variables
+    // Constant game variables & references
     private GameViewEventHandler handler;
     private String owner;
 
@@ -210,7 +209,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Status Variables - Selection %%%%%%%%%%%%%%%%%%%
     private final List<CellInfo> selectedCoordinatesAndValuesList = new ArrayList<>();
     // endregion %%%%%%%%%%%%%%% Status Variables - Selection %%%%%%%%%%%%%%%%%%%
-
 
     // region %%%%%%%%%%%%%%% Status Variables - Insertion %%%%%%%%%%%%%%%%%%%
     private int currentlySelectedColumn;
@@ -266,6 +264,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private boolean hasInitializedUi = false;
     private String currentlySelectedUsername = null;
 
+    // region %%%%%%%%%%%%%%% Initialization %%%%%%%%%%%%%%%%%%%
 
     /**
      * Initializes the game model, event handler, and owner for the GUI controller.
@@ -302,7 +301,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         resetSelectionLabelsAndImages();
     }
 
-    // useful player sessions
+    // endregion %%%%%%%%%%%%%%% Initialization %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Useful Player Sessions %%%%%%%%%%%%%%%%%%%
     private PlayerSession currentPlayerSession() {
         return model.getCurrentPlayerSession();
     }
@@ -319,8 +320,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         return model.getPlayerSession(currentlySelectedUsername);
     }
 
+    // endregion %%%%%%%%%%%%%%% Useful Player Sessions %%%%%%%%%%%%%%%%%%%
 
-    // game creation
+    // region %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
 
     /**
      * Called when the game is created.
@@ -383,10 +385,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         render();
         renderEnemySection();
+        //gameEnded();
     }
 
+    // endregion %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
 
-    // model update
+    // region %%%%%%%%%%%%%%% Updates %%%%%%%%%%%%%%%%%%%
 
     /**
      * Updates the game model and refreshes the GUI elements based on the updated model.
@@ -405,7 +409,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         renderChat();
     }
 
-    // renders
+    // endregion %%%%%%%%%%%%%%% Updates %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
     public void renderChat() {
         //Updating chat ListView
         ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatTextMessage::toString).toList());
@@ -481,10 +487,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 checkAndApplyBoardDarkeningState();
             }
             case ENDED -> {
-                //gameEnded();
+                gameEnded();
             }
             case STANDBY -> {
-                //gameStandby();
+                gameStandby();
             }
         }
 
@@ -513,44 +519,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession());
     }
 
+    // endregion %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
 
-    // utils
-    public void autoUpdateVisibility() {
-        switch (ownerSession().getPlayerCurrentGamePhase()) {
-            case IDLE -> {
-                UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton, selectedTilesNumberedLabelsHBox);
-            }
-            case SELECTING -> {
-                UiUtils.visible(boardSelectionButton, xbox, insertionVBox);
-                UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);
-            }
-            case INSERTING -> {
-                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, xbox);
-                UiUtils.invisible(boardSelectionButton);
-            }
-        }
-    }
-
-    public void checkAndApplyBoardDarkeningState() {
-        if (ownerSession().getPlayerCurrentGamePhase() == SELECTING) {
-            Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
-            // non-selectable tiles darken
-            makeNonSelectableTilesDark(boardGridPane, model, selectedCoordinatesSet);
-        }
-    }
-
-    public void onSelectionButtonClicked() {
-        autoUpdateVisibility();
-        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
-
-        // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
-        if (model.isSelectionValid(selectedCoordinatesSet)) {
-            handler.onViewSelection(selectedCoordinatesSet);
-        } else {
-            errorLabel.setText("The tiles you selected are not valid.");
-        }
-    }
-
+    // region %%%%%%%%%%%%%%% Selection phase %%%%%%%%%%%%%%%%%%%
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void onBoardTileClickHandler(Coordinate selectedCoordinate, Optional<Tile> optionalTileInSelectedCoordinate, ImageView currentImageView) {
@@ -607,11 +578,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    void resetSelectionLabelsAndImages() {
-        iter.selectedOwnerTilesLabels().forEach(it -> it.setText(" "));
-        iter.selectedOwnerTilesImages().forEach(it -> it.setImage(null));
+    public void onSelectionButtonClicked() {
+        autoUpdateVisibility();
+        Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
+
+        // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
+        if (model.isSelectionValid(selectedCoordinatesSet)) {
+            handler.onViewSelection(selectedCoordinatesSet);
+        } else {
+            errorLabel.setText("The tiles you selected are not valid.");
+        }
     }
 
+    // endregion %%%%%%%%%%%%%%% Selection phase %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Insertion phase %%%%%%%%%%%%%%%%%%%
 
     public void onInsertionButtonClicked() {
         autoUpdateVisibility();
@@ -624,7 +605,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             errorLabel.setText("You have to select all the tiles.");
         }
     }
-
 
     private void onSelectedTilesClickHandler(int index, ImageView selectedTileImageView, Label selectedTextLabel) {
         logger.info("onSelectedTilesClickHandler(index={}, selectedTileImageView={})", index, selectedTileImageView);
@@ -668,11 +648,68 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-    private void addToChat(ChatTextMessage chatTextMessage) {
-        handler.onViewSendMessage(chatTextMessage);
+    void resetSelectionLabelsAndImages() {
+        iter.selectedOwnerTilesLabels().forEach(it -> it.setText(" "));
+        iter.selectedOwnerTilesImages().forEach(it -> it.setImage(null));
+    }
+
+    // endregion %%%%%%%%%%%%%%% Insertion phase %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
+
+    public void gameEnded() {
+        List<PlayerScore> playersRanking = model.getRankings();
+
+        Alert rankingWindow = new Alert(Alert.AlertType.NONE);
+        rankingWindow.setTitle("Game Over - Ranking");
+        rankingWindow.setHeaderText(null);
+
+        rankingWindow.showAndWait();
+    }
+
+    // endregion %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Game standby %%%%%%%%%%%%%%%%%%%
+    public void gameStandby() {
+
+    }
+    // endregion %%%%%%%%%%%%%%% Game standby %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Chat %%%%%%%%%%%%%%%%%%%
+
+    private void onChatTextSend(String senderUsername, MessageRecipient recipient, String text) {
+        handler.onViewSendMessage(senderUsername, recipient, text);
         chatTextField.clear();
     }
 
+    // endregion %%%%%%%%%%%%%%% Chat %%%%%%%%%%%%%%%%%%%
+
+    // region %%%%%%%%%%%%%%% Utils %%%%%%%%%%%%%%%%%%%
+
+    public void autoUpdateVisibility() {
+        switch (ownerSession().getPlayerCurrentGamePhase()) {
+            case IDLE -> {
+                UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton, selectedTilesNumberedLabelsHBox);
+            }
+            case SELECTING -> {
+                UiUtils.visible(boardSelectionButton, xbox, insertionVBox);
+                UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);
+            }
+            case INSERTING -> {
+                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, xbox);
+                UiUtils.invisible(boardSelectionButton);
+            }
+        }
+    }
+
+    public void checkAndApplyBoardDarkeningState() {
+        if (ownerSession().getPlayerCurrentGamePhase() == SELECTING) {
+            Set<Coordinate> selectedCoordinatesSet = selectedCoordinatesAndValuesList.stream().map(CellInfo::coordinate).collect(Collectors.toSet());
+            // non-selectable tiles darken
+            makeNonSelectableTilesDark(boardGridPane, model, selectedCoordinatesSet);
+        }
+    }
+    // endregion %%%%%%%%%%%%%%% Utils %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%%%%%% Replies %%%%%%%%%%%%%%%%%%%
 
@@ -724,7 +761,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     // endregion %%%%%%%%%%%%%%%%%%% Replies %%%%%%%%%%%%%%%%%%%
-
 
     // region %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%
     public void setRadioButtonsClickListeners() {
@@ -824,11 +860,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     public void setSendMessageButtonClickListener() {
         sendMessageButton.setOnMouseClicked(mouseEvent -> {
-            Timestamp time = new Timestamp(System.currentTimeMillis());
-
             if (!chatTextField.getText().isEmpty()) {
-                ChatTextMessage textMessage = new ChatTextMessage(owner, parseRecipientFromComboBox(), chatTextField.getText(), time);
-                addToChat(textMessage);
+                onChatTextSend(owner, parseRecipientFromComboBox(), chatTextField.getText());
             }
         });
     }

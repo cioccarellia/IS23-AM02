@@ -140,7 +140,7 @@ public class PlayerSession implements Serializable {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                if (personalGoalCard[i][j] == bookshelf[i][j]) {
+                if (personalGoalCard[i][j] != null && personalGoalCard[i][j] == bookshelf[i][j]) {
                     points++;
                 }
             }
@@ -168,7 +168,7 @@ public class PlayerSession implements Serializable {
             case 6 -> {
                 return 12;
             }
-            default -> throw new IllegalArgumentException("Expected a number between 0 and 6.");
+            default -> throw new IllegalArgumentException("Expected a number between 0 and 6, got " + points);
         }
     }
 

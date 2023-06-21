@@ -10,7 +10,6 @@ public class ChatTextMessageRequest extends Request {
     private final @Nullable String recipientUsername;
     private final String text;
 
-
     public ChatTextMessageRequest(String senderUsername, boolean isBroadcast, @Nullable String recipientUsername, String text) {
         this.senderUsername = senderUsername;
         this.isBroadcast = isBroadcast;
@@ -44,12 +43,22 @@ public class ChatTextMessageRequest extends Request {
         if (isBroadcast) {
             return new MessageRecipient.Broadcast();
         } else {
-            assert senderUsername != null;
-            return new MessageRecipient.Direct(senderUsername);
+            assert recipientUsername != null;
+            return new MessageRecipient.Direct(recipientUsername);
         }
     }
 
     public String text() {
         return text;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatTextMessageRequest{" +
+                "senderUsername='" + senderUsername + '\'' +
+                ", isBroadcast=" + isBroadcast +
+                ", recipientUsername='" + recipientUsername + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

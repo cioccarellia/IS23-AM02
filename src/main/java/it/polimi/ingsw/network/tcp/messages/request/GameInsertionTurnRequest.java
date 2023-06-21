@@ -27,4 +27,13 @@ public class GameInsertionTurnRequest extends Request {
     public int getColumn() {
         return column;
     }
+
+    @Override
+    public String toString() {
+        return "GameInsertionTurnRequest{" +
+                "username='" + username + '\'' +
+                ", tiles=" + tiles +
+                ", column=" + column +
+                '}';
+    }
 }

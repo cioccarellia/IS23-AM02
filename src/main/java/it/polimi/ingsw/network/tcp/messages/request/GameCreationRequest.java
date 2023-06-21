@@ -26,4 +26,13 @@ public class GameCreationRequest extends Request {
     public ClientProtocol getProtocol() {
         return protocol;
     }
+
+    @Override
+    public String toString() {
+        return "GameCreationRequest{" +
+                "mode=" + mode +
+                ", username='" + username + '\'' +
+                ", protocol=" + protocol +
+                '}';
+    }
 }

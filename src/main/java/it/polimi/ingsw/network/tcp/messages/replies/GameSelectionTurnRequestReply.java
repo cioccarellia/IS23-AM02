@@ -14,4 +14,11 @@ public class GameSelectionTurnRequestReply extends Reply {
     public SingleResult<TileSelectionFailures> getTurnResult() {
         return turnResult;
     }
+
+    @Override
+    public String toString() {
+        return "GameSelectionTurnRequestReply{" +
+                "turnResult=" + turnResult +
+                '}';
+    }
 }

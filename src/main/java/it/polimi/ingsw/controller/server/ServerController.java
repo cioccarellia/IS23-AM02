@@ -413,6 +413,28 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             );
         }
 
+        /*
+        switch (recipient) {
+            case MessageRecipient.Broadcast broadcast -> {
+                for (String username : connectionsManager.getUsernames()) {
+                    router.route(username).onChatModelUpdate(
+                            chatModel.getMessagesFor(username)
+                    );
+                }
+            }
+            case MessageRecipient.Direct direct -> {
+                router.route(sendingUsername).onChatModelUpdate(
+                        chatModel.getMessagesFor(sendingUsername)
+                );
+
+                String recipientUsername = direct.username();
+                router.route(recipientUsername).onChatModelUpdate(
+                        chatModel.getMessagesFor(recipientUsername)
+                );
+            }
+        }*/
+
+
     }
 
     @Override

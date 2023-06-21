@@ -22,4 +22,12 @@ public class ServerStatusRequestReply extends Reply {
     public List<PlayerInfo> getPlayerInfo() {
         return playerInfo;
     }
+
+    @Override
+    public String toString() {
+        return "ServerStatusRequestReply{" +
+                "status=" + status +
+                ", playerInfo=" + playerInfo +
+                '}';
+    }
 }

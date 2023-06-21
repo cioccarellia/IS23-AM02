@@ -14,4 +14,11 @@ public class GameInsertionTurnRequestReply extends Reply {
     public SingleResult<BookshelfInsertionFailure> getTurnResult() {
         return turnResult;
     }
+
+    @Override
+    public String toString() {
+        return "GameInsertionTurnRequestReply{" +
+                "turnResult=" + turnResult +
+                '}';
+    }
 }

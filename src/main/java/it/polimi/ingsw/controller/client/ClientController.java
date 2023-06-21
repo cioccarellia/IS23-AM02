@@ -22,6 +22,7 @@ import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
@@ -431,12 +432,11 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     /**
      * Handles the event when the view sends a chat message.
      *
-     * @param message The chat message.
      */
     @Override
-    public void onViewSendMessage(ChatTextMessage message) {
+    public void onViewSendMessage(String senderUsername, MessageRecipient recipient, String text) {
         try {
-            gateway.sendTextMessage(message.senderUsername(), message.messageRecipient(), message.text());
+            gateway.sendTextMessage(senderUsername, recipient, text);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

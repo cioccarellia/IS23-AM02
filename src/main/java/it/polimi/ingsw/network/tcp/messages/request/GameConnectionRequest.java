@@ -20,4 +20,11 @@ public class GameConnectionRequest extends Request {
         return protocol;
     }
 
+    @Override
+    public String toString() {
+        return "GameConnectionRequest{" +
+                "username='" + username + '\'' +
+                ", protocol=" + protocol +
+                '}';
+    }
 }

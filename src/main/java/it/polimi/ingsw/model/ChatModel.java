@@ -26,12 +26,20 @@ public class ChatModel {
     public List<ChatTextMessage> getMessagesFor(String viewerUsername) {
         return messages.stream()
                 .filter(it -> {
-                    if (it.directUsername().isPresent()) {
-                        return it.directUsername().get().equals(viewerUsername);
-                    } else {
-                        return it.isBroadcast(); // should always be true
+                    switch (it.messageRecipient()) {
+                        case MessageRecipient.Broadcast broadcast -> {
+                            return true;
+                        }
+                        case MessageRecipient.Direct direct -> {
+                            return direct.username().equals(viewerUsername) || it.senderUsername().equals(viewerUsername);
+                        }
+                        default -> throw new IllegalStateException("Unexpected value: " + it.messageRecipient());
                     }
                 })
                 .toList();
+    }
+
+    public List<ChatTextMessage> getAllMessages() {
+        return messages.stream().toList();
     }
 }

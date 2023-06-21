@@ -11,4 +11,9 @@ public class KeepAlive extends Request {
     public String getUsername() {
         return username;
     }
+
+    @Override
+    public String toString() {
+        return "KeepAlive(username=" + username + ")";
+    }
 }

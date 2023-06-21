@@ -21,4 +21,12 @@ public class GameSelectionTurnRequest extends Request {
     public Set<Coordinate> getSelection() {
         return selection;
     }
+
+    @Override
+    public String toString() {
+        return "GameSelectionTurnRequest{" +
+                "username='" + username + '\'' +
+                ", selection=" + selection +
+                '}';
+    }
 }
