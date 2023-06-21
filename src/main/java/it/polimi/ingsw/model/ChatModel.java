@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
-import org.jetbrains.annotations.TestOnly;
 
 import java.sql.Timestamp;
 import java.time.Instant;

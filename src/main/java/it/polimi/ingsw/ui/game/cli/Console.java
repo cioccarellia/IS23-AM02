@@ -33,6 +33,7 @@ public class Console {
     }
 
     public static void printnl(int times) {
+        assert times > 0;
         for (int i = 0; i < times; i++) {
             System.out.println();
         }

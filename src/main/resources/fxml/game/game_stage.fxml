@@ -163,6 +163,12 @@
         </font>
     </Label>
 
+    <Label fx:id="ownerCurrentPointsLabel" layoutX="901.0" layoutY="331.0" prefHeight="26.0" prefWidth="158.0" text="Your points: points">
+        <font>
+            <Font name="Monospaced Regular" size="13.0" />
+        </font>
+    </Label>
+
     <ImageView fx:id="startingOwnerChair" fitHeight="50.0" fitWidth="50.0" layoutX="821.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true" visible="false">
         <Image url="@../../img/misc/firstPlayerToken_chair.png" />
     </ImageView>
@@ -249,8 +255,7 @@
     <VBox fx:id="insertionVBox" layoutX="498.0" layoutY="10.0" prefHeight="93.0" prefWidth="300.0" AnchorPane.bottomAnchor="871.0" AnchorPane.leftAnchor="498.0" AnchorPane.rightAnchor="668.0" AnchorPane.topAnchor="5.0">
         <!-- Selected tiles -->
 
-        <HBox fx:id="xbox">
-
+        <HBox fx:id="selectedTilesHBox">
             <ImageView fx:id="firstSelectedTile" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" userData="0">
                 <Image url="@../../img/tiles/book1.1.png" />
                 <effect>
@@ -365,7 +370,7 @@
 
     <!-- Insertion label -->
     <HBox fx:id="selectedTilesNumberedLabelsHBox" alignment="CENTER" layoutX="495.0" layoutY="10.0" prefHeight="49.0" prefWidth="300.0">
-        <Label fx:id="firstSelectedTilesNumberedLabel" onMouseClicked="#onFirstSelectedOwnerTile" text=" " textFill="#e06a2f">
+        <Label fx:id="firstSelectedTilesNumberedLabel" onMouseClicked="#onFirstSelectedOwnerTile" text=" ">
             <font>
                 <Font name="Monospaced Bold" size="30.0" />
             </font>
@@ -376,7 +381,7 @@
                 <Insets bottom="8.0" left="14.0" right="14.0" top="8.0" />
             </padding>
         </Label>
-        <Label fx:id="secondSelectedTilesNumberedLabel" onMouseClicked="#onSecondSelectedOwnerTile" text=" " textFill="#e06a2f">
+        <Label fx:id="secondSelectedTilesNumberedLabel" onMouseClicked="#onSecondSelectedOwnerTile" text=" ">
             <font>
                 <Font name="Monospaced Bold" size="30.0" />
             </font>
@@ -387,7 +392,7 @@
                 <Insets bottom="8.0" left="14.0" right="14.0" top="8.0" />
             </padding>
         </Label>
-        <Label fx:id="thirdSelectedTilesNumberedLabel" onMouseClicked="#onThirdSelectedOwnerTile" text=" " textFill="#e06a2f">
+        <Label fx:id="thirdSelectedTilesNumberedLabel" onMouseClicked="#onThirdSelectedOwnerTile" text=" ">
             <font>
                 <Font name="Monospaced Bold" size="30.0" />
             </font>
@@ -676,6 +681,5 @@
             <Font name="Monospaced Regular" size="20.0" />
         </font>
     </Label>
-
 
 </AnchorPane>

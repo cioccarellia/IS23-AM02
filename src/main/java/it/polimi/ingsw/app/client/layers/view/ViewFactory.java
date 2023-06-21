@@ -29,7 +29,6 @@ public class ViewFactory {
      *
      * @param mode       The client UI mode.
      * @param controller The lobby view event handler.
-     * @return The lobby UI view.
      */
     public static void createLobbyUiAsync(final @NotNull ClientUiMode mode, final ClientController controller, ExecutorService executorService) {
         switch (mode) {
@@ -64,7 +63,6 @@ public class ViewFactory {
      * @param model      The game model.
      * @param controller The game view event handler.
      * @param owner      The owner of the game.
-     * @return The game UI view.
      */
     public static void createGameUiAsync(final @NotNull ClientUiMode mode, final GameModel model, final ClientController controller, final String owner, ExecutorService executorService) {
         switch (mode) {
@@ -72,11 +70,11 @@ public class ViewFactory {
                 logger.info("createGameUiAsync(): Starting CLI game");
 
                 //executorService.submit(() -> {
-                logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
-                GameGateway game = new CliApp(model, controller, owner);
+                    logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
+                    GameGateway game = new CliApp(model, controller, owner);
 
-                logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
-                controller.onGameUiReady(game);
+                    logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
+                    controller.onGameUiReady(game);
                 //});
             }
             case GUI -> {

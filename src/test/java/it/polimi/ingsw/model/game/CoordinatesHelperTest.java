@@ -1,169 +1,231 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.board.Coordinate;
-import it.polimi.ingsw.utils.model.CoordinatesHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static it.polimi.ingsw.utils.model.CoordinatesHelper.areCoordinatesInStraightLine;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CoordinatesHelperTest {
 
+    // tests with no tiles
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for rows")
-    public void areCoordinatesInStraightLinePositivelyForRowsTest() {
-        Coordinate testingCoordinate1 = new Coordinate(5, 1);
-        Coordinate testingCoordinate2 = new Coordinate(5, 2);
-        Coordinate testingCoordinate3 = new Coordinate(5, 3);
-
-        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2, testingCoordinate3});
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine negatively, no tiles")
+    public void areCoordinatesInStraightLineNegativelyForNoTiles_test() {
+        assertFalse(areCoordinatesInStraightLine(null));
+    }
 
 
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    // tests with one tile
+    @Test
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine positively, one tile - 1")
+    public void areCoordinatesInStraightLinePositivelyForOneTile_test1() {
+        Coordinate testCoo1 = new Coordinate(5, 0);
+
+        assertTrue(areCoordinatesInStraightLine(List.of(testCoo1)));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for rows, edge case")
-    public void areCoordinatesInStraightLinePositivelyForRowsEdgeCaseTest() {
-        Coordinate testingCoordinate1 = new Coordinate(1, 3);
-        Coordinate testingCoordinate2 = new Coordinate(1, 4);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine positively, one tile - 2")
+    public void areCoordinatesInStraightLinePositivelyForOneTile_test2() {
+        Coordinate testCoo1 = new Coordinate(4, 4);
 
-        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2});
+        assertTrue(areCoordinatesInStraightLine(List.of(testCoo1)));
+    }
 
 
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    // tests with two tiles - same column
+    @Test
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine positively, two tiles in column - 1")
+    public void areCoordinatesInStraightLinePositivelyForTwoTilesInColumn_test1() {
+        Coordinate testCoo1 = new Coordinate(4, 8);
+        Coordinate testCoo2 = new Coordinate(5, 8);
+
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
+
+        assertTrue(areCoordinatesInStraightLine(testCooList));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for columns, edge case")
-    public void areCoordinatesInStraightLinePositivelyForColumnsEdgeCaseTest() {
-        Coordinate testingCoordinate2 = new Coordinate(7, 4);
-        Coordinate testingCoordinate1 = new Coordinate(7, 5);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine positively, two tiles in column - 2")
+    public void areCoordinatesInStraightLinePositivelyForTwoTilesInColumn_test2() {
+        Coordinate testCoo1 = new Coordinate(0, 3);
+        Coordinate testCoo2 = new Coordinate(1, 3);
 
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
 
-        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
-
-
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertTrue(areCoordinatesInStraightLine(testCooList));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for columns, edge case #2")
-    public void areCoordinatesInStraightLinePositivelyForColumnsEdgeCaseTest2() {
-        Coordinate testingCoordinate1 = new Coordinate(4, 7);
-        Coordinate testingCoordinate2 = new Coordinate(5, 7);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine negatively, two tiles in column - 1")
+    public void areCoordinatesInStraightLineNegativelyForTwoTilesInColumn_test1() {
+        Coordinate testCoo1 = new Coordinate(4, 4);
+        Coordinate testCoo2 = new Coordinate(5, 5);
 
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
 
-        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
-
-
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertFalse(areCoordinatesInStraightLine(testCooList));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for columns, edge case #3")
-    public void areCoordinatesInStraightLinePositivelyForColumnsEdgeCaseTest3() {
-        Coordinate testingCoordinate1 = new Coordinate(4, 8);
-        Coordinate testingCoordinate2 = new Coordinate(5, 8);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine negatively, two tiles in column - 2")
+    public void areCoordinatesInStraightLineNegativelyForTwoTilesInColumn_test2() {
+        Coordinate testCoo1 = new Coordinate(0, 3);
+        Coordinate testCoo2 = new Coordinate(5, 3);
+
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
+
+        assertFalse(areCoordinatesInStraightLine(testCooList));
+    }
 
 
-        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
+    // tests with two tiles - same row
+    @Test
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine positively, two tiles in row - 1")
+    public void areCoordinatesInStraightLinePositivelyForTwoTilesInRow_test1() {
+        Coordinate testCoo1 = new Coordinate(1, 3);
+        Coordinate testCoo2 = new Coordinate(1, 4);
 
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
 
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertTrue(areCoordinatesInStraightLine(testCooList));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for columns, edge case #4")
-    public void areCoordinatesInStraightLinePositivelyForColumnsEdgeCaseTest4() {
-        Coordinate testingCoordinate1 = new Coordinate(0, 9);
-        Coordinate testingCoordinate2 = new Coordinate(1, 9);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine positively, two tiles in row - 2")
+    public void areCoordinatesInStraightLinePositivelyForTwoTilesInRow_test2() {
+        Coordinate testCoo1 = new Coordinate(6, 3);
+        Coordinate testCoo2 = new Coordinate(6, 4);
 
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
 
-        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
-
-
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertTrue(areCoordinatesInStraightLine(testCooList));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively for columns, edge case")
-    public void areCoordinatesInStraightLineNegativelyForColumnsEdgeCaseTest() {
-        Coordinate testingCoordinate1 = new Coordinate(0, 9);
-        Coordinate testingCoordinate2 = new Coordinate(2, 9);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine negatively, two tiles in row - 1")
+    public void areCoordinatesInStraightLineNegativelyForTwoTilesInRow_test1() {
+        Coordinate testCoo1 = new Coordinate(4, 4);
+        Coordinate testCoo2 = new Coordinate(3, 8);
 
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
 
-        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
-
-
-        assertFalse(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertFalse(areCoordinatesInStraightLine(testCooList));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively for columns, edge case #2")
-    public void areCoordinatesInStraightLineNegativelyForColumnsEdgeCaseTest2() {
-        Coordinate testingCoordinate1 = new Coordinate(0, 9);
-        Coordinate testingCoordinate2 = new Coordinate(3, 4);
+    @DisplayName("Tests the correct function of areCoordinatesInStraightLine negatively, two tiles in row - 2")
+    public void areCoordinatesInStraightLineNegativelyForTwoTilesInRow_test2() {
+        Coordinate testCoo1 = new Coordinate(4, 0);
+        Coordinate testCoo2 = new Coordinate(4, 3);
+
+        List<Coordinate> testCooList = List.of(testCoo1, testCoo2);
+
+        assertFalse(areCoordinatesInStraightLine(testCooList));
+    }
 
 
-        List<Coordinate> testingCordianteList = List.of(testingCoordinate1, testingCoordinate2);
+    // tests with three tiles - same column
+    @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively, three tiles in column - 1")
+    public void areCoordinatesInStraightLinePositivelyForThreeTilesInColumn_test1() {
+        Coordinate testCoo1 = new Coordinate(2, 3);
+        Coordinate testCoo2 = new Coordinate(3, 3);
+        Coordinate testCoo3 = new Coordinate(4, 3);
 
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
 
-        assertFalse(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertTrue(areCoordinatesInStraightLine(testCoolist));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively for Columns")
-    public void areCoordinatesInStraightLinePositivelyForColumnsTest() {
-        Coordinate testingCoordinate1 = new Coordinate(2, 3);
-        Coordinate testingCoordinate2 = new Coordinate(3, 3);
-        Coordinate testingCoordinate3 = new Coordinate(4, 3);
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively, three tiles in column - 2")
+    public void areCoordinatesInStraightLinePositivelyForThreeTilesInColumn_test2() {
+        Coordinate testCoo1 = new Coordinate(2, 3);
+        Coordinate testCoo2 = new Coordinate(3, 3);
+        Coordinate testCoo3 = new Coordinate(4, 3);
 
-        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2, testingCoordinate3});
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
 
-
-        assertTrue(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertTrue(areCoordinatesInStraightLine(testCoolist));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively for Columns")
-    public void areCoordinatesInStraightLineNegativelyForColumnsTest() {
-        Coordinate testingCoordinate1 = new Coordinate(2, 4);
-        Coordinate testingCoordinate2 = new Coordinate(3, 3);
-        Coordinate testingCoordinate3 = new Coordinate(4, 4);
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively, three tiles in column - 1")
+    public void areCoordinatesInStraightLineNegativelyForThreeTilesInColumn_test1() {
+        Coordinate testCoo1 = new Coordinate(2, 4);
+        Coordinate testCoo2 = new Coordinate(3, 3);
+        Coordinate testCoo3 = new Coordinate(4, 4);
 
-        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2, testingCoordinate3});
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
 
-
-        assertFalse(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+        assertFalse(areCoordinatesInStraightLine(testCoolist));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively for rows")
-    public void areCoordinatesInStraightLineNegativelyTest() {
-        Coordinate testingCoordinate1 = new Coordinate(2, 2);
-        Coordinate testingCoordinate2 = new Coordinate(3, 2);
-        Coordinate testingCoordinate3 = new Coordinate(4, 3);
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively, three tiles in column - 2")
+    public void areCoordinatesInStraightLineNegativelyForThreeTilesInColumn_test2() {
+        Coordinate testCoo1 = new Coordinate(2, 4);
+        Coordinate testCoo2 = new Coordinate(3, 4);
+        Coordinate testCoo3 = new Coordinate(6, 4);
 
-        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2, testingCoordinate3});
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
+
+        assertFalse(areCoordinatesInStraightLine(testCoolist));
+    }
 
 
-        assertFalse(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    // tests with three tiles - same row
+    @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively, three tiles in row - 1")
+    public void areCoordinatesInStraightLinePositivelyForThreeTilesInRow_test1() {
+        Coordinate testCoo1 = new Coordinate(5, 1);
+        Coordinate testCoo2 = new Coordinate(5, 2);
+        Coordinate testCoo3 = new Coordinate(5, 3);
+
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
+
+        assertTrue(areCoordinatesInStraightLine(testCoolist));
     }
 
     @Test
-    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively, edge case")
-    public void areCoordinatesInStraightLineNegativelyEdgeCaseTest() {
-        Coordinate testingCoordinate1 = new Coordinate(0, 1);
-        Coordinate testingCoordinate2 = new Coordinate(1, 2);
-        Coordinate testingCoordinate3 = new Coordinate(0, 3);
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine positively, three tiles in row - 2")
+    public void areCoordinatesInStraightLinePositivelyForThreeTilesInRow_test2() {
+        Coordinate testCoo1 = new Coordinate(1, 3);
+        Coordinate testCoo2 = new Coordinate(1, 4);
+        Coordinate testCoo3 = new Coordinate(1, 5);
 
-        List<Coordinate> testingCordianteList = List.of(new Coordinate[]{testingCoordinate1, testingCoordinate2, testingCoordinate3});
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
 
+        assertTrue(areCoordinatesInStraightLine(testCoolist));
+    }
 
-        assertFalse(CoordinatesHelper.areCoordinatesInStraightLine(testingCordianteList));
+    @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively, three tiles in row - 1")
+    public void areCoordinatesInStraightLineNegativelyForThreeTilesInRow_test1() {
+        Coordinate testCoo1 = new Coordinate(2, 2);
+        Coordinate testCoo2 = new Coordinate(3, 2);
+        Coordinate testCoo3 = new Coordinate(4, 3);
+
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
+
+        assertFalse(areCoordinatesInStraightLine(testCoolist));
+    }
+
+    @Test
+    @DisplayName("Test the correct function of areCoordinatesInStraightLine negatively, three tiles in row - 2")
+    public void areCoordinatesInStraightLineNegativelyForThreeTilesInRow_test2() {
+        Coordinate testCoo1 = new Coordinate(2, 2);
+        Coordinate testCoo2 = new Coordinate(2, 4);
+        Coordinate testCoo3 = new Coordinate(2, 5);
+
+        List<Coordinate> testCoolist = List.of(testCoo1, testCoo2, testCoo3);
+
+        assertFalse(areCoordinatesInStraightLine(testCoolist));
     }
 }

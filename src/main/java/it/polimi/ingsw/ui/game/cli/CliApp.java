@@ -47,6 +47,8 @@ public class CliApp implements GameGateway, Renderable {
         render();
     }
 
+
+
     /**
      * Calls model's onGameStarted and notify user that the game is running
      */
@@ -55,7 +57,6 @@ public class CliApp implements GameGateway, Renderable {
         if (model == null) {
             return;
         }
-
 
         Console.out("Hi " + owner + "! Game has started, Enjoy the game and good luck!\n");
 
@@ -84,20 +85,23 @@ public class CliApp implements GameGateway, Renderable {
             return;
         }
 
+        Console.printnl(300);
+
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
                 PlayerSession currentPlayer = model.getCurrentPlayerSession();
                 boolean isOwnerTurn = currentPlayer.getUsername().equals(owner);
-
                 Console.outln();
+
                 BoardPrinter.print(model.getBoard());
                 CommonGoalCardsPrinter.print(model.getCommonGoalCards());
                 Console.printnl(2);
+
                 PersonalGoalCardPrinter.print(model.getSessions().getByUsername(owner).getPersonalGoalCard());
                 Console.outln();
+
                 BookshelvesPrinter.print(model);
                 Console.outln();
-
 
                 if (isOwnerTurn) {
                     switch (currentPlayer.getPlayerCurrentGamePhase()) {

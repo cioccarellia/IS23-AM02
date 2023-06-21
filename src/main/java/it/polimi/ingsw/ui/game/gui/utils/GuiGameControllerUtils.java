@@ -34,11 +34,9 @@ import java.util.Set;
 public class GuiGameControllerUtils {
     private static final int maxTokensPerPlayer = 3;
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
-    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
-
-    // onGameCreated
+    // on game created
     public static void commonGoalCardsOnCreation(GameModel model, List<ImageView> commonGoalCards, List<Label> commonGoalCardDescriptions, List<ImageView> topTokens) {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             CommonGoalCard currentCommonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
@@ -51,8 +49,7 @@ public class GuiGameControllerUtils {
         }
     }
 
-
-    // render
+    // game running updates
     public static void tokenUpdate(PlayerSession session, List<ImageView> obtainedTokens) {
         for (int i = 0; i < maxTokensPerPlayer; i++) {
             List<Token> playerTokens = session.getAcquiredTokens();
@@ -65,17 +62,13 @@ public class GuiGameControllerUtils {
         }
     }
 
-
     public static void checkAchievedCommonGoalCards(PlayerSession session, GameModel model, List<Label> commonGoalCardDescriptions) {
         List<CommonGoalCardIdentifier> ownerAchievedCommonGoalCards = session.getAchievedCommonGoalCards();
-        List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream()
-                .map(card -> card.getCommonGoalCard().getId()).toList();
+        List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream().map(card -> card.getCommonGoalCard().getId()).toList();
 
         for (int i = 0; i < commonGoalCardsAmount && !ownerAchievedCommonGoalCards.isEmpty(); i++) {
             if (ownerAchievedCommonGoalCards.contains(gameCommonGoalCards.get(i))) {
-                commonGoalCardDescriptions.get(i)
-                        .setText(commonGoalCardDescriptions.get(i).getText() +
-                                "\nYou already achieved the token for this card!");
+                commonGoalCardDescriptions.get(i).setText(commonGoalCardDescriptions.get(i).getText() + "\nYou already achieved the token for this card!");
             }
         }
     }
@@ -87,38 +80,7 @@ public class GuiGameControllerUtils {
         }
     }
 
-    public static void renderSelectedTiles(List<ImageView> selectedTilesImageViewsList, List<CellInfo> coordinatesAndValues) {
-        // All nodes can be safely cast to ImageView(s)
-        List<Tile> selectedTiles = null;
-
-        if (!coordinatesAndValues.isEmpty()) {
-            selectedTiles = coordinatesAndValues.stream().map(CellInfo::tile).toList();
-        }
-
-        for (int i = 0; i < maxSelectionSize; i++) {
-            // if either no image is present or board doesn't have any content for (i,j)
-            if (selectedTilesImageViewsList.get(i) == null) {
-                continue;
-            }
-
-            // ImageView containing our selected tile[0][i]
-            ImageView imageView = selectedTilesImageViewsList.get(i);
-
-            Image tileImage = null;
-
-            if (selectedTiles != null && i < selectedTiles.size()) {
-                String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(i));
-                tileImage = new Image(url);
-            }
-
-            imageView.setImage(tileImage);
-
-            UiUtils.visible(imageView);
-            enableDarkeningEffect(imageView);
-        }
-    }
-
-
+    // utils
     public static void enableDarkeningEffect(ImageView selectedTile) {
         Light.Distant light = new Light.Distant();
         light.setColor(Color.valueOf("#444444"));
@@ -127,6 +89,29 @@ public class GuiGameControllerUtils {
         selectedTile.setEffect(effect);
     }
 
+    public static void disableDarkeningEffectForAllTiles(GridPane gridBoard, Board board) {
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                // if either no image is present or board doesn't have any content for (i,j)
+                if (gridPaneNodes[i][j] == null) {
+                    continue;
+                }
+
+                // checks if the tile is present
+                if (board.getTileAt(i, j).isEmpty()) {
+                    continue;
+                }
+
+                // ImageView containing our bookshelf tile[i][j]
+                ImageView imageView = (ImageView) gridPaneNodes[i][j];
+
+                // un-darkens all the tiles
+                imageView.setEffect(null);
+            }
+        }
+    }
 
     public static void makeNonSelectableTilesDark(GridPane gridBoard, GameModel game, Set<Coordinate> selectedCoordinates) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
@@ -159,7 +144,6 @@ public class GuiGameControllerUtils {
                     enableDarkeningEffect(imageView);
                 } else {
                     checkSelectedCoordinates(imageView, currentCoordinate, selectedCoordinates, game);
-                    //imageView.setEffect(null);
                 }
             }
         }
@@ -174,8 +158,7 @@ public class GuiGameControllerUtils {
 
             if (!game.isSelectionValid(copy)) {
                 enableDarkeningEffect(imageView);
-            } else if (game.isSelectionValid(copy))
-                imageView.setEffect(null);
+            } else if (game.isSelectionValid(copy)) imageView.setEffect(null);
         } else {
             imageView.setEffect(null);
         }

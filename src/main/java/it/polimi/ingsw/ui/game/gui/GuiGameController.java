@@ -43,6 +43,8 @@ import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
+import static it.polimi.ingsw.ui.game.gui.renders.FinalRankingRender.renderRanking;
+import static it.polimi.ingsw.ui.game.gui.renders.SelectedTilesRender.renderSelectedTiles;
 import static it.polimi.ingsw.ui.game.gui.utils.GuiGameControllerUtils.*;
 
 
@@ -54,105 +56,56 @@ import static it.polimi.ingsw.ui.game.gui.utils.GuiGameControllerUtils.*;
 public class GuiGameController implements GameGateway, Initializable, Renderable {
 
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
-
-
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
-    // region %%%%%%%%%%%%%%% Main Layer %%%%%%%%%%%%%%%%%%%
-
-    // GridPanes
+    // region %%%%%%%%%%%%%%% FXML variables %%%%%%%%%%%%%%%%%%%
+    // region board section
     @FXML
     public GridPane boardGridPane;
     @FXML
+    public ImageView endGameTokenImageView;
+    @FXML
+    public Button boardSelectionButton;
+    // endregion board section
+
+    // region owner section
+    @FXML
     public GridPane ownerBookshelfGridPane;
     @FXML
-    public GridPane enemyBookshelfGridPane;
-
-    // Starting player chair ImageView (owner and enemy)
-    @FXML
-    public ImageView startingEnemyChair;
-    @FXML
     public ImageView startingOwnerChair;
-
-    // Tokens ImageViews
-    @FXML
-    public ImageView firstCommonGoalCardTopTokenImageView;
-    @FXML
-    public ImageView secondCommonGoalCardTopTokenImageView;
-    @FXML
-    public ImageView endGameTokenImageView;
-
-    // Owner Username Label
     @FXML
     public Label ownerUsernameLabel;
-
-
-    // Personal + Common Goal Cards ImageViews
+    @FXML
+    public Label ownerCurrentPointsLabel;
     @FXML
     public ImageView personalGoalCardImageView;
-    @FXML
-    public ImageView firstCommonGoalCardImageView;
-    @FXML
-    public ImageView secondCommonGoalCardImageView;
-
-    // OWNER TOKENS
     @FXML
     public ImageView ownerFirstTokenImageView;
     @FXML
     public ImageView ownerSecondTokenImageView;
     @FXML
     public ImageView ownerThirdTokenImageView;
-
-
-    // Enemy Buttons
-    @FXML
-    public Label enemyStatusLabel;
-    @FXML
-    public Label enemyUsernameLabel;
-    @FXML
-    public Button enemySelect1Button;
-    @FXML
-    public Button enemySelect2Button;
-    @FXML
-    public Button enemySelect3Button;
-    @FXML
-    public CheckBox autoFollowCheckBox;
-
-    // ENEMY TOKENS
-    @FXML
-    public ImageView enemyFirstTokenImageView;
-    @FXML
-    public ImageView enemySecondTokenImageView;
-    @FXML
-    public ImageView enemyThirdTokenImageView;
-
-
-    // BUTTONS
-    @FXML
-    public Button quitButton;
-    @FXML
-    public Button sendMessageButton;
-    @FXML
-    public Button boardSelectionButton;
     @FXML
     public Button bookshelfInsertionButton;
-
-
-    // STATUS LABELS
-    @FXML
-    public Label statusLabel;
-    @FXML
-    public Label errorLabel;
-    @FXML
-    public Label firstCommonGoalCardDescriptionLabel;
-    @FXML
-    public Label secondCommonGoalCardDescriptionLabel;
-
-    // INSERTION VBox
+    // insertion
     @FXML
     public VBox insertionVBox;
-
-    // RadioButtons and HBox for column selection
+    @FXML
+    public HBox selectedTilesHBox;
+    @FXML
+    public ImageView firstSelectedTile;
+    @FXML
+    public ImageView secondSelectedTile;
+    @FXML
+    public ImageView thirdSelectedTile;
+    @FXML
+    public HBox selectedTilesNumberedLabelsHBox;
+    @FXML
+    public Label firstSelectedTilesNumberedLabel;
+    @FXML
+    public Label secondSelectedTilesNumberedLabel;
+    @FXML
+    public Label thirdSelectedTilesNumberedLabel;
     @FXML
     public RadioButton columnSelection1RadioButton;
     @FXML
@@ -165,46 +118,106 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public RadioButton columnSelection5RadioButton;
     @FXML
     public HBox radioButtonHBox;
+    // endregion owner section
 
-    // ImageViews and HBox for selected tiles
+    // region enemy(ies) section
     @FXML
-    public ImageView firstSelectedTile;
+    public GridPane enemyBookshelfGridPane;
     @FXML
-    public ImageView secondSelectedTile;
+    public ImageView startingEnemyChair;
     @FXML
-    public ImageView thirdSelectedTile;
+    public Label enemyStatusLabel;
+    @FXML
+    public Label enemyUsernameLabel;
+    @FXML
+    public Button enemySelect1Button;
+    @FXML
+    public Button enemySelect2Button;
+    @FXML
+    public Button enemySelect3Button;
+    @FXML
+    public CheckBox autoFollowCheckBox;
+    @FXML
+    public ImageView enemyFirstTokenImageView;
+    @FXML
+    public ImageView enemySecondTokenImageView;
+    @FXML
+    public ImageView enemyThirdTokenImageView;
+    // endregion enemy(ies) section
 
-    // Labels and HBox for selected tiles
+    // region status and common goal card section
     @FXML
-    public HBox selectedTilesNumberedLabelsHBox;
+    public ImageView firstCommonGoalCardImageView;
     @FXML
-    public Label firstSelectedTilesNumberedLabel;
+    public ImageView secondCommonGoalCardImageView;
     @FXML
-    public Label secondSelectedTilesNumberedLabel;
+    public ImageView firstCommonGoalCardTopTokenImageView;
     @FXML
-    public Label thirdSelectedTilesNumberedLabel;
+    public ImageView secondCommonGoalCardTopTokenImageView;
+    @FXML
+    public Label firstCommonGoalCardDescriptionLabel;
+    @FXML
+    public Label secondCommonGoalCardDescriptionLabel;
+    @FXML
+    public Label statusLabel;
+    @FXML
+    public Label errorLabel;
+    // endregion status and common goal card section
 
-
-    // CHAT
+    // region chat section
+    @FXML
+    public Button sendMessageButton;
+    @FXML
+    public Button quitButton;
     @FXML
     public TextArea chatTextField;
     @FXML
     public ComboBox<String> chatSelectorComboBox;
     @FXML
     public ListView<String> chatPane;
+    // endregion chat section
 
-    @FXML
-    public HBox xbox;
+    // endregion %%%%%%%%%%%%%%% FXML variables %%%%%%%%%%%%%%%%%%%
 
-
-    // endregion %%%%%%%%%%%%%%% Main Layer %%%%%%%%%%%%%%%%%%%
-
-    // Constant game variables & references
+    // region %%%%%%%%%%%%%%% Controller variables %%%%%%%%%%%%%%%%%%%
+    // region Constant game variables & references
     private GameViewEventHandler handler;
     private String owner;
+    // endregion Constant game variables & references
 
-    // Model data
+    // region Model data
     private GameModel model;
+    // endregion Model data
+
+    // region Chat data
+    private List<ChatTextMessage> messages;
+    // endregion Chat data
+
+    // region Controller data
+    private boolean hasInitializedUi = false;
+    private String currentlySelectedUsername = null;
+    // endregion Controller data
+
+    // region Useful Player Sessions
+    private PlayerSession currentPlayerSession() {
+        return model.getCurrentPlayerSession();
+    }
+
+    private PlayerSession ownerSession() {
+        return model.getPlayerSession(owner);
+    }
+
+    private PlayerSession startingPlayerSession() {
+        return model.getStartingPlayerSession();
+    }
+
+    private PlayerSession selectedEnemySession() {
+        return model.getPlayerSession(currentlySelectedUsername);
+    }
+
+    // endregion Useful Player Sessions
+
+    // endregion %%%%%%%%%%%%%%% Controller variables %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%% Status Variables - Selection %%%%%%%%%%%%%%%%%%%
     private final List<CellInfo> selectedCoordinatesAndValuesList = new ArrayList<>();
@@ -215,11 +228,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private final List<Tile> playerOrderedTilesToBeInserted = new ArrayList<>();
     // endregion %%%%%%%%%%%% Status Variables - Insertion %%%%%%%%%%%%%%%%%%%
 
-    // chat data
-    private List<String> chatEnemyUsernamesList;
-    private List<ChatTextMessage> messages;
-
-
+    // region %%%%%%%%%%%%%%% Iterator %%%%%%%%%%%%%%%%%%%
     DynamicIterator iter = new DynamicIterator();
 
     public class DynamicIterator {
@@ -260,9 +269,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             return Arrays.asList(firstSelectedTilesNumberedLabel, secondSelectedTilesNumberedLabel, thirdSelectedTilesNumberedLabel);
         }
     }
-
-    private boolean hasInitializedUi = false;
-    private String currentlySelectedUsername = null;
+    // endregion %%%%%%%%%%%%%%% Iterator %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%% Initialization %%%%%%%%%%%%%%%%%%%
 
@@ -303,25 +310,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // endregion %%%%%%%%%%%%%%% Initialization %%%%%%%%%%%%%%%%%%%
 
-    // region %%%%%%%%%%%%%%% Useful Player Sessions %%%%%%%%%%%%%%%%%%%
-    private PlayerSession currentPlayerSession() {
-        return model.getCurrentPlayerSession();
-    }
-
-    private PlayerSession ownerSession() {
-        return model.getPlayerSession(owner);
-    }
-
-    private PlayerSession startingPlayerSession() {
-        return model.getStartingPlayerSession();
-    }
-
-    private PlayerSession selectedEnemySession() {
-        return model.getPlayerSession(currentlySelectedUsername);
-    }
-
-    // endregion %%%%%%%%%%%%%%% Useful Player Sessions %%%%%%%%%%%%%%%%%%%
-
     // region %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
 
     /**
@@ -354,6 +342,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // owner username label
         ownerUsernameLabel.setText("Hi " + ownerSession().getUsername());
 
+        // owner current points
+        PlayerScore ownerPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(owner)).findAny().get();
+        ownerCurrentPointsLabel.setText("Your points: " + ownerPlayerScore.total());
+
         // owner starting player chair
         if (ownerSession().getUsername().equals(startingPlayerSession.getUsername())) {
             UiUtils.visible(startingOwnerChair);
@@ -367,25 +359,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // we set the currently selected enemy as the first one in the list
         currentlySelectedUsername = enemyList.get(0);
 
-
-        // chat initialization
-        chatEnemyUsernamesList = model.getPlayersUsernameListExcluding(owner);
-
         // set ComboBox items for chat
-        List<String> comboItems = new ArrayList<>();
-        comboItems.add("Everyone");
-
-        comboItems.addAll(enemyList);
-
-        ObservableList<String> options = FXCollections.observableArrayList(comboItems);
-        chatSelectorComboBox.setItems(options);
-        chatSelectorComboBox.getSelectionModel().selectFirst();
+        ChatRender.renderChatComboItems(enemyList, chatSelectorComboBox);
 
         hasInitializedUi = true;
 
         render();
         renderEnemySection();
-        //gameEnded();
     }
 
     // endregion %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
@@ -433,22 +413,18 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 // owner's bookshelf
                 BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession().getBookshelf());
 
-                // tokens update
-                // owner's tokens
-                tokenUpdate(ownerSession(), iter.ownerObtainedTokens());
+                // token update
+                renderTokens();
 
-                // end game token
-                boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
+                // points update
+                PlayerScore ownerPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(owner)).findAny().get();
+                ownerCurrentPointsLabel.setText("Your points: " + ownerPlayerScore.total());
 
-                if (hasSomeoneFinished && model.getGameStatus() == LAST_ROUND) {
-                    TokenRender.renderToken(endGameTokenImageView, null);
-                }
+                // enemy section update
+                renderEnemySection();
 
                 // check if owner has obtained common goal card token
                 checkAchievedCommonGoalCards(ownerSession(), model, iter.commonGoalCardsDescriptions());
-
-                // common goal cards token update
-                topTokenUpdate(model, iter.topTokens());
 
                 // current player settings
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
@@ -462,7 +438,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                     }
                 }
 
-                // current owner actions
+                // owner actions
                 switch (ownerSession().getPlayerCurrentGamePhase()) {
                     case IDLE -> {
                         resetSelectionLabelsAndImages();
@@ -493,10 +469,22 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 gameStandby();
             }
         }
-
-        renderEnemySection();
     }
 
+    public void renderTokens() {
+        // owner's tokens
+        tokenUpdate(ownerSession(), iter.ownerObtainedTokens());
+
+        // end game token
+        boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
+
+        if (hasSomeoneFinished && model.getGameStatus() == LAST_ROUND) {
+            TokenRender.renderToken(endGameTokenImageView, null);
+        }
+
+        // common goal cards token update
+        topTokenUpdate(model, iter.topTokens());
+    }
 
     public void renderEnemySection() {
         // selected enemy's bookshelf
@@ -516,7 +504,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         tokenUpdate(selectedEnemySession(), iter.enemyObtainedTokens());
 
         // enemy label (enemyStatusLabel)
-        EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession());
+        PlayerScore enemyPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(currentlySelectedUsername)).findAny().get();
+        EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession(), enemyPlayerScore.total());
     }
 
     // endregion %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
@@ -588,6 +577,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         } else {
             errorLabel.setText("The tiles you selected are not valid.");
         }
+
+        // all tiles return to null darkening effect
+        disableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
+
     }
 
     // endregion %%%%%%%%%%%%%%% Selection phase %%%%%%%%%%%%%%%%%%%
@@ -658,13 +651,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
 
     public void gameEnded() {
-        List<PlayerScore> playersRanking = model.getRankings();
-
-        Alert rankingWindow = new Alert(Alert.AlertType.NONE);
-        rankingWindow.setTitle("Game Over - Ranking");
-        rankingWindow.setHeaderText(null);
-
-        rankingWindow.showAndWait();
+        renderRanking(model.getRankings());
     }
 
     // endregion %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
@@ -692,11 +679,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton, selectedTilesNumberedLabelsHBox);
             }
             case SELECTING -> {
-                UiUtils.visible(boardSelectionButton, xbox, insertionVBox);
+                UiUtils.visible(boardSelectionButton, selectedTilesHBox, insertionVBox);
                 UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);
             }
             case INSERTING -> {
-                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, xbox);
+                UiUtils.visible(bookshelfInsertionButton, radioButtonHBox, selectedTilesNumberedLabelsHBox, selectedTilesHBox);
                 UiUtils.invisible(boardSelectionButton);
             }
         }
