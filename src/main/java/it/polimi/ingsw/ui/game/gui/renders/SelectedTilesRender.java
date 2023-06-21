@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.ui.game.gui.resources.ResourcePathConstants;
 import it.polimi.ingsw.utils.javafx.UiUtils;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -17,7 +18,6 @@ public class SelectedTilesRender {
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
 
     public static void renderSelectedTiles(List<ImageView> selectedTilesImageViewsList, List<CellInfo> coordinatesAndValues) {
-        // All nodes can be safely cast to ImageView(s)
         List<Tile> selectedTiles = null;
 
         if (!coordinatesAndValues.isEmpty()) {
@@ -44,6 +44,29 @@ public class SelectedTilesRender {
 
             UiUtils.visible(imageView);
             enableDarkeningEffect(imageView);
+        }
+    }
+
+    public static void renderSelectedTilesWhenOnlyOne(ImageView firstSelectedTile, Label firstSelectedTileLabel, List<CellInfo> coordinatesAndValues, List<Tile> playerOrderedTilesToBeInserted) {
+        List<Tile> selectedTiles = null;
+
+        if (!coordinatesAndValues.isEmpty()) {
+            selectedTiles = coordinatesAndValues.stream().map(CellInfo::tile).toList();
+        }
+        if (coordinatesAndValues.size() == 1) {
+
+            String url = ResourcePathConstants.Tiles.mapTileToImagePath(selectedTiles.get(0));
+            Image tileImage = new Image(url);
+
+            firstSelectedTile.setImage(new Image(url));
+
+            UiUtils.visible(firstSelectedTile);
+            firstSelectedTile.setEffect(null);
+
+            playerOrderedTilesToBeInserted.add(selectedTiles.get(0));
+
+            firstSelectedTileLabel.setText("1");
+
         }
     }
 }

@@ -63,8 +63,11 @@ public class GuiGameControllerUtils {
         List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream().map(card -> card.getCommonGoalCard().getId()).toList();
 
         for (int i = 0; i < commonGoalCardsAmount && !ownerAchievedCommonGoalCards.isEmpty(); i++) {
-            if (ownerAchievedCommonGoalCards.contains(gameCommonGoalCards.get(i))) {
-                commonGoalCardDescriptions.get(i).setText(commonGoalCardDescriptions.get(i).getText() + "\nYou already achieved the token for this card!");
+            String labelCurrentText = commonGoalCardDescriptions.get(i).getText();
+            String achievedText = "You already achieved the token for this card!";
+
+            if (ownerAchievedCommonGoalCards.contains(gameCommonGoalCards.get(i)) && !labelCurrentText.contains(achievedText)) {
+                commonGoalCardDescriptions.get(i).setText(labelCurrentText + "\n" + achievedText);
             }
         }
     }

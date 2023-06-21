@@ -125,13 +125,13 @@
     <ImageView fx:id="secondCommonGoalCardImageView" fitHeight="111.0" fitWidth="158.0" layoutX="20.0" layoutY="754.0" pickOnBounds="true" preserveRatio="true">
     </ImageView>
 
-    <Label fx:id="firstCommonGoalCardDescriptionLabel" layoutX="200.0" layoutY="616.0" prefHeight="133.0" prefWidth="229.0" text="first common goal card" wrapText="true">
+    <Label fx:id="firstCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="616.0" prefHeight="133.0" prefWidth="229.0" text="first common goal card" wrapText="true">
         <font>
             <Font name="Monospaced Regular" size="11.0" />
         </font>
     </Label>
 
-    <Label fx:id="secondCommonGoalCardDescriptionLabel" layoutX="200.0" layoutY="754.0" prefHeight="143.0" prefWidth="229.0" text="second common goal card" wrapText="true">
+    <Label fx:id="secondCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="754.0" prefHeight="133.0" prefWidth="229.0" text="second common goal card" wrapText="true">
         <font>
             <Font name="Monospaced Regular" size="11.0" />
         </font>
@@ -493,7 +493,7 @@
     </HBox>
 
     <!-- Auto-Follow CheckBox -->
-    <CheckBox fx:id="autoFollowCheckBox" layoutX="965.0" layoutY="862.0" text="Auto-Follow">
+    <CheckBox fx:id="autoFollowCheckBox" layoutX="903.0" layoutY="862.0" text="Follow active player">
         <font>
             <Font name="Monospaced Regular" size="14.0" />
         </font>

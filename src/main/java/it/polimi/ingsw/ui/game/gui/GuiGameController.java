@@ -45,6 +45,7 @@ import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTI
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
 import static it.polimi.ingsw.ui.game.gui.renders.FinalRankingRender.renderRanking;
 import static it.polimi.ingsw.ui.game.gui.renders.SelectedTilesRender.renderSelectedTiles;
+import static it.polimi.ingsw.ui.game.gui.renders.SelectedTilesRender.renderSelectedTilesWhenOnlyOne;
 import static it.polimi.ingsw.ui.game.gui.utils.GuiGameControllerUtils.*;
 
 
@@ -306,6 +307,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         // resets text
         resetSelectionLabelsAndImages();
+
+        // autofollow
+        setAutoFollowListener();
     }
 
     // endregion %%%%%%%%%%%%%%% Initialization %%%%%%%%%%%%%%%%%%%
@@ -360,7 +364,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         currentlySelectedUsername = enemyList.get(0);
 
         // set ComboBox items for chat
-        ChatRender.renderChatComboItems(enemyList, chatSelectorComboBox);
+        ChatRender.renderChatComboItems(enemyList, chatSelectorComboBox, model.getGameMode());
 
         hasInitializedUi = true;
 
@@ -442,6 +446,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 switch (ownerSession().getPlayerCurrentGamePhase()) {
                     case IDLE -> {
                         resetSelectionLabelsAndImages();
+
+                        // all tiles return to null darkening effect
+                        disableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
                     }
                     case SELECTING -> {
                         statusLabel.setText("Select up to 3 tiles from board");
@@ -453,7 +460,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         logger.warn(ownerSession().toString());
                         List<CellInfo> selectedTiles = ownerSession().getPlayerTileSelection().getSelection().stream().toList();
 
-                        renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedTiles);
+                        if (selectedTiles.size() == 1) {
+                            // if only one tile is selected, it is automatically selected as first tile
+                            renderSelectedTilesWhenOnlyOne(firstSelectedTile, firstSelectedTilesNumberedLabel, selectedTiles, playerOrderedTilesToBeInserted);
+                        } else {
+                            renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedTiles);
+                        }
                     }
                 }
 
@@ -487,6 +499,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     public void renderEnemySection() {
+        if (autoFollowCheckBox.isSelected() && !currentPlayerSession().getUsername().equals(ownerSession().getUsername())) {
+            currentlySelectedUsername = currentPlayerSession().getUsername();
+        }
+
         // selected enemy's bookshelf
         BookshelfRender.renderBookshelf(enemyBookshelfGridPane, selectedEnemySession().getBookshelf());
 
@@ -577,10 +593,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         } else {
             errorLabel.setText("The tiles you selected are not valid.");
         }
-
-        // all tiles return to null darkening effect
-        disableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
-
     }
 
     // endregion %%%%%%%%%%%%%%% Selection phase %%%%%%%%%%%%%%%%%%%
@@ -651,6 +663,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
 
     public void gameEnded() {
+        render();
         renderRanking(model.getRankings());
     }
 
@@ -758,7 +771,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-
     public void setBookshelfInsertionButtonClickListener() {
         bookshelfInsertionButton.setOnMouseClicked(mouseEvent -> {
                     if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING) {
@@ -768,7 +780,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         );
     }
 
-
     public void setBoardSelectionButtonClickListener() {
         boardSelectionButton.setOnMouseClicked(mouseEvent -> {
                     if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
@@ -777,7 +788,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 }
         );
     }
-
 
     public void setBoardImageViewsTileClickListener() {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(boardGridPane, dimension, dimension);
@@ -833,7 +843,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-
     public MessageRecipient parseRecipientFromComboBox() {
         String currentlySelectedEntry = chatSelectorComboBox.getValue();
 
@@ -844,7 +853,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
-
     public void setSendMessageButtonClickListener() {
         sendMessageButton.setOnMouseClicked(mouseEvent -> {
             if (!chatTextField.getText().isEmpty()) {
@@ -853,20 +861,40 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         });
     }
 
-
     public void setEnemyButtonClickListeners() {
         enemySelect1Button.setOnMouseClicked(mouseEvent -> {
+            if (autoFollowCheckBox.isSelected()) {
+                // removes auto follow
+                autoFollowCheckBox.setSelected(false);
+            }
+
             currentlySelectedUsername = enemySelect1Button.getText();
             renderEnemySection();
         });
 
         enemySelect2Button.setOnMouseClicked(mouseEvent -> {
+            if (autoFollowCheckBox.isSelected()) {
+                // removes auto follow
+                autoFollowCheckBox.setSelected(false);
+            }
+
             currentlySelectedUsername = enemySelect2Button.getText();
             renderEnemySection();
         });
 
         enemySelect3Button.setOnMouseClicked(mouseEvent -> {
+            if (autoFollowCheckBox.isSelected()) {
+                // removes auto follow
+                autoFollowCheckBox.setSelected(false);
+            }
+
             currentlySelectedUsername = enemySelect3Button.getText();
+            renderEnemySection();
+        });
+    }
+
+    public void setAutoFollowListener() {
+        autoFollowCheckBox.setOnMouseClicked(mouseEvent -> {
             renderEnemySection();
         });
     }
