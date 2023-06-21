@@ -125,15 +125,15 @@
     <ImageView fx:id="secondCommonGoalCardImageView" fitHeight="111.0" fitWidth="158.0" layoutX="20.0" layoutY="754.0" pickOnBounds="true" preserveRatio="true">
     </ImageView>
 
-    <Label fx:id="firstCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="616.0" prefHeight="133.0" prefWidth="229.0" text="first common goal card" wrapText="true">
+    <Label fx:id="firstCommonGoalCardDescriptionLabel" layoutX="200.0" layoutY="616.0" prefHeight="133.0" prefWidth="229.0" text="first common goal card" wrapText="true">
         <font>
-            <Font name="Monospaced Regular" size="14.0" />
+            <Font name="Monospaced Regular" size="11.0" />
         </font>
     </Label>
 
-    <Label fx:id="secondCommonGoalCardDescriptionLabel" alignment="TOP_LEFT" layoutX="200.0" layoutY="754.0" prefHeight="143.0" prefWidth="229.0" text="second common goal card" wrapText="true">
+    <Label fx:id="secondCommonGoalCardDescriptionLabel" layoutX="200.0" layoutY="754.0" prefHeight="143.0" prefWidth="229.0" text="second common goal card" wrapText="true">
         <font>
-            <Font name="Monospaced Regular" size="14.0" />
+            <Font name="Monospaced Regular" size="11.0" />
         </font>
     </Label>
 
@@ -145,12 +145,12 @@
         </ImageView>
     </Pane>
     <Pane layoutX="110.0" layoutY="778.0" prefHeight="50.0" prefWidth="50.0" rotate="-8.0">
-        <ImageView fx:id="firstCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="secondCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="50.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../../img/tokens/scoring_back_EMPTY.jpg" />
         </ImageView>
     </Pane>
     <Pane layoutX="110.0" layoutY="641.0" prefHeight="50.0" prefWidth="50.0" rotate="-8.0">
-        <ImageView fx:id="secondCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="firstCommonGoalCardTopTokenImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../../img/tokens/scoring_back_EMPTY.jpg" />
         </ImageView>
     </Pane>

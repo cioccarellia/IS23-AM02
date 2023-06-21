@@ -7,14 +7,14 @@ import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 
 public class TokenRender {
-    public static void renderToken(@NotNull ImageView topTokenImageView, Token token) {
-        Image topTokenImage = null;
+    public static void renderToken(@NotNull ImageView tokenImageView, Token token) {
+        Image tokenImage = null;
 
         if (token != null) {
             String url = ResourcePathConstants.Tokens.mapTokenToImagePath(token);
-            topTokenImage = new Image(url);
+            tokenImage = new Image(url);
         }
 
-        topTokenImageView.setImage(topTokenImage);
+        tokenImageView.setImage(tokenImage);
     }
 }

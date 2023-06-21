@@ -3,25 +3,20 @@ package it.polimi.ingsw.ui.game.gui.utils;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
-import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.cards.common.CommonGoalCard;
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
 import it.polimi.ingsw.model.config.logic.LogicConfiguration;
-import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardDescriptionRender;
 import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardRender;
 import it.polimi.ingsw.ui.game.gui.renders.TokenRender;
-import it.polimi.ingsw.ui.game.gui.resources.ResourcePathConstants;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
-import it.polimi.ingsw.utils.javafx.UiUtils;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -44,6 +39,7 @@ public class GuiGameControllerUtils {
             CommonGoalCardRender.renderCommonGoalCard(commonGoalCards.get(i), currentCommonGoalCard);
             commonGoalCardDescriptions.get(i).setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(currentCommonGoalCard.getId()));
 
+            // no need to check if lastElement() is present, because this is done on game creation and there's always a token
             Token topToken = model.getCommonGoalCards().get(i).getCardTokens().lastElement();
             TokenRender.renderToken(topTokens.get(i), topToken);
         }
@@ -75,7 +71,13 @@ public class GuiGameControllerUtils {
 
     public static void topTokenUpdate(GameModel model, List<ImageView> topTokens) {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
-            Token topToken = model.getCommonGoalCards().get(i).getCardTokens().lastElement();
+            Token topToken = null;
+
+            // check that there still is a token, otherwise the image will be empty (in renderToken)
+            if (!model.getCommonGoalCards().get(i).getCardTokens().isEmpty()) {
+                topToken = model.getCommonGoalCards().get(i).getCardTokens().lastElement();
+            }
+
             TokenRender.renderToken(topTokens.get(i), topToken);
         }
     }

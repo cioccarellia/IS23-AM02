@@ -524,7 +524,7 @@ public class GameModel implements ModelService, Serializable {
             scores.add(new PlayerScore(player.getUsername(), player.getAcquiredTokens(), breakdown));
         }
 
-        return scores.stream().sorted(comparing(PlayerScore::total)).toList();
+        return scores.stream().sorted(comparing(PlayerScore::total).reversed()).toList();
     }
 
     private GameStatus preStandByGameStatus;
