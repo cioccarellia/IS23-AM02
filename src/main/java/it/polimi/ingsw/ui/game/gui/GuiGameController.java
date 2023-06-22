@@ -39,6 +39,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.model.game.GameStatus.ENDED;
 import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
@@ -414,21 +415,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 // board
                 BoardRender.renderBoard(boardGridPane, model.getBoard());
 
-                // owner's bookshelf
-                BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession().getBookshelf());
-
-                // token update
-                renderTokens();
-
-                // points update
-                PlayerScore ownerPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(owner)).findAny().get();
-                ownerCurrentPointsLabel.setText("Your points: " + ownerPlayerScore.total());
+                // owner section update
+                endTurnRender();
 
                 // enemy section update
                 renderEnemySection();
-
-                // check if owner has obtained common goal card token
-                checkAchievedCommonGoalCards(ownerSession(), model, iter.commonGoalCardsDescriptions());
 
                 // current player settings
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
@@ -490,7 +481,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // end game token
         boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
 
-        if (hasSomeoneFinished && model.getGameStatus() == LAST_ROUND) {
+        if (hasSomeoneFinished && model.getGameStatus() == LAST_ROUND && model.getGameStatus() == ENDED) {
             TokenRender.renderToken(endGameTokenImageView, null);
         }
 
@@ -522,6 +513,21 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // enemy label (enemyStatusLabel)
         PlayerScore enemyPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(currentlySelectedUsername)).findAny().get();
         EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession(), enemyPlayerScore.total());
+    }
+
+    public void endTurnRender() {
+        // owner's bookshelf
+        BookshelfRender.renderBookshelf(ownerBookshelfGridPane, ownerSession().getBookshelf());
+
+        // token update
+        renderTokens();
+
+        // points update
+        PlayerScore ownerPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(owner)).findAny().get();
+        ownerCurrentPointsLabel.setText("Your points: " + ownerPlayerScore.total());
+
+        // check if owner has obtained common goal card token
+        checkAchievedCommonGoalCards(ownerSession(), model, iter.commonGoalCardsDescriptions());
     }
 
     // endregion %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
@@ -663,7 +669,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
 
     public void gameEnded() {
-        render();
+        renderEnemySection();
+        endTurnRender();
+        resetSelectionLabelsAndImages();
+        disableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
+
         renderRanking(model.getRankings());
     }
 
