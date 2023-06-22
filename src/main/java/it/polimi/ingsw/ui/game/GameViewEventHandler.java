@@ -2,7 +2,6 @@ package it.polimi.ingsw.ui.game;
 
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
 
 import java.util.List;

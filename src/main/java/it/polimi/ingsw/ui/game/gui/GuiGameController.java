@@ -12,6 +12,8 @@ import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
+import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
+import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.CellInfo;
 import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
@@ -44,6 +46,7 @@ import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
+import static it.polimi.ingsw.ui.game.gui.GuiErrors.*;
 import static it.polimi.ingsw.ui.game.gui.renders.FinalRankingRender.renderRanking;
 import static it.polimi.ingsw.ui.game.gui.renders.SelectedTilesRender.renderSelectedTiles;
 import static it.polimi.ingsw.ui.game.gui.renders.SelectedTilesRender.renderSelectedTilesWhenOnlyOne;
@@ -59,6 +62,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     private static final Logger logger = LoggerFactory.getLogger(GuiGameController.class);
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
+    private static final int cols = BookshelfConfiguration.getInstance().cols();
+
+    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
+
 
     // region %%%%%%%%%%%%%%% FXML variables %%%%%%%%%%%%%%%%%%%
     // region board section
@@ -198,6 +205,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region Controller data
     private boolean hasInitializedUi = false;
     private String currentlySelectedUsername = null;
+
+    // private GuiError ownerError; //todo if listener otherwise delete
+
     // endregion Controller data
 
     // region Useful Player Sessions
@@ -309,7 +319,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // resets text
         resetSelectionLabelsAndImages();
 
-        // autofollow
+        // auto-follow
         setAutoFollowListener();
     }
 
@@ -370,7 +380,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         hasInitializedUi = true;
 
         render();
-        renderEnemySection();
     }
 
     // endregion %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
@@ -420,6 +429,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 // enemy section update
                 renderEnemySection();
+
+                // renderErrorLabel(); //todo if listener otherwise delete
+
+                // error label update
+                errorLabel.setText(NO_ERROR.getGuiErrorMessage());
 
                 // current player settings
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
@@ -481,7 +495,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // end game token
         boolean hasSomeoneFinished = !model.getSessions().playerSessions().stream().map(player -> player.noMoreTurns).filter(flag -> flag).toList().isEmpty();
 
-        if (hasSomeoneFinished && model.getGameStatus() == LAST_ROUND && model.getGameStatus() == ENDED) {
+        if (hasSomeoneFinished && (model.getGameStatus() == LAST_ROUND || model.getGameStatus() == ENDED)) {
             TokenRender.renderToken(endGameTokenImageView, null);
         }
 
@@ -530,6 +544,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         checkAchievedCommonGoalCards(ownerSession(), model, iter.commonGoalCardsDescriptions());
     }
 
+    //public void renderErrorLabel() { //todo if listener otherwise delete
+    //    errorLabel.setText(ownerError.getGuiErrorMessage());
+    //}
+
     // endregion %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%% Selection phase %%%%%%%%%%%%%%%%%%%
@@ -567,10 +585,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
             // removes from insertionVBox, no check needed
             renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedCoordinatesAndValuesList);
+            errorLabel.setText(NO_ERROR.getGuiErrorMessage());
         } else {
             selectedCoordinatesAndValuesList.add(new CellInfo(selectedCoordinate, tile));
             selectedCoordinatesSet.add(selectedCoordinate);
-
 
             if (model.isSelectionValid(selectedCoordinatesSet)) {
                 enableDarkeningEffect(currentImageView);
@@ -580,11 +598,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 // adds them to insertionVBox
                 renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedCoordinatesAndValuesList);
+                errorLabel.setText(NO_ERROR.getGuiErrorMessage());
             } else {
                 selectedCoordinatesAndValuesList.remove(new CellInfo(selectedCoordinate, tile));
                 selectedCoordinatesSet.remove(selectedCoordinate);
-                statusLabel.setText("Selection error");
-                errorLabel.setText("Player " + ownerSession().getUsername() + " you can't select this tile.");
+                errorLabel.setText(SELECTION_ERROR_WRONG_TILE.getGuiErrorMessage());
             }
         }
     }
@@ -596,8 +614,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
         if (model.isSelectionValid(selectedCoordinatesSet)) {
             handler.onViewSelection(selectedCoordinatesSet);
+            errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+        } else if (selectedCoordinatesSet.size() < 1) {
+            errorLabel.setText(SELECTION_ERROR_AT_LEAST_ONE.getGuiErrorMessage());
+        } else if (selectedCoordinatesSet.size() > maxSelectionSize) {
+            errorLabel.setText(SELECTION_ERROR_TOO_MANY_TILES.getGuiErrorMessage());
         } else {
-            errorLabel.setText("The tiles you selected are not valid.");
+            errorLabel.setText(SELECTION_ERROR_INVALID.getGuiErrorMessage());
         }
     }
 
@@ -608,12 +631,15 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     public void onInsertionButtonClicked() {
         autoUpdateVisibility();
 
-        if (playerOrderedTilesToBeInserted.size() == selectedCoordinatesAndValuesList.size() && currentlySelectedColumn >= 0 && currentlySelectedColumn < 5) {
+        if (playerOrderedTilesToBeInserted.size() == selectedCoordinatesAndValuesList.size() && currentlySelectedColumn >= 0 && currentlySelectedColumn < cols) {
             handler.onViewInsertion(currentlySelectedColumn, playerOrderedTilesToBeInserted);
             playerOrderedTilesToBeInserted.clear();
             selectedCoordinatesAndValuesList.clear();
+            errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+        } else if(playerOrderedTilesToBeInserted.size() != selectedCoordinatesAndValuesList.size()){
+            errorLabel.setText(INSERTION_ERROR_SELECT_ALL_TILES.getGuiErrorMessage());
         } else {
-            errorLabel.setText("You have to select all the tiles.");
+            errorLabel.setText(INSERTION_ERROR_SELECT_COLUMN.getGuiErrorMessage());
         }
     }
 
@@ -908,5 +934,10 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             renderEnemySection();
         });
     }
+
+    //public void setOwnerErrorListener(){ //todo if listener otherwise delete
+    //    renderErrorLabel();
+    //}
+
     // endregion %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%
 }

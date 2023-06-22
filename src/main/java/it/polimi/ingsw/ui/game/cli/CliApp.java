@@ -35,7 +35,7 @@ public class CliApp implements GameGateway, Renderable {
 
     private List<ChatTextMessage> messages;
 
-    private GameViewEventHandler handler;
+    private final GameViewEventHandler handler;
 
     private final String owner;
 
@@ -46,7 +46,6 @@ public class CliApp implements GameGateway, Renderable {
 
         render();
     }
-
 
 
     /**

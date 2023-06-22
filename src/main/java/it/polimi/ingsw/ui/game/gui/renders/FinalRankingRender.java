@@ -23,6 +23,13 @@ import static it.polimi.ingsw.ui.game.gui.utils.GameUiConstants.RANKING_WIDTH;
 
 public class FinalRankingRender {
 
+    public static final int TABLE_COLUMNS = 5;
+    public static final int GAP = 40;
+    public static final int BIG_MARGIN = 50;
+    public static final int FONT_SIZE = 25;
+    public static final int SMALL_MARGIN = 20;
+
+
     public static void renderRanking(List<PlayerScore> playersRanking) {
         //set up dialog
         Dialog rankingWindow = new Dialog();
@@ -42,7 +49,7 @@ public class FinalRankingRender {
 
         // Winner label
         Label winnerLabel = new Label("The winner is: " + playersRanking.get(0).username());
-        winnerLabel.setFont(Font.font("Monospaced", FontWeight.BOLD, FontPosture.REGULAR, 50));
+        winnerLabel.setFont(Font.font("Monospaced", FontWeight.BOLD, FontPosture.REGULAR, FONT_SIZE * 2));
         winnerLabel.setTextFill(Color.valueOf("#900000"));
 
         // ranking GridPane
@@ -59,9 +66,9 @@ public class FinalRankingRender {
         rankingVBox.getChildren().add(rankingGridPane);
 
         //insets(top, right, bottom, left)
-        VBox.setMargin(myshelfieImageView, new Insets(20, 0, 50, 0));
-        VBox.setMargin(winnerLabel, new Insets(50, 0, 50, 0));
-        VBox.setMargin(rankingGridPane, new Insets(50, 0, 20, 0));
+        VBox.setMargin(myshelfieImageView, new Insets(SMALL_MARGIN, 0, BIG_MARGIN, 0));
+        VBox.setMargin(winnerLabel, new Insets(BIG_MARGIN, 0, BIG_MARGIN, 0));
+        VBox.setMargin(rankingGridPane, new Insets(BIG_MARGIN, 0, SMALL_MARGIN, 0));
 
         // add VBox to dialog
         rankingWindow.getDialogPane().setContent(rankingVBox);
@@ -72,15 +79,15 @@ public class FinalRankingRender {
     public static void settingUpRankingGridPane(GridPane grid, List<PlayerScore> playersRanking) {
         grid.setAlignment(Pos.CENTER);
         //grid.setGridLinesVisible(true);
-        grid.setHgap(40);
+        grid.setHgap(GAP);
 
         for (int i = 0; i < playersRanking.size() + 1; i++) {
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < TABLE_COLUMNS; j++) {
                 grid.add(new Label(), j, i);
             }
         }
 
-        Node[][] gridPaneNodes = PaneViewUtil.matrixify(grid, playersRanking.size() + 1, 5);
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(grid, playersRanking.size() + 1, TABLE_COLUMNS);
 
         for (int i = 0; i < playersRanking.size() + 1; i++) {
             Label labelPlayers = (Label) gridPaneNodes[i][0];
@@ -106,14 +113,14 @@ public class FinalRankingRender {
 
     public static void settingUpFontAndAlignmentForLabels(@NotNull Label @NotNull ... labelList) {
         for (Label label : labelList) {
-            label.setFont(Font.font("Monospaced", FontWeight.NORMAL, FontPosture.REGULAR, 25));
+            label.setFont(Font.font("Monospaced", FontWeight.NORMAL, FontPosture.REGULAR, FONT_SIZE));
             label.setAlignment(Pos.CENTER);
         }
     }
 
     public static void settingUpFontWeightAndAlignmentForLabels(@NotNull Label @NotNull ... labelList) {
         for (Label label : labelList) {
-            label.setFont(Font.font("Monospaced", FontWeight.BOLD, FontPosture.REGULAR, 25));
+            label.setFont(Font.font("Monospaced", FontWeight.BOLD, FontPosture.REGULAR, FONT_SIZE));
             label.setAlignment(Pos.CENTER_LEFT);
         }
     }

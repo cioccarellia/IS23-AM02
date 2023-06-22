@@ -402,7 +402,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }*/
 
 
-
     @Override
     public synchronized void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
         chatModel.addMessage(sendingUsername, recipient, text);

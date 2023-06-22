@@ -23,13 +23,15 @@ public record ChatTextMessage(
             case MessageRecipient.Direct direct -> Optional.of(direct.username());
         };
     }
+
     public String toString() {
         String fullTime = this.stamp().toString().split(" ")[1];
         String time = fullTime.substring(0, fullTime.length() - 2);
 
         return switch (messageRecipient) {
             case MessageRecipient.Broadcast broadcast -> time + " [" + this.senderUsername() + "]: " + this.text();
-            case MessageRecipient.Direct direct ->  time + " [" + this.senderUsername() + " -> " + direct.username() + "]: " + this.text();
+            case MessageRecipient.Direct direct ->
+                    time + " [" + this.senderUsername() + " -> " + direct.username() + "]: " + this.text();
         };
     }
 }

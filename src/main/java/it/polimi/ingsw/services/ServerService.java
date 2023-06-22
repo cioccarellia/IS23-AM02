@@ -62,7 +62,6 @@ public interface ServerService extends Remote {
     void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException;
 
 
-
     /**
      * Sends an acknowledgement message.
      */

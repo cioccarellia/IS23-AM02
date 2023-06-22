@@ -333,7 +333,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     public void onChatModelUpdate(List<ChatTextMessage> messages) {
         asyncExecutor.submit(() -> {
-                ui.chatModelUpdate(messages);
+            ui.chatModelUpdate(messages);
         });
     }
 
@@ -431,7 +431,6 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
 
     /**
      * Handles the event when the view sends a chat message.
-     *
      */
     @Override
     public void onViewSendMessage(String senderUsername, MessageRecipient recipient, String text) {
