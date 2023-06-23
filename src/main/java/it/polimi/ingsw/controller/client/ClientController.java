@@ -225,7 +225,15 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         logger.info("Received status={}, playerInfo={}", status, playerInfo);
 
         asyncExecutor.submit(() -> {
-            lobby.onServerStatusUpdate(status, playerInfo);
+            if (lobby != null) {
+                lobby.onServerStatusUpdate(status, playerInfo);
+            }
+        });
+
+        asyncExecutor.submit(() -> {
+            if (ui != null) {
+                ui.onGameServerStatusUpdate(status, playerInfo);
+            }
         });
     }
 

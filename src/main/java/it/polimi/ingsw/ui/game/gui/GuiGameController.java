@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ui.game.gui;
 
 
+import it.polimi.ingsw.app.model.PlayerInfo;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
@@ -64,7 +66,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private static final int cols = BookshelfConfiguration.getInstance().cols();
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
-
 
     // region %%%%%%%%%%%%%%% FXML variables %%%%%%%%%%%%%%%%%%%
     // region board section
@@ -195,13 +196,16 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // region Model data
     private GameModel model;
+    private ServerStatus status;
+    private List<PlayerInfo> playerInfo;
+
     // endregion Model data
 
     // region Chat data
     private List<ChatTextMessage> messages;
     // endregion Chat data
 
-    // region Controller data
+    // region Client Controller data
     private boolean hasInitializedUi = false;
     private String currentlySelectedUsername = null;
 
@@ -298,7 +302,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
-// selection listeners
+        // selection listeners
         setBoardSelectionButtonClickListener();
         setBoardImageViewsTileClickListener();
 
@@ -327,7 +331,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
 
     /**
-     * Called when the game is created.
+     * Called when the game is created, only once.
      */
     @Override
     public void onGameCreated() {
@@ -397,6 +401,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     @Override
+    public void onGameServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
+        this.status = status;
+        this.playerInfo = playerInfo;
+    }
+
+    @Override
     public void chatModelUpdate(List<ChatTextMessage> messages) {
         this.messages = messages;
         renderChat();
@@ -406,7 +416,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // region %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
     public void renderChat() {
-        //Updating chat ListView
+        // updating chat ListView
         ObservableList<String> observableMessage = FXCollections.observableArrayList(messages.stream().map(ChatTextMessage::toString).toList());
 
         chatPane.setItems(observableMessage);
@@ -430,12 +440,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 renderEnemySection();
 
                 // error label update
-                errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+                errorLabel.setText("");
 
                 // current player settings
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
-                    case IDLE -> {
-                    }
+                    case IDLE -> {}
                     case SELECTING -> {
                         statusLabel.setText("Selection for @" + currentPlayerSession().getUsername());
                     }
@@ -466,6 +475,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                             // if only one tile is selected, it is automatically selected as first tile
                             renderSelectedTilesWhenOnlyOne(firstSelectedTile, firstSelectedTilesNumberedLabel, selectedTiles, playerOrderedTilesToBeInserted);
                         } else {
+                            // we initiate the selection process
                             renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedTiles);
                         }
                     }
@@ -505,20 +515,20 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             currentlySelectedUsername = currentPlayerSession().getUsername();
         }
 
-        // selected enemy's bookshelf
+        // renders the selected enemy's bookshelf
         BookshelfRender.renderBookshelf(enemyBookshelfGridPane, selectedEnemySession().getBookshelf());
 
-        // enemy username label
+        // set enemy username label
         enemyUsernameLabel.setText("@" + currentlySelectedUsername);
 
-        // enemy starting player chair
+        // show a chair if the enemy is the starting player
         if (selectedEnemySession().getUsername().equals(startingPlayerSession().getUsername())) {
             UiUtils.visible(startingEnemyChair);
         } else {
             UiUtils.invisible(startingEnemyChair);
         }
 
-        // enemy's token
+        // enemy's token(s)
         tokenUpdate(selectedEnemySession(), iter.enemyObtainedTokens());
 
         // enemy label (enemyStatusLabel)
@@ -578,7 +588,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
             // removes from insertionVBox, no check needed
             renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedCoordinatesAndValuesList);
-            errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+            errorLabel.setText("");
         } else {
             selectedCoordinatesAndValuesList.add(new CellInfo(selectedCoordinate, tile));
             selectedCoordinatesSet.add(selectedCoordinate);
@@ -591,11 +601,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 // adds them to insertionVBox
                 renderSelectedTiles(iter.selectedOwnerTilesImages(), selectedCoordinatesAndValuesList);
-                errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+                errorLabel.setText("");
             } else {
                 selectedCoordinatesAndValuesList.remove(new CellInfo(selectedCoordinate, tile));
                 selectedCoordinatesSet.remove(selectedCoordinate);
-                errorLabel.setText(SELECTION_ERROR_WRONG_TILE.getGuiErrorMessage());
+                errorLabel.setText(SELECTION_ERROR_WRONG_TILE.errorText());
             }
         }
     }
@@ -607,13 +617,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         // if selection is right (between 1 and 3 and acceptable tiles) sends coordinates to handler
         if (model.isSelectionValid(selectedCoordinatesSet)) {
             handler.onViewSelection(selectedCoordinatesSet);
-            errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+            errorLabel.setText("");
         } else if (selectedCoordinatesSet.size() < 1) {
-            errorLabel.setText(SELECTION_ERROR_AT_LEAST_ONE.getGuiErrorMessage());
+            errorLabel.setText(SELECTION_ERROR_AT_LEAST_ONE.errorText());
         } else if (selectedCoordinatesSet.size() > maxSelectionSize) {
-            errorLabel.setText(SELECTION_ERROR_TOO_MANY_TILES.getGuiErrorMessage());
+            errorLabel.setText(SELECTION_ERROR_TOO_MANY_TILES.errorText());
         } else {
-            errorLabel.setText(SELECTION_ERROR_INVALID.getGuiErrorMessage());
+            errorLabel.setText(SELECTION_ERROR_INVALID.errorText());
         }
     }
 
@@ -628,14 +638,17 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             handler.onViewInsertion(currentlySelectedColumn, playerOrderedTilesToBeInserted);
             playerOrderedTilesToBeInserted.clear();
             selectedCoordinatesAndValuesList.clear();
-            errorLabel.setText(NO_ERROR.getGuiErrorMessage());
+            errorLabel.setText("");
         } else if (playerOrderedTilesToBeInserted.size() != selectedCoordinatesAndValuesList.size()) {
-            errorLabel.setText(INSERTION_ERROR_SELECT_ALL_TILES.getGuiErrorMessage());
+            errorLabel.setText(INSERTION_ERROR_SELECT_ALL_TILES.errorText());
         } else {
-            errorLabel.setText(INSERTION_ERROR_SELECT_COLUMN.getGuiErrorMessage());
+            errorLabel.setText(INSERTION_ERROR_SELECT_COLUMN.errorText());
         }
     }
 
+    /**
+     *
+     * */
     private void onSelectedTilesClickHandler(int index, ImageView selectedTileImageView, Label selectedTextLabel) {
         logger.info("onSelectedTilesClickHandler(index={}, selectedTileImageView={})", index, selectedTileImageView);
         List<Tile> playerSelectedTiles = model.getPlayerSession(owner).getPlayerTileSelection().getSelectedTiles().stream().toList();
@@ -805,7 +818,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                     if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING && (model.getGameStatus() == RUNNING || model.getGameStatus() == LAST_ROUND)) {
                         onSelectionButtonClicked();
                     } else if (model.getGameStatus() == STANDBY) {
-                        errorLabel.setText(STANDBY_ERROR_NO_SELECTION.getGuiErrorMessage());
+                        errorLabel.setText(STANDBY_ERROR_NO_SELECTION.errorText());
                     }
                 }
         );
@@ -849,7 +862,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                     if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING && (model.getGameStatus() == RUNNING || model.getGameStatus() == LAST_ROUND)) {
                         onInsertionButtonClicked();
                     } else if (model.getGameStatus() == STANDBY) {
-                        errorLabel.setText(STANDBY_ERROR_NO_INSERTION.getGuiErrorMessage());
+                        errorLabel.setText(STANDBY_ERROR_NO_INSERTION.errorText());
                     }
                 }
         );
@@ -901,8 +914,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         sendMessageButton.setOnMouseClicked(mouseEvent -> {
             if (!chatTextField.getText().isEmpty() && (model.getGameStatus() == RUNNING || model.getGameStatus() == LAST_ROUND)) {
                 onChatTextSend(owner, parseRecipientFromComboBox(), chatTextField.getText());
-            } else if(model.getGameStatus() == STANDBY) {
-                errorLabel.setText(STANDBY_ERROR_NO_SEND_CHAT.getGuiErrorMessage());
+            } else if (model.getGameStatus() == STANDBY) {
+                errorLabel.setText(STANDBY_ERROR_NO_SEND_CHAT.errorText());
             }
         });
     }
@@ -948,11 +961,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // quit button listener
     public void setQuitButtonListener() {
-            quitButton.setOnMouseClicked(mouseEvent -> {
-                //todo
-                // if we want to show a ranking anyway, when the game is quit by someone:
-                gameEnded();
-            });
+        quitButton.setOnMouseClicked(mouseEvent -> {
+            //todo
+            // if we want to show a ranking anyway, when the game is quit by someone:
+            gameEnded();
+        });
     }
 
     // endregion %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%

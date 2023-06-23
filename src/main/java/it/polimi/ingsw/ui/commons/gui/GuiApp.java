@@ -217,6 +217,15 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
             gameController.onGameCreated();
         });
     }
+    /**
+     * Notifies the game controller that the game has been created.
+     */
+    @Override
+    public void onGameServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
+        Platform.runLater(() -> {
+            gameController.onGameServerStatusUpdate(status, playerInfo);
+        });
+    }
 
     /**
      * Updates the game model in the game controller.

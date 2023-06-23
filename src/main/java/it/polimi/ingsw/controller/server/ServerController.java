@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
+import it.polimi.ingsw.controller.server.async.AsyncExecutor;
 import it.polimi.ingsw.controller.server.connection.PeriodicConnectionAwareComponent;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -73,7 +74,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private final ChatModel chatModel = new ChatModel();
 
     /**
-     *
+     * Max number of players for current game mode, when selected
      */
     private int maxPlayerAmount;
 
@@ -81,6 +82,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      * Current server general status, independent from game logic
      */
     private ServerStatus serverStatus = NO_GAME_STARTED;
+
+
+    private final AsyncExecutor asyncExecutor = AsyncExecutor.newFixedThreadPool(4);
 
 
     public ServerController(ClientConnectionsManager manager) {
@@ -106,7 +110,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) throws RemoteException {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
-        service.onAcceptConnectionAndFinalizeUsername(username);
+        asyncExecutor.async(() -> {
+            service.onAcceptConnectionAndFinalizeUsername(username);
+        });
 
         // en-route parameters
         switch (service) {
@@ -122,11 +128,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
-        try {
+        asyncExecutor.async(() -> {
             remoteService.onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
 
@@ -137,14 +141,18 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         if (serverStatus == GAME_RUNNING) {
             logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.GAME_ALREADY_RUNNING);
 
-            remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_RUNNING));
+            asyncExecutor.async(() -> {
+                remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_RUNNING));
+            });
             return;
         }
 
         if (serverStatus == GAME_INITIALIZING) {
             logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.GAME_ALREADY_INITIALIZING);
 
-            remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_INITIALIZING));
+            asyncExecutor.async(() -> {
+                remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_INITIALIZING));
+            });
             return;
         }
 
@@ -152,7 +160,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         if (!Validator.isValidUsername(username)) {
             logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.INVALID_USERNAME);
 
-            remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.INVALID_USERNAME));
+            asyncExecutor.async(() -> {
+                remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.INVALID_USERNAME));
+            });
             return;
         }
 
@@ -174,11 +184,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         logger.info("returning success from gameStartRequest()");
 
         // return success to the caller
-        router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packPlayerInfo())));
+        asyncExecutor.async(() -> {
+            router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packPlayerInfo())));
+        });
 
         // route the new status to everybody
-        // router.broadcast().onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        asyncExecutor.async(() -> {
+            router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        });
     }
+
 
 
     // Creates a connection between client and server
@@ -191,7 +206,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         if (!Validator.isValidUsername(username)) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.INVALID_USERNAME);
 
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.INVALID_USERNAME));
+            asyncExecutor.async(() -> {
+                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.INVALID_USERNAME));
+            });
             return;
         }
 
@@ -199,7 +216,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_STARTED);
 
             // anonymous routing
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
+            asyncExecutor.async(() -> {
+                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
+            });
             return;
         }
 
@@ -207,7 +226,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.NO_GAME_TO_JOIN);
 
             // anonymous routing
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.NO_GAME_TO_JOIN));
+            asyncExecutor.async(() -> {
+                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.NO_GAME_TO_JOIN));
+            });
             return;
         }
 
@@ -215,7 +236,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.MAX_PLAYER_AMOUNT_EACHED);
 
             // anonymous routing
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_AMOUNT_EACHED));
+            asyncExecutor.async(() -> {
+                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_AMOUNT_EACHED));
+            });
             return;
         }
 
@@ -223,7 +246,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.USERNAME_ALREADY_IN_USE);
 
             // anonymous routing
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
+            asyncExecutor.async(() -> {
+                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
+            });
             return;
         }
 
@@ -231,7 +256,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_ENDED);
 
             // anonymous routing
-            remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
+            asyncExecutor.async(() -> {
+                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
+            });
             return;
         }
 
@@ -257,22 +284,31 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // route a success response to the caller, since it connected successfully
-        router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packPlayerInfo())));
 
+        asyncExecutor.async(() -> {
+            router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packPlayerInfo())));
+        });
 
         // route the new status to everybody, giving the details for the new connected player
-        router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        asyncExecutor.async(() -> {
+            router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packPlayerInfo());
+        });
 
 
         if (shouldStartGame) {
             // broadcast the game model with all users to everybody, only if the game has started.
             // This will display the main game UI
-            router.broadcast().onGameStartedEvent(gameModel);
+
+            asyncExecutor.async(() -> {
+                router.broadcast().onGameStartedEvent(gameModel);
+            });
         }
 
 
         // log an interaction for the requiring user
-        connectionsManager.registerInteraction(username);
+        asyncExecutor.async(() -> {
+            connectionsManager.registerInteraction(username);
+        });
     }
 
 

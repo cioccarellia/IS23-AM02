@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ui.game.cli;
 
+import it.polimi.ingsw.app.model.PlayerInfo;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
@@ -32,6 +34,8 @@ public class CliApp implements GameGateway, Renderable {
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
     private GameModel model;
+    private ServerStatus status;
+    private List<PlayerInfo> playerInfo;
 
     private List<ChatTextMessage> messages;
 
@@ -72,6 +76,13 @@ public class CliApp implements GameGateway, Renderable {
         this.model = game;
         render();
     }
+
+    @Override
+    public void onGameServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo) {
+        this.status = status;
+        this.playerInfo = playerInfo;
+    }
+
 
     /**
      * Shows users' Bookshelves, updates Board, Common goal cards and Tokens, First Player and Current Player, Private

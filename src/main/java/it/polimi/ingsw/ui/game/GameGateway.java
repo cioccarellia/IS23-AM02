@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ui.game;
 
+import it.polimi.ingsw.app.model.PlayerInfo;
+import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
 import it.polimi.ingsw.controller.server.result.failures.TileSelectionFailures;
@@ -22,6 +24,14 @@ public interface GameGateway extends Serializable {
      * Called to notify an update in the game data model
      */
     void modelUpdate(GameModel game);
+
+    /**
+     * Handles the server status update by receiving the current server status and player information.
+     *
+     * @param status     the current server status
+     * @param playerInfo the list of player information
+     */
+    void onGameServerStatusUpdate(ServerStatus status, List<PlayerInfo> playerInfo);
 
     /**
      * Called to notify an update in the game data model
