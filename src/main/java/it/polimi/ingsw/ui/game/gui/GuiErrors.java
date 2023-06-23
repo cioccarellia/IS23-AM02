@@ -7,7 +7,10 @@ public enum GuiErrors {
     SELECTION_ERROR_TOO_MANY_TILES("Selection error: You selected too many tiles"),
     SELECTION_ERROR_INVALID("Selection error: invalid selection"),
     INSERTION_ERROR_SELECT_ALL_TILES("Insertion error: You have to select all tiles"),
-    INSERTION_ERROR_SELECT_COLUMN("Insertion error: You have to select a column");
+    INSERTION_ERROR_SELECT_COLUMN("Insertion error: You have to select a column"),
+    STANDBY_ERROR_NO_SEND_CHAT("Game in standby: you can't send messages"),
+    STANDBY_ERROR_NO_SELECTION("Game in standby: you can't select tiles"),
+    STANDBY_ERROR_NO_INSERTION("Game in standby: you can't insert tiles");
 
     private final String errorMessage;
 

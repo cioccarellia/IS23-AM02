@@ -64,7 +64,7 @@ public class GuiGameControllerUtils {
 
         for (int i = 0; i < commonGoalCardsAmount && !ownerAchievedCommonGoalCards.isEmpty(); i++) {
             String labelCurrentText = commonGoalCardDescriptions.get(i).getText();
-            String achievedText = "You already achieved the token for this card!";
+            String achievedText = "Token achieved!";
 
             if (ownerAchievedCommonGoalCards.contains(gameCommonGoalCards.get(i)) && !labelCurrentText.contains(achievedText)) {
                 commonGoalCardDescriptions.get(i).setText(labelCurrentText + "\n" + achievedText);

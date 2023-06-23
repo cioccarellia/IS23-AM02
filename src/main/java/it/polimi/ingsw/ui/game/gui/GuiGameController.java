@@ -41,8 +41,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.model.game.GameStatus.ENDED;
-import static it.polimi.ingsw.model.game.GameStatus.LAST_ROUND;
+import static it.polimi.ingsw.model.game.GameStatus.*;
 import static it.polimi.ingsw.model.game.goal.Token.FULL_SHELF_TOKEN;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.INSERTING;
 import static it.polimi.ingsw.model.player.action.PlayerCurrentGamePhase.SELECTING;
@@ -206,8 +205,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     private boolean hasInitializedUi = false;
     private String currentlySelectedUsername = null;
 
-    // private GuiError ownerError; //todo if listener otherwise delete
-
     // endregion Controller data
 
     // region Useful Player Sessions
@@ -301,14 +298,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
+// selection listeners
+        setBoardSelectionButtonClickListener();
+        setBoardImageViewsTileClickListener();
 
         // insertion listeners
         setRadioButtonsClickListeners();
         setBookshelfInsertionButtonClickListener();
-
-        // selection listeners
-        setBoardSelectionButtonClickListener();
-        setBoardImageViewsTileClickListener();
 
         // chat listeners
         setSendMessageButtonClickListener();
@@ -321,6 +317,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         // auto-follow
         setAutoFollowListener();
+
+        // quit button
+        setQuitButtonListener();
     }
 
     // endregion %%%%%%%%%%%%%%% Initialization %%%%%%%%%%%%%%%%%%%
@@ -429,8 +428,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 // enemy section update
                 renderEnemySection();
-
-                // renderErrorLabel(); //todo if listener otherwise delete
 
                 // error label update
                 errorLabel.setText(NO_ERROR.getGuiErrorMessage());
@@ -544,10 +541,6 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         checkAchievedCommonGoalCards(ownerSession(), model, iter.commonGoalCardsDescriptions());
     }
 
-    //public void renderErrorLabel() { //todo if listener otherwise delete
-    //    errorLabel.setText(ownerError.getGuiErrorMessage());
-    //}
-
     // endregion %%%%%%%%%%%%%%% Renders %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%% Selection phase %%%%%%%%%%%%%%%%%%%
@@ -636,7 +629,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
             playerOrderedTilesToBeInserted.clear();
             selectedCoordinatesAndValuesList.clear();
             errorLabel.setText(NO_ERROR.getGuiErrorMessage());
-        } else if(playerOrderedTilesToBeInserted.size() != selectedCoordinatesAndValuesList.size()){
+        } else if (playerOrderedTilesToBeInserted.size() != selectedCoordinatesAndValuesList.size()) {
             errorLabel.setText(INSERTION_ERROR_SELECT_ALL_TILES.getGuiErrorMessage());
         } else {
             errorLabel.setText(INSERTION_ERROR_SELECT_COLUMN.getGuiErrorMessage());
@@ -707,7 +700,14 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // region %%%%%%%%%%%%%%% Game standby %%%%%%%%%%%%%%%%%%%
     public void gameStandby() {
+        // deactivate chat send button, selection button, insertion button, while they can still swap between enemy sections:
+        // for chat: allow "send" only when game is running in send button listener
 
+        // make invisible selection and insertion button (and in listener same condition as for chat)
+        UiUtils.invisible(boardSelectionButton, bookshelfInsertionButton);
+
+        // change label
+        statusLabel.setText("Game in standby, waiting for other players to reconnect");
     }
     // endregion %%%%%%%%%%%%%%% Game standby %%%%%%%%%%%%%%%%%%%
 
@@ -799,27 +799,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // endregion %%%%%%%%%%%%%%%%%%% Replies %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%
-    public void setRadioButtonsClickListeners() {
-        for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
-            final int finalizedIndex = i;
-            RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
-            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex);
-        }
-    }
-
-    public void setBookshelfInsertionButtonClickListener() {
-        bookshelfInsertionButton.setOnMouseClicked(mouseEvent -> {
-                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING) {
-                        onInsertionButtonClicked();
-                    }
-                }
-        );
-    }
-
+    // selection listeners
     public void setBoardSelectionButtonClickListener() {
         boardSelectionButton.setOnMouseClicked(mouseEvent -> {
-                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING) {
+                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == SELECTING && (model.getGameStatus() == RUNNING || model.getGameStatus() == LAST_ROUND)) {
                         onSelectionButtonClicked();
+                    } else if (model.getGameStatus() == STANDBY) {
+                        errorLabel.setText(STANDBY_ERROR_NO_SELECTION.getGuiErrorMessage());
                     }
                 }
         );
@@ -847,6 +833,26 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 });
             }
         }
+    }
+
+    // insertion listeners
+    public void setRadioButtonsClickListeners() {
+        for (int i = 0; i < iter.columnRadioButtons().size(); i++) {
+            final int finalizedIndex = i;
+            RadioButton columnRadioButton = iter.columnRadioButtons().get(finalizedIndex);
+            columnRadioButton.setOnMouseClicked(mouseEvent -> currentlySelectedColumn = finalizedIndex);
+        }
+    }
+
+    public void setBookshelfInsertionButtonClickListener() {
+        bookshelfInsertionButton.setOnMouseClicked(mouseEvent -> {
+                    if (model.getPlayerSession(owner).getPlayerCurrentGamePhase() == INSERTING && (model.getGameStatus() == RUNNING || model.getGameStatus() == LAST_ROUND)) {
+                        onInsertionButtonClicked();
+                    } else if (model.getGameStatus() == STANDBY) {
+                        errorLabel.setText(STANDBY_ERROR_NO_INSERTION.getGuiErrorMessage());
+                    }
+                }
+        );
     }
 
     @FXML
@@ -879,6 +885,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
     }
 
+    // chat listeners
     public MessageRecipient parseRecipientFromComboBox() {
         String currentlySelectedEntry = chatSelectorComboBox.getValue();
 
@@ -890,13 +897,17 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     public void setSendMessageButtonClickListener() {
+        // allows "send" only if game is running (not in standby or ended) and if there is a message
         sendMessageButton.setOnMouseClicked(mouseEvent -> {
-            if (!chatTextField.getText().isEmpty()) {
+            if (!chatTextField.getText().isEmpty() && (model.getGameStatus() == RUNNING || model.getGameStatus() == LAST_ROUND)) {
                 onChatTextSend(owner, parseRecipientFromComboBox(), chatTextField.getText());
+            } else if(model.getGameStatus() == STANDBY) {
+                errorLabel.setText(STANDBY_ERROR_NO_SEND_CHAT.getGuiErrorMessage());
             }
         });
     }
 
+    // enemy section listeners
     public void setEnemyButtonClickListeners() {
         enemySelect1Button.setOnMouseClicked(mouseEvent -> {
             if (autoFollowCheckBox.isSelected()) {
@@ -935,9 +946,14 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         });
     }
 
-    //public void setOwnerErrorListener(){ //todo if listener otherwise delete
-    //    renderErrorLabel();
-    //}
+    // quit button listener
+    public void setQuitButtonListener() {
+            quitButton.setOnMouseClicked(mouseEvent -> {
+                //todo
+                // if we want to show a ranking anyway, when the game is quit by someone:
+                gameEnded();
+            });
+    }
 
     // endregion %%%%%%%%%%%%%%%%%%% ClickListeners %%%%%%%%%%%%%%%%%%%
 }

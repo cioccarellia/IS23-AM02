@@ -157,13 +157,13 @@
 
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OWNER AREA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-    <Label fx:id="ownerUsernameLabel" layoutX="900.0" layoutY="91.0" text="Hi @player">
+    <Label fx:id="ownerUsernameLabel" layoutX="900.0" layoutY="91.0" text="Hi @player" wrapText="true">
         <font>
             <Font name="Monospaced Regular" size="18.0" />
         </font>
     </Label>
 
-    <Label fx:id="ownerCurrentPointsLabel" layoutX="901.0" layoutY="331.0" prefHeight="26.0" prefWidth="158.0" text="Your points: points">
+    <Label fx:id="ownerCurrentPointsLabel" layoutX="901.0" layoutY="331.0" prefHeight="26.0" prefWidth="158.0" text="Your points: points" wrapText="true">
         <font>
             <Font name="Monospaced Regular" size="13.0" />
         </font>
@@ -408,7 +408,7 @@
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ENEMY AREA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- enemy username -->
-    <Label fx:id="enemyUsernameLabel" layoutX="507.0" layoutY="471.0" prefHeight="72.0" prefWidth="359.0" text="\@EnemyUsername">
+    <Label fx:id="enemyUsernameLabel" layoutX="507.0" layoutY="471.0" prefHeight="72.0" prefWidth="359.0" text="\@EnemyUsername" wrapText="true">
         <font>
             <Font name="Monospaced Bold" size="30.0" />
         </font>
@@ -670,13 +670,13 @@
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% STATUS LABELS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- Status title and content label -->
-    <Label fx:id="statusLabel" layoutX="14.0" layoutY="470.0" prefHeight="48.0" prefWidth="418.0" text="Status Text">
+    <Label fx:id="statusLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="463.0" prefHeight="78.0" prefWidth="418.0" text="Status Text" wrapText="true">
         <font>
             <Font name="Monospaced Bold" size="20.0" />
         </font>
     </Label>
 
-    <Label fx:id="errorLabel" alignment="TOP_LEFT" layoutX="15.0" layoutY="524.0" prefHeight="72.0" prefWidth="418.0" text="Brief error summary" textFill="#900000" wrapText="true">
+    <Label fx:id="errorLabel" alignment="TOP_LEFT" layoutX="15.0" layoutY="544.0" prefHeight="72.0" prefWidth="418.0" text="Brief error summary" textFill="#900000" wrapText="true">
         <font>
             <Font name="Monospaced Regular" size="20.0" />
         </font>
