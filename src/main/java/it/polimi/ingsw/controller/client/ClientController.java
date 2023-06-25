@@ -113,7 +113,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
     private ClientController identity;
 
-    private final ExecutorService asyncExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService asyncExecutor = Executors.newCachedThreadPool();
 
     /**
      * Constructs a ClientController object with the specified gateway and configuration.

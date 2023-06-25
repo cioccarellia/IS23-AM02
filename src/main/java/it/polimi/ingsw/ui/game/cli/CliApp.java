@@ -20,13 +20,11 @@ import it.polimi.ingsw.ui.game.GameViewEventHandler;
 import it.polimi.ingsw.ui.game.cli.parser.ColumnParser;
 import it.polimi.ingsw.ui.game.cli.parser.CoordinatesParser;
 import it.polimi.ingsw.ui.game.cli.parser.PlayerTilesOrderInsertionParser;
-import it.polimi.ingsw.ui.game.cli.printer.BoardPrinter;
-import it.polimi.ingsw.ui.game.cli.printer.BookshelvesPrinter;
-import it.polimi.ingsw.ui.game.cli.printer.CommonGoalCardsPrinter;
-import it.polimi.ingsw.ui.game.cli.printer.PersonalGoalCardPrinter;
+import it.polimi.ingsw.ui.game.cli.printer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +36,7 @@ public class CliApp implements GameGateway, Renderable {
     private ServerStatus status;
     private List<PlayerInfo> playerInfo;
 
-    private List<ChatTextMessage> messages;
+    private List<ChatTextMessage> messages = new ArrayList<>();
 
     private final GameViewEventHandler handler;
 
@@ -96,7 +94,9 @@ public class CliApp implements GameGateway, Renderable {
             return;
         }
 
-        Console.printnl(100);
+        Console.printnl(150);
+        Console.out("Latest 10 messages:\n");
+        ChatPrinter.printLastNMessages(messages, owner, 10);
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
@@ -200,6 +200,8 @@ public class CliApp implements GameGateway, Renderable {
     @Override
     public void chatModelUpdate(List<ChatTextMessage> messages) {
         this.messages = messages;
+
+        ChatPrinter.printChatLastMessage(messages, owner);
     }
 
     /**
