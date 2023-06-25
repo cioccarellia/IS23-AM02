@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.game.cli.parser;
 
+import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
@@ -24,11 +25,10 @@ public class CoordinatesParser {
      * @return the set of coordinates selected by the player, already checked for validity
      */
     public static Set<Coordinate> scan(GameModel game) {
-
         while (true) {
             Console.out("""
-                    Give me the coordinates of the tiles you want (at least one tile, at most three),
-                    in the format: x1, y1, x2, y2, ... (x are rows, y are columns):
+                    Insert coordinates pairs for your selection (at least one tile, at most three)
+                    Format: X1,Y1, [X2,Y2], [X3,Y3]                  (Xs are rows, Ys are columns)
                     """);
 
             String input = Console.in();
@@ -36,10 +36,10 @@ public class CoordinatesParser {
             String[] tokens = input.split(",");
 
             if (tokens.length < 2 || tokens.length > 2 * maxSelectionSize || tokens.length % 2 != 0) {
-                Console.out("""
+                Console.out(Chalk.on("""
                         You need to select at least one tile and at most three;
                         also, you need both the x-coordinate and the y-coordinate.
-                        """);
+                        """).bgYellow().toString());
                 continue;
             }
 
@@ -59,10 +59,9 @@ public class CoordinatesParser {
                     Coordinate coords = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
                     validCoordinates.add(coords);
                 } else {
-                    Console.out("""
-                            Some of these coordinates are out of bounds, you need to select numbers
-                            from 0 to 9.
-                            """);
+                    Console.out(Chalk.on(
+                            "Out-of-bounds coordinates detected. Only numbers in 0-9 are valid coordinates.\n"
+                    ).bgYellow().toString());
                     check = false;
                     break;
                 }
@@ -75,9 +74,9 @@ public class CoordinatesParser {
             if (isSelectionValid(validCoordinates, game)) {
                 return validCoordinates;
             } else {
-                Console.out("""
-                        The coordinates are not valid.
-                        """);
+                Console.out(Chalk.on(
+                        "Invalid coordinates.\n"
+                ).bgYellow().toString());
             }
         }
     }

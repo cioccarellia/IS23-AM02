@@ -1,5 +1,6 @@
 package it.polimi.ingsw.app.server.timeout;
 
+import it.polimi.ingsw.app.server.flags.ServerFlags;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.controller.server.connection.ClientConnection;
 import it.polimi.ingsw.controller.server.connection.ConnectionStatus;
@@ -51,6 +52,10 @@ public class TimeoutKeepAliveHandler implements Runnable {
 
     @Override
     public void run() {
+        if (!ServerFlags.ENABLE_TTLS) {
+            return;
+        }
+
         while (isTimeoutThreadActive) {
             synchronized (ServerController.class) {
                 Date now = Calendar.getInstance().getTime();

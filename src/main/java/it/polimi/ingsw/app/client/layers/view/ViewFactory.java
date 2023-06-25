@@ -69,13 +69,13 @@ public class ViewFactory {
             case CLI -> {
                 logger.info("createGameUiAsync(): Starting CLI game");
 
-                //executorService.submit(() -> {
-                logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
-                GameGateway game = new CliApp(model, controller, owner);
+                executorService.submit(() -> {
+                    logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
+                    GameGateway game = new CliApp(model, controller, owner);
 
-                logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
-                controller.onGameUiReady(game);
-                //});
+                    logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
+                    controller.onGameUiReady(game);
+                });
             }
             case GUI -> {
                 logger.info("Starting GUI game");

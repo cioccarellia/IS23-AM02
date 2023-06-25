@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.game.cli.parser;
 
+import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.ui.game.cli.Console;
@@ -19,27 +20,28 @@ public class ColumnParser {
     public static int scan(Tile[][] bookshelf, List<Tile> selectedTiles) {
         while (true) {
             Console.outln();
-            Console.out("In which column would you like to insert the selected tiles: ");
+            Console.out("Select the column for insertion >");
 
             selectedTiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
                 Console.out(" " + tileText);
             });
 
-            Console.out(" ?");
             Console.outln();
 
-            int column = Integer.parseInt(Console.in());
+            int column = -1;
+
+            try {
+                column = Integer.parseInt(Console.in());
+            } catch (NumberFormatException ignored) {}
 
             if (column < 0 || column > cols) {
-                Console.outln();
-                Console.out("The column you selected is out of bounds, choose a number between 0 and 4.");
-                Console.outln();
+                Console.out(Chalk.on("Selected column out of bounds, choose a number between 0 and 4.").bgYellow().toString());
             } else if (!itFits(bookshelf, selectedTiles.size(), column)) {
-                Console.outln();
-                Console.out("You selected more tiles than there is space in this column. Change column.");
-            } else
+                Console.out(Chalk.on("Selected column does not have enough space to house your selection.").bgYellow().toString());
+            } else {
                 return column;
+            }
         }
     }
 

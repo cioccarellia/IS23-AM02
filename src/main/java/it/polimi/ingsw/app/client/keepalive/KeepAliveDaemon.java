@@ -1,5 +1,6 @@
 package it.polimi.ingsw.app.client.keepalive;
 
+import it.polimi.ingsw.app.server.flags.ServerFlags;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,10 @@ public class KeepAliveDaemon implements Runnable {
 
     @Override
     public void run() {
+        if (!ServerFlags.ENABLE_TTLS) {
+            return;
+        }
+
         while (isActive) {
             try {
                 TimeUnit.SECONDS.sleep(5);

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ui.game.cli;
 
+import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
@@ -48,7 +49,7 @@ public class CliApp implements GameGateway, Renderable {
         this.handler = handler;
         this.owner = owner;
 
-        render();
+        //render();
     }
 
 
@@ -91,11 +92,11 @@ public class CliApp implements GameGateway, Renderable {
     @Override
     public void render() {
         if (model == null) {
-            Console.out("Void model.");
+            Console.out(Chalk.on("Void model.").bgRed().toString());
             return;
         }
 
-        Console.printnl(300);
+        Console.printnl(100);
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
@@ -174,7 +175,6 @@ public class CliApp implements GameGateway, Renderable {
                     case WRONG_GAME_PHASE, UNAUTHORIZED_PLAYER, UNAUTHORIZED_SELECTION:
                         break;
                 }
-
             }
             case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> {
                 // implicit model update
