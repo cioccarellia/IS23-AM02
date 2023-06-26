@@ -12,11 +12,14 @@ import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
+import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
+import it.polimi.ingsw.ui.game.cli.console.ConsoleInputReadTask;
+import it.polimi.ingsw.ui.game.cli.parser.ChatMessageParser;
 import it.polimi.ingsw.ui.game.cli.parser.ColumnParser;
 import it.polimi.ingsw.ui.game.cli.parser.CoordinatesParser;
 import it.polimi.ingsw.ui.game.cli.parser.PlayerTilesOrderInsertionParser;
@@ -27,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.*;
 
 public class CliApp implements GameGateway, Renderable {
 
@@ -42,13 +46,48 @@ public class CliApp implements GameGateway, Renderable {
 
     private final String owner;
 
+    ExecutorService chatCommandStreamReader = Executors.newFixedThreadPool(5);
+
     public CliApp(GameModel model, GameViewEventHandler handler, String owner) {
         this.model = model;
         this.handler = handler;
         this.owner = owner;
 
         //render();
+
+        chatCommandStreamReader.execute(this::startChatReader);
     }
+
+    Future<String> chatCommand;
+    public void startChatReader() {
+        while (true) {
+            chatCommand = chatCommandStreamReader.submit(new ConsoleInputReadTask());
+
+            String input;
+            try {
+                input = chatCommand.get();
+            } catch (CancellationException e) {
+                // stop blocking input
+                break;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (input == null) {
+                continue;
+            }
+
+            logger.info("Got message " + input);
+
+            String text = ChatMessageParser.parseMessageText(input.trim());
+            MessageRecipient recipient = ChatMessageParser.parseMessageRecipient(input.trim());
+
+            handler.onViewSendMessage(owner, recipient, text);
+        }
+    }
+
 
 
     /**
@@ -94,9 +133,14 @@ public class CliApp implements GameGateway, Renderable {
             return;
         }
 
-        Console.printnl(150);
-        Console.out("Latest 10 messages:\n");
-        ChatPrinter.printLastNMessages(messages, owner, 10);
+        Console.printnl(100);
+
+        int messagesToShow = Math.min(messages.size(), 10);
+
+        if (messagesToShow > 0) {
+            Console.out("Latest " + messagesToShow + " messages:\n");
+            ChatPrinter.printLastNMessages(messages, owner, messagesToShow);
+        }
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
@@ -134,22 +178,29 @@ public class CliApp implements GameGateway, Renderable {
             case ENDED -> onGameEnded();
             case STANDBY -> onGameStandby();
         }
+
+
     }
 
     /**
      * To be invoked when it's the player turn to select
      */
     public void gameSelection() {
-        Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
+        chatCommand.cancel(true);
 
+        Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
         handler.onViewSelection(validCoordinates);
+
+        chatCommandStreamReader.execute(this::startChatReader);
     }
 
     /**
      * To be invoked when it's the player turn to insert
      */
     public void gameInsertion() {
+        chatCommand.cancel(true);
         List<Tile> selectedTiles = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles();
+
 
         int tilesSize = selectedTiles.size();
 
@@ -162,8 +213,10 @@ public class CliApp implements GameGateway, Renderable {
         } else {
             orderedTiles = selectedTiles;
         }
-
         handler.onViewInsertion(column, orderedTiles);
+
+
+        chatCommandStreamReader.execute(this::startChatReader);
     }
 
 

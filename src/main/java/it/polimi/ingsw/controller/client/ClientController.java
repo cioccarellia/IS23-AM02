@@ -70,13 +70,13 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
             case CLI -> {
                 logger.info("createGameUiAsync(): Starting CLI game");
 
-                //executorService.submit(() -> {
+                executorService.submit(() -> {
                 logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
                 GameGateway game = new CliApp(model, controller, owner);
 
                 logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
                 controller.onGameUiReady(game);
-                //});
+                });
             }
             case GUI -> {
                 logger.info("Starting GUI game");
@@ -113,6 +113,10 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
     private ClientController identity;
 
+    /**
+     * We need an asynchronous, multithreaded pool because multiple independent calls may be coming in at once
+     * and we need to process them in parallel (e.g. chat message while user updates data)
+     * */
     private final ExecutorService asyncExecutor = Executors.newCachedThreadPool();
 
     /**
@@ -132,8 +136,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         }
     }
 
-    protected ClientController() throws RemoteException {
-    }
+    protected ClientController() throws RemoteException {}
 
 
     ///////////////////////////////////////////////////////////////// Client Lifecycle
@@ -340,6 +343,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
 
     @Override
     public void onChatModelUpdate(List<ChatTextMessage> messages) {
+        logger.warn("onChatModelUpdate(messages={})", messages);
         asyncExecutor.submit(() -> {
             ui.chatModelUpdate(messages);
         });

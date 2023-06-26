@@ -440,22 +440,42 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     @Override
     public synchronized void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
-        chatModel.addMessage(sendingUsername, recipient, text.trim());
+
 
         switch (recipient) {
             case MessageRecipient.Broadcast broadcast -> {
+                // add to model
+                chatModel.addMessage(sendingUsername, recipient, text.trim());
+
+                // dispatch
                 for (String username : connectionsManager.getUsernames()) {
                     router.route(username).onChatModelUpdate(
                             chatModel.getMessagesFor(username)
                     );
                 }
             }
-            case MessageRecipient.Direct direct -> {
+            case MessageRecipient.Direct directRecipient -> {
+                if (sendingUsername.equals(directRecipient.username())) {
+                    // can't DM yourself
+                    logger.warn("Dropping Message(sendingUsername={}, recipient={}, text={}), self message", sendingUsername, recipient, text);
+                    return;
+                }
+
+                if (!connectionsManager.containsUsername(directRecipient.username())) {
+                    // the given username doesn't exist
+                    logger.warn("Dropping Message(sendingUsername={}, recipient={}, text={}), recipient non-existent", sendingUsername, recipient, text);
+                    return;
+                }
+
+                // add to model
+                chatModel.addMessage(sendingUsername, recipient, text.trim());
+
+                // dispatch
                 router.route(sendingUsername).onChatModelUpdate(
                         chatModel.getMessagesFor(sendingUsername)
                 );
 
-                String recipientUsername = direct.username();
+                String recipientUsername = directRecipient.username();
                 router.route(recipientUsername).onChatModelUpdate(
                         chatModel.getMessagesFor(recipientUsername)
                 );
