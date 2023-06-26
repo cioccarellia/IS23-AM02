@@ -358,7 +358,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         }
 
         // owner username label
-        ownerUsernameLabel.setText("Hi " + ownerSession().getUsername());
+        ownerUsernameLabel.setText(ownerSession().getUsername());
 
         // owner current points
         PlayerScore ownerPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(owner)).findAny().get();

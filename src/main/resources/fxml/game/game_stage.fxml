@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
-
 <AnchorPane prefHeight="900.0" prefWidth="1465.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.game.gui.GuiGameController">
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BACKGROUND %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
@@ -157,9 +156,9 @@
 
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OWNER AREA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-    <Label fx:id="ownerUsernameLabel" layoutX="900.0" layoutY="91.0" text="Hi @player" wrapText="true">
+    <Label fx:id="ownerUsernameLabel" layoutX="1116.0" layoutY="27.0" prefHeight="23.0" prefWidth="229.0" text="Hi @player" wrapText="true">
         <font>
-            <Font name="Monospaced Regular" size="18.0" />
+            <Font name="Monospaced Bold" size="18.0" />
         </font>
     </Label>
 
@@ -526,9 +525,9 @@
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BUTTONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <!-- Quit button -->
-    <Button fx:id="quitButton" layoutX="1334.0" layoutY="18.0" prefHeight="33.0" prefWidth="118.0" text="QUIT" textAlignment="CENTER" textFill="#e06a2f">
+    <Button fx:id="quitButton" layoutX="1363.0" layoutY="18.0" prefHeight="41.0" prefWidth="89.0" text="QUIT" textAlignment="CENTER" textFill="#e06a2f">
         <font>
-            <Font name="Monospaced Bold" size="21.0" />
+            <Font name="Monospaced Bold" size="18.0" />
         </font>
         <textFill>
             <LinearGradient endX="1.0" endY="1.0">
@@ -628,9 +627,9 @@
             </ComboBox>
 
             <!-- Send Message Button -->
-            <Button fx:id="sendMessageButton" prefHeight="26.0" text="SEND">
+            <Button fx:id="sendMessageButton" prefHeight="26.0" prefWidth="106.0" text="SEND">
                 <font>
-                    <Font name="Monospaced Regular" size="14.0" />
+                    <Font name="Monospaced Bold" size="14.0" />
                 </font>
                 <textFill>
                     <LinearGradient endX="1.0" endY="1.0">

@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -94,35 +95,53 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
      * @throws Exception if an error occurs while loading the lobby XML.
      */
     public void setupLobbyStage(Stage lobbyStage) throws Exception {
-        URL xmlURL = getClass().getResource(LobbyUiConstants.LOBBY_FXML_PATH);
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(xmlURL);
-
-        Parent rootLayout;
-
         try {
-            rootLayout = loader.load();
-        } catch (IOException e) {
-            logger.error("Error while loading lobby XML", e);
-            throw new IllegalStateException();
+            URL xmlURL = getClass().getResource(LobbyUiConstants.LOBBY_FXML_PATH);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(xmlURL);
+
+            Parent rootLayout;
+
+            try {
+                rootLayout = loader.load();
+            } catch (IOException e) {
+                logger.error("Error while loading lobby XML", e);
+                throw new IllegalStateException();
+            }
+
+
+            lobbyController = loader.getController();
+            lobbyController.injectEventHandler(lobbyHandler);
+
+            Scene loadedScene = new Scene(rootLayout, LOBBY_WIDTH, LOBBY_HEIGHT, false);
+            lobbyStage.setScene(loadedScene);
+            lobbyStage.setResizable(false);
+
+            try {
+                if (Taskbar.isTaskbarSupported()) {
+                    var taskbar = Taskbar.getTaskbar();
+
+                    if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+                        final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+                        var dockIcon = defaultToolkit.getImage(getClass().getResource("img/publisher_material/title_2000x618px.png"));
+                        taskbar.setIconImage(dockIcon);
+                    }
+                }
+            } catch (Exception ignored) {}
+
+
+
+            lobbyStage.setTitle("Lobby");
+            lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
+            lobbyStage.show();
+
+            // notify the rest of the app
+            AppManager.setAppInstance(this);
+            lifecycle.onLobbyUiReady(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error while loading game app", e);
         }
-
-
-        lobbyController = loader.getController();
-        lobbyController.injectEventHandler(lobbyHandler);
-
-        Scene loadedScene = new Scene(rootLayout, LOBBY_WIDTH, LOBBY_HEIGHT, false);
-
-        lobbyStage.setScene(loadedScene);
-        lobbyStage.setResizable(false);
-
-        lobbyStage.setTitle("Lobby");
-        lobbyStage.getIcons().add(new Image("img/publisher_material/publisher.png"));
-        lobbyStage.show();
-
-        // notify the rest of the app
-        AppManager.setAppInstance(this);
-        lifecycle.onLobbyUiReady(this);
     }
 
 
@@ -139,35 +158,40 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
     }
 
     public void setupPrimaryStage(Stage newStage) throws Exception {
-        URL xmlURL = getClass().getResource(GameUiConstants.GAME_FXML_PATH);
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(xmlURL);
-
-        Parent rootLayout;
-
         try {
-            rootLayout = loader.load();
-        } catch (IOException e) {
-            logger.error("Error while loading game XML", e);
-            throw new IllegalStateException();
+            URL xmlURL = getClass().getResource(GameUiConstants.GAME_FXML_PATH);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(xmlURL);
+
+            Parent rootLayout;
+
+            try {
+                rootLayout = loader.load();
+            } catch (IOException e) {
+                logger.error("Error while loading game XML", e);
+                throw new IllegalStateException();
+            }
+
+            gameController = loader.getController();
+            gameController.injectModelData(model, gameHandler, owner);
+
+            Scene loadedScene = new Scene(rootLayout, APP_WIDTH, APP_HEIGHT, false, SceneAntialiasing.BALANCED);
+
+            newStage.setScene(loadedScene);
+            newStage.setResizable(false);
+
+            newStage.setTitle("MyShelfie");
+            newStage.show();
+
+            // Platform.runLater(() -> {
+            //     gameController.modelUpdate(model);
+            // });
+
+            lifecycle.onGameUiReady(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error while loading game app", e);
         }
-
-        gameController = loader.getController();
-        gameController.injectModelData(model, gameHandler, owner);
-
-        Scene loadedScene = new Scene(rootLayout, APP_WIDTH, APP_HEIGHT, false, SceneAntialiasing.BALANCED);
-
-        newStage.setScene(loadedScene);
-        newStage.setResizable(false);
-
-        newStage.setTitle("MyShelfie");
-        newStage.show();
-
-        // Platform.runLater(() -> {
-        //     gameController.modelUpdate(model);
-        // });
-
-        lifecycle.onGameUiReady(this);
     }
 
 
@@ -217,6 +241,7 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
             gameController.onGameCreated();
         });
     }
+
     /**
      * Notifies the game controller that the game has been created.
      */
