@@ -343,7 +343,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
 
     @Override
     public void onChatModelUpdate(List<ChatTextMessage> messages) {
-        logger.warn("onChatModelUpdate(messages={})", messages);
+        logger.info("onChatModelUpdate(messages={})", messages);
+
         asyncExecutor.submit(() -> {
             ui.chatModelUpdate(messages);
         });
@@ -355,7 +356,9 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameEndedEvent() {
-        // not used
+        asyncExecutor.submit(() -> {
+            ui.onGameEnded();
+        });
     }
 
 

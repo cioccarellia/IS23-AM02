@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller.server.router;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
+import it.polimi.ingsw.controller.server.async.AsyncExecutor;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
 import it.polimi.ingsw.controller.server.result.TypedResult;
 import it.polimi.ingsw.controller.server.result.failures.BookshelfInsertionFailure;
@@ -15,6 +16,8 @@ import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
 import it.polimi.ingsw.services.ClientService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -22,27 +25,52 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Mock instance specifically aimed at broadcasting capabilities
+ * Mock instance tuned with broadcasting capabilities, forwarding all the methods
+ * called on it to its support
  */
 public class BroadcastClientService implements ClientService {
 
     /**
-     * Support to forward the method sources to
+     * Support {@link ClientConnectionsManager}, to forward the method sources to
      */
     private final ClientConnectionsManager support;
 
     /**
-     * List of clients which won't be forwarded
+     * List of clients which won't be included in the forward operation
      */
     private List<String> ignoredSources = new ArrayList<>();
 
+    /**
+     * External executor for running the given commands in
+     */
+    @Nullable
+    AsyncExecutor externalExecutor;
+
+    boolean isUsingExternalExecutor;
+
     public BroadcastClientService(ClientConnectionsManager support) {
         this.support = support;
+        isUsingExternalExecutor = false;
+    }
+
+
+    public BroadcastClientService(ClientConnectionsManager support, @NotNull AsyncExecutor executor) {
+        this.support = support;
+        this.externalExecutor = executor;
+        isUsingExternalExecutor = true;
     }
 
     public BroadcastClientService(ClientConnectionsManager support, List<String> ignoredSources) {
         this.support = support;
         this.ignoredSources = ignoredSources;
+        isUsingExternalExecutor = false;
+    }
+
+    public BroadcastClientService(ClientConnectionsManager support, List<String> ignoredSources, @NotNull AsyncExecutor executor) {
+        this.support = support;
+        this.ignoredSources = ignoredSources;
+        this.externalExecutor = executor;
+        isUsingExternalExecutor = true;
     }
 
     /**
@@ -51,7 +79,13 @@ public class BroadcastClientService implements ClientService {
     private void forward(Consumer<ClientService> remoteMethodCall) {
         support.values().forEach(clientConnection -> {
             if (!ignoredSources.contains(clientConnection.getUsername())) {
-                remoteMethodCall.accept(clientConnection);
+                // allowed destination
+                if (isUsingExternalExecutor) {
+                    assert externalExecutor != null;
+                    externalExecutor.async(() -> remoteMethodCall.accept(clientConnection));
+                } else {
+                    remoteMethodCall.accept(clientConnection);
+                }
             }
         });
     }

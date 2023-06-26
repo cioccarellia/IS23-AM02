@@ -270,6 +270,13 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
         });
     }
 
+    @Override
+    public void onGameEnded() {
+        Platform.runLater(() -> {
+            gameController.onGameEnded();
+        });
+    }
+
     public static void main(String[] args) {
         Application.launch(args);
     }

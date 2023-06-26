@@ -3,6 +3,8 @@ package it.polimi.ingsw.app.client.keepalive;
 import it.polimi.ingsw.app.server.flags.ServerFlags;
 import it.polimi.ingsw.controller.client.gateways.ClientGateway;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.rmi.RemoteException;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +13,8 @@ import java.util.concurrent.TimeUnit;
  * Daemon thread responsible for sending keep-alive signals to the server at regular intervals.
  */
 public class KeepAliveDaemon implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(KeepAliveDaemon.class);
 
     private final ClientGateway gateway;
     private final String username;
@@ -57,6 +61,9 @@ public class KeepAliveDaemon implements Runnable {
                 TimeUnit.SECONDS.sleep(5);
                 gateway.keepAlive(username);
             } catch (InterruptedException | RemoteException e) {
+                logger.error("Exiting, exception while communicating with server", e);
+                System.out.println("Can not communicate with server, exiting");
+                System.exit(69);
                 throw new RuntimeException(e);
             }
         }

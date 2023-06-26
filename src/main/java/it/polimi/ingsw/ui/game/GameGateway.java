@@ -47,4 +47,10 @@ public interface GameGateway extends Serializable {
      * Calls to notify about a previously-submitted insertion attempt
      */
     void onGameInsertionReply(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult);
+
+
+    /**
+     * Called when the game is ended
+     */
+    void onGameEnded();
 }

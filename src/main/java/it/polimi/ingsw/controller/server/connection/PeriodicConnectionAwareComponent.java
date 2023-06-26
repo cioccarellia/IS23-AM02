@@ -19,5 +19,4 @@ public interface PeriodicConnectionAwareComponent {
     ClientConnectionsManager getConnectionsManager();
 
     void onConnectionChange();
-
 }

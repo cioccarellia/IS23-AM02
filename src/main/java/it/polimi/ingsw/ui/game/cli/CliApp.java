@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.Renderable;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.cli.console.ConsoleInputReadTask;
+import it.polimi.ingsw.ui.game.cli.console.AsyncStreamReader;
 import it.polimi.ingsw.ui.game.cli.parser.ChatMessageParser;
 import it.polimi.ingsw.ui.game.cli.parser.ColumnParser;
 import it.polimi.ingsw.ui.game.cli.parser.CoordinatesParser;
@@ -36,6 +36,9 @@ public class CliApp implements GameGateway, Renderable {
 
     private static final Logger logger = LoggerFactory.getLogger(CliApp.class);
 
+    /**
+     * Keeps a reference to the game model
+     * */
     private GameModel model;
     private ServerStatus status;
     private List<PlayerInfo> playerInfo;
@@ -53,25 +56,22 @@ public class CliApp implements GameGateway, Renderable {
         this.handler = handler;
         this.owner = owner;
 
-        //render();
-
         chatCommandStreamReader.execute(this::startChatReader);
     }
 
-    Future<String> chatCommand;
+    Future<String> currentChatCommand;
     public void startChatReader() {
         while (true) {
-            chatCommand = chatCommandStreamReader.submit(new ConsoleInputReadTask());
+            currentChatCommand = chatCommandStreamReader.submit(new AsyncStreamReader());
 
-            String input;
+            String input = null;
             try {
-                input = chatCommand.get();
+                input = currentChatCommand.get();
             } catch (CancellationException e) {
                 // stop blocking input
+                logger.info("Intercepted keyboard input on idle, input=[" + input + "]");
                 break;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
 
@@ -84,7 +84,11 @@ public class CliApp implements GameGateway, Renderable {
             String text = ChatMessageParser.parseMessageText(input.trim());
             MessageRecipient recipient = ChatMessageParser.parseMessageRecipient(input.trim());
 
-            handler.onViewSendMessage(owner, recipient, text);
+            if (text == null || recipient == null) {
+                logger.warn("Got a malformed message [" + input + "], can't parse recipient and/or text");
+            } else {
+                handler.onViewSendMessage(owner, recipient, text);
+            }
         }
     }
 
@@ -186,7 +190,7 @@ public class CliApp implements GameGateway, Renderable {
      * To be invoked when it's the player turn to select
      */
     public void gameSelection() {
-        chatCommand.cancel(true);
+        currentChatCommand.cancel(true);
 
         Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
         handler.onViewSelection(validCoordinates);
@@ -198,7 +202,7 @@ public class CliApp implements GameGateway, Renderable {
      * To be invoked when it's the player turn to insert
      */
     public void gameInsertion() {
-        chatCommand.cancel(true);
+        currentChatCommand.cancel(true);
         List<Tile> selectedTiles = model.getCurrentPlayerSession().getPlayerTileSelection().getSelectedTiles();
 
 
@@ -260,6 +264,7 @@ public class CliApp implements GameGateway, Renderable {
     /**
      * Shows ranking and announces the winner.
      */
+    @Override
     public void onGameEnded() {
         Console.out("""
                 The game has ended.

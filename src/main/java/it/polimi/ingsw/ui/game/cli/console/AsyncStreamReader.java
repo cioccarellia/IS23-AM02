@@ -1,28 +1,29 @@
 package it.polimi.ingsw.ui.game.cli.console;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
-public class ConsoleInputReadTask implements Callable<String> {
+public class AsyncStreamReader implements Callable<String> {
 
+    private int DELAY = 200;
     public static boolean isActive = false;
 
-    public String call() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public String call() {
         String input;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         try {
             isActive = true;
             // wait until we have data to complete a readLine()
             while (!br.ready()) {
-                Thread.sleep(200);
+                Thread.sleep(DELAY);
             }
 
             // only read when a "\n" character is present in the input buffer
             input = br.readLine();
         } catch (InterruptedException e) {
+            // task interrupted
             return null;
         } catch (Exception e) {
             e.printStackTrace();

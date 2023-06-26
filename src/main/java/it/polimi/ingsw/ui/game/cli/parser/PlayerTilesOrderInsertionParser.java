@@ -33,7 +33,7 @@ public class PlayerTilesOrderInsertionParser {
     public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
             Console.outln();
-            Console.out("You have selected:");
+            Console.out("Selection > ");
             // printing tiles and prompting the user to sort them
             tiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
@@ -41,12 +41,12 @@ public class PlayerTilesOrderInsertionParser {
             });
 
             Console.outln();
-            Console.out("Give me your insertion order (the first one is the first to go in the bookshelf).");
-            Console.outln();
-            Console.out("Format: Tile1, Tile2...");
+            Console.out("Type in the tiles in the desired order (the first selected tile is the first to be inserted)\n");
+            Console.out("[Usage: tile1, tile2, ...]\n");
             Console.outln();
 
             String input = Console.in();
+            Console.outln();
 
             // checking that the given text matches the necessary requirements
             String[] tokens = input.split(",");

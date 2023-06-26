@@ -31,4 +31,8 @@ public class AsyncExecutor {
     public static AsyncExecutor newSingleThreadExecutor() {
         return new AsyncExecutor(Executors.newSingleThreadExecutor());
     }
+
+    public static AsyncExecutor newCachedThreadPool() {
+        return new AsyncExecutor(Executors.newCachedThreadPool());
+    }
 }

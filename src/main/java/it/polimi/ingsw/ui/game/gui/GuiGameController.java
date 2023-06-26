@@ -487,7 +487,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 checkAndApplyBoardDarkeningState();
             }
             case ENDED -> {
-                gameEnded();
+                renderEndScreenAndResetUI();
             }
             case STANDBY -> {
                 gameStandby();
@@ -700,7 +700,12 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     // region %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
 
-    public void gameEnded() {
+    @Override
+    public void onGameEnded() {
+        renderEndScreenAndResetUI();
+    }
+
+    public void renderEndScreenAndResetUI() {
         renderEnemySection();
         endTurnRender();
         resetSelectionLabelsAndImages();
@@ -964,7 +969,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         quitButton.setOnMouseClicked(mouseEvent -> {
             //todo
             // if we want to show a ranking anyway, when the game is quit by someone:
-            gameEnded();
+            renderEndScreenAndResetUI();
         });
     }
 

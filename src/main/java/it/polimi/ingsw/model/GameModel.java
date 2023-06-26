@@ -42,12 +42,10 @@ import static java.util.Comparator.comparing;
  */
 public class GameModel implements ModelService, Serializable {
 
-    private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
-
 
     // Game logger
     @Expose(serialize = false)
-    private static final Logger logger = LoggerFactory.getLogger(GameModel.class);
+    private transient final Logger logger = LoggerFactory.getLogger(GameModel.class);
 
     /**
      * Basic game related data
@@ -63,8 +61,7 @@ public class GameModel implements ModelService, Serializable {
     /**
      * Random, stateful extractors for the game
      */
-    @Expose(serialize = false)
-    private transient final TileExtractor tileExtractor = new TileExtractor();
+    private final TileExtractor tileExtractor = new TileExtractor();
 
     @Expose(serialize = false)
     private transient final CommonGoalCardExtractor commonGoalCardExtractor = new CommonGoalCardExtractor();
@@ -77,12 +74,6 @@ public class GameModel implements ModelService, Serializable {
      * Holds the current statuses for the common goal cards.
      */
     private final List<CommonGoalCardStatus> commonGoalCardStatuses = new ArrayList<>();
-
-    /**
-     * External game configuration parameters
-     */
-    @Expose(serialize = false)
-    private transient final LogicConfiguration config = LogicConfiguration.getInstance();
 
     /**
      * Game Status
@@ -293,7 +284,7 @@ public class GameModel implements ModelService, Serializable {
      */
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
         boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
-        boolean isSelectionAmountValid = coordinates.size() <= maxSelectionSize && coordinates.size() > 0;
+        boolean isSelectionAmountValid = coordinates.size() <= LogicConfiguration.getInstance().maxSelectionSize() && coordinates.size() > 0;
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 
@@ -352,7 +343,7 @@ public class GameModel implements ModelService, Serializable {
         }
 
         // Common goal card initialization
-        for (int cardNumber = 1; cardNumber <= config.commonGoalCardAmount(); cardNumber++) {
+        for (int cardNumber = 1; cardNumber <= LogicConfiguration.getInstance().commonGoalCardAmount(); cardNumber++) {
             CommonGoalCard card = commonGoalCardExtractor.extract();
             CommonGoalCardStatus cardStatus = new CommonGoalCardStatus(card, mode);
             commonGoalCardStatuses.add(cardStatus);
@@ -552,24 +543,23 @@ public class GameModel implements ModelService, Serializable {
 
     @Override
     public void onGameEnded() {
-
+        status = ENDED;
     }
 
     @Override
     public String toString() {
-        return "Game{" +
-                "mode=" + mode +
-                ", board=" + board +
-                ", sessions=" + sessions +
-                ", tileExtractor=" + tileExtractor +
-                ", commonGoalCardExtractor=" + commonGoalCardExtractor +
-                ", personalGoalCardExtractor=" + personalGoalCardExtractor +
-                ", commonGoalCardStatuses=" + commonGoalCardStatuses +
-                ", config=" + config +
-                ", status=" + status +
-                ", startingPlayerNumber=" + startingPlayerNumber +
-                ", currentPlayerNumber=" + currentPlayerNumber +
-                ", preStandByGameStatus=" + preStandByGameStatus +
-                '}';
+        return "GameModel{" +
+               "mode=" + mode +
+               ", board=" + board +
+               ", sessions=" + sessions +
+               ", tileExtractor=" + tileExtractor +
+               ", commonGoalCardExtractor=" + commonGoalCardExtractor +
+               ", personalGoalCardExtractor=" + personalGoalCardExtractor +
+               ", commonGoalCardStatuses=" + commonGoalCardStatuses +
+               ", status=" + status +
+               ", startingPlayerNumber=" + startingPlayerNumber +
+               ", currentPlayerNumber=" + currentPlayerNumber +
+               ", preStandByGameStatus=" + preStandByGameStatus +
+               '}';
     }
 }
