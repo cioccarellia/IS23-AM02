@@ -71,11 +71,11 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
                 logger.info("createGameUiAsync(): Starting CLI game");
 
                 executorService.submit(() -> {
-                logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
-                GameGateway game = new CliApp(model, controller, owner);
+                    logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
+                    GameGateway game = new CliApp(model, controller, owner);
 
-                logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
-                controller.onGameUiReady(game);
+                    logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
+                    controller.onGameUiReady(game);
                 });
             }
             case GUI -> {
@@ -116,7 +116,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     /**
      * We need an asynchronous, multithreaded pool because multiple independent calls may be coming in at once
      * and we need to process them in parallel (e.g. chat message while user updates data)
-     * */
+     */
     private final ExecutorService asyncExecutor = Executors.newCachedThreadPool();
 
     /**
@@ -136,7 +136,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         }
     }
 
-    protected ClientController() throws RemoteException {}
+    protected ClientController() throws RemoteException {
+    }
 
 
     ///////////////////////////////////////////////////////////////// Client Lifecycle
@@ -154,17 +155,14 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
 
     @Override
     public void onLobbyUiReady(LobbyGateway lobby) {
-        logger.warn("onLobbyUiReady() started");
+        logger.info("onLobbyUiReady() started");
         this.lobby = lobby;
 
         try {
-            logger.warn("onLobbyUiReady() sending RMI call serverStatusRequest()");
             gateway.serverStatusRequest(identity);
-            logger.warn("onLobbyUiReady() returned RMI call serverStatusRequest()");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        logger.warn("onLobbyUiReady() ended");
     }
 
     @Override
@@ -209,7 +207,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onAcceptConnectionAndFinalizeUsername(String username) {
-        logger.warn("onAcceptConnectionAndFinalizeUsername(username={})", username);
+        logger.info("onAcceptConnectionAndFinalizeUsername(username={})", username);
+
         asyncExecutor.submit(() -> {
             authorize(username);
         });
@@ -224,8 +223,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onServerStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
-        logger.warn("onServerStatusUpdateEvent(status={}, playerInfo={})", status, playerInfo);
-        logger.info("Received status={}, playerInfo={}", status, playerInfo);
+        logger.info("onServerStatusUpdateEvent(status={}, playerInfo={})", status, playerInfo);
 
         asyncExecutor.submit(() -> {
             if (lobby != null) {
@@ -248,7 +246,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
-        logger.warn("onGameCreationReply(result={})", result);
+        logger.info("onGameCreationReply(result={})", result);
         asyncExecutor.submit(() -> {
             lobby.onServerCreationReply(result);
         });
@@ -262,7 +260,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
-        logger.warn("onGameConnectionReply(result={})", result);
+        logger.info("onGameConnectionReply(result={})", result);
 
         asyncExecutor.submit(() -> {
             lobby.onServerConnectionReply(result);
@@ -277,7 +275,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameStartedEvent(GameModel game) {
-        logger.warn("onGameStartedEvent(game={})", game);
+        logger.info("onGameStartedEvent(game={})", game);
 
         asyncExecutor.submit(() -> {
             ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
@@ -292,7 +290,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onModelUpdateEvent(GameModel game) {
-        logger.warn("onModelUpdateEvent(game={})", game);
+        logger.info("onModelUpdateEvent(game={})", game);
 
         asyncExecutor.submit(() -> {
             ui.modelUpdate(game);
@@ -307,7 +305,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
-        logger.warn("onGameSelectionTurnEvent(turnResult={})", turnResult);
+        logger.info("onGameSelectionTurnEvent(turnResult={})", turnResult);
 
         asyncExecutor.submit(() -> {
             ui.onGameSelectionReply(turnResult);
@@ -322,7 +320,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
-        logger.warn("onGameInsertionTurnEvent(turnResult={})", turnResult);
+        logger.info("onGameInsertionTurnEvent(turnResult={})", turnResult);
 
         asyncExecutor.submit(() -> {
             ui.onGameInsertionReply(turnResult);
@@ -337,7 +335,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onPlayerConnectionStatusUpdateEvent(ServerStatus status, List<PlayerInfo> playerInfo) {
-        // logger.warn("onPlayerConnectionStatusUpdateEvent(turnResult={})", playerInfo);
+        // logger.info("onPlayerConnectionStatusUpdateEvent(turnResult={})", playerInfo);
         // not used
     }
 
@@ -356,6 +354,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @Override
     @ClientFunction
     public void onGameEndedEvent() {
+        logger.info("onGameEndedEvent()");
+
         asyncExecutor.submit(() -> {
             ui.onGameEnded();
         });
@@ -369,10 +369,10 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void sendStatusUpdateRequest() {
+        logger.info("sendStatusUpdateRequest()");
+
         try {
-            logger.warn("sendStatusUpdateRequest() sending RMI call serverStatusRequest()");
             gateway.serverStatusRequest(this);
-            logger.warn("sendStatusUpdateRequest() returning RMI call serverStatusRequest()");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -386,10 +386,10 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void sendGameStartRequest(String username, GameMode mode) {
+        logger.info("sendGameStartRequest()");
+
         try {
-            logger.warn("sendGameStartRequest() sending RMI call gameStartRequest({}, {})", username, mode);
             gateway.gameStartRequest(username, mode, config.protocol(), this);
-            logger.warn("sendGameStartRequest() returning RMI call gameStartRequest({}, {})", username, mode);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -402,11 +402,10 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void sendGameConnectionRequest(String username) {
-        try {
-            logger.warn("sendGameConnectionRequest() sending RMI call gameConnectionRequest({})", username);
-            gateway.gameConnectionRequest(username, config.protocol(), this);
+        logger.info("sendGameConnectionRequest()");
 
-            logger.warn("sendGameConnectionRequest() returning RMI call gameConnectionRequest({})", username);
+        try {
+            gateway.gameConnectionRequest(username, config.protocol(), this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -422,6 +421,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void onViewSelection(Set<Coordinate> coordinates) {
+        logger.info("onViewSelection()");
+
         try {
             gateway.gameSelectionTurnResponse(ownerUsername, coordinates);
         } catch (RemoteException e) {
@@ -437,6 +438,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void onViewInsertion(int column, List<Tile> tiles) {
+        logger.info("onViewInsertion()");
+
         try {
             gateway.gameInsertionTurnResponse(ownerUsername, tiles, column);
         } catch (RemoteException e) {
@@ -449,6 +452,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      */
     @Override
     public void onViewSendMessage(String senderUsername, MessageRecipient recipient, String text) {
+        logger.info("onViewSendMessage()");
+
         try {
             gateway.sendTextMessage(senderUsername, recipient, text);
         } catch (RemoteException e) {
@@ -460,7 +465,13 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      * Handles the event when the view requests to quit the game.
      */
     @Override
-    public void onViewQuitGame() {
+    public void onViewQuitGame(String username) {
+        logger.info("onViewQuitGame(username={})", username);
 
+        try {
+            gateway.quitRequest(username);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

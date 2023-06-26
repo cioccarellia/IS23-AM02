@@ -96,6 +96,15 @@ public class RmiClientGateway extends ClientGateway {
     }
 
     @Override
+    public void quitRequest(String username) throws RemoteException {
+        try {
+            rmiServerStub.quitRequest(username);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void keepAlive(String username) {
         try {
             rmiServerStub.keepAlive(username);

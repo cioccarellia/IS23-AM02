@@ -56,11 +56,11 @@ public class CliApp implements GameGateway, Renderable {
         this.handler = handler;
         this.owner = owner;
 
-        chatCommandStreamReader.execute(this::startChatReader);
+        chatCommandStreamReader.execute(this::startChatStdinReader);
     }
 
     Future<String> currentChatCommand;
-    public void startChatReader() {
+    public void startChatStdinReader() {
         while (true) {
             currentChatCommand = chatCommandStreamReader.submit(new AsyncStreamReader());
 
@@ -85,7 +85,7 @@ public class CliApp implements GameGateway, Renderable {
             MessageRecipient recipient = ChatMessageParser.parseMessageRecipient(input.trim());
 
             if (text == null || recipient == null) {
-                logger.warn("Got a malformed message [" + input + "], can't parse recipient and/or text");
+                logger.warn("Got a malformed message=\"" + input + "\", can't parse recipient and/or text");
             } else {
                 handler.onViewSendMessage(owner, recipient, text);
             }
@@ -103,7 +103,7 @@ public class CliApp implements GameGateway, Renderable {
             return;
         }
 
-        Console.out("Hi " + owner + "! Game has started, Enjoy the game and good luck!\n");
+        Console.out("Hi @" + owner + "! Game has started, Enjoy the game and good luck!\n");
 
         render();
     }
@@ -195,7 +195,7 @@ public class CliApp implements GameGateway, Renderable {
         Set<Coordinate> validCoordinates = CoordinatesParser.scan(model);
         handler.onViewSelection(validCoordinates);
 
-        chatCommandStreamReader.execute(this::startChatReader);
+        chatCommandStreamReader.execute(this::startChatStdinReader);
     }
 
     /**
@@ -220,7 +220,7 @@ public class CliApp implements GameGateway, Renderable {
         handler.onViewInsertion(column, orderedTiles);
 
 
-        chatCommandStreamReader.execute(this::startChatReader);
+        chatCommandStreamReader.execute(this::startChatStdinReader);
     }
 
 

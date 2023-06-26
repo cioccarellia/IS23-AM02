@@ -49,7 +49,8 @@ public class Parsers {
                     .registerSubtype(GameSelectionTurnResponse.class, GameSelectionTurnResponse.class.getName())
                     .registerSubtype(ChatTextMessageRequest.class, ChatTextMessageRequest.class.getName())
                     .registerSubtype(ChatModelUpdateEvent.class, ChatModelUpdateEvent.class.getName())
-                    .registerSubtype(GameEndedEventResponse.class, GameEndedEventResponse.class.getName());
+                    .registerSubtype(GameEndedEventResponse.class, GameEndedEventResponse.class.getName())
+                    .registerSubtype(QuitRequest.class, QuitRequest.class.getName());
 
 
     private static final Gson marshaledGson = new GsonBuilder()

@@ -454,6 +454,19 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
+    @Override
+    public void quitRequest(String username) throws RemoteException {
+        logger.info("quitRequest(username={})", username);
+        connectionsManager.registerInteraction(username);
+
+        gameModel.onGameEnded();
+
+        asyncExecutor.async(() -> {
+            router.broadcast().onGameEndedEvent();
+        });
+    }
+
+
 
     private synchronized PlayerSession processNextPlayer() {
         PlayerNumber currentPlayerNumber = gameModel.getCurrentPlayerSession().getPlayerNumber();
@@ -535,9 +548,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 });
             }
         }
-
-
     }
+
 
     @Override
     public synchronized void onConnectionChange() {
@@ -623,6 +635,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             });
         }
     }
+
 
 
     @Override

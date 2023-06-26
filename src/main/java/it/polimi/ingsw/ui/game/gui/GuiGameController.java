@@ -444,7 +444,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 // current player settings
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
-                    case IDLE -> {}
+                    case IDLE -> {
+                    }
                     case SELECTING -> {
                         statusLabel.setText("Selection for @" + currentPlayerSession().getUsername());
                     }
@@ -648,7 +649,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     /**
      *
-     * */
+     */
     private void onSelectedTilesClickHandler(int index, ImageView selectedTileImageView, Label selectedTextLabel) {
         logger.info("onSelectedTilesClickHandler(index={}, selectedTileImageView={})", index, selectedTileImageView);
         List<Tile> playerSelectedTiles = model.getPlayerSession(owner).getPlayerTileSelection().getSelectedTiles().stream().toList();
@@ -699,19 +700,23 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // endregion %%%%%%%%%%%%%%% Insertion phase %%%%%%%%%%%%%%%%%%%
 
     // region %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
-
     @Override
     public void onGameEnded() {
         renderEndScreenAndResetUI();
     }
 
+    boolean hasAlreadyShownScore = false;
     public void renderEndScreenAndResetUI() {
-        renderEnemySection();
-        endTurnRender();
-        resetSelectionLabelsAndImages();
-        disableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
+        if (!hasAlreadyShownScore) {
+            hasAlreadyShownScore = true;
 
-        renderRanking(model.getRankings());
+            renderEnemySection();
+            endTurnRender();
+            resetSelectionLabelsAndImages();
+            enableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
+
+            renderRanking(model.getRankings());
+        }
     }
 
     // endregion %%%%%%%%%%%%%%% Game ended %%%%%%%%%%%%%%%%%%%
@@ -967,9 +972,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // quit button listener
     public void setQuitButtonListener() {
         quitButton.setOnMouseClicked(mouseEvent -> {
-            //todo
-            // if we want to show a ranking anyway, when the game is quit by someone:
-            renderEndScreenAndResetUI();
+            handler.onViewQuitGame(owner);
         });
     }
 

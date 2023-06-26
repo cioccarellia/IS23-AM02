@@ -126,15 +126,12 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
             case ServerStatusRequestReply s -> controller.onServerStatusUpdateEvent(s.getStatus(), s.getPlayerInfo());
             case GameStartedEvent e -> controller.onGameStartedEvent(e.getGame());
             case ModelUpdateEvent e -> controller.onModelUpdateEvent(e.getGame());
-            case GameSelectionTurnResponse r -> {
-                controller.onGameSelectionTurnEvent(r.seal());
-            }
-            case GameInsertionTurnResponse r -> {
-                controller.onGameInsertionTurnEvent(r.seal());
-            }
-            case ChatModelUpdateEvent r -> {
-                controller.onChatModelUpdate(r.getMessages());
-            }
+            case GameSelectionTurnResponse r -> controller.onGameSelectionTurnEvent(r.seal());
+            case GameInsertionTurnResponse r -> controller.onGameInsertionTurnEvent(r.seal());
+            case QuitRequest r -> controller.onViewQuitGame(r.getUsername());
+            case ChatModelUpdateEvent r -> controller.onChatModelUpdate(r.getMessages());
+            case GameEndedEventResponse r -> controller.onGameEndedEvent();
+
             case null, default ->
                     throw new IllegalArgumentException("Message type not handled, message=" + incomingMessage);
         }
@@ -181,6 +178,13 @@ public class TcpClientGateway extends ClientGateway implements Runnable, Closeab
         GameInsertionTurnRequest message = new GameInsertionTurnRequest(username, tiles, column);
 
         SocketSystem.sendAsync(socketOut, message, GameInsertionTurnRequest.class);
+    }
+
+    @Override
+    public void quitRequest(String username) throws RemoteException {
+        QuitRequest message = new QuitRequest(username);
+
+        SocketSystem.sendAsync(socketOut, message, QuitRequest.class);
     }
 
     @Override

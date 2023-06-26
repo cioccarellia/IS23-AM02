@@ -69,6 +69,12 @@ public interface ServerService extends Remote {
     void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException;
 
     /**
+     * Closes the game
+     * */
+    @ServerFunction
+    void quitRequest(String username) throws RemoteException;
+
+    /**
      * Sends an acknowledgement message.
      */
     @ServerFunction

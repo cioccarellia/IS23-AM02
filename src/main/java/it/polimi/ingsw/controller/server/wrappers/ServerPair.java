@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.rmi.RemoteException;
 
+/**
+ * Starts both TCP and RMI servers
+ * */
 public class ServerPair {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerPair.class);

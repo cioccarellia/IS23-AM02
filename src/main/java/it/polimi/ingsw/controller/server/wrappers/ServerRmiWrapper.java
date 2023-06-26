@@ -109,6 +109,15 @@ public class ServerRmiWrapper extends ServerWrapper implements ServerService {
     }
 
     @Override
+    public void quitRequest(String username) throws RemoteException {
+        try {
+            controller.quitRequest(username);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void keepAlive(String username) {
         try {
             controller.keepAlive(username);

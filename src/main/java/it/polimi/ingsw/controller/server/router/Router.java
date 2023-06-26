@@ -36,10 +36,10 @@ public class Router {
 
 
     public ClientService broadcastExcluding(AsyncExecutor asyncExecutor, List<String> usernames) {
-        return new BroadcastClientService(support, usernames);
+        return new BroadcastClientService(support, usernames, asyncExecutor);
     }
 
     public ClientService broadcastExcluding(AsyncExecutor asyncExecutor, String... usernames) {
-        return new BroadcastClientService(support, List.of(usernames));
+        return new BroadcastClientService(support, List.of(usernames), asyncExecutor);
     }
 }

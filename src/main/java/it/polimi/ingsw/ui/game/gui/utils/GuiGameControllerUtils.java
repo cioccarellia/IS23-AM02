@@ -118,6 +118,30 @@ public class GuiGameControllerUtils {
         }
     }
 
+    public static void enableDarkeningEffectForAllTiles(GridPane gridBoard, Board board) {
+        Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                // if either no image is present or board doesn't have any content for (i,j)
+                if (gridPaneNodes[i][j] == null) {
+                    continue;
+                }
+
+                // checks if the tile is present
+                if (board.getTileAt(i, j).isEmpty()) {
+                    continue;
+                }
+
+                // ImageView containing our bookshelf tile[i][j]
+                ImageView imageView = (ImageView) gridPaneNodes[i][j];
+
+                // un-darkens all the tiles
+                enableDarkeningEffect(imageView);
+            }
+        }
+    }
+
     public static void makeNonSelectableTilesDark(GridPane gridBoard, GameModel game, Set<Coordinate> selectedCoordinates) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
 

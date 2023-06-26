@@ -32,5 +32,5 @@ public interface GameViewEventHandler {
     /**
      * User has quit the game
      */
-    void onViewQuitGame();
+    void onViewQuitGame(String username);
 }

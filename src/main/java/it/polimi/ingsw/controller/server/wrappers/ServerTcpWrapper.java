@@ -45,6 +45,7 @@ public class ServerTcpWrapper extends ServerWrapper {
                     controller.sendTextMessage(text.senderUsername(), text.recipient(), text.text());
                 }
                 case KeepAlive r -> controller.keepAlive(r.getUsername());
+                case QuitRequest r -> controller.quitRequest(r.getUsername());
                 case null, default -> throw new IllegalArgumentException("Message type not handled");
             }
         } catch (RemoteException e) {

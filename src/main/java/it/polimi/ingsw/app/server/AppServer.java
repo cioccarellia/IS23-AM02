@@ -30,13 +30,12 @@ public class AppServer {
 
     public AppServer(String serverAddress, int tcpPort, int rmiPort) {
         logger.info("Starting AppServer, serverAddress={}, tcpPort={}, rmiPort={}", serverAddress, tcpPort, rmiPort);
-        pair = new ServerPair(controller, connectionsManager, serverAddress, tcpPort, rmiPort);
 
+        pair = new ServerPair(controller, connectionsManager, serverAddress, tcpPort, rmiPort);
         pair.bindAndStartServers();
 
         initializeServerThreads();
     }
-
 
     private void initializeServerThreads() {
         ServerNetworkLayer.scheduleTimeoutThread(controller);
