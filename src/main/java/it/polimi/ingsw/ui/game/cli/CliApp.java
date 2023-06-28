@@ -103,7 +103,8 @@ public class CliApp implements GameGateway, Renderable {
             return;
         }
 
-        Console.out("Hi @" + owner + "! Game has started, Enjoy the game and good luck!\n");
+        System.out.print("Hi @" + owner + "! Game has started, Enjoy the game and good luck!\n");
+        System.out.flush();
 
         render();
     }
@@ -133,16 +134,21 @@ public class CliApp implements GameGateway, Renderable {
     @Override
     public void render() {
         if (model == null) {
-            Console.out(Chalk.on("Void model.").bgRed().toString());
+            System.out.print(Chalk.on("Void model.").bgRed().toString());
+            System.out.flush();
             return;
         }
 
-        Console.printnl(100);
+        for (int i = 0; i < 100; i++) {
+            System.out.println();
+        }
 
         int messagesToShow = Math.min(messages.size(), 10);
 
         if (messagesToShow > 0) {
-            Console.out("Latest " + messagesToShow + " messages:\n");
+            System.out.print("Latest " + messagesToShow + " messages:\n");
+            System.out.flush();
+
             ChatPrinter.printLastNMessages(messages, owner, messagesToShow);
         }
 
@@ -150,17 +156,19 @@ public class CliApp implements GameGateway, Renderable {
             case RUNNING, LAST_ROUND -> {
                 PlayerSession currentPlayer = model.getCurrentPlayerSession();
                 boolean isOwnerTurn = currentPlayer.getUsername().equals(owner);
-                Console.outln();
+                System.out.println();
 
                 BoardPrinter.print(model.getBoard());
                 CommonGoalCardsPrinter.print(model.getCommonGoalCards());
-                Console.printnl(2);
+
+                System.out.println();
+                System.out.println();
 
                 PersonalGoalCardPrinter.print(model.getSessions().getByUsername(owner).getPersonalGoalCard());
-                Console.outln();
+                System.out.println();
 
                 BookshelvesPrinter.print(model);
-                Console.outln();
+                System.out.println();
 
                 if (isOwnerTurn) {
                     switch (currentPlayer.getPlayerCurrentGamePhase()) {
@@ -175,8 +183,9 @@ public class CliApp implements GameGateway, Renderable {
                         }
                     }
                 } else {
-                    Console.out("@" + currentPlayer.getUsername() + " is " + currentPlayer.getPlayerCurrentGamePhase().toString().toLowerCase());
-                    Console.outln();
+                    System.out.print("@" + currentPlayer.getUsername() + " is " + currentPlayer.getPlayerCurrentGamePhase().toString().toLowerCase());
+                    System.out.flush();
+                    System.out.println();
                 }
             }
             case ENDED -> onGameEnded();
@@ -264,10 +273,11 @@ public class CliApp implements GameGateway, Renderable {
      */
     @Override
     public void onGameEnded() {
-        Console.out("""
+        System.out.print("""
                 The game has ended.
                 Here's the player's ranking with their points:
                 """);
+        System.out.flush();
 
         List<PlayerScore> playersRanking = model.getRankings();
 
@@ -275,6 +285,7 @@ public class CliApp implements GameGateway, Renderable {
     }
 
     private void onGameStandby() {
-        Console.out("Game standby.\n");
+        System.out.print("Game standby.\n");
+        System.out.flush();
     }
 }

@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.player.PlayerSession;
-import it.polimi.ingsw.ui.game.cli.Console;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -38,58 +37,67 @@ public class BookshelvesPrinter {
                 stream().
                 toList();
 
-        Console.outln();
-        Console.out("Bookshelves:");
-        Console.outln();
+        System.out.println();
+        System.out.print("Bookshelves:");
+        System.out.flush();
+        System.out.println();
 
         for (int i = 0; i < dim; i++) {
-            Console.out("    0  1  2  3  4      ");
+            System.out.print("    0  1  2  3  4      ");
+            System.out.flush();
         }
 
-        Console.outln();
+        System.out.println();
 
         for (int i = 0; i < rows; i++) {
             for (int k = 0; k < dim; k++) {
-                Console.out(i);
-                Console.out("  ");
+                System.out.print(i + "  ");
+                System.out.flush();
 
                 for (int j = 0; j < cols; j++) {
                     if (bookshelves.get(k)[i][j] != null) {
-                        Console.out(" " + TilePrinter.print(bookshelves.get(k)[i][j]) + " ");
+                        System.out.print(" " + TilePrinter.print(bookshelves.get(k)[i][j]) + " ");
+                        System.out.flush();
                     } else
-                        Console.printspace(3);
+                        System.out.print("   ");
                 }
 
-                Console.out("  |  ");
+                System.out.print("  |  ");
+                System.out.flush();
             }
-            Console.outln();
+            System.out.println();
         }
 
         for (int i = 0; i < dim; i++) {
             String username = players.get(i).getUsername();
             if (players.get(i).getPlayerNumber() == game.getStartingPlayerNumber()) {
-                Console.out(Chalk.on("F ").red().toString());
+                System.out.print(Chalk.on("F ").red().toString());
+                System.out.flush();
             } else
-                Console.printspace(2);
+                System.out.print("  ");
 
             if (players.get(i).getPlayerNumber() == game.getCurrentPlayerSession().getPlayerNumber()) {
                 var x = Chalk.on("@" + username).bgMagenta().toString();
-                Console.out(StringUtils.rightPad(x, 29, " "));
+                System.out.print(StringUtils.rightPad(x, 29, " "));
+                System.out.flush();
             } else {
-                Console.out(StringUtils.rightPad("@" + username, 19, " "));
+                System.out.print(StringUtils.rightPad("@" + username, 19, " "));
+                System.out.flush();
             }
 
-            Console.printspace(2);
+            System.out.print("  ");
         }
 
-        Console.outln();
+        System.out.println();
 
         for (int i = 0; i < dim; i++) {
-            Console.out("  Tokens:");
+            System.out.print("  Tokens:");
+            System.out.flush();
             var x = players.get(i).getAcquiredTokens().toString();
 
-            Console.out(StringUtils.rightPad(x, 14, " "));
+            System.out.print(StringUtils.rightPad(x, 14, " "));
+            System.out.flush();
         }
-        Console.outln();
+        System.out.println();
     }
 }

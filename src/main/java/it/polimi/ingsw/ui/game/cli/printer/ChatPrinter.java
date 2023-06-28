@@ -2,7 +2,6 @@ package it.polimi.ingsw.ui.game.cli.printer;
 
 import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.model.chat.ChatTextMessage;
-import it.polimi.ingsw.ui.game.cli.Console;
 
 import java.util.Comparator;
 import java.util.List;
@@ -58,12 +57,14 @@ public class ChatPrinter {
             case it.polimi.ingsw.model.chat.MessageRecipient.Broadcast broadcast -> {
                 sb.append("[").append(message.senderUsername()).append("]: ").append(message.text()).append("\n");
                 var chalk = Chalk.on(sb.toString()).bgGreen().toString();
-                Console.out(chalk);
+                System.out.print(chalk);
+                System.out.flush();
             }
             case it.polimi.ingsw.model.chat.MessageRecipient.Direct direct -> {
                 sb.append("[").append(message.senderUsername()).append(" -> ").append(direct.username()).append("]: ").append(message.text()).append("\n");
                 var chalk = Chalk.on(sb.toString()).bgBlue().toString();
-                Console.out(chalk);
+                System.out.print(chalk);
+                System.out.flush();
             }
         }
     }

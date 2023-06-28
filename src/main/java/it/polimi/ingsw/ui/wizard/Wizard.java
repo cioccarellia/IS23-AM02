@@ -1,15 +1,16 @@
 package it.polimi.ingsw.ui.wizard;
 
 import it.polimi.ingsw.launcher.parameters.*;
-import it.polimi.ingsw.ui.game.cli.Console;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Scanner;
 
 import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 
 public class Wizard {
+    private static final Scanner scanner = new Scanner(System.in);
 
     /**
      * Lunches the wizard and acquires the parameters from the user
@@ -70,7 +71,7 @@ public class Wizard {
         while (true) {
             System.out.println("Select app launch target: [SERVER, CLIENT]: ");
 
-            String modeValueFromUser = Console.in();
+            String modeValueFromUser = scanner.nextLine();
 
             if (modeValueFromUser.equalsIgnoreCase("s") || modeValueFromUser.toLowerCase().contains("server") || modeValueFromUser.equalsIgnoreCase("1")) {
                 return AppLaunchTarget.SERVER;
@@ -93,7 +94,7 @@ public class Wizard {
         while (true) {
             System.out.println("Select client UI [CLI, GUI]: ");
 
-            String modeValueFromUser = Console.in();
+            String modeValueFromUser = scanner.nextLine();
 
             if (modeValueFromUser.equalsIgnoreCase("gui") || modeValueFromUser.equalsIgnoreCase("1")) {
                 return ClientUiMode.GUI;
@@ -115,7 +116,7 @@ public class Wizard {
         while (true) {
             System.out.println("Select protocol [TCP, RMI]: ");
 
-            String protocolValueFromUser = Console.in();
+            String protocolValueFromUser = scanner.nextLine();
 
             if (protocolValueFromUser.equalsIgnoreCase("tcp") || protocolValueFromUser.equalsIgnoreCase("1")) {
                 return ClientProtocol.TCP;
@@ -137,7 +138,7 @@ public class Wizard {
         while (true) {
             System.out.println("Select TCP port [1024, 65535]: ");
 
-            String tcpPortValueFromUser = Console.in();
+            String tcpPortValueFromUser = scanner.nextLine();
 
             if (isPortValid(tcpPortValueFromUser))
                 return Integer.parseInt(tcpPortValueFromUser);
@@ -156,7 +157,7 @@ public class Wizard {
         while (true) {
             System.out.println("Select RMI port [1024, 65535]: ");
 
-            String rmiPortValueFromUser = Console.in();
+            String rmiPortValueFromUser = scanner.nextLine();
 
             if (isPortValid(rmiPortValueFromUser))
                 return Integer.parseInt(rmiPortValueFromUser);
@@ -176,7 +177,7 @@ public class Wizard {
         while (true) {
             System.out.println("Select server IP address: ");
 
-            String serverValueFromUser = Console.in();
+            String serverValueFromUser = scanner.nextLine();
 
             if (!serverValueFromUser.isBlank()) {
                 return serverValueFromUser;

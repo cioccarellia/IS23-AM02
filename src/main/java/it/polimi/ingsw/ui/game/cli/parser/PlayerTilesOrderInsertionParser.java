@@ -1,16 +1,17 @@
 package it.polimi.ingsw.ui.game.cli.parser;
 
 import it.polimi.ingsw.model.board.Tile;
-import it.polimi.ingsw.ui.game.cli.Console;
 import it.polimi.ingsw.ui.game.cli.printer.TilePrinter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static it.polimi.ingsw.model.board.Tile.*;
 
 public class PlayerTilesOrderInsertionParser {
+    private static final Scanner scanner = new Scanner(System.in);
 
     final private static List<String> acceptableCharacters = List.
             of("B", "C", "G", "P", "T", "F", "b", "c", "g", "p", "t", "f");
@@ -32,29 +33,34 @@ public class PlayerTilesOrderInsertionParser {
      */
     public static List<Tile> scan(List<Tile> tiles) {
         while (true) {
-            Console.outln();
-            Console.out("Selection > ");
+            System.out.println();
+            System.out.print("Selection > ");
+            System.out.flush();
             // printing tiles and prompting the user to sort them
             tiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
-                Console.out(" " + tileText);
+                System.out.print(" " + tileText);
+                System.out.flush();
             });
 
-            Console.outln();
-            Console.out("Type in the tiles in the desired order (the first selected tile is the first to be inserted)\n");
-            Console.out("[Usage: tile1, tile2, ...]\n");
-            Console.outln();
+            System.out.println();
+            System.out.print("Type in the tiles in the desired order (the first selected tile is the first to be inserted)\n");
+            System.out.flush();
+            System.out.print("[Usage: tile1, tile2, ...]\n");
+            System.out.flush();
+            System.out.println();
 
-            String input = Console.in();
-            Console.outln();
+            String input = scanner.nextLine();
+            System.out.println();
 
             // checking that the given text matches the necessary requirements
             String[] tokens = input.split(",");
 
             if (tokens.length != tiles.size()) {
-                Console.outln();
-                Console.out("Tiles not valid, you need to order the selected tiles from before.");
-                Console.outln();
+                System.out.println();
+                System.out.print("Tiles not valid, you need to order the selected tiles from before.");
+                System.out.flush();
+                System.out.println();
                 continue;
             }
 
@@ -76,8 +82,9 @@ public class PlayerTilesOrderInsertionParser {
                         case "F", "f" -> orderedTiles.add(FRAME);
                     }
                 } else {
-                    Console.out("You need to write at least one tile.");
-                    Console.outln();
+                    System.out.print("You need to write at least one tile.");
+                    System.out.flush();
+                    System.out.println();
                     check = false;
                     break;
                 }
@@ -90,9 +97,10 @@ public class PlayerTilesOrderInsertionParser {
             if (orderedTiles.containsAll(tiles) && tiles.containsAll(orderedTiles)) {
                 return orderedTiles;
             } else {
-                Console.outln();
-                Console.out("Tiles not valid, you need to order the selected tiles from before.");
-                Console.outln();
+                System.out.println();
+                System.out.print("Tiles not valid, you need to order the selected tiles from before.");
+                System.out.flush();
+                System.out.println();
             }
         }
     }

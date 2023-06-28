@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.Board;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.board.BoardConfiguration;
-import it.polimi.ingsw.ui.game.cli.Console;
 
 import java.util.Optional;
 
@@ -17,13 +16,14 @@ public class BoardPrinter {
      * @param board board that needs printing
      */
     public static void print(Board board) {
-        Console.outln();
-        Console.out("   0  1  2  3  4  5  6  7  8 ");
-        Console.outln();
+        System.out.println();
+        System.out.print("   0  1  2  3  4  5  6  7  8 ");
+        System.out.flush();
+        System.out.println();
 
         for (int i = 0; i < dimension; i++) {
-            Console.out(i);
-            Console.out(" ");
+            System.out.print(i + " ");
+            System.out.flush();
 
             for (int j = 0; j < dimension; j++) {
 
@@ -34,15 +34,17 @@ public class BoardPrinter {
                     Tile tile = tileOpt.get();
                     String tileText = TilePrinter.print(tile);
 
-                    Console.out(" " + tileText + " ");
+                    System.out.print(" " + tileText + " ");
+                    System.out.flush();
                 } else {
-                    Console.out("   ");
+                    System.out.print("   ");
+                    System.out.flush();
                 }
 
             }
-            Console.outln();
+            System.out.println();
         }
 
-        Console.outln();
+        System.out.println();
     }
 }

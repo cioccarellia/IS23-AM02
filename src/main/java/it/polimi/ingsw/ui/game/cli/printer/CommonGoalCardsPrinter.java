@@ -3,7 +3,6 @@ package it.polimi.ingsw.ui.game.cli.printer;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
 import it.polimi.ingsw.model.game.goal.CommonGoalCardStatus;
 import it.polimi.ingsw.model.game.goal.Token;
-import it.polimi.ingsw.ui.game.cli.Console;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -20,14 +19,15 @@ public class CommonGoalCardsPrinter {
      * @param cards status of common goal cards, within the game that is being played
      */
     public static void print(List<CommonGoalCardStatus> cards) {
-        Console.outln();
+        System.out.println();
         int dim = cards.size();
         for (CommonGoalCardStatus card : cards) {
             setExampleMatrices(card);
         }
 
-        Console.out("Common goal cards (the tiles' disposition is just a general description of the card):");
-        Console.outln();
+        System.out.print("Common goal cards (the tiles' disposition is just a general description of the card):");
+        System.out.flush();
+        System.out.println();
 
         for (int i = 0; i < dim; i++) {
             var x = exampleMatrices
@@ -38,39 +38,45 @@ public class CommonGoalCardsPrinter {
                     .toString()
                     .toLowerCase();
 
-            Console.out(StringUtils.rightPad(x, 23, " "));
+            System.out.print(StringUtils.rightPad(x, 23, " "));
+            System.out.flush();
         }
 
-        Console.outln();
+        System.out.println();
 
         for (int i = 0; i < dim; i++) {
-            Console.out("    0  1  2  3  4      ");
+            System.out.print("    0  1  2  3  4      ");
+            System.out.flush();
         }
 
-        Console.outln();
+        System.out.println();
 
         for (int i = 0; i < rows; i++) {
             for (int k = 0; k < dim; k++) {
-                Console.out(i);
-                Console.out("  ");
+                System.out.print(i + "  ");
+                System.out.flush();
 
                 for (int j = 0; j < cols; j++) {
                     var tile = exampleMatrices.get(k).bookshelf()[i][j];
                     if (tile != null) {
-                        Console.out(" " + TilePrinter.print(tile) + " ");
-                    } else
-                        Console.out("   ");
+                        System.out.print(" " + TilePrinter.print(tile) + " ");
+                        System.out.flush();
+                    } else {
+                        System.out.print("   ");
+                        System.out.flush();
+                    }
                 }
-
-                Console.out("     ");
+                System.out.print("     ");
+                System.out.flush();
             }
-            Console.outln();
+            System.out.println();
         }
 
-        Console.outln();
+        System.out.println();
 
         for (int i = 0; i < dim; i++) {
-            Console.out("  Tokens:");
+            System.out.print("  Tokens:");
+            System.out.flush();
             var x = exampleMatrices
                     .get(i)
                     .status()
@@ -80,10 +86,11 @@ public class CommonGoalCardsPrinter {
                     .toList()
                     .toString();
 
-            Console.out(StringUtils.rightPad(x, 14, " "));
+            System.out.print(StringUtils.rightPad(x, 14, " "));
+            System.out.flush();
         }
 
-        Console.outln();
+        System.out.println();
 
     }
 

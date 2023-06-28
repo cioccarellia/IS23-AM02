@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ui.game.cli.splash;
 
 import com.github.tomaslanger.chalk.Chalk;
-import it.polimi.ingsw.ui.game.cli.Console;
 import it.polimi.ingsw.utils.CollectionUtils;
 
 import java.util.Arrays;
@@ -261,7 +260,8 @@ public class SplashScreen {
         String out = CollectionUtils.extractRandomElement(screens);
         String colored = randomizeColor(out);
 
-        Console.out(colored);
+        System.out.print(colored);
+        System.out.flush();
     }
 
 

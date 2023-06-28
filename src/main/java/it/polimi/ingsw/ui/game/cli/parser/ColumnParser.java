@@ -3,12 +3,14 @@ package it.polimi.ingsw.ui.game.cli.parser;
 import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
-import it.polimi.ingsw.ui.game.cli.Console;
 import it.polimi.ingsw.ui.game.cli.printer.TilePrinter;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class ColumnParser {
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final int rows = BookshelfConfiguration.getInstance().rows();
     private static final int cols = BookshelfConfiguration.getInstance().cols();
 
@@ -19,26 +21,31 @@ public class ColumnParser {
      */
     public static int scan(Tile[][] bookshelf, List<Tile> selectedTiles) {
         while (true) {
-            Console.outln();
-            Console.out("Select the column for insertion >");
+            System.out.println();
+            System.out.print("Select the column for insertion >");
+            System.out.flush();
 
             selectedTiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
-                Console.out(" " + tileText);
+                System.out.print(" " + tileText);
+                System.out.flush();
+
             });
 
-            Console.outln();
+            System.out.println();
 
             int column = -1;
 
             try {
-                column = Integer.parseInt(Console.in());
+                column = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException ignored) {}
 
             if (column < 0 || column > cols) {
-                Console.out(Chalk.on("Selected column out of bounds, choose a number between 0 and 4.").bgYellow().toString());
+                System.out.print(Chalk.on("Selected column out of bounds, choose a number between 0 and 4.").bgYellow().toString());
+                System.out.flush();
             } else if (!itFits(bookshelf, selectedTiles.size(), column)) {
-                Console.out(Chalk.on("Selected column does not have enough space to house your selection.").bgYellow().toString());
+                System.out.print(Chalk.on("Selected column does not have enough space to house your selection.").bgYellow().toString());
+                System.out.flush();
             } else {
                 return column;
             }
