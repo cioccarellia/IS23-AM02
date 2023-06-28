@@ -23,6 +23,6 @@
 | GUI            |  🟢   |
 | CLI            |  🟢   |
 | Multiple games |  🔴   |
-| Persistence    |  🟡   |
+| Persistence    |  🟢   |
 | Resilience     |  🟡   |
 | Chat           |  🟢   |

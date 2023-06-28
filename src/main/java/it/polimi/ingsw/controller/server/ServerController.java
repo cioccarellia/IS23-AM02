@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.app.model.PlayerInfo;
 import it.polimi.ingsw.app.server.ClientConnectionsManager;
+import it.polimi.ingsw.app.server.storage.StorageManager;
 import it.polimi.ingsw.controller.server.async.AsyncExecutor;
 import it.polimi.ingsw.controller.server.connection.PeriodicConnectionAwareComponent;
 import it.polimi.ingsw.controller.server.model.ServerStatus;
@@ -62,6 +63,11 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private final ClientConnectionsManager connectionsManager;
 
     /**
+     * Handles record creation/deletion/reading
+     * */
+    private final StorageManager storageManager;
+
+    /**
      * Routes asynchronous client responses to their destination
      */
     private final Router router;
@@ -87,8 +93,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private final AsyncExecutor asyncExecutor = AsyncExecutor.newCachedThreadPool();
 
 
-    public ServerController(ClientConnectionsManager manager) {
-        connectionsManager = manager;
+    public ServerController(ClientConnectionsManager connectionsManager, StorageManager storageManager) {
+        this.connectionsManager = connectionsManager;
+        this.storageManager = storageManager;
+
         router = new Router(connectionsManager);
     }
 
@@ -104,6 +112,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 .stream()
                 .map(user -> new PlayerInfo(user.getUsername(), user.getStatus(), user.isHost()))
                 .toList();
+    }
+
+    private void saveModelToPersistentStorage() {
+        storageManager.save(connectionsManager.getUsernames(), gameModel);
     }
 
 
@@ -308,6 +320,17 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             // broadcast the game model with all users to everybody, only if the game has started.
             // This will display the main game UI
 
+
+            // bonus: we discard and load a file-saved model if the usernames are recognized to be part of a past game
+            GameModel matchingGame = storageManager.load(connectionsManager.getUsernames());
+
+            if (matchingGame != null) {
+                // we override the game
+                gameModel = matchingGame;
+            } else {
+                // no game found, proceed with empty
+            }
+
             asyncExecutor.async(() -> {
                 router.broadcast().onGameStartedEvent(gameModel);
             });
@@ -315,9 +338,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // log an interaction for the requiring user
-        asyncExecutor.async(() -> {
-            connectionsManager.registerInteraction(username);
-        });
+        connectionsManager.registerInteraction(username);
     }
 
 
@@ -374,6 +395,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         asyncExecutor.async(() -> {
             router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
         });
+
+        saveModelToPersistentStorage();
     }
 
 
@@ -451,6 +474,11 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         asyncExecutor.async(() -> {
             router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
         });
+
+        storageManager.save(connectionsManager.getUsernames(), gameModel);
+
+
+        saveModelToPersistentStorage();
     }
 
 

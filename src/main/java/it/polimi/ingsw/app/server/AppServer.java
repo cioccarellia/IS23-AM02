@@ -1,6 +1,7 @@
 package it.polimi.ingsw.app.server;
 
 import it.polimi.ingsw.app.server.network.ServerNetworkLayer;
+import it.polimi.ingsw.app.server.storage.StorageManager;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.controller.server.wrappers.ServerPair;
 import org.slf4j.Logger;
@@ -18,10 +19,16 @@ public class AppServer {
      */
     ClientConnectionsManager connectionsManager = new ClientConnectionsManager();
 
+
+    /**
+     * Handles record creation/deletion/reading
+     * */
+    StorageManager storageManager = new StorageManager();
+
     /**
      * Root controller
      */
-    ServerController controller = new ServerController(connectionsManager);
+    ServerController controller = new ServerController(connectionsManager, storageManager);
 
     /**
      * RMI and TCP active servers
