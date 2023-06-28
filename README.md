@@ -20,9 +20,9 @@
 | Complete rules |  🟢   |
 | Socket         |  🟢   |
 | RMI            |  🟢   |
-| GUI            |  🟡   |
+| GUI            |  🟢   |
 | CLI            |  🟢   |
 | Multiple games |  🔴   |
 | Persistence    |  🟡   |
 | Resilience     |  🟡   |
-| Chat           |  🟡   |
+| Chat           |  🟢   |
