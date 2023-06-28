@@ -38,7 +38,7 @@ public class CliApp implements GameGateway, Renderable {
 
     /**
      * Keeps a reference to the game model
-     * */
+     */
     private GameModel model;
     private ServerStatus status;
     private List<PlayerInfo> playerInfo;
@@ -60,6 +60,7 @@ public class CliApp implements GameGateway, Renderable {
     }
 
     Future<String> currentChatCommand;
+
     public void startChatStdinReader() {
         while (true) {
             currentChatCommand = chatCommandStreamReader.submit(new AsyncStreamReader());
@@ -91,7 +92,6 @@ public class CliApp implements GameGateway, Renderable {
             }
         }
     }
-
 
 
     /**
@@ -270,10 +270,26 @@ public class CliApp implements GameGateway, Renderable {
                 The game has ended.
                 Here's the player's ranking with their points:
                 """);
-
         List<PlayerScore> playersRanking = model.getRankings();
+        Console.out("Player:          Token points:          Personal goal card points:          Bookshelf points:\n");
+        Console.out("\n");
+        for (int i = 0; i < playersRanking.size(); i++) {
 
-        playersRanking.forEach(System.out::println);
+            Console.out(playersRanking.get(i).username());
+            cliFormatiPrinter.printSpaceAfterUsername(playersRanking.get(i).username().length());
+
+            Console.out(playersRanking.get(i).getTokenPoints());
+            cliFormatiPrinter.printSpaceAfterTokenPoints(playersRanking.get(i).getTokenPoints());
+
+            Console.out(playersRanking.get(i).getPersonalGoalCardsPoints());
+            cliFormatiPrinter.printSpaceAfterPersonalGoalCardPoints(playersRanking.get(i).getPersonalGoalCardsPoints());
+
+            Console.out(playersRanking.get(i).getBookshelfPoints());
+            cliFormatiPrinter.printSpaceAfterBookshelfPoints(playersRanking.get(i).getBookshelfPoints());
+            Console.out("\n");
+        }
+
+        //playersRanking.forEach(System.out::println);
     }
 
     private void onGameStandby() {
