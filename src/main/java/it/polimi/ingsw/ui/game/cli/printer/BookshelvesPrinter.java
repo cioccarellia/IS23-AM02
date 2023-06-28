@@ -57,7 +57,7 @@ public class BookshelvesPrinter {
                     if (bookshelves.get(k)[i][j] != null) {
                         Console.out(" " + TilePrinter.print(bookshelves.get(k)[i][j]) + " ");
                     } else
-                        Console.out("   ");
+                        Console.printspace(3);
                 }
 
                 Console.out("  |  ");
@@ -70,8 +70,7 @@ public class BookshelvesPrinter {
             if (players.get(i).getPlayerNumber() == game.getStartingPlayerNumber()) {
                 Console.out(Chalk.on("F ").red().toString());
             } else
-                Console.out("  ");
-
+                Console.printspace(2);
 
             if (players.get(i).getPlayerNumber() == game.getCurrentPlayerSession().getPlayerNumber()) {
                 var x = Chalk.on("@" + username).bgMagenta().toString();
@@ -80,7 +79,7 @@ public class BookshelvesPrinter {
                 Console.out(StringUtils.rightPad("@" + username, 19, " "));
             }
 
-            Console.out("  ");
+            Console.printspace(2);
         }
 
         Console.outln();

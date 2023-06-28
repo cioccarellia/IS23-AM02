@@ -38,4 +38,11 @@ public class Console {
             System.out.println();
         }
     }
+
+    public static void printspace(int times) {
+        assert times > 0;
+        for (int i = 0; i < times; i++) {
+            System.out.print(" ");
+        }
+    }
 }

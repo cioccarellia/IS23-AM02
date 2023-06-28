@@ -182,8 +182,6 @@ public class CliApp implements GameGateway, Renderable {
             case ENDED -> onGameEnded();
             case STANDBY -> onGameStandby();
         }
-
-
     }
 
     /**
@@ -247,7 +245,7 @@ public class CliApp implements GameGateway, Renderable {
 
             }
             case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> {
-                // implicit modelupdate
+                // implicit modelUpdate
                 modelUpdate(success.value().model());
             }
         }
@@ -270,26 +268,10 @@ public class CliApp implements GameGateway, Renderable {
                 The game has ended.
                 Here's the player's ranking with their points:
                 """);
+
         List<PlayerScore> playersRanking = model.getRankings();
-        Console.out("Player:          Token points:          Personal goal card points:          Bookshelf points:\n");
-        Console.out("\n");
-        for (int i = 0; i < playersRanking.size(); i++) {
 
-            Console.out(playersRanking.get(i).username());
-            cliFormatiPrinter.printSpaceAfterUsername(playersRanking.get(i).username().length());
-
-            Console.out(playersRanking.get(i).getTokenPoints());
-            cliFormatiPrinter.printSpaceAfterTokenPoints(playersRanking.get(i).getTokenPoints());
-
-            Console.out(playersRanking.get(i).getPersonalGoalCardsPoints());
-            cliFormatiPrinter.printSpaceAfterPersonalGoalCardPoints(playersRanking.get(i).getPersonalGoalCardsPoints());
-
-            Console.out(playersRanking.get(i).getBookshelfPoints());
-            cliFormatiPrinter.printSpaceAfterBookshelfPoints(playersRanking.get(i).getBookshelfPoints());
-            Console.out("\n");
-        }
-
-        //playersRanking.forEach(System.out::println);
+        RankingPrinter.print(playersRanking);
     }
 
     private void onGameStandby() {
