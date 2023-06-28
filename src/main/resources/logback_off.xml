@@ -1,0 +1,33 @@
+<configuration>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/app.log</file>
+        <append>false</append>
+
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            &lt;!&ndash; each archived file, size max 10MB &ndash;&gt;
+            <maxFileSize>10MB</maxFileSize>
+            &lt;!&ndash; total size of all archive files, if total size > 1GB, it will delete old archived file &ndash;&gt;
+            <totalSizeCap>1GB</totalSizeCap>
+            &lt;!&ndash; 60 days to keep &ndash;&gt;
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>-->
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-50([%thread]) %-70(%logger{60}) %-5level %kvp %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-40([%thread]) %-50(%logger{44}) %-5level %kvp %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="OFF">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

@@ -51,3 +51,8 @@ records/
 
 ########
 .idea
+
+
+# compilation
+dependency-reduced-pom.xml
+shade

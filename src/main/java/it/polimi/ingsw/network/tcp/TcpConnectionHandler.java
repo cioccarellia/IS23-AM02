@@ -36,6 +36,9 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
 
     private static final Logger logger = LoggerFactory.getLogger(TcpConnectionHandler.class);
 
+    /**
+     * Socket for given {@code TcpConnectionHandler}
+     * */
     private final Socket socket;
     final private PrintWriter socketOut;
     final private BufferedReader socketIn;
@@ -90,7 +93,6 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
         logger.info("Starting TcpConnectionHandler for socket={}", socket);
         try (
                 Scanner in = new Scanner(socketIn)
-                // PrintWriter out = new PrintWriter(socket.getOutputStream())
         ) {
             logger.info("Actively monitoring socket={}", socket);
             while (isActivelyListeningOnSocket) {

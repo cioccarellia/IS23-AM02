@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 
 /**
@@ -117,7 +119,9 @@ public class CLIParser {
 
                 return serverHost != null && !serverHost.isBlank() && mode != null && proto != null;
             }
-            default -> throw new IllegalStateException("Unexpected value: " + config);
+            default -> {
+                throw new IllegalStateException("Unexpected value: " + config);
+            }
         }
     }
 
@@ -131,7 +135,9 @@ public class CLIParser {
             return parser.parseArgs(args);
         } catch (ArgumentParserException e) {
             logger.error("Error parsing CLI arguments", e);
-            throw new RuntimeException(e);
+            System.out.println("Unrecognized arguments: " + Arrays.toString(args));
+            System.exit(-1);
+            throw new RuntimeException();
         }
     }
 }
