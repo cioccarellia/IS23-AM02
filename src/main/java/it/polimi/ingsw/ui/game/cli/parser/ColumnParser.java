@@ -23,12 +23,10 @@ public class ColumnParser {
         while (true) {
             System.out.println();
             System.out.print("Select the column for insertion >");
-            System.out.flush();
 
             selectedTiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
                 System.out.print(" " + tileText);
-                System.out.flush();
 
             });
 
@@ -42,10 +40,8 @@ public class ColumnParser {
 
             if (column < 0 || column > cols) {
                 System.out.print(Chalk.on("Selected column out of bounds, choose a number between 0 and 4.").bgYellow().toString());
-                System.out.flush();
             } else if (!itFits(bookshelf, selectedTiles.size(), column)) {
                 System.out.print(Chalk.on("Selected column does not have enough space to house your selection.").bgYellow().toString());
-                System.out.flush();
             } else {
                 return column;
             }

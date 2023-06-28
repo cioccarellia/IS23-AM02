@@ -35,19 +35,15 @@ public class PlayerTilesOrderInsertionParser {
         while (true) {
             System.out.println();
             System.out.print("Selection > ");
-            System.out.flush();
             // printing tiles and prompting the user to sort them
             tiles.forEach(tile -> {
                 String tileText = TilePrinter.print(tile);
                 System.out.print(" " + tileText);
-                System.out.flush();
             });
 
             System.out.println();
             System.out.print("Type in the tiles in the desired order (the first selected tile is the first to be inserted)\n");
-            System.out.flush();
             System.out.print("[Usage: tile1, tile2, ...]\n");
-            System.out.flush();
             System.out.println();
 
             String input = scanner.nextLine();
@@ -59,7 +55,6 @@ public class PlayerTilesOrderInsertionParser {
             if (tokens.length != tiles.size()) {
                 System.out.println();
                 System.out.print("Tiles not valid, you need to order the selected tiles from before.");
-                System.out.flush();
                 System.out.println();
                 continue;
             }
@@ -83,7 +78,6 @@ public class PlayerTilesOrderInsertionParser {
                     }
                 } else {
                     System.out.print("You need to write at least one tile.");
-                    System.out.flush();
                     System.out.println();
                     check = false;
                     break;
@@ -99,7 +93,6 @@ public class PlayerTilesOrderInsertionParser {
             } else {
                 System.out.println();
                 System.out.print("Tiles not valid, you need to order the selected tiles from before.");
-                System.out.flush();
                 System.out.println();
             }
         }

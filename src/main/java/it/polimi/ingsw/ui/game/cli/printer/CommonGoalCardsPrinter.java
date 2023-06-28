@@ -26,7 +26,6 @@ public class CommonGoalCardsPrinter {
         }
 
         System.out.print("Common goal cards (the tiles' disposition is just a general description of the card):");
-        System.out.flush();
         System.out.println();
 
         for (int i = 0; i < dim; i++) {
@@ -39,14 +38,12 @@ public class CommonGoalCardsPrinter {
                     .toLowerCase();
 
             System.out.print(StringUtils.rightPad(x, 23, " "));
-            System.out.flush();
         }
 
         System.out.println();
 
         for (int i = 0; i < dim; i++) {
             System.out.print("    0  1  2  3  4      ");
-            System.out.flush();
         }
 
         System.out.println();
@@ -54,20 +51,16 @@ public class CommonGoalCardsPrinter {
         for (int i = 0; i < rows; i++) {
             for (int k = 0; k < dim; k++) {
                 System.out.print(i + "  ");
-                System.out.flush();
 
                 for (int j = 0; j < cols; j++) {
                     var tile = exampleMatrices.get(k).bookshelf()[i][j];
                     if (tile != null) {
                         System.out.print(" " + TilePrinter.print(tile) + " ");
-                        System.out.flush();
                     } else {
                         System.out.print("   ");
-                        System.out.flush();
                     }
                 }
                 System.out.print("     ");
-                System.out.flush();
             }
             System.out.println();
         }
@@ -76,7 +69,6 @@ public class CommonGoalCardsPrinter {
 
         for (int i = 0; i < dim; i++) {
             System.out.print("  Tokens:");
-            System.out.flush();
             var x = exampleMatrices
                     .get(i)
                     .status()
@@ -87,7 +79,6 @@ public class CommonGoalCardsPrinter {
                     .toString();
 
             System.out.print(StringUtils.rightPad(x, 14, " "));
-            System.out.flush();
         }
 
         System.out.println();

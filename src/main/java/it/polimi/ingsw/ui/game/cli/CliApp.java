@@ -104,7 +104,6 @@ public class CliApp implements GameGateway, Renderable {
         }
 
         System.out.print("Hi @" + owner + "! Game has started, Enjoy the game and good luck!\n");
-        System.out.flush();
 
         render();
     }
@@ -135,7 +134,6 @@ public class CliApp implements GameGateway, Renderable {
     public void render() {
         if (model == null) {
             System.out.print(Chalk.on("Void model.").bgRed().toString());
-            System.out.flush();
             return;
         }
 
@@ -147,7 +145,6 @@ public class CliApp implements GameGateway, Renderable {
 
         if (messagesToShow > 0) {
             System.out.print("Latest " + messagesToShow + " messages:\n");
-            System.out.flush();
 
             ChatPrinter.printLastNMessages(messages, owner, messagesToShow);
         }
@@ -184,7 +181,6 @@ public class CliApp implements GameGateway, Renderable {
                     }
                 } else {
                     System.out.print("@" + currentPlayer.getUsername() + " is " + currentPlayer.getPlayerCurrentGamePhase().toString().toLowerCase());
-                    System.out.flush();
                     System.out.println();
                 }
             }
@@ -277,7 +273,6 @@ public class CliApp implements GameGateway, Renderable {
                 The game has ended.
                 Here's the player's ranking with their points:
                 """);
-        System.out.flush();
 
         List<PlayerScore> playersRanking = model.getRankings();
 
@@ -286,6 +281,5 @@ public class CliApp implements GameGateway, Renderable {
 
     private void onGameStandby() {
         System.out.print("Game standby.\n");
-        System.out.flush();
     }
 }

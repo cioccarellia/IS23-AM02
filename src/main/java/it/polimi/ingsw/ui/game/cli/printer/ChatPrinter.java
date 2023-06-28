@@ -58,13 +58,11 @@ public class ChatPrinter {
                 sb.append("[").append(message.senderUsername()).append("]: ").append(message.text()).append("\n");
                 var chalk = Chalk.on(sb.toString()).bgGreen().toString();
                 System.out.print(chalk);
-                System.out.flush();
             }
             case it.polimi.ingsw.model.chat.MessageRecipient.Direct direct -> {
                 sb.append("[").append(message.senderUsername()).append(" -> ").append(direct.username()).append("]: ").append(message.text()).append("\n");
                 var chalk = Chalk.on(sb.toString()).bgBlue().toString();
                 System.out.print(chalk);
-                System.out.flush();
             }
         }
     }

@@ -261,7 +261,6 @@ public class SplashScreen {
         String colored = randomizeColor(out);
 
         System.out.print(colored);
-        System.out.flush();
     }
 
 

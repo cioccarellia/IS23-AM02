@@ -78,18 +78,15 @@ public class CliLobby implements LobbyGateway, Renderable {
                 switch (failure.error()) {
                     case GAME_ALREADY_INITIALIZING -> {
                         System.out.print("A game has been initialized already. You can't choose the number of players.");
-                        System.out.flush();
 
                         // out of phase model, requiring manual model update since server isn't aware of our existence yet
                         handler.sendStatusUpdateRequest();
                     }
                     case GAME_ALREADY_RUNNING -> {
                         System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
-                        System.out.flush();
                     }
                     case INVALID_USERNAME -> {
                         System.out.print("The username is invalid.\n");
-                        System.out.flush();
                         render();
                     }
                 }
@@ -116,34 +113,13 @@ public class CliLobby implements LobbyGateway, Renderable {
         switch (result) {
             case TypedResult.Failure<GameConnectionSuccess, GameConnectionError> failure -> {
                 switch (failure.error()) {
-                    case ALREADY_CONNECTED_PLAYER -> {
-                        System.out.print("You are already connected to this game.\n");
-                        System.out.flush();
-                    }
-                    case USERNAME_ALREADY_IN_USE -> {
-                        System.out.print("This username is already taken.\n");
-                        System.out.flush();
-                    }
-                    case MAX_PLAYER_AMOUNT_EACHED -> {
-                        System.out.print("The maximum amount of players for this game has been reached already.\n");
-                        System.out.flush();
-                    }
-                    case NO_GAME_TO_JOIN -> {
-                        System.out.print("No game has been started.\n");
-                        System.out.flush();
-                    }
-                    case GAME_ALREADY_STARTED -> {
-                        System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
-                        System.out.flush();
-                    }
-                    case GAME_ALREADY_ENDED -> {
-                        System.out.print("The game has already ended.\n");
-                        System.out.flush();
-                    }
-                    case INVALID_USERNAME -> {
-                        System.out.print("The username is invalid.\n");
-                        System.out.flush();
-                    }
+                    case ALREADY_CONNECTED_PLAYER -> System.out.print("You are already connected to this game.\n");
+                    case USERNAME_ALREADY_IN_USE -> System.out.print("This username is already taken.\n");
+                    case MAX_PLAYER_AMOUNT_EACHED -> System.out.print("The maximum amount of players for this game has been reached already.\n");
+                    case NO_GAME_TO_JOIN -> System.out.print("No game has been started.\n");
+                    case GAME_ALREADY_STARTED -> System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
+                    case GAME_ALREADY_ENDED -> System.out.print("The game has already ended.\n");
+                    case INVALID_USERNAME -> System.out.print("The username is invalid.\n");
                 }
 
             }
@@ -166,19 +142,15 @@ public class CliLobby implements LobbyGateway, Renderable {
 
         if (owner != null) {
             System.out.print("List of players currently in this game:\n");
-            System.out.flush();
 
             for (PlayerInfo info : playerInfo) {
                 if (info.isHost()) {
                     System.out.print(Chalk.on("[H]").red().toString());
-                    System.out.flush();
                 } else {
                     System.out.print("[P]");
-                    System.out.flush();
                 }
 
                 System.out.print(" @" + info.username() + ", " + info.status().toHumanReadable());
-                System.out.flush();
                 System.out.println();
             }
             return;
@@ -189,7 +161,6 @@ public class CliLobby implements LobbyGateway, Renderable {
                 GameMode mode;
 
                 System.out.print("Game not started. To create one, enter the number of players for this game [2,4] > ");
-                System.out.flush();
                 String in = scanner.nextLine();
 
                 int playersAmount;
@@ -206,13 +177,11 @@ public class CliLobby implements LobbyGateway, Renderable {
                     mode = GameMode.numberToMode(playersAmount);
                 } else {
                     System.out.print("You need to select a number between 2 and 4.\n");
-                    System.out.flush();
                     render();
                     return;
                 }
 
                 System.out.print("Input username > ");
-                System.out.flush();
                 String username = scanner.nextLine();
 
                 handler.sendGameStartRequest(username, mode);
@@ -220,14 +189,12 @@ public class CliLobby implements LobbyGateway, Renderable {
             case GAME_INITIALIZING -> {
 
                 System.out.print("A game has been started already. Insert username to join > ");
-                System.out.flush();
                 String username = scanner.nextLine();
 
                 handler.sendGameConnectionRequest(username);
             }
             case GAME_RUNNING -> {
                 System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
-                System.out.flush();
             }
         }
     }

@@ -27,18 +27,14 @@ public class RankingPrinter {
             // print i-player bookshelf points
             System.out.print(StringUtils.rightPad(bookshelfPoints, 19, "") + "|");
 
-
             // print i-player personal goal card points
             System.out.print(StringUtils.rightPad(personalGCPoints, 28, "") + "|");
-
 
             // print i-player total points
             System.out.print(StringUtils.rightPad(totalPoints, 15, "") + "|");
 
             System.out.println();
         }
-
         System.out.println();
-        System.out.flush();
     }
 }

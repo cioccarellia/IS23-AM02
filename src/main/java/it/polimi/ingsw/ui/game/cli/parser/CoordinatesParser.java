@@ -31,7 +31,6 @@ public class CoordinatesParser {
                     Insert coordinates pairs for your selection (at least one tile, at most three)
                     Format: X1,Y1, [X2,Y2], [X3,Y3]                  (Xs are rows, Ys are columns)
                     """);
-            System.out.flush();
 
             String input = scanner.nextLine();
 
@@ -42,7 +41,6 @@ public class CoordinatesParser {
                         You need to select at least one tile and at most three;
                         also, you need both the x-coordinate and the y-coordinate.
                         """).bgYellow().toString());
-                System.out.flush();
                 continue;
             }
 
@@ -65,7 +63,6 @@ public class CoordinatesParser {
                     System.out.print(Chalk.on(
                             "Out-of-bounds coordinates detected. Only numbers in 0-9 are valid coordinates.\n"
                     ).bgYellow().toString());
-                    System.out.flush();
                     check = false;
                     break;
                 }
@@ -81,7 +78,6 @@ public class CoordinatesParser {
                 System.out.print(Chalk.on(
                         "Invalid coordinates.\n"
                 ).bgYellow().toString());
-                System.out.flush();
             }
         }
     }

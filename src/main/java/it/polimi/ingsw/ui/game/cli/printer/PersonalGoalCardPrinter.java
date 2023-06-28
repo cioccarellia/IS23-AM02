@@ -14,25 +14,20 @@ public class PersonalGoalCardPrinter {
      */
     public static void print(PersonalGoalCard personalGoalCard) {
         System.out.print("Your personal goal card:\n");
-        System.out.flush();
 
         System.out.print("    0  1  2  3  4");
-        System.out.flush();
         System.out.println();
 
         for (int i = 0; i < rows; i++) {
             System.out.print(i + "  ");
-            System.out.flush();
 
             for (int j = 0; j < cols; j++) {
 
                 if (personalGoalCard.getShelfPointMatrix()[i][j] != null) {
                     String tileText = TilePrinter.print(personalGoalCard.getShelfPointMatrix()[i][j]);
                     System.out.print(" " + tileText + " ");
-                    System.out.flush();
                 } else {
                     System.out.print("   ");
-                    System.out.flush();
                 }
             }
 

@@ -18,12 +18,10 @@ public class BoardPrinter {
     public static void print(Board board) {
         System.out.println();
         System.out.print("   0  1  2  3  4  5  6  7  8 ");
-        System.out.flush();
         System.out.println();
 
         for (int i = 0; i < dimension; i++) {
             System.out.print(i + " ");
-            System.out.flush();
 
             for (int j = 0; j < dimension; j++) {
 
@@ -35,10 +33,8 @@ public class BoardPrinter {
                     String tileText = TilePrinter.print(tile);
 
                     System.out.print(" " + tileText + " ");
-                    System.out.flush();
                 } else {
                     System.out.print("   ");
-                    System.out.flush();
                 }
 
             }

@@ -39,12 +39,10 @@ public class BookshelvesPrinter {
 
         System.out.println();
         System.out.print("Bookshelves:");
-        System.out.flush();
         System.out.println();
 
         for (int i = 0; i < dim; i++) {
             System.out.print("    0  1  2  3  4      ");
-            System.out.flush();
         }
 
         System.out.println();
@@ -52,18 +50,15 @@ public class BookshelvesPrinter {
         for (int i = 0; i < rows; i++) {
             for (int k = 0; k < dim; k++) {
                 System.out.print(i + "  ");
-                System.out.flush();
 
                 for (int j = 0; j < cols; j++) {
                     if (bookshelves.get(k)[i][j] != null) {
                         System.out.print(" " + TilePrinter.print(bookshelves.get(k)[i][j]) + " ");
-                        System.out.flush();
                     } else
                         System.out.print("   ");
                 }
 
                 System.out.print("  |  ");
-                System.out.flush();
             }
             System.out.println();
         }
@@ -72,17 +67,14 @@ public class BookshelvesPrinter {
             String username = players.get(i).getUsername();
             if (players.get(i).getPlayerNumber() == game.getStartingPlayerNumber()) {
                 System.out.print(Chalk.on("F ").red().toString());
-                System.out.flush();
             } else
                 System.out.print("  ");
 
             if (players.get(i).getPlayerNumber() == game.getCurrentPlayerSession().getPlayerNumber()) {
                 var x = Chalk.on("@" + username).bgMagenta().toString();
                 System.out.print(StringUtils.rightPad(x, 29, " "));
-                System.out.flush();
             } else {
                 System.out.print(StringUtils.rightPad("@" + username, 19, " "));
-                System.out.flush();
             }
 
             System.out.print("  ");
@@ -92,11 +84,9 @@ public class BookshelvesPrinter {
 
         for (int i = 0; i < dim; i++) {
             System.out.print("  Tokens:");
-            System.out.flush();
             var x = players.get(i).getAcquiredTokens().toString();
 
             System.out.print(StringUtils.rightPad(x, 14, " "));
-            System.out.flush();
         }
         System.out.println();
     }
