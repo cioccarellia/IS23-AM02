@@ -40,6 +40,8 @@ import java.lang.reflect.Proxy;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.DISCONNECTED;
 import static it.polimi.ingsw.controller.server.connection.ConnectionStatus.OPEN;
@@ -61,6 +63,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      * to the specific details of its connection to the server.
      */
     private final ClientConnectionsManager connectionsManager;
+    private final ExecutorService persistenceExecutor = Executors.newSingleThreadExecutor();
 
     /**
      * Handles record creation/deletion/reading
@@ -338,7 +341,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // log an interaction for the requiring user
-        connectionsManager.registerInteraction(username);
+        asyncExecutor.async(() -> {
+            connectionsManager.registerInteraction(username);
+        });
     }
 
 
@@ -387,16 +392,18 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         gameModel.onPlayerSelectionPhase(selection);
 
 
+        // send insertion success result to caller
         asyncExecutor.async(() -> {
             router.route(username).onGameSelectionTurnEvent(new TypedResult.Success<>(new TileSelectionSuccess(gameModel)));
         });
 
-
+        // and send model update to everybody else
         asyncExecutor.async(() -> {
             router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
         });
 
-        saveModelToPersistentStorage();
+        // saves updated game config to file
+        persistenceExecutor.submit(this::saveModelToPersistentStorage);
     }
 
 
@@ -467,18 +474,18 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         gameModel.onNextTurn(nextPlayer.getUsername());
 
 
+        // send insertion success result to caller
         asyncExecutor.async(() -> {
             router.route(username).onGameInsertionTurnEvent(new TypedResult.Success<>(new TileInsertionSuccess(gameModel)));
         });
 
+        // and send model update to everybody else
         asyncExecutor.async(() -> {
             router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
         });
 
-        storageManager.save(connectionsManager.getUsernames(), gameModel);
-
-
-        saveModelToPersistentStorage();
+        // saves updates game config to file
+        persistenceExecutor.submit(this::saveModelToPersistentStorage);
     }
 
 

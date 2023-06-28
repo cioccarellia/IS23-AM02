@@ -15,6 +15,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Helper class used to manage stored configurations
+ * */
 public class StorageManager {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageManager.class);
