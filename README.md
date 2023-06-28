@@ -46,13 +46,12 @@ mvn package -f pom.xml
 
 ### Executing
 
-Once the jar file is compiled you can run it (assuming your `java` uses a jdk 19 with preview enabled) using one of the
-following launch modes:
+Once the jar file has been compiled, you can run it (assuming your `java` uses a jdk 19 with preview-features enabled) using one of the following launch modes:
+
 
 #### Wizard
 
-The wizard is invoked when no/not enough parameters are given through CLI, and will ask through a CLI interface to
-provide them until an exhaustive configuration is reached and the corresponding module is started.
+The wizard is invoked when no/not enough parameters are given (as program arguments), and will ask through a CLI interface to provide them until an exhaustive configuration is reached, and the corresponding module is started.
 
 ```
 java --enable-preview -jar shelfie.jar
@@ -60,7 +59,7 @@ java --enable-preview -jar shelfie.jar
 
 #### Server
 
-Template for starting hte server
+Template for starting the server. The server address is the IP of the machine executing it.
 
 | Parameter | Value    | Description                                 |
 |-----------|----------|---------------------------------------------|
@@ -74,12 +73,14 @@ java --enable-preview -jar shelfie.jar --target SERVER --server-tcp-port 12000 -
 
 #### Client
 
+Template for starting the client.
+
 | Parameter       | Value                       | Description                                                                |
 |-----------------|-----------------------------|----------------------------------------------------------------------------|
 | Target          | `CLIENT`                    | Specifies that the server should be started                                |
 | Server address  | `127.0.0.1` / `192.168.1.X` | Address of the server hosting the game. Can be the loopback or local (LAN) |
 | Client mode     | `CLI`/`GUI`                 | Whether starting the client in CLI or GUI mode                             |
-| Client proto    | `RCP`/`RMI`                 | Specifies which communication protocol is used for this client             |
+| Client proto    | `TCP`/`RMI`                 | Specifies which communication protocol is used for this client             |
 | Server TCP port | `12000`                     | Port used for TCP connections                                              |
 | Server RMI port | `13000`                     | Port used for RMI connections                                              |
 
