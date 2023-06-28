@@ -8,7 +8,7 @@ import java.util.List;
 
 public class EnemyStatusLabelRender {
 
-    public static void renderEnemyStatusLabel(@NotNull Label enemyStatusLabel, @NotNull PlayerSession enemySession, @NotNull int points) {
+    public static void renderEnemyStatusLabel(@NotNull Label enemyStatusLabel, @NotNull PlayerSession enemySession, int points) {
         enemyStatusLabel.setText("Player game phase: " + enemySession.getPlayerCurrentGamePhase().toString().toLowerCase() +
                 "\n\nConnection status: " + /* todo how do we deal with connection, since PlayerInfo seems useless outside of lobby !! add + once comment is removed */
                 "\n\nObtained common goal cards: " + renderEnemyAchievedCommonGoalCards(enemySession) +

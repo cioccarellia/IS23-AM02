@@ -4,6 +4,7 @@ import com.github.tomaslanger.chalk.Chalk;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Tile;
 import it.polimi.ingsw.model.config.bookshelf.BookshelfConfiguration;
+import it.polimi.ingsw.model.game.score.PlayerScore;
 import it.polimi.ingsw.model.player.PlayerSession;
 import org.apache.commons.lang.StringUtils;
 
@@ -37,6 +38,7 @@ public class BookshelvesPrinter {
                 stream().
                 toList();
 
+        // print the bookshelf
         System.out.println();
         System.out.print("Bookshelves:");
         System.out.println();
@@ -63,6 +65,7 @@ public class BookshelvesPrinter {
             System.out.println();
         }
 
+        // print the player's name
         for (int i = 0; i < dim; i++) {
             String username = players.get(i).getUsername();
             if (players.get(i).getPlayerNumber() == game.getStartingPlayerNumber()) {
@@ -82,11 +85,38 @@ public class BookshelvesPrinter {
 
         System.out.println();
 
+        // print the token
         for (int i = 0; i < dim; i++) {
             System.out.print("  Tokens:");
-            var x = players.get(i).getAcquiredTokens().toString();
 
-            System.out.print(StringUtils.rightPad(x, 14, " "));
+            var tokens = players.get(i).getAcquiredTokens();
+
+            StringBuilder text = new StringBuilder();
+
+            if (!tokens.isEmpty()) {
+                for (int j = 0; j < tokens.size(); j++) {
+                    if (j != 0) {
+                        text.append(", ");
+                    }
+                    text.append(tokens.get(i).getPoints());
+                }
+            }
+
+            System.out.print(StringUtils.rightPad(text.toString(), 14, " "));
+        }
+        System.out.println();
+
+        // print points
+        List<PlayerScore> scores = game.getRankings();
+
+        for (int i = 0; i < dim; i++) {
+            System.out.print("  Points:");
+            String username = players.get(i).getUsername();
+
+            scores.stream()
+                    .filter(s -> s.username().equals(username))
+                    .findAny()
+                    .ifPresent(totalPoints -> System.out.print(StringUtils.rightPad(String.valueOf(totalPoints.total()), 14, " ")));
         }
         System.out.println();
     }

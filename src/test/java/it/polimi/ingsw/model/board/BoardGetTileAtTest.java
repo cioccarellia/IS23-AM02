@@ -15,7 +15,6 @@ public class BoardGetTileAtTest {
 
     @Test
     @DisplayName("Tests the correct functionality of getTileAt method")
-    //FIXME understand if returning optional instead of Tile could be better
     public void test_getTileAt_method() {
         Board board = new Board();
         Cell[][] cellMatrix = board.getCellMatrix();

@@ -14,7 +14,6 @@ public class BoardRemoveTileAtTest {
 
     @Test
     @DisplayName("Tests the correct functionality of removeTileAt method, positive case")
-    //FIXME understand if returning optional instead of Tile could be better
     public void test_removeTileAt_method_positively() {
         Board board = new Board();
         Cell[][] cellMatrix = board.getCellMatrix();
@@ -32,7 +31,6 @@ public class BoardRemoveTileAtTest {
 
     @Test
     @DisplayName("Tests the correct functionality of removeTileAt method, edge case")
-    //FIXME understand if returning optional instead of Tile could be better
     public void test_removeTileAt_method_edge_case() {
         Board board = new Board();
         Cell[][] cellMatrix = board.getCellMatrix();
