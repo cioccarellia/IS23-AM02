@@ -60,6 +60,7 @@ public class AppClient implements Runnable {
         try {
             this.controller = new ClientController(gateway, config);
         } catch (RemoteException e) {
+            System.out.println("Can not start client, error instantiating ");
             throw new RuntimeException(e);
         }
 

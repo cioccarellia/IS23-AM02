@@ -20,6 +20,7 @@ import static it.polimi.ingsw.launcher.argparser.CLIDestinations.*;
 /**
  * Program entry point. Depending on what is requested, either the client,
  * the server, or a configuration of them may be started.
+ * If no config is provided, a wizard is started to fill in the missing details
  */
 public class App {
 
@@ -102,5 +103,4 @@ public class App {
             case CLIENT -> startClient(config);
         }
     }
-
 }

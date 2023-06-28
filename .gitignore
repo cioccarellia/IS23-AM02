@@ -56,3 +56,4 @@ records/
 # compilation
 dependency-reduced-pom.xml
 shade
+artifacts
