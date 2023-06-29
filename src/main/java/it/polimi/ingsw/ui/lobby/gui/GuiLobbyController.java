@@ -144,7 +144,6 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
                     }
                     case INVALID_USERNAME -> {
                         statusTextLabel.setText("The username is invalid.");
-                        render();
                     }
                 }
             }

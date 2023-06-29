@@ -350,6 +350,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             asyncExecutor.async(() -> {
                 router.broadcast().onGameStartedEvent(gameModel);
             });
+
+            asyncExecutor.async(() -> {
+                router.broadcast().onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
+            });
         }
 
 

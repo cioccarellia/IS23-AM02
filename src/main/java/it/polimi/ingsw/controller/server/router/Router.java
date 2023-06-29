@@ -43,7 +43,6 @@ public class Router {
         return new BroadcastClientService(support, List.of(usernames));
     }
 
-
     public ClientService broadcastExcluding(AsyncExecutor asyncExecutor, List<String> usernames) {
         return new BroadcastClientService(support, usernames, asyncExecutor);
     }
