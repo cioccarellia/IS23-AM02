@@ -34,7 +34,12 @@ public class TimeoutKeepAliveHandler implements Runnable {
     /**
      * The amount of seconds after which a connection is deemed not active
      */
-    private final static int MAX_SECONDS_DISCINNECTION_THRESHOLD = 25;
+    private final static int MAX_SECONDS_DISCONNECTION_THRESHOLD = 25;
+
+    /**
+     * The amount of seconds after which a connection is deemed not active
+     */
+    private final static int MAX_SECONDS_AUTOQUIT_THRESHOLD = 900;
 
     /**
      * Component to execute the task on
@@ -67,13 +72,17 @@ public class TimeoutKeepAliveHandler implements Runnable {
                     // how many seconds since last contact
                     long secondsDiff = ChronoUnit.SECONDS.between(connection.getLastSeen().toInstant(), now.toInstant());
 
-                    logger.warn("keep alive checking for @{}: delta is {}s", connection.getUsername(), secondsDiff);
 
-
-                    if (connection.getStatus() == ConnectionStatus.OPEN && secondsDiff > MAX_SECONDS_DISCINNECTION_THRESHOLD) {
+                    if (connection.getStatus() == ConnectionStatus.OPEN && secondsDiff > MAX_SECONDS_DISCONNECTION_THRESHOLD) {
                         // we went over the threshold, flagging that client as disconnected
                         logger.warn("Disconnection threshold reached, flagging {} as DISCONNECTED", connection.getUsername());
                         connection.setStatus(ConnectionStatus.DISCONNECTED);
+                    } else if (connection.getStatus() == ConnectionStatus.DISCONNECTED && secondsDiff > MAX_SECONDS_AUTOQUIT_THRESHOLD) {
+                        // we went over the threshold, flagging that client as closed
+                        logger.warn("Closure threshold reached, flagging {} as CLOSED", connection.getUsername());
+                        connection.setStatus(ConnectionStatus.CLOSED);
+                    } else {
+                        logger.info("keep alive checking for @{}: delta is {}s", connection.getUsername(), secondsDiff);
                     }
 
 

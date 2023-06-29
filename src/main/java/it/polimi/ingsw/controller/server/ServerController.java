@@ -57,17 +57,25 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     private static final Logger logger = LoggerFactory.getLogger(ServerController.class);
 
-
     /**
      * Keeps a map associating a username (unique identifier for a player)
      * to the specific details of its connection to the server.
      */
     private final ClientConnectionsManager connectionsManager;
+
+    /**
+     * Executor service for saving data to the persistent storage
+     */
     private final ExecutorService persistenceExecutor = Executors.newSingleThreadExecutor();
 
     /**
+     * Executor service for running remote calls / network response tasks
+     */
+    private final AsyncExecutor asyncExecutor = AsyncExecutor.newCachedThreadPool();
+
+    /**
      * Handles record creation/deletion/reading
-     * */
+     */
     private final StorageManager storageManager;
 
     /**
@@ -76,11 +84,14 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private final Router router;
 
     /**
-     * Game instance
+     * Game model, containing full game information and data.
      */
     private GameModel gameModel;
 
-    private final ChatModel chatModel = new ChatModel();
+    /**
+     * Chat model, containing all chat messages.
+     */
+    private ChatModel chatModel = new ChatModel();
 
     /**
      * Max number of players for current game mode, when selected
@@ -92,8 +103,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      */
     private ServerStatus serverStatus = NO_GAME_STARTED;
 
-
-    private final AsyncExecutor asyncExecutor = AsyncExecutor.newCachedThreadPool();
 
 
     public ServerController(ClientConnectionsManager connectionsManager, StorageManager storageManager) {
@@ -119,6 +128,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
     private void saveModelToPersistentStorage() {
         storageManager.save(connectionsManager.getUsernames(), gameModel);
+    }
+
+    private void deletePersistentModelForGame() {
+        storageManager.delete(connectionsManager.getUsernames());
     }
 
 
@@ -488,24 +501,27 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         persistenceExecutor.submit(this::saveModelToPersistentStorage);
     }
 
-
     @Override
     public void quitRequest(String username) throws RemoteException {
         logger.info("quitRequest(username={})", username);
         connectionsManager.registerInteraction(username);
 
+        serverStatus = GAME_OVER;
         gameModel.onGameEnded();
 
         asyncExecutor.async(() -> {
             router.broadcast().onGameEndedEvent();
         });
+
+        persistenceExecutor.submit(this::deletePersistentModelForGame);
     }
 
 
-
+    /**
+     * Determines which player should move next
+     */
     private synchronized PlayerSession processNextPlayer() {
         PlayerNumber currentPlayerNumber = gameModel.getCurrentPlayerSession().getPlayerNumber();
-
         PlayerNumber next = next_rec(currentPlayerNumber);
 
         return gameModel.getPlayerSession(next);
@@ -521,17 +537,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return next.getPlayerNumber();
         }
     }
-
-
-    /*
-    private synchronized void onNextTurn(String nextPlayerUsername) {
-        // assume the username is correct
-        assert game.getSessions().isPresent(nextPlayerUsername);
-        PlayerNumber currentPlayerUsername = game.getCurrentPlayerSession().getPlayerNumber();
-
-        currentPlayerUsername = game.getSessions().getByUsername(nextPlayerUsername).getPlayerNumber();
-        game.getCurrentPlayerSession().setPlayerCurrentGamePhase(SELECTING);
-    }*/
 
 
     @Override
@@ -590,17 +595,19 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     public synchronized void onConnectionChange() {
         if (connectionsManager.isAnyClientClosed()) {
             serverStatus = GAME_OVER;
+            gameModel.onGameEnded();
 
             asyncExecutor.async(() -> {
                 router.broadcastExcluding(
                         connectionsManager.getDisconnectedOrClosedClientUsernames()
                 ).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
             });
+
+            persistenceExecutor.submit(this::deletePersistentModelForGame);
             return;
         }
-        // no clients are closed
 
-
+        // no clients are closed, we continue
         if (connectionsManager.isAnyClientDisconnected()) {
             // Server Status Update
             // there are clients disconnected
@@ -680,7 +687,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         if (connectionsManager.containsUsername(username)) {
             connectionsManager.registerInteraction(username);
         } else {
-            logger.warn("Wrong keep alive username");
+            logger.warn("Wrong keep alive username: {}", username);
         }
     }
 }

@@ -6,9 +6,19 @@ import it.polimi.ingsw.services.ClientService;
 
 import java.util.List;
 
+/**
+ * Class that simplifies sending messages/calls to a client / set of clients
+ * */
 public class Router {
 
+    /**
+     * Connection manager, used to extract the relevant data for communicating with users
+     * */
     private final ClientConnectionsManager support;
+
+    /**
+     * Default {@link BroadcastClientService}, with all users as target (full broadcast)
+     * */
     private final BroadcastClientService defaultBroadcast;
 
     public Router(ClientConnectionsManager support) {
@@ -24,7 +34,6 @@ public class Router {
     public ClientService broadcast() {
         return defaultBroadcast;
     }
-
 
     public ClientService broadcastExcluding(List<String> usernames) {
         return new BroadcastClientService(support, usernames);

@@ -83,6 +83,29 @@ public class StorageManager {
     }
 
 
+    public synchronized void delete(@NotNull List<String> playerList) {
+        assert !playerList.isEmpty() && playerList.size() <= 4;
+
+        String orderedPlayers = playerList.stream().sorted().collect(Collectors.joining());
+        String HASHED_KEY = hash(orderedPlayers);
+
+        String PATH = FULL_SAVE_PATH_PREFIX + HASHED_KEY;
+        File file = new File(PATH);
+        String path = file.getAbsolutePath();
+
+        if (file.exists() ) {
+            if (file.delete()) {
+                logger.info("Successfully deleted file=" + path);
+            } else {
+                logger.error("Could not delete file=" + path);
+            }
+        } else {
+            logger.warn("Could not find file=" + path);
+        }
+    }
+
+
+
     private @NotNull String readFileContents(File file) {
         BufferedReader reader = null;
         try {

@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Mock instance tuned with broadcasting capabilities, forwarding all the methods
- * called on it to its support
+ * Mock instance of {@link ClientService} tuned with broadcasting capabilities,
+ * forwarding all the methods called on it to its support
  */
 public class BroadcastClientService implements ClientService {
 
