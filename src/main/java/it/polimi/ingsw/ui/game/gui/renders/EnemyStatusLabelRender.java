@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Class responsible for rendering the enemyStatusLabel in the GUI
+ */
 public class EnemyStatusLabelRender {
 
     public static void renderEnemyStatusLabel(@NotNull Label enemyStatusLabel, @NotNull PlayerSession enemySession, int points, PlayerInfo playerInfo) {
@@ -31,6 +34,9 @@ public class EnemyStatusLabelRender {
         enemyStatusLabel.setText(labelText.toString());
     }
 
+    /**
+     * Checks whether the player has achieved common goal cards and returns the corresponding name(s) or "none"
+     */
     public static String renderEnemyAchievedCommonGoalCards(@NotNull PlayerSession enemySession) {
         List<String> enemyAchievedCommonGoalCards = enemySession.getAchievedCommonGoalCards().stream().map(CommonGoalCardNameRender::renderCommonGoalCardName).toList();
 

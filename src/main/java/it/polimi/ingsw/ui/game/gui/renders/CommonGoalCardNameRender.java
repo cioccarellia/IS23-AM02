@@ -2,6 +2,10 @@ package it.polimi.ingsw.ui.game.gui.renders;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 
+/**
+ * Class responsible for assigning a name to a specific common goal card,
+ * that is then used in the enemy label
+ */
 public class CommonGoalCardNameRender {
 
     public static String renderCommonGoalCardName(CommonGoalCardIdentifier id) {

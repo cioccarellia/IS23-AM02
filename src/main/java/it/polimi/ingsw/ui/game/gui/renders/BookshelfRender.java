@@ -10,14 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+/**
+ * Class responsible for rendering the given bookshelf in the GUI.
+ */
 public class BookshelfRender {
 
     private static final int rows = BookshelfConfiguration.getInstance().rows();
     private static final int cols = BookshelfConfiguration.getInstance().cols();
 
-    /**
-     * Renders the contents of the {@link Bookshelf} according to the given matrix
-     */
     public static void renderBookshelf(GridPane bookshelfGridPane, Bookshelf bookshelf) {
         // All nodes can be safely cast to ImageView(s)
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(bookshelfGridPane, rows, cols);

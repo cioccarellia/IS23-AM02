@@ -6,7 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 
-public class CommonGoalCardRender {
+/**
+ * Class responsible for rendering the common goal cards in the GUI.
+ */
+public class CommonGoalCardImageViewRender {
 
     public static void renderCommonGoalCard(@NotNull ImageView commonGoalCardImageView, @NotNull CommonGoalCard commonGoalCard) {
         String url = ResourcePathConstants.Commons.mapCommonsToImagePath(commonGoalCard.getId());

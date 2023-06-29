@@ -8,7 +8,9 @@ import javafx.scene.control.ComboBox;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Class responsible for rendering the chat in the GUI.
+ */
 public class ChatRender {
     public static final String EVERYONE = "Everyone";
 

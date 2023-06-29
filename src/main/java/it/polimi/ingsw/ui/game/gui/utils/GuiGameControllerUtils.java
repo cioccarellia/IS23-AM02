@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.config.logic.LogicConfiguration;
 import it.polimi.ingsw.model.game.goal.Token;
 import it.polimi.ingsw.model.player.PlayerSession;
 import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardDescriptionRender;
-import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardRender;
+import it.polimi.ingsw.ui.game.gui.renders.CommonGoalCardImageViewRender;
 import it.polimi.ingsw.ui.game.gui.renders.TokenRender;
 import it.polimi.ingsw.utils.javafx.PaneViewUtil;
 import javafx.scene.Node;
@@ -36,7 +36,7 @@ public class GuiGameControllerUtils {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             CommonGoalCard currentCommonGoalCard = model.getCommonGoalCards().get(i).getCommonGoalCard();
 
-            CommonGoalCardRender.renderCommonGoalCard(commonGoalCards.get(i), currentCommonGoalCard);
+            CommonGoalCardImageViewRender.renderCommonGoalCard(commonGoalCards.get(i), currentCommonGoalCard);
             commonGoalCardDescriptions.get(i).setText(CommonGoalCardDescriptionRender.renderCommonGoalCardDescription(currentCommonGoalCard.getId()));
 
             // no need to check if lastElement() is present, because this is done on game creation and there's always a token

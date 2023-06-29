@@ -2,6 +2,9 @@ package it.polimi.ingsw.ui.game.gui.renders;
 
 import it.polimi.ingsw.model.cards.common.CommonGoalCardIdentifier;
 
+/**
+ * Class responsible for assigning a description to a specific common goal card
+ */
 public class CommonGoalCardDescriptionRender {
     public static String renderCommonGoalCardDescription(CommonGoalCardIdentifier id) {
         switch (id) {

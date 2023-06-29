@@ -6,8 +6,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Class responsible for rendering the personal goal cards in the GUI.
+ */
 public class PersonalGoalCardRender {
 
+    /**
+     * Renders a personal goal card on the specified ImageView.
+     */
     public static void renderPersonalGoalCard(@NotNull ImageView personalGoalCardImageView, @NotNull PersonalGoalCard personalGoalCard) {
         String url = ResourcePathConstants.Personals.mapPersonalsToImagePath(personalGoalCard.getId());
 

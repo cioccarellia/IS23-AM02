@@ -21,6 +21,9 @@ import java.util.List;
 import static it.polimi.ingsw.ui.game.gui.utils.GameUiConstants.RANKING_HEIGHT;
 import static it.polimi.ingsw.ui.game.gui.utils.GameUiConstants.RANKING_WIDTH;
 
+/**
+ * Class responsible for rendering the final ranking in the GUI.
+ */
 public class FinalRankingRender {
 
     public static final int TABLE_COLUMNS = 5;
@@ -29,7 +32,9 @@ public class FinalRankingRender {
     public static final int FONT_SIZE = 25;
     public static final int SMALL_MARGIN = 20;
 
-
+    /**
+     * Creates a dialog where to render the provided players ranking
+     */
     public static void renderRanking(List<PlayerScore> playersRanking) {
         //set up dialog
         Dialog rankingWindow = new Dialog();
@@ -75,6 +80,7 @@ public class FinalRankingRender {
 
         rankingWindow.showAndWait();
     }
+
 
     public static void settingUpRankingGridPane(GridPane grid, List<PlayerScore> playersRanking) {
         grid.setAlignment(Pos.CENTER);

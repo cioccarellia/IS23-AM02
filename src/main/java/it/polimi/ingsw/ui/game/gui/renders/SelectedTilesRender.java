@@ -13,10 +13,16 @@ import java.util.List;
 
 import static it.polimi.ingsw.ui.game.gui.utils.GuiGameControllerUtils.enableDarkeningEffect;
 
+/**
+ * Class responsible for rendering the selected tile(s) in the GUI.
+ */
 public class SelectedTilesRender {
 
     private static final int maxSelectionSize = LogicConfiguration.getInstance().maxSelectionSize();
 
+    /**
+     * Renders the selected tiles on the specified list of ImageViews, when more than one is selected
+     */
     public static void renderSelectedTiles(List<ImageView> selectedTilesImageViewsList, List<CellInfo> coordinatesAndValues) {
         List<Tile> selectedTiles = null;
 
@@ -47,6 +53,9 @@ public class SelectedTilesRender {
         }
     }
 
+    /**
+     * Renders the selected tiles on the specified list of ImageViews, when only one is selected
+     */
     public static void renderSelectedTilesWhenOnlyOne(ImageView firstSelectedTile, Label firstSelectedTileLabel, List<CellInfo> coordinatesAndValues, List<Tile> playerOrderedTilesToBeInserted) {
         List<Tile> selectedTiles = null;
 
