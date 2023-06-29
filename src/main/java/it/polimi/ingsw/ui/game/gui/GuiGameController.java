@@ -299,6 +299,13 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         this.owner = owner;
     }
 
+    /**
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // JavaFX app initialization
@@ -331,7 +338,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     // region %%%%%%%%%%%%%%% Game creation %%%%%%%%%%%%%%%%%%%
 
     /**
-     * Called when the game is created, only once.
+     * Called when the game is created, only once. Sets and renders everything needed from the start.
      */
     @Override
     public void onGameCreated() {
@@ -406,6 +413,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         this.playerInfo = playerInfo;
     }
 
+    /**
+     * Updates the chat and refreshes the GUI elements based on the updated chat.
+     *
+     * @param messages the updated messages
+     */
     @Override
     public void chatModelUpdate(List<ChatTextMessage> messages) {
         this.messages = messages;
@@ -446,12 +458,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                 switch (currentPlayerSession().getPlayerCurrentGamePhase()) {
                     case IDLE -> {
                     }
-                    case SELECTING -> {
-                        statusLabel.setText("Selection for @" + currentPlayerSession().getUsername());
-                    }
-                    case INSERTING -> {
-                        statusLabel.setText("Insertion for @" + currentPlayerSession().getUsername());
-                    }
+                    case SELECTING -> statusLabel.setText("Selection for @" + currentPlayerSession().getUsername());
+                    case INSERTING -> statusLabel.setText("Insertion for @" + currentPlayerSession().getUsername());
                 }
 
                 // owner actions
@@ -462,9 +470,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
                         // all tiles return to null darkening effect
                         disableDarkeningEffectForAllTiles(boardGridPane, model.getBoard());
                     }
-                    case SELECTING -> {
-                        statusLabel.setText("Select up to 3 tiles from board");
-                    }
+                    case SELECTING -> statusLabel.setText("Select up to 3 tiles from board");
                     case INSERTING -> {
                         statusLabel.setText("Insert selected tiles in the bookshelf");
 
@@ -487,12 +493,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
                 checkAndApplyBoardDarkeningState();
             }
-            case ENDED -> {
-                renderEndScreenAndResetUI();
-            }
-            case STANDBY -> {
-                gameStandby();
-            }
+            case ENDED -> renderEndScreenAndResetUI();
+            case STANDBY -> gameStandby();
         }
     }
 
@@ -511,6 +513,9 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
         topTokenUpdate(model, iter.topTokens());
     }
 
+    /**
+     * Used to render only the enemy section instead of the whole game when an enemy button is pressed
+     */
     public void renderEnemySection() {
         if (autoFollowCheckBox.isSelected() && !currentPlayerSession().getUsername().equals(ownerSession().getUsername())) {
             currentlySelectedUsername = currentPlayerSession().getUsername();
@@ -752,9 +757,8 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
     public void autoUpdateVisibility() {
         switch (ownerSession().getPlayerCurrentGamePhase()) {
-            case IDLE -> {
-                UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton, selectedTilesNumberedLabelsHBox);
-            }
+            case IDLE ->
+                    UiUtils.invisible(insertionVBox, boardSelectionButton, bookshelfInsertionButton, selectedTilesNumberedLabelsHBox);
             case SELECTING -> {
                 UiUtils.visible(boardSelectionButton, selectedTilesHBox, insertionVBox);
                 UiUtils.invisible(radioButtonHBox, selectedTilesNumberedLabelsHBox, bookshelfInsertionButton);

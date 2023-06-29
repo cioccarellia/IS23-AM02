@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 public class RmiStash extends ProtocolStash {
 
     /**
-     * Used to keep a RMI remote reference on a client's controller, so that the server
+     * Used to keep an RMI remote reference on a client's controller, so that the server
      * (once the connection has been set up) can remote-invoke methods on the client's controller
      */
     private @Nullable ClientService clientService = null;

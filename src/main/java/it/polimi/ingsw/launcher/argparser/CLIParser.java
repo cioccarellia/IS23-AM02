@@ -119,9 +119,7 @@ public class CLIParser {
 
                 return serverHost != null && !serverHost.isBlank() && mode != null && proto != null;
             }
-            default -> {
-                throw new IllegalStateException("Unexpected value: " + config);
-            }
+            default -> throw new IllegalStateException("Unexpected value: " + config);
         }
     }
 

@@ -150,9 +150,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
         // en-route parameters
         switch (service) {
-            case TcpConnectionHandler handler -> {
-                handler.setUsername(username);
-            }
+            case TcpConnectionHandler handler -> handler.setUsername(username);
             case Proxy controller -> {
                 // no-op, proxy is stateless
             }

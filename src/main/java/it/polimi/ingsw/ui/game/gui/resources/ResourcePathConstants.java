@@ -6,10 +6,9 @@ import it.polimi.ingsw.model.cards.personal.PersonalGoalCardIdentifier;
 import it.polimi.ingsw.model.game.goal.Token;
 
 import java.util.List;
-//import java.util.Random;
 
 /**
- * Contains constants and methods for managing and loading images/resources
+ * Class containing constants and methods to interrelate an image to its url
  */
 public class ResourcePathConstants {
 

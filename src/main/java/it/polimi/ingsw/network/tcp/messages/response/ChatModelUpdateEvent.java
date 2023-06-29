@@ -9,8 +9,8 @@ import java.util.List;
 
 public class ChatModelUpdateEvent extends Response {
     final private List<String> destructuredSenderUsernames = new ArrayList<>();
-    final private List<String> destructurdRecipientStrs = new ArrayList<>();
-    final private List<String> destructurdText = new ArrayList<>();
+    final private List<String> destructuredRecipientStrs = new ArrayList<>();
+    final private List<String> destructuredText = new ArrayList<>();
     final private List<Timestamp> destructuredTimestamp = new ArrayList<>();
 
     final private int size;
@@ -20,8 +20,8 @@ public class ChatModelUpdateEvent extends Response {
 
         for (ChatTextMessage it : messages) {
             this.destructuredSenderUsernames.add(it.senderUsername());
-            this.destructurdRecipientStrs.add(it.isBroadcast() ? "" : it.directUsername().get());
-            this.destructurdText.add(it.text());
+            this.destructuredRecipientStrs.add(it.isBroadcast() ? "" : it.directUsername().get());
+            this.destructuredText.add(it.text());
             this.destructuredTimestamp.add(it.stamp());
         }
 
@@ -32,10 +32,10 @@ public class ChatModelUpdateEvent extends Response {
 
         for (int i = 0; i < size; i++) {
             String sender = destructuredSenderUsernames.get(i);
-            String recipientUsername = destructurdRecipientStrs.get(i);
+            String recipientUsername = destructuredRecipientStrs.get(i);
             MessageRecipient recipient = recipientUsername.isEmpty() ? new MessageRecipient.Broadcast() : new MessageRecipient.Direct(recipientUsername);
 
-            String text = destructurdText.get(i);
+            String text = destructuredText.get(i);
             Timestamp stamp = destructuredTimestamp.get(i);
 
             m.add(
@@ -50,8 +50,8 @@ public class ChatModelUpdateEvent extends Response {
     public String toString() {
         return "ChatModelUpdateEvent{" +
                 "destructuredSenderUsernames=" + destructuredSenderUsernames +
-                ", destructurdRecipientStrs=" + destructurdRecipientStrs +
-                ", destructurdText=" + destructurdText +
+                ", destructuredRecipientStrs=" + destructuredRecipientStrs +
+                ", destructuredText=" + destructuredText +
                 ", destructuredTimestamp=" + destructuredTimestamp +
                 ", size=" + size +
                 '}';

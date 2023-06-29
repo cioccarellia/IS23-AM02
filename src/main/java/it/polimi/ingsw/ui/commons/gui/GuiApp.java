@@ -183,10 +183,6 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
             newStage.setTitle("MyShelfie");
             newStage.show();
 
-            // Platform.runLater(() -> {
-            //     gameController.modelUpdate(model);
-            // });
-
             lifecycle.onGameUiReady(this);
         } catch (Exception e) {
             e.printStackTrace();
