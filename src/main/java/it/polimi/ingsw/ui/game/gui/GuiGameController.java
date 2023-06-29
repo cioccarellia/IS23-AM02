@@ -534,7 +534,11 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
 
         // enemy label (enemyStatusLabel)
         PlayerScore enemyPlayerScore = model.getRankings().stream().filter(r -> r.username().equals(currentlySelectedUsername)).findAny().get();
-        EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession(), enemyPlayerScore.total());
+        PlayerInfo enemyPlayerInfo = null;
+        if (playerInfo != null) {
+            enemyPlayerInfo = playerInfo.stream().filter(i -> i.username().equals(currentlySelectedUsername)).findAny().get();
+        }
+        EnemyStatusLabelRender.renderEnemyStatusLabel(enemyStatusLabel, selectedEnemySession(), enemyPlayerScore.total(), enemyPlayerInfo);
     }
 
     public void endTurnRender() {
@@ -706,6 +710,7 @@ public class GuiGameController implements GameGateway, Initializable, Renderable
     }
 
     boolean hasAlreadyShownScore = false;
+
     public void renderEndScreenAndResetUI() {
         if (!hasAlreadyShownScore) {
             hasAlreadyShownScore = true;

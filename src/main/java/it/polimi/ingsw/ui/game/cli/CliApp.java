@@ -42,7 +42,6 @@ public class CliApp implements GameGateway, Renderable {
     private GameModel model;
     private ServerStatus status;
     private List<PlayerInfo> playerInfo;
-
     private List<ChatTextMessage> messages = new ArrayList<>();
 
     private final GameViewEventHandler handler;
@@ -148,6 +147,8 @@ public class CliApp implements GameGateway, Renderable {
 
             ChatPrinter.printLastNMessages(messages, owner, messagesToShow);
         }
+
+        PlayersInfoPrinter.print(model.getSessions().playerSessions(), playerInfo, model.getRankings());
 
         switch (model.getGameStatus()) {
             case RUNNING, LAST_ROUND -> {
