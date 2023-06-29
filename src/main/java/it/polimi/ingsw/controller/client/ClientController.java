@@ -63,7 +63,6 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
      * @param model      The game model.
      * @param controller The game view event handler.
      * @param owner      The owner of the game.
-     * @return The game UI view.
      */
     public static void createGameUiAsync(final @NotNull ClientUiMode mode, final GameModel model, final ClientController controller, final String owner, ExecutorService executorService) {
         switch (mode) {
@@ -114,7 +113,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     private ClientController identity;
 
     /**
-     * We need an asynchronous, multithreaded pool because multiple independent calls may be coming in at once
+     * We need an asynchronous, multithreaded pool because multiple independent calls may be coming in at once,
      * and we need to process them in parallel (e.g. chat message while user updates data)
      */
     private final ExecutorService asyncExecutor = Executors.newCachedThreadPool();
@@ -130,9 +129,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         this.config = config;
 
         switch (config.protocol()) {
-            case RMI, TCP -> {
-                identity = this;
-            }
+            case RMI, TCP -> identity = this;
         }
     }
 

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.ui.game.gui;
 
+/**
+ * Class containing all the possible error messages for the GUI
+ */
 public enum GuiErrors {
     SELECTION_ERROR_WRONG_TILE("Selection error: You can't select this tile"),
     SELECTION_ERROR_AT_LEAST_ONE("Selection error: You have to select at least one tile"),
@@ -13,11 +16,11 @@ public enum GuiErrors {
 
     private final String errorMessage;
 
-    GuiErrors(String errorMessage){
+    GuiErrors(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-    public String errorText(){
+    public String errorText() {
         return errorMessage;
     }
 }

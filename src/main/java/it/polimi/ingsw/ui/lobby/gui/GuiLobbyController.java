@@ -139,9 +139,7 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
 
                         handler.sendStatusUpdateRequest();
                     }
-                    case GAME_ALREADY_RUNNING -> {
-                        statusTextLabel.setText("A game is already running, you can't enter. Change server if you want to play.\n");
-                    }
+                    case GAME_ALREADY_RUNNING -> statusTextLabel.setText("A game is already running, you can't enter. Change server if you want to play.\n");
                     case INVALID_USERNAME -> {
                         statusTextLabel.setText("The username is invalid.");
                     }
@@ -166,27 +164,13 @@ public class GuiLobbyController implements LobbyGateway, Initializable, Renderab
         switch (result) {
             case TypedResult.Failure<GameConnectionSuccess, GameConnectionError> failure -> {
                 switch (failure.error()) {
-                    case ALREADY_CONNECTED_PLAYER -> {
-                        statusTextLabel.setText("You are already connected to this game.");
-                    }
-                    case USERNAME_ALREADY_IN_USE -> {
-                        statusTextLabel.setText("This username is already taken.");
-                    }
-                    case MAX_PLAYER_AMOUNT_EACHED -> {
-                        statusTextLabel.setText("The maximum amount of players for this game has been reached already.");
-                    }
-                    case NO_GAME_TO_JOIN -> {
-                        statusTextLabel.setText("No game has been started.");
-                    }
-                    case GAME_ALREADY_STARTED -> {
-                        statusTextLabel.setText("A game is already running, you can't enter. Change server if you want to play.");
-                    }
-                    case GAME_ALREADY_ENDED -> {
-                        statusTextLabel.setText("The game has already ended.");
-                    }
-                    case INVALID_USERNAME -> {
-                        statusTextLabel.setText("The username is invalid.");
-                    }
+                    case ALREADY_CONNECTED_PLAYER -> statusTextLabel.setText("You are already connected to this game.");
+                    case USERNAME_ALREADY_IN_USE -> statusTextLabel.setText("This username is already taken.");
+                    case MAX_PLAYER_AMOUNT_EACHED -> statusTextLabel.setText("The maximum amount of players for this game has been reached already.");
+                    case NO_GAME_TO_JOIN -> statusTextLabel.setText("No game has been started.");
+                    case GAME_ALREADY_STARTED -> statusTextLabel.setText("A game is already running, you can't enter. Change server if you want to play.");
+                    case GAME_ALREADY_ENDED -> statusTextLabel.setText("The game has already ended.");
+                    case INVALID_USERNAME -> statusTextLabel.setText("The username is invalid.");
                 }
             }
             case TypedResult.Success<GameConnectionSuccess, GameConnectionError> success -> {

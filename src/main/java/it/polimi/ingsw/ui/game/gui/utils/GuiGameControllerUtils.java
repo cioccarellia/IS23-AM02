@@ -31,6 +31,10 @@ public class GuiGameControllerUtils {
     private static final int commonGoalCardsAmount = LogicConfiguration.getInstance().commonGoalCardAmount();
     private static final int dimension = BoardConfiguration.getInstance().getDimension();
 
+    /**
+     * Manages the rending of everything that is related to the common goal cards
+     * when the game is created: card image view, card description label, top token image view
+     */
     // on game created
     public static void commonGoalCardsOnCreation(GameModel model, List<ImageView> commonGoalCards, List<Label> commonGoalCardDescriptions, List<ImageView> topTokens) {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
@@ -46,6 +50,10 @@ public class GuiGameControllerUtils {
     }
 
     // game running updates
+
+    /**
+     * Updates the token image views of a given player (used both for owner and enemy)
+     */
     public static void tokenUpdate(PlayerSession session, List<ImageView> obtainedTokens) {
         for (int i = 0; i < maxTokensPerPlayer; i++) {
             List<Token> playerTokens = session.getAcquiredTokens();
@@ -58,6 +66,10 @@ public class GuiGameControllerUtils {
         }
     }
 
+    /**
+     * Checks if a player has achieved a token for any common goal card,
+     * and if so it adds a text to the description label
+     */
     public static void checkAchievedCommonGoalCards(PlayerSession session, GameModel model, List<Label> commonGoalCardDescriptions) {
         List<CommonGoalCardIdentifier> ownerAchievedCommonGoalCards = session.getAchievedCommonGoalCards();
         List<CommonGoalCardIdentifier> gameCommonGoalCards = model.getCommonGoalCards().stream().map(card -> card.getCommonGoalCard().getId()).toList();
@@ -72,6 +84,9 @@ public class GuiGameControllerUtils {
         }
     }
 
+    /**
+     * Updates the top token image view for both common goal cards
+     */
     public static void topTokenUpdate(GameModel model, List<ImageView> topTokens) {
         for (int i = 0; i < commonGoalCardsAmount; i++) {
             Token topToken = null;
@@ -85,6 +100,9 @@ public class GuiGameControllerUtils {
         }
     }
 
+    /**
+     * Sets an effect to the given image view of a tile, so that it darkens when it is not selectable
+     */
     // utils
     public static void enableDarkeningEffect(ImageView selectedTile) {
         Light.Distant light = new Light.Distant();
@@ -94,6 +112,9 @@ public class GuiGameControllerUtils {
         selectedTile.setEffect(effect);
     }
 
+    /**
+     * After the end of a player's turn all the tiles go back to not having the darkening effect
+     */
     public static void disableDarkeningEffectForAllTiles(GridPane gridBoard, Board board) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
 
@@ -118,6 +139,9 @@ public class GuiGameControllerUtils {
         }
     }
 
+    /**
+     * Darkens all the tiles at the end of the game
+     */
     public static void enableDarkeningEffectForAllTiles(GridPane gridBoard, Board board) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
 
@@ -142,6 +166,9 @@ public class GuiGameControllerUtils {
         }
     }
 
+    /**
+     * Checks for each tile on the board if it is a valid tile with the current selection, and if not it darkens it
+     */
     public static void makeNonSelectableTilesDark(GridPane gridBoard, GameModel game, Set<Coordinate> selectedCoordinates) {
         Node[][] gridPaneNodes = PaneViewUtil.matrixify(gridBoard, dimension, dimension);
 
@@ -178,6 +205,9 @@ public class GuiGameControllerUtils {
         }
     }
 
+    /**
+     * Called by makeNonSelectableTilesDark, to check if a tile is selectable with the current selection
+     */
     public static void checkSelectedCoordinates(ImageView imageView, Coordinate currentCoordinate, Set<Coordinate> selectedCoordinates, GameModel game) {
         // darkens all the tiles that can't be selected with the currently selected tile and removes the effect from the acceptable ones
         Set<Coordinate> copy = (Set<Coordinate>) SerializationUtils.clone((Serializable) selectedCoordinates);

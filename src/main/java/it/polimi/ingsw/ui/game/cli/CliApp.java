@@ -170,15 +170,9 @@ public class CliApp implements GameGateway, Renderable {
 
                 if (isOwnerTurn) {
                     switch (currentPlayer.getPlayerCurrentGamePhase()) {
-                        case IDLE -> {
-                            logger.warn("Current user in idle state, model={},", model);
-                        }
-                        case SELECTING -> {
-                            gameSelection();
-                        }
-                        case INSERTING -> {
-                            gameInsertion();
-                        }
+                        case IDLE -> logger.warn("Current user in idle state, model={},", model);
+                        case SELECTING -> gameSelection();
+                        case INSERTING -> gameInsertion();
                     }
                 } else {
                     System.out.print("@" + currentPlayer.getUsername() + " is " + currentPlayer.getPlayerCurrentGamePhase().toString().toLowerCase());
@@ -237,10 +231,8 @@ public class CliApp implements GameGateway, Renderable {
                         break;
                 }
             }
-            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> {
-                // implicit model update
-                modelUpdate(success.value().model());
-            }
+            case TypedResult.Success<TileSelectionSuccess, TileSelectionFailures> success -> // implicit model update
+                    modelUpdate(success.value().model());
         }
     }
 
@@ -250,10 +242,8 @@ public class CliApp implements GameGateway, Renderable {
             case TypedResult.Failure<TileInsertionSuccess, BookshelfInsertionFailure> failure -> {
 
             }
-            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> {
-                // implicit modelUpdate
-                modelUpdate(success.value().model());
-            }
+            case TypedResult.Success<TileInsertionSuccess, BookshelfInsertionFailure> success -> // implicit modelUpdate
+                    modelUpdate(success.value().model());
         }
     }
 
