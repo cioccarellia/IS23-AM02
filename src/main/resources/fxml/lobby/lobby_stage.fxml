@@ -6,18 +6,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.lobby.gui.GuiLobbyController">
-    <children>
-        <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BACKGROUND %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-        <ImageView fitHeight="600.0" fitWidth="800.0">
-            <Image url="@../../img/misc/wood_background.jpg" />
-        </ImageView>
 
-        <ImageView fitHeight="220.0" fitWidth="800.0" layoutY="396.0">
-            <Image url="@../../img/misc/banner_chair.png" />
-         <effect>
-            <GaussianBlur />
-         </effect>
-        </ImageView>
+    <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BACKGROUND %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+    <ImageView fitHeight="600.0" fitWidth="800.0">
+        <Image url="@../../img/misc/wood_background.jpg"/>
+    </ImageView>
+
+    <ImageView fitHeight="220.0" fitWidth="800.0" layoutY="396.0">
+        <Image url="@../../img/misc/banner_chair.png"/>
+    </ImageView>
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BORDERPANE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <BorderPane prefHeight="600.0" prefWidth="800.0">
@@ -110,30 +107,31 @@
 
                         <!-- Login button -->
                         <HBox alignment="CENTER">
-                                <HBox alignment="CENTER" layoutY="20.0">
+                            <HBox alignment="CENTER" layoutY="20.0">
 
-                                    <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
-                                        <Image url="@../../img/misc/closed_tiles_bag.png" />
-                                    </ImageView>
-                                    <Button fx:id="actionButton" onAction="#onActionButtonClicked" prefHeight="35.0" prefWidth="200.0" text="LOGIN" textAlignment="CENTER" textFill="#e06a2f" HBox.hgrow="ALWAYS">
-                                        <font>
-                                            <Font name="Consolas" size="18.0" />
-                                        </font>
-                                        <HBox.margin>
-                                            <Insets bottom="10.0" top="10.0" />
-                                        </HBox.margin>
-                                    </Button>
+                                <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
+                                    <Image url="@../../img/misc/closed_tiles_bag.png"/>
+                                </ImageView>
+                                <Button fx:id="actionButton" onAction="#onActionButtonClicked" prefHeight="35.0" prefWidth="200.0" text="LOGIN" textAlignment="CENTER" textFill="#e06a2f"
+                                        HBox.hgrow="ALWAYS">
+                                    <font>
+                                        <Font name="Consolas" size="18.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" top="10.0"/>
+                                    </HBox.margin>
+                                </Button>
 
-                                    <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
-                                        <Image url="@../../img/misc/closed_tiles_bag.png" />
-                                    </ImageView>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                                </HBox>
+                                <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
+                                    <Image url="@../../img/misc/closed_tiles_bag.png"/>
+                                </ImageView>
+                                <HBox.margin>
+                                    <Insets/>
+                                </HBox.margin>
                             </HBox>
-                        </VBox>
+                        </HBox>
                     </VBox>
+                </VBox>
 
                 <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% POSTLOGIN VBOX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
                 <VBox fx:id="postLoginVBox" managed="false" visible="false">
@@ -279,13 +277,13 @@
         </center>
 
 
-            <bottom>
-                <HBox alignment="CENTER">
-                    <Label fx:id="statusTextLabel" alignment="CENTER" prefHeight="30.0" prefWidth="700.0" text="Placeholder status" textFill="WHITE">
-                        <font>
-                            <Font name="Monospaced Bold" size="20.0" />
-                        </font>
-                    </Label>
+        <bottom>
+            <HBox alignment="CENTER">
+                <Label fx:id="statusTextLabel" alignment="CENTER" prefHeight="30.0" prefWidth="700.0" text="Placeholder status" textFill="WHITE">
+                    <font>
+                        <Font name="Monospaced Bold" size="20.0"/>
+                    </font>
+                </Label>
 
                 <BorderPane.margin>
                     <Insets bottom="30.0"/>
