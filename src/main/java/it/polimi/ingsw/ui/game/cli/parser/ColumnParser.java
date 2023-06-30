@@ -36,7 +36,8 @@ public class ColumnParser {
 
             try {
                 column = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
 
             if (column < 0 || column > cols) {
                 System.out.print(Chalk.on("Selected column out of bounds, choose a number between 0 and 4.").bgYellow().toString());

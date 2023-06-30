@@ -38,7 +38,7 @@ public class TcpConnectionHandler implements Runnable, ClientService, Closeable 
 
     /**
      * Socket for given {@code TcpConnectionHandler}
-     * */
+     */
     private final Socket socket;
     final private PrintWriter socketOut;
     final private BufferedReader socketIn;

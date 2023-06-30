@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 
 public class AsyncStreamReader implements Callable<String> {
 
-    private int DELAY = 200;
+    private final int DELAY = 200;
     public static boolean isActive = false;
 
     public String call() {

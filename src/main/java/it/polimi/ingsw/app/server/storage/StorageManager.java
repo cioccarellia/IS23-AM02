@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * Helper class used to manage stored configurations
- * */
+ */
 public class StorageManager {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageManager.class);
@@ -93,7 +93,7 @@ public class StorageManager {
         File file = new File(PATH);
         String path = file.getAbsolutePath();
 
-        if (file.exists() ) {
+        if (file.exists()) {
             if (file.delete()) {
                 logger.info("Successfully deleted file=" + path);
             } else {
@@ -103,7 +103,6 @@ public class StorageManager {
             logger.warn("Could not find file=" + path);
         }
     }
-
 
 
     private @NotNull String readFileContents(File file) {

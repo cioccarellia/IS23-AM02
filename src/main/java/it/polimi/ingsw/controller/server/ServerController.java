@@ -91,7 +91,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     /**
      * Chat model, containing all chat messages.
      */
-    private ChatModel chatModel = new ChatModel();
+    private final ChatModel chatModel = new ChatModel();
 
     /**
      * Max number of players for current game mode, when selected
@@ -102,7 +102,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      * Current server general status, independent from game logic
      */
     private ServerStatus serverStatus = NO_GAME_STARTED;
-
 
 
     public ServerController(ClientConnectionsManager connectionsManager, StorageManager storageManager) {
@@ -395,7 +394,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-
     /**
      * Processes, validates and updates the game data according to the played move.
      * This function should be the called by the current player when it's his/her turn
@@ -403,9 +401,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      * Any invocation outside these conditions will be ignored.
      * If successful, the next game phase will be insertion for the current player.
      *
-     * @param username      player invoking this method
-     * @param selection     the coordinates packed by the user. No {@code Tile}s needed since the data
-     *                      will be queried on the server regardless
+     * @param username  player invoking this method
+     * @param selection the coordinates packed by the user. No {@code Tile}s needed since the data
+     *                  will be queried on the server regardless
      */
     @Override
     public synchronized void gameSelectionTurnResponse(String username, Set<Coordinate> selection) throws RemoteException {
@@ -457,7 +455,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-
     /**
      * Processes, validates and updates the game data according to the played move.
      * This function should be the called by the current player when it's his/her turn
@@ -465,9 +462,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      * Any invocation outside these conditions will be ignored.
      * If successful, the next player will be set, and it will be its turn to play.
      *
-     * @param username      player invoking this method
-     * @param tiles         the selected tiles, in order of insertion
-     * @param column        the column to insert the tiles in
+     * @param username player invoking this method
+     * @param tiles    the selected tiles, in order of insertion
+     * @param column   the column to insert the tiles in
      */
     @Override
     public synchronized void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException {
@@ -573,11 +570,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-
     /**
      * Quits the game and shares the updates status with all the connected players.
      *
-     * @param username      player invoking this method
+     * @param username player invoking this method
      */
     @Override
     public void quitRequest(String username) throws RemoteException {
@@ -599,8 +595,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      * Sends a message (updating the {@link ChatModel}) and then notifies the designated players
      * that new messages have been sent, and updates them.
      *
-     * @param sendingUsername      player invoking this method and sending the message
-     * @param recipient            a {@link MessageRecipient} to specify the destination of this message
+     * @param sendingUsername player invoking this method and sending the message
+     * @param recipient       a {@link MessageRecipient} to specify the destination of this message
      */
     @Override
     public synchronized void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
@@ -747,12 +743,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-
-
     /**
      * Empty message for registering interactions with the server
      *
-     * @param username      player invoking this method
+     * @param username player invoking this method
      */
     @Override
     public void keepAlive(String username) {

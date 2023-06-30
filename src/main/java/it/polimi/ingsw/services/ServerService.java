@@ -70,7 +70,7 @@ public interface ServerService extends Remote {
 
     /**
      * Closes the game
-     * */
+     */
     @ServerFunction
     void quitRequest(String username) throws RemoteException;
 

@@ -5,7 +5,8 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.lobby.gui.GuiLobbyController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.ui.lobby.gui.GuiLobbyController">
 
     <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BACKGROUND %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
     <ImageView fitHeight="600.0" fitWidth="800.0">
@@ -112,7 +113,8 @@
                                 <ImageView fitHeight="50.0" fitWidth="152.0" preserveRatio="true">
                                     <Image url="@../../img/misc/closed_tiles_bag.png"/>
                                 </ImageView>
-                                <Button fx:id="actionButton" onAction="#onActionButtonClicked" prefHeight="35.0" prefWidth="200.0" text="LOGIN" textAlignment="CENTER" textFill="#e06a2f"
+                                <Button fx:id="actionButton" onAction="#onActionButtonClicked" prefHeight="35.0"
+                                        prefWidth="200.0" text="LOGIN" textAlignment="CENTER" textFill="#e06a2f"
                                         HBox.hgrow="ALWAYS">
                                     <font>
                                         <Font name="Consolas" size="18.0"/>
@@ -279,7 +281,8 @@
 
         <bottom>
             <HBox alignment="CENTER">
-                <Label fx:id="statusTextLabel" alignment="CENTER" prefHeight="30.0" prefWidth="700.0" text="Placeholder status" textFill="WHITE">
+                <Label fx:id="statusTextLabel" alignment="CENTER" prefHeight="30.0" prefWidth="700.0"
+                       text="Placeholder status" textFill="WHITE">
                     <font>
                         <Font name="Monospaced Bold" size="20.0"/>
                     </font>

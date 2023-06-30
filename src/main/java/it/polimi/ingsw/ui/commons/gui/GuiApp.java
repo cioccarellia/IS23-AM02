@@ -127,8 +127,8 @@ public class GuiApp extends Application implements LobbyGateway, GameGateway {
                         taskbar.setIconImage(dockIcon);
                     }
                 }
-            } catch (Exception ignored) {}
-
+            } catch (Exception ignored) {
+            }
 
 
             lobbyStage.setTitle("Lobby");

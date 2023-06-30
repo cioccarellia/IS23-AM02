@@ -82,7 +82,8 @@ public class CliLobby implements LobbyGateway, Renderable {
                         // out of phase model, requiring manual model update since server isn't aware of our existence yet
                         handler.sendStatusUpdateRequest();
                     }
-                    case GAME_ALREADY_RUNNING -> System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
+                    case GAME_ALREADY_RUNNING ->
+                            System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
                     case INVALID_USERNAME -> {
                         System.out.print("The username is invalid.\n");
                         render();
@@ -113,9 +114,11 @@ public class CliLobby implements LobbyGateway, Renderable {
                 switch (failure.error()) {
                     case ALREADY_CONNECTED_PLAYER -> System.out.print("You are already connected to this game.\n");
                     case USERNAME_ALREADY_IN_USE -> System.out.print("This username is already taken.\n");
-                    case MAX_PLAYER_AMOUNT_EACHED -> System.out.print("The maximum amount of players for this game has been reached already.\n");
+                    case MAX_PLAYER_AMOUNT_EACHED ->
+                            System.out.print("The maximum amount of players for this game has been reached already.\n");
                     case NO_GAME_TO_JOIN -> System.out.print("No game has been started.\n");
-                    case GAME_ALREADY_STARTED -> System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
+                    case GAME_ALREADY_STARTED ->
+                            System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
                     case GAME_ALREADY_ENDED -> System.out.print("The game has already ended.\n");
                     case INVALID_USERNAME -> System.out.print("The username is invalid.\n");
                 }
@@ -191,7 +194,8 @@ public class CliLobby implements LobbyGateway, Renderable {
 
                 handler.sendGameConnectionRequest(username);
             }
-            case GAME_RUNNING -> System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
+            case GAME_RUNNING ->
+                    System.out.print("A game is already running, you can't enter. Change server if you want to play.\n");
         }
     }
 

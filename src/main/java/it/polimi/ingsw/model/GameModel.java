@@ -549,17 +549,17 @@ public class GameModel implements ModelService, Serializable {
     @Override
     public String toString() {
         return "GameModel{" +
-               "mode=" + mode +
-               ", board=" + board +
-               ", sessions=" + sessions +
-               ", tileExtractor=" + tileExtractor +
-               ", commonGoalCardExtractor=" + commonGoalCardExtractor +
-               ", personalGoalCardExtractor=" + personalGoalCardExtractor +
-               ", commonGoalCardStatuses=" + commonGoalCardStatuses +
-               ", status=" + status +
-               ", startingPlayerNumber=" + startingPlayerNumber +
-               ", currentPlayerNumber=" + currentPlayerNumber +
-               ", preStandByGameStatus=" + preStandByGameStatus +
-               '}';
+                "mode=" + mode +
+                ", board=" + board +
+                ", sessions=" + sessions +
+                ", tileExtractor=" + tileExtractor +
+                ", commonGoalCardExtractor=" + commonGoalCardExtractor +
+                ", personalGoalCardExtractor=" + personalGoalCardExtractor +
+                ", commonGoalCardStatuses=" + commonGoalCardStatuses +
+                ", status=" + status +
+                ", startingPlayerNumber=" + startingPlayerNumber +
+                ", currentPlayerNumber=" + currentPlayerNumber +
+                ", preStandByGameStatus=" + preStandByGameStatus +
+                '}';
     }
 }
