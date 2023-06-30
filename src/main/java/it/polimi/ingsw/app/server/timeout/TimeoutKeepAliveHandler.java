@@ -104,6 +104,7 @@ public class TimeoutKeepAliveHandler implements Runnable {
             try {
                 Thread.sleep(TIMEOUT);
             } catch (InterruptedException e) {
+                System.out.println("Keep Alive Thread interrupted");
                 throw new RuntimeException(e);
             }
         }

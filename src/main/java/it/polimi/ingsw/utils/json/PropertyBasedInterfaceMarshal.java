@@ -18,6 +18,7 @@ public class PropertyBasedInterfaceMarshal implements JsonSerializer<Message>, J
             Class<?> clazz = Class.forName(className);
             return context.deserialize(element, clazz);
         } catch (ClassNotFoundException e) {
+            System.out.println("Malformed response");
             throw new JsonParseException(e);
         }
     }

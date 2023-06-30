@@ -4,6 +4,9 @@ import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Specialized {@link ExecutorService} for networking calls
+ * */
 public class AsyncExecutor {
 
     private final ExecutorService service;
@@ -17,7 +20,9 @@ public class AsyncExecutor {
             try {
                 sam.exec();
             } catch (RemoteException e) {
+                System.out.println("Generic network issue");
                 e.printStackTrace();
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });

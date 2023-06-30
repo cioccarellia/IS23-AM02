@@ -483,7 +483,6 @@ public class GameModel implements ModelService, Serializable {
                     onNextTurn(nextPlayerUsername);
             case INSERTING -> {
                 // rollback model to pre-selection stage and forward turns
-                // todo
                 List<CellInfo> savedCellInfos = getCurrentPlayerSession().getPlayerTileSelection().getSelection();
 
                 for (CellInfo savedInfoForSingleCell : savedCellInfos) {

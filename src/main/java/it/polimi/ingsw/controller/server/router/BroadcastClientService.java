@@ -107,6 +107,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onServerStatusUpdateEvent(status, playerInfo);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -118,6 +120,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onGameCreationReply(result);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -129,6 +133,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onGameConnectionReply(result);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -140,6 +146,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onGameStartedEvent(game);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -151,6 +159,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onModelUpdateEvent(game);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -162,6 +172,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onGameSelectionTurnEvent(turnResult);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -173,6 +185,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onGameInsertionTurnEvent(turnResult);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -184,6 +198,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 source.onPlayerConnectionStatusUpdateEvent(status, usernames);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -196,6 +212,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 clientService.onGameEndedEvent();
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });
@@ -207,6 +225,8 @@ public class BroadcastClientService implements ClientService {
             try {
                 clientService.onChatModelUpdate(messages);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the client");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         });

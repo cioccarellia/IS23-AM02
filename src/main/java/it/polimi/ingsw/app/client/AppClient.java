@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Launches a client instance
+ * Launches a client instance with the given parameters
  */
 public class AppClient implements Runnable {
 
@@ -42,7 +42,10 @@ public class AppClient implements Runnable {
     private final ClientController controller;
 
     /**
-     * Client-side thread pool executor
+     * Client-side thread pool executor. This is used to launch different threads carrying out different tasks.
+     * An example is the {@link it.polimi.ingsw.app.client.keepalive.KeepAliveDaemon} which periodically sends
+     * to the server connection status and data.
+     * It is also used to schedule UI threads (like CLI and GUI-starter)
      */
     public final static ExecutorService clientExecutorService = Executors.newCachedThreadPool();
 
@@ -60,7 +63,8 @@ public class AppClient implements Runnable {
         try {
             this.controller = new ClientController(gateway, config);
         } catch (RemoteException e) {
-            System.out.println("Can not start client, error instantiating ");
+            System.out.println("Can not start client, error instantiating clients");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
 
@@ -72,6 +76,9 @@ public class AppClient implements Runnable {
         initializeClientThreads();
     }
 
+    /**
+     * Creates all the needed threads on the client before starting the game
+     * */
     private void initializeClientThreads() {
         ClientNetworkLayer.scheduleReceiverExecutionThread(gateway, clientExecutorService);
     }

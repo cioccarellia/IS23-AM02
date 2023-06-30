@@ -12,9 +12,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The LobbyGateway interface represents the gateway for communication between the lobby view
+ * The {@code LobbyGateway} interface represents the gateway for communication between the lobby view
  * and the server. It provides methods to handle server status updates, game creation replies,
  * game connection replies, and termination of the lobby.
+ * This interface is meant to describe higher-order events which can be implemented in different
+ * user interfaces (GUI/CLI) independently.
  */
 public interface LobbyGateway extends Serializable {
 

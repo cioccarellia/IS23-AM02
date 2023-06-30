@@ -109,6 +109,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         this.storageManager = storageManager;
 
         router = new Router(connectionsManager);
+
+        System.out.println("Server up");
     }
 
 
@@ -152,9 +154,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     private synchronized void synchronizeConnectionLayer(String username, @NotNull ClientService service) throws RemoteException {
         // connection stash service for callbacks
         connectionsManager.get(username).getStash().setClientConnectionService(service);
-        asyncExecutor.async(() -> {
-            service.onAcceptConnectionAndFinalizeUsername(username);
-        });
+        asyncExecutor.async(() -> service.onAcceptConnectionAndFinalizeUsername(username));
 
         // en-route parameters
         switch (service) {
@@ -172,9 +172,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
      */
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
-        asyncExecutor.async(() -> {
-            remoteService.onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-        });
+        asyncExecutor.async(() -> remoteService.onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
     }
 
     /**
@@ -191,32 +189,30 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     @Override
     public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) throws RemoteException {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
+        System.out.println("gameStartedRequest, mode=" + mode + ", username=" + username + ", protocol = " + protocol);
 
         if (serverStatus == GAME_RUNNING) {
             logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.GAME_ALREADY_RUNNING);
+            System.out.println("returning failure from gameStartRequest(): " + GameCreationError.GAME_ALREADY_RUNNING);
 
-            asyncExecutor.async(() -> {
-                remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_RUNNING));
-            });
+            asyncExecutor.async(() -> remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_RUNNING)));
             return;
         }
 
         if (serverStatus == GAME_INITIALIZING) {
             logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.GAME_ALREADY_INITIALIZING);
+            System.out.println("returning failure from gameStartRequest(): " + GameCreationError.GAME_ALREADY_INITIALIZING);
 
-            asyncExecutor.async(() -> {
-                remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_INITIALIZING));
-            });
+            asyncExecutor.async(() -> remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.GAME_ALREADY_INITIALIZING)));
             return;
         }
 
 
         if (!Validator.isValidUsername(username)) {
             logger.warn("returning failure from gameStartRequest(): {}", GameCreationError.INVALID_USERNAME);
+            System.out.println("returning failure from gameStartRequest(): " + GameCreationError.INVALID_USERNAME);
 
-            asyncExecutor.async(() -> {
-                remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.INVALID_USERNAME));
-            });
+            asyncExecutor.async(() -> remoteService.onGameCreationReply(new TypedResult.Failure<>(GameCreationError.INVALID_USERNAME)));
             return;
         }
 
@@ -236,14 +232,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         logger.info("returning success from gameStartRequest()");
 
         // return success to the caller
-        asyncExecutor.async(() -> {
-            router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packagePlayerInfo())));
-        });
+        asyncExecutor.async(() -> router.route(username).onGameCreationReply(new TypedResult.Success<>(new GameCreationSuccess(username, packagePlayerInfo()))));
 
         // route the new status to everybody
-        asyncExecutor.async(() -> {
-            router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-        });
+        asyncExecutor.async(() -> router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
     }
 
 
@@ -260,65 +252,60 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     @Override
     public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) throws RemoteException {
         logger.info("gameConnectionRequest(username={}, protocol={}, remoteService={})", username, protocol, remoteService);
+        System.out.println("gameConnectionRequest, username=" + username + ", protocol = " + protocol + ", remoteService=" + remoteService);
 
         assert connectionsManager.size() <= maxPlayerAmount;
 
         if (!Validator.isValidUsername(username)) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.INVALID_USERNAME);
+            System.out.println("returning failure from gameConnectionRequest(): " + GameConnectionError.INVALID_USERNAME);
 
-            asyncExecutor.async(() -> {
-                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.INVALID_USERNAME));
-            });
+            asyncExecutor.async(() -> remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.INVALID_USERNAME)));
             return;
         }
 
         if (serverStatus == GAME_RUNNING) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_STARTED);
+            System.out.println("returning failure from gameConnectionRequest(): " + GameConnectionError.GAME_ALREADY_STARTED);
 
             // anonymous routing
-            asyncExecutor.async(() -> {
-                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED));
-            });
+            asyncExecutor.async(() -> remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_STARTED)));
             return;
         }
 
         if (serverStatus == NO_GAME_STARTED) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.NO_GAME_TO_JOIN);
+            System.out.println("returning failure from gameConnectionRequest(): " + GameConnectionError.NO_GAME_TO_JOIN);
 
             // anonymous routing
-            asyncExecutor.async(() -> {
-                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.NO_GAME_TO_JOIN));
-            });
+            asyncExecutor.async(() -> remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.NO_GAME_TO_JOIN)));
             return;
         }
 
         if (connectionsManager.size() == maxPlayerAmount) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.MAX_PLAYER_AMOUNT_EACHED);
+            System.out.println("returning failure from gameConnectionRequest(): " + GameConnectionError.MAX_PLAYER_AMOUNT_EACHED);
 
             // anonymous routing
-            asyncExecutor.async(() -> {
-                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_AMOUNT_EACHED));
-            });
+            asyncExecutor.async(() -> remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.MAX_PLAYER_AMOUNT_EACHED)));
             return;
         }
 
         if (connectionsManager.containsUsername(username)) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.USERNAME_ALREADY_IN_USE);
+            System.out.println("returning failure from gameConnectionRequest(): " + GameConnectionError.USERNAME_ALREADY_IN_USE);
 
             // anonymous routing
-            asyncExecutor.async(() -> {
-                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE));
-            });
+            asyncExecutor.async(() -> remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.USERNAME_ALREADY_IN_USE)));
             return;
         }
 
         if (gameModel.getGameStatus() == ENDED) {
             logger.warn("returning failure from gameConnectionRequest(): {}", GameConnectionError.GAME_ALREADY_ENDED);
+            System.out.println("returning failure from gameConnectionRequest(): " + GameConnectionError.GAME_ALREADY_ENDED);
 
             // anonymous routing
-            asyncExecutor.async(() -> {
-                remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED));
-            });
+            asyncExecutor.async(() -> remoteService.onGameConnectionReply(new TypedResult.Failure<>(GameConnectionError.GAME_ALREADY_ENDED)));
             return;
         }
 
@@ -344,14 +331,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // route a success response to the caller, since it connected successfully
-        asyncExecutor.async(() -> {
-            router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packagePlayerInfo())));
-        });
+        asyncExecutor.async(() -> router.route(username).onGameConnectionReply(new TypedResult.Success<>(new GameConnectionSuccess(username, packagePlayerInfo()))));
 
         // route the new status to everybody, giving the details for the new connected player
-        asyncExecutor.async(() -> {
-            router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-        });
+        asyncExecutor.async(() -> router.broadcastExcluding(username).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
 
 
         if (shouldStartGame) {
@@ -364,24 +347,19 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             if (matchingGame != null) {
                 // we override the game
                 gameModel = matchingGame;
+                System.out.println("Loading game model from storage");
             } else {
                 // no game found, proceed with empty
             }
 
-            asyncExecutor.async(() -> {
-                router.broadcast().onGameStartedEvent(gameModel);
-            });
+            asyncExecutor.async(() -> router.broadcast().onGameStartedEvent(gameModel));
 
-            asyncExecutor.async(() -> {
-                router.broadcast().onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-            });
+            asyncExecutor.async(() -> router.broadcast().onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
         }
 
 
         // log an interaction for the requiring user
-        asyncExecutor.async(() -> {
-            connectionsManager.registerInteraction(username);
-        });
+        asyncExecutor.async(() -> connectionsManager.registerInteraction(username));
     }
 
 
@@ -408,32 +386,31 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     @Override
     public synchronized void gameSelectionTurnResponse(String username, Set<Coordinate> selection) throws RemoteException {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
+        System.out.println("gameSelectionTurnResponse(username=" + username + ", selection=" + selection + ")");
+
         connectionsManager.registerInteraction(username);
 
         if (!isUsernameActivePlayer(username)) {
             logger.warn("returning failure from gameSelectionTurnResponse(): {}", TileSelectionFailures.UNAUTHORIZED_PLAYER);
+            System.out.println("returning failure from gameSelectionTurnResponse(): " + TileSelectionFailures.UNAUTHORIZED_PLAYER);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_PLAYER)));
             return;
         }
 
         if (gameModel.getCurrentPlayerSession().getPlayerCurrentGamePhase() != SELECTING) {
             logger.warn("returning failure from gameSelectionTurnResponse(): {}", TileSelectionFailures.WRONG_GAME_PHASE);
+            System.out.println("returning failure from gameSelectionTurnResponse(): " + TileSelectionFailures.WRONG_GAME_PHASE);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.WRONG_GAME_PHASE));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.WRONG_GAME_PHASE)));
             return;
         }
 
         if (!gameModel.isSelectionValid(selection)) {
             logger.warn("returning failure from gameSelectionTurnResponse(): {}", TileSelectionFailures.UNAUTHORIZED_SELECTION);
+            System.out.println("returning failure from gameSelectionTurnResponse(): " + TileSelectionFailures.UNAUTHORIZED_SELECTION);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameSelectionTurnEvent(new TypedResult.Failure<>(TileSelectionFailures.UNAUTHORIZED_SELECTION)));
             return;
         }
 
@@ -441,14 +418,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // send insertion success result to caller
-        asyncExecutor.async(() -> {
-            router.route(username).onGameSelectionTurnEvent(new TypedResult.Success<>(new TileSelectionSuccess(gameModel)));
-        });
+        asyncExecutor.async(() -> router.route(username).onGameSelectionTurnEvent(new TypedResult.Success<>(new TileSelectionSuccess(gameModel))));
 
         // and send model update to everybody else
-        asyncExecutor.async(() -> {
-            router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
-        });
+        asyncExecutor.async(() -> router.broadcastExcluding(username).onModelUpdateEvent(gameModel));
 
         // saves updated game config to file
         persistenceExecutor.submit(this::saveModelToPersistentStorage);
@@ -469,59 +442,55 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     @Override
     public synchronized void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException {
         logger.info("gameInsertionTurnResponse(username={}, tiles={}, column={})", username, tiles, column);
+        System.out.println("gameSelectionTurnResponse(username=" + username + ", tiles=" + tiles + ", column=" + column + ")");
+
         connectionsManager.registerInteraction(username);
 
         if (!isUsernameActivePlayer(username)) {
             logger.warn("returning failure from gameInsertionTurnResponse(): {}", BookshelfInsertionFailure.WRONG_PLAYER);
+            System.out.println("returning failure from gameInsertionTurnResponse(): " + BookshelfInsertionFailure.WRONG_PLAYER);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_PLAYER)));
             return;
         }
 
         if (gameModel.getCurrentPlayerSession().getPlayerCurrentGamePhase() != INSERTING) {
             logger.warn("returning failure from gameInsertionTurnResponse(): {}", BookshelfInsertionFailure.WRONG_GAME_PHASE);
+            System.out.println("returning failure from gameInsertionTurnResponse(): " + BookshelfInsertionFailure.WRONG_GAME_PHASE);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_GAME_PHASE));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_GAME_PHASE)));
             return;
         }
 
         if (!gameModel.getCurrentPlayerSession().getPlayerTileSelection().selectionEquals(tiles)) {
             logger.warn("returning failure from gameInsertionTurnResponse(): {}", BookshelfInsertionFailure.WRONG_SELECTION);
+            System.out.println("returning failure from gameInsertionTurnResponse(): " + BookshelfInsertionFailure.WRONG_SELECTION);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.WRONG_SELECTION)));
             return;
         }
 
         if (column < 0 || column >= BookshelfConfiguration.getInstance().cols()) {
             logger.warn("returning failure from gameInsertionTurnResponse(): {}", BookshelfInsertionFailure.ILLEGAL_COLUMN);
+            System.out.println("returning failure from gameInsertionTurnResponse(): " + BookshelfInsertionFailure.ILLEGAL_COLUMN);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.ILLEGAL_COLUMN)));
             return;
         }
 
         if (tiles.size() > LogicConfiguration.getInstance().maxSelectionSize()) {
             logger.warn("returning failure from gameInsertionTurnResponse(): {}", BookshelfInsertionFailure.TOO_MANY_TILES);
+            System.out.println("returning failure from gameInsertionTurnResponse(): " + BookshelfInsertionFailure.TOO_MANY_TILES);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.TOO_MANY_TILES)));
             return;
         }
 
         if (!gameModel.getCurrentPlayerSession().getBookshelf().canFit(column, tiles.size())) {
             logger.warn("returning failure from gameInsertionTurnResponse(): {}", BookshelfInsertionFailure.NO_FIT);
+            System.out.println("returning failure from gameInsertionTurnResponse(): " + BookshelfInsertionFailure.NO_FIT);
 
-            asyncExecutor.async(() -> {
-                router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.NO_FIT));
-            });
+            asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Failure<>(BookshelfInsertionFailure.NO_FIT)));
             return;
         }
 
@@ -534,14 +503,10 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
         // send insertion success result to caller
-        asyncExecutor.async(() -> {
-            router.route(username).onGameInsertionTurnEvent(new TypedResult.Success<>(new TileInsertionSuccess(gameModel)));
-        });
+        asyncExecutor.async(() -> router.route(username).onGameInsertionTurnEvent(new TypedResult.Success<>(new TileInsertionSuccess(gameModel))));
 
         // and send model update to everybody else
-        asyncExecutor.async(() -> {
-            router.broadcastExcluding(username).onModelUpdateEvent(gameModel);
-        });
+        asyncExecutor.async(() -> router.broadcastExcluding(username).onModelUpdateEvent(gameModel));
 
         // saves updates game config to file
         persistenceExecutor.submit(this::saveModelToPersistentStorage);
@@ -578,14 +543,14 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     @Override
     public void quitRequest(String username) throws RemoteException {
         logger.info("quitRequest(username={})", username);
+        System.out.println("quitRequest(username=" + username + ")");
+
         connectionsManager.registerInteraction(username);
 
         serverStatus = GAME_OVER;
         gameModel.onGameEnded();
 
-        asyncExecutor.async(() -> {
-            router.broadcast().onGameEndedEvent();
-        });
+        asyncExecutor.async(() -> router.broadcast().onGameEndedEvent());
 
         persistenceExecutor.submit(this::deletePersistentModelForGame);
     }
@@ -607,11 +572,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
                 // dispatch a chat update for everybody
                 for (String username : connectionsManager.getUsernames()) {
-                    asyncExecutor.async(() -> {
-                        router.route(username).onChatModelUpdate(
-                                chatModel.getMessagesFor(username)
-                        );
-                    });
+                    asyncExecutor.async(() -> router.route(username).onChatModelUpdate(
+                            chatModel.getMessagesFor(username)
+                    ));
                 }
             }
             case MessageRecipient.Direct directRecipient -> {
@@ -631,19 +594,15 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 chatModel.addMessage(sendingUsername, recipient, text.trim());
 
                 // dispatch new message list for sender and receiver
-                asyncExecutor.async(() -> {
-                    router.route(sendingUsername).onChatModelUpdate(
-                            chatModel.getMessagesFor(sendingUsername)
-                    );
-                });
+                asyncExecutor.async(() -> router.route(sendingUsername).onChatModelUpdate(
+                        chatModel.getMessagesFor(sendingUsername)
+                ));
 
                 String recipientUsername = directRecipient.username();
 
-                asyncExecutor.async(() -> {
-                    router.route(recipientUsername).onChatModelUpdate(
-                            chatModel.getMessagesFor(recipientUsername)
-                    );
-                });
+                asyncExecutor.async(() -> router.route(recipientUsername).onChatModelUpdate(
+                        chatModel.getMessagesFor(recipientUsername)
+                ));
             }
         }
     }
@@ -662,11 +621,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             serverStatus = GAME_OVER;
             gameModel.onGameEnded();
 
-            asyncExecutor.async(() -> {
-                router.broadcastExcluding(
-                        connectionsManager.getDisconnectedOrClosedClientUsernames()
-                ).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-            });
+            asyncExecutor.async(() -> router.broadcastExcluding(
+                    connectionsManager.getDisconnectedOrClosedClientUsernames()
+            ).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
 
             persistenceExecutor.submit(this::deletePersistentModelForGame);
             return;
@@ -677,11 +634,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             // Server Status Update
             // there are clients which are disconnected
 
-            asyncExecutor.async(() -> {
-                router.broadcastExcluding(
-                        connectionsManager.getDisconnectedClientUsernames()
-                ).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-            });
+            asyncExecutor.async(() -> router.broadcastExcluding(
+                    connectionsManager.getDisconnectedClientUsernames()
+            ).onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
 
 
             if (gameModel != null && gameModel.getGameStatus() != GameStatus.INITIALIZATION) {
@@ -704,22 +659,18 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                     boolean hasModelStatusChanged = gameModel.onStandby();
 
                     if (hasModelStatusChanged) {
-                        asyncExecutor.async(() -> {
-                            router.broadcastExcluding(
-                                    connectionsManager.getDisconnectedClientUsernames()
-                            ).onModelUpdateEvent(gameModel);
-                        });
+                        asyncExecutor.async(() -> router.broadcastExcluding(
+                                connectionsManager.getDisconnectedClientUsernames()
+                        ).onModelUpdateEvent(gameModel));
                     }
                 } else {
                     // player(s) disconnected but game running
                     boolean hasModelStatusChanged = gameModel.onResume();
 
                     if (hasModelStatusChanged) {
-                        asyncExecutor.async(() -> {
-                            router.broadcastExcluding(
-                                    connectionsManager.getDisconnectedClientUsernames()
-                            ).onModelUpdateEvent(gameModel);
-                        });
+                        asyncExecutor.async(() -> router.broadcastExcluding(
+                                connectionsManager.getDisconnectedClientUsernames()
+                        ).onModelUpdateEvent(gameModel));
                     }
                 }
             }
@@ -728,17 +679,13 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             boolean hasModelStatusChanged = gameModel.onResume();
 
             if (hasModelStatusChanged) {
-                asyncExecutor.async(() -> {
-                    router.broadcastExcluding(
-                            connectionsManager.getDisconnectedClientUsernames()
-                    ).onModelUpdateEvent(gameModel);
-                });
+                asyncExecutor.async(() -> router.broadcastExcluding(
+                        connectionsManager.getDisconnectedClientUsernames()
+                ).onModelUpdateEvent(gameModel));
             }
 
             // all clients are back online, resend model and server status. Maybe make appropriate request
-            asyncExecutor.async(() -> {
-                router.broadcast().onServerStatusUpdateEvent(serverStatus, packagePlayerInfo());
-            });
+            asyncExecutor.async(() -> router.broadcast().onServerStatusUpdateEvent(serverStatus, packagePlayerInfo()));
         }
     }
 
@@ -751,6 +698,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     @Override
     public void keepAlive(String username) {
         logger.info("keepAlive(username={})", username);
+        System.out.println("keepAlive(username=" + username + ")");
 
         if (connectionsManager.containsUsername(username)) {
             connectionsManager.registerInteraction(username);

@@ -13,6 +13,14 @@ import it.polimi.ingsw.model.chat.ChatTextMessage;
 import java.io.Serializable;
 import java.util.List;
 
+
+/**
+ * The {@link GameGateway} interface represents the gateway for communication between the main ui view
+ * and the server. It provides methods to handle server status updates, game model updates,
+ * game phases changes, and game altering events.
+ * This interface is meant to describe higher-order events which can be implemented in different
+ * user interfaces (GUI/CLI) independently.
+ * */
 public interface GameGateway extends Serializable {
 
     /**

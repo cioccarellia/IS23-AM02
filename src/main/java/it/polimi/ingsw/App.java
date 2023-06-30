@@ -26,8 +26,14 @@ public class App {
 
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
+    /**
+     * Configuration determining what is launched by App
+     * */
     private static ExhaustiveLaunchConfiguration finalConfig = null;
 
+    /**
+     * Executes the client/server
+     * */
     private final static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private static void startServer(@NotNull ExhaustiveLaunchConfiguration config) {

@@ -42,6 +42,8 @@ public class RmiClientGateway extends ClientGateway {
             rmiServerStub = (ServerService) registry.lookup(ServerService.NAME);
         } catch (RemoteException | NotBoundException e) {
             logger.error("error while looking up the registry info for ServerService, serverHost={}, rmiPort={}", serverHost, serverRmiPort);
+            System.out.println("Can not connect to the server " + serverHost + " on port " + serverRmiPort + ": no RMI server found");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -52,6 +54,8 @@ public class RmiClientGateway extends ClientGateway {
             try {
                 rmiServerStub.serverStatusRequest(remoteService);
             } catch (RemoteException e) {
+                System.out.println("Connection issue, can not communicate with the RMI server");
+                System.exit(-1);
                 throw new RuntimeException(e);
             }
         } catch (Exception e) {
@@ -64,6 +68,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.gameStartRequest(username, mode, protocol, remoteService);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -73,6 +79,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.gameConnectionRequest(username, protocol, remoteService);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -82,6 +90,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.gameSelectionTurnResponse(username, selection);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -91,6 +101,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.gameInsertionTurnResponse(username, tiles, column);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -100,6 +112,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.quitRequest(username);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -109,6 +123,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.keepAlive(username);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -118,6 +134,8 @@ public class RmiClientGateway extends ClientGateway {
         try {
             rmiServerStub.sendTextMessage(sendingUsername, recipient, text);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the RMI server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }

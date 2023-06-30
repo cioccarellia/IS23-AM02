@@ -17,7 +17,6 @@ import it.polimi.ingsw.controller.server.result.types.GameCreationSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileInsertionSuccess;
 import it.polimi.ingsw.controller.server.result.types.TileSelectionSuccess;
 import it.polimi.ingsw.launcher.parameters.ClientExhaustiveConfiguration;
-import it.polimi.ingsw.launcher.parameters.ClientUiMode;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.board.Coordinate;
 import it.polimi.ingsw.model.board.Tile;
@@ -26,10 +25,8 @@ import it.polimi.ingsw.model.chat.MessageRecipient;
 import it.polimi.ingsw.model.game.GameMode;
 import it.polimi.ingsw.services.ClientFunction;
 import it.polimi.ingsw.services.ClientService;
-import it.polimi.ingsw.ui.commons.gui.GuiApp;
 import it.polimi.ingsw.ui.game.GameGateway;
 import it.polimi.ingsw.ui.game.GameViewEventHandler;
-import it.polimi.ingsw.ui.game.cli.CliApp;
 import it.polimi.ingsw.ui.lobby.LobbyGateway;
 import it.polimi.ingsw.ui.lobby.LobbyViewEventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -46,70 +43,44 @@ import java.util.concurrent.Executors;
 
 /**
  * Client-side controller.
- * Acts as an event hub, routing incoming network calls to their respective interfaces, and back to the server
+ * Acts as an event hub, routing incoming network calls to their respective interfaces, and back to the server.
  */
 public class ClientController extends UnicastRemoteObject implements AppLifecycle, ClientService, LobbyViewEventHandler, GameViewEventHandler, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
+    /**
+     * Launch config, containing all protocol and server specific data
+     * */
     private ClientExhaustiveConfiguration config;
 
+    /**
+     * Server communication
+     * */
     private ClientGateway gateway;
 
     /**
-     * Creates the UI view for the game based on the client UI mode.
-     *
-     * @param mode       The client UI mode.
-     * @param model      The game model.
-     * @param controller The game view event handler.
-     * @param owner      The owner of the game.
-     */
-    public static void createGameUiAsync(final @NotNull ClientUiMode mode, final GameModel model, final ClientController controller, final String owner, ExecutorService executorService) {
-        switch (mode) {
-            case CLI -> {
-                logger.info("createGameUiAsync(): Starting CLI game");
-
-                executorService.submit(() -> {
-                    logger.info("createGameUiAsync(): Starting CLI game on dedicated thread");
-                    GameGateway game = new CliApp(model, controller, owner);
-
-                    logger.info("createGameUiAsync(): CLI started, calling controller.onGameUiReady()");
-                    controller.onGameUiReady(game);
-                });
-            }
-            case GUI -> {
-                logger.info("Starting GUI game");
-                GuiApp.injectGameModelPostLogin(model, controller, owner);
-
-                executorService.submit(() -> {
-                    // Platform.runLater(() -> {
-                    logger.info("Starting GUI game on dedicated thread");
-                    GuiApp.main(new String[]{});
-                });
-
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + mode);
-        }
-    }
-
-    /**
-     * Lobby waiting room.
-     */
-    private LobbyGateway lobby;
-
-    /**
-     * Game ser-interface.
+     * Lobby waiting room, used to read username (and eventually game mode) and start the server game.
      * The controller receives incoming event calls by the server, and forwards model centric events
      * to the user interface gateway.
      * <p>
      * The UI gateway processes those events, displays them to the user, and eventually forwards its
      * user-generated events to this controller (through {@link GameViewEventHandler})
      */
+    private LobbyGateway lobby;
+
+    /**
+     * Actual game
+     * The controller receives incoming event calls by the server, and forwards model centric events
+     * to the user interface gateway.
+     * <p>
+     * The {@code GameGateway} processes those events, displays them to the user, and eventually forwards its
+     * user-generated events to this controller (through {@link GameViewEventHandler})
+     */
     private GameGateway ui;
 
 
     private String ownerUsername;
-    private boolean hasAuthenticatedWithServerAndExchangedUsername = false;
     private ClientController identity;
 
     /**
@@ -133,6 +104,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         }
     }
 
+    @SuppressWarnings("unused")
     protected ClientController() throws RemoteException {
     }
 
@@ -158,6 +130,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.serverStatusRequest(identity);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -179,7 +153,6 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void authorize(String username) {
         // setup internal variables post-authorization
         ownerUsername = username;
-        hasAuthenticatedWithServerAndExchangedUsername = true;
 
         // schedules keep-alive thread
         ClientNetworkLayer.scheduleKeepAliveThread(ownerUsername, gateway, AppClient.clientExecutorService);
@@ -206,9 +179,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onAcceptConnectionAndFinalizeUsername(String username) {
         logger.info("onAcceptConnectionAndFinalizeUsername(username={})", username);
 
-        asyncExecutor.submit(() -> {
-            authorize(username);
-        });
+        asyncExecutor.submit(() -> authorize(username));
     }
 
     /**
@@ -244,9 +215,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     @ClientFunction
     public void onGameCreationReply(TypedResult<GameCreationSuccess, GameCreationError> result) {
         logger.info("onGameCreationReply(result={})", result);
-        asyncExecutor.submit(() -> {
-            lobby.onServerCreationReply(result);
-        });
+        asyncExecutor.submit(() -> lobby.onServerCreationReply(result));
     }
 
     /**
@@ -259,9 +228,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onGameConnectionReply(TypedResult<GameConnectionSuccess, GameConnectionError> result) {
         logger.info("onGameConnectionReply(result={})", result);
 
-        asyncExecutor.submit(() -> {
-            lobby.onServerConnectionReply(result);
-        });
+        asyncExecutor.submit(() -> lobby.onServerConnectionReply(result));
     }
 
     /**
@@ -274,9 +241,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onGameStartedEvent(GameModel game) {
         logger.info("onGameStartedEvent(game={})", game);
 
-        asyncExecutor.submit(() -> {
-            ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService);
-        });
+        asyncExecutor.submit(() -> ViewFactory.createGameUiAsync(config.mode(), game, this, ownerUsername, AppClient.clientExecutorService));
     }
 
     /**
@@ -289,9 +254,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onModelUpdateEvent(GameModel game) {
         logger.info("onModelUpdateEvent(game={})", game);
 
-        asyncExecutor.submit(() -> {
-            ui.modelUpdate(game);
-        });
+        asyncExecutor.submit(() -> ui.modelUpdate(game));
     }
 
     /**
@@ -304,9 +267,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onGameSelectionTurnEvent(TypedResult<TileSelectionSuccess, TileSelectionFailures> turnResult) {
         logger.info("onGameSelectionTurnEvent(turnResult={})", turnResult);
 
-        asyncExecutor.submit(() -> {
-            ui.onGameSelectionReply(turnResult);
-        });
+        asyncExecutor.submit(() -> ui.onGameSelectionReply(turnResult));
     }
 
     /**
@@ -319,9 +280,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onGameInsertionTurnEvent(TypedResult<TileInsertionSuccess, BookshelfInsertionFailure> turnResult) {
         logger.info("onGameInsertionTurnEvent(turnResult={})", turnResult);
 
-        asyncExecutor.submit(() -> {
-            ui.onGameInsertionReply(turnResult);
-        });
+        asyncExecutor.submit(() -> ui.onGameInsertionReply(turnResult));
     }
 
     /**
@@ -340,9 +299,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onChatModelUpdate(List<ChatTextMessage> messages) {
         logger.info("onChatModelUpdate(messages={})", messages);
 
-        asyncExecutor.submit(() -> {
-            ui.chatModelUpdate(messages);
-        });
+        asyncExecutor.submit(() -> ui.chatModelUpdate(messages));
     }
 
     /**
@@ -353,9 +310,7 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
     public void onGameEndedEvent() {
         logger.info("onGameEndedEvent()");
 
-        asyncExecutor.submit(() -> {
-            ui.onGameEnded();
-        });
+        asyncExecutor.submit(() -> ui.onGameEnded());
     }
 
 
@@ -371,6 +326,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.serverStatusRequest(this);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -388,6 +345,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.gameStartRequest(username, mode, config.protocol(), this);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -404,6 +363,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.gameConnectionRequest(username, config.protocol(), this);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -423,6 +384,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.gameSelectionTurnResponse(ownerUsername, coordinates);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -440,6 +403,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.gameInsertionTurnResponse(ownerUsername, tiles, column);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -454,6 +419,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.sendTextMessage(senderUsername, recipient, text);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
@@ -468,6 +435,8 @@ public class ClientController extends UnicastRemoteObject implements AppLifecycl
         try {
             gateway.quitRequest(username);
         } catch (RemoteException e) {
+            System.out.println("Connection issue, can not communicate with the server");
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }

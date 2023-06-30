@@ -35,10 +35,8 @@ public class ViewFactory {
             case CLI -> {
                 logger.info("Starting CLI lobby");
 
-                //executorService.submit(() -> {
                 CliLobby lobby = new CliLobby(controller);
                 controller.onLobbyUiReady(lobby);
-                //});
             }
             case GUI -> {
                 logger.info("Starting GUI lobby");
@@ -46,7 +44,7 @@ public class ViewFactory {
                 GuiApp.initLifecycle(controller);
 
                 executorService.submit(() -> {
-                    logger.info("Starting GUI lobby on dedicated thread");
+                    logger.info("createLobbyUiAsync(): Starting JavaFX stage");
                     GuiApp.main(new String[]{});
                 });
 
@@ -83,12 +81,15 @@ public class ViewFactory {
 
                 Platform.runLater(() -> {
                     try {
+                        logger.info("createGameUiAsync(): Starting JavaFX stage");
                         AppManager.getAppInstance().setupPrimaryStage(new Stage());
                     } catch (Exception e) {
+                        System.out.println("Error starting JavaFX application");
+                        e.printStackTrace();
+                        System.exit(-1);
                         throw new RuntimeException(e);
                     }
                 });
-
             }
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
