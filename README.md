@@ -31,30 +31,31 @@
 
 ### Requirements
 
-The project uses as the intended language level `19 preview`.
+The project uses as the intended language level `19 preview` ⚠️. <br>
 To compile and execute the project, you'll need a jdk with 19 preview features support.
 We recommend using any version of openjdk-19.
 
 ### Compiling
-
-Run the maven `clean` and then `package` command to generate a jar file for the project.
+Run the maven `clean` and then `package` command to generate a jar file for the project. 
 
 ```
 mvn clean -f pom.xml
 mvn package -f pom.xml
 ```
 
+The output jar will be located in `artifacts/shelfie.jar`.
+
 ### Executing
 
-Once the jar file has been compiled, you can run it (assuming your `java` uses a jdk 19 with preview-features enabled) using one of the following launch modes:
-
+Once the jar file has been compiled, you can run it (assuming your `java` uses a jdk 19 with preview-features enabled) using one of the launch modes described below.
+A script to generate command line arguments is present (`gen_args_nix.sh`) to expedite this process.
 
 #### Wizard
 
 The wizard is invoked when no/not enough parameters are given (as program arguments), and will ask through a CLI interface to provide them until an exhaustive configuration is reached, and the corresponding module is started.
 
 ```
-java --enable-preview -jar shelfie.jar
+java --enable-preview -jar myshelfie-all.jar
 ```
 
 #### Server
@@ -68,7 +69,7 @@ Template for starting the server. The server address is the IP of the machine ex
 | RMI port  | `13000`  | Port used for RMI connections               |
 
 ```
-java --enable-preview -jar shelfie.jar --target SERVER --server-tcp-port 12000 --server-rmi-port 13000
+java --enable-preview -jar myshelfie-all.jar --target SERVER --server-tcp-port 12000 --server-rmi-port 13000
 ```
 
 #### Client
@@ -85,5 +86,5 @@ Template for starting the client.
 | Server RMI port | `13000`                     | Port used for RMI connections                                              |
 
 ```
-java --enable-preview -jar shelfie.jar --target CLIENT --server-address 127.0.0.1 --client-mode CLI --client-protocol RMI --server-tcp-port 12000 --server-rmi-port 13000
+java --enable-preview -jar myshelfie-all.jar --target CLIENT --server-address 127.0.0.1 --client-mode CLI --client-protocol RMI --server-tcp-port 12000 --server-rmi-port 13000
 ```
