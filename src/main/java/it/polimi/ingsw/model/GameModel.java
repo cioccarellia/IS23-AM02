@@ -283,8 +283,8 @@ public class GameModel implements ModelService, Serializable {
      * at least one free edge, checks if they in a straight line (vertically and horizontally)
      */
     public boolean isSelectionValid(@NotNull Set<Coordinate> coordinates) {
-        boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
         boolean isSelectionAmountValid = coordinates.size() <= LogicConfiguration.getInstance().maxSelectionSize() && coordinates.size() > 0;
+        boolean areCoordinatesReferencingValidTiles = areAllCoordinatesPresent(coordinates);
         boolean isEdgeConditionSatisfied = coordinates.stream().allMatch(coordinate -> board.countFreeEdges(coordinate) > 0);
         boolean areCoordinatesInStraightLine = CoordinatesHelper.areCoordinatesInStraightLine(coordinates.stream().toList());
 

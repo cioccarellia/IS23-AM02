@@ -119,6 +119,9 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
+    /**
+     * Returns all the player info, including connection status and whether someone is an host or not
+     */
     private List<PlayerInfo> packagePlayerInfo() {
         return connectionsManager.values()
                 .stream()
@@ -126,10 +129,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 .toList();
     }
 
+    /**
+     * Calls the {@code save} primitive on {@code StorageManager} to persist the current game model on disk
+     */
     private void saveModelToPersistentStorage() {
         storageManager.save(connectionsManager.getUsernames(), gameModel);
     }
 
+    /**
+     * Removes the currently-stored game file (when the game needs to be cleaned up)
+     */
     private void deletePersistentModelForGame() {
         storageManager.delete(connectionsManager.getUsernames());
     }
@@ -159,9 +168,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-
     /**
-     * Returns the server information for each player regarding its connection status
+     * Sends the server information (connection status for each player) to the caller
      */
     @Override
     public void serverStatusRequest(ClientService remoteService) throws RemoteException {
@@ -170,6 +178,17 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         });
     }
 
+    /**
+     * Creates a new game and associates the calling client as the first user (which is also the host).
+     * This function should be the first game-related interaction a player has with the server
+     * if the user is the first one connecting to the server.
+     * Saves the client callback information for future asynchronous calls.
+     *
+     * @param username      player invoking this method
+     * @param mode          game mode to play with (2, 3 or 4 players)
+     * @param protocol      protocol to use during the interaction
+     * @param remoteService callback object needed to reply to the client
+     */
     @Override
     public synchronized void gameStartRequest(String username, GameMode mode, ClientProtocol protocol, ClientService remoteService) throws RemoteException {
         logger.info("gameStartedRequest, mode={}, username={}, protocol={}", mode, username, protocol);
@@ -202,7 +221,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             return;
         }
 
-
         // accepting request and setting up the game model
         gameModel = new GameModel(mode);
         gameModel.addPlayer(username);
@@ -216,7 +234,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         synchronizeConnectionLayer(username, remoteService);
 
 
-        // notify the
         logger.info("returning success from gameStartRequest()");
 
         // return success to the caller
@@ -231,8 +248,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-
-    // Creates a connection between client and server
+    /**
+     * Connects a client to an already in-creation game.
+     * This function should be the first game-related interaction a player has with the server
+     * if the user is not the first one connecting to the server.
+     * Saves the client callback information for future asynchronous calls.
+     *
+     * @param username      player invoking this method
+     * @param protocol      protocol to use during the interaction
+     * @param remoteService callback object needed to reply to the client
+     */
     @Override
     public synchronized void gameConnectionRequest(String username, ClientProtocol protocol, ClientService remoteService) throws RemoteException {
         logger.info("gameConnectionRequest(username={}, protocol={}, remoteService={})", username, protocol, remoteService);
@@ -334,7 +359,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
             // broadcast the game model with all users to everybody, only if the game has started.
             // This will display the main game UI
 
-
             // bonus: we discard and load a file-saved model if the usernames are recognized to be part of a past game
             GameModel matchingGame = storageManager.load(connectionsManager.getUsernames());
 
@@ -362,7 +386,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
-    // Game logic
     public boolean isUsernameActivePlayer(@NotNull String username) {
         return username.equals(gameModel.getCurrentPlayerSession().getUsername());
     }
@@ -372,6 +395,18 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
+
+    /**
+     * Processes, validates and updates the game data according to the played move.
+     * This function should be the called by the current player when it's his/her turn
+     * to play a selection move, and all the appropriate parameters should be passed.
+     * Any invocation outside these conditions will be ignored.
+     * If successful, the next game phase will be insertion for the current player.
+     *
+     * @param username      player invoking this method
+     * @param selection     the coordinates packed by the user. No {@code Tile}s needed since the data
+     *                      will be queried on the server regardless
+     */
     @Override
     public synchronized void gameSelectionTurnResponse(String username, Set<Coordinate> selection) throws RemoteException {
         logger.info("gameSelectionTurnResponse(username={}, selection={})", username, selection);
@@ -422,6 +457,18 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
+
+    /**
+     * Processes, validates and updates the game data according to the played move.
+     * This function should be the called by the current player when it's his/her turn
+     * to play an insertion move, and all the appropriate parameters should be passed.
+     * Any invocation outside these conditions will be ignored.
+     * If successful, the next player will be set, and it will be its turn to play.
+     *
+     * @param username      player invoking this method
+     * @param tiles         the selected tiles, in order of insertion
+     * @param column        the column to insert the tiles in
+     */
     @Override
     public synchronized void gameInsertionTurnResponse(String username, List<Tile> tiles, int column) throws RemoteException {
         logger.info("gameInsertionTurnResponse(username={}, tiles={}, column={})", username, tiles, column);
@@ -484,8 +531,8 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         gameModel.onPlayerInsertionPhase(column, tiles);
         gameModel.onPlayerTurnEnding();
 
+        // computes next player
         PlayerSession nextPlayer = processNextPlayer();
-
         gameModel.onNextTurn(nextPlayer.getUsername());
 
 
@@ -503,6 +550,35 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         persistenceExecutor.submit(this::saveModelToPersistentStorage);
     }
 
+
+    /**
+     * Determines which player should move next
+     */
+    private PlayerSession processNextPlayer() {
+        PlayerNumber currentPlayerNumber = gameModel.getCurrentPlayerSession().getPlayerNumber();
+        PlayerNumber next = next_rec(currentPlayerNumber);
+
+        return gameModel.getPlayerSession(next);
+    }
+
+    private PlayerNumber next_rec(@NotNull PlayerNumber current) {
+        PlayerNumber naturalNextNumber = current.next(gameModel.getGameMode());
+        PlayerSession next = gameModel.getPlayerSession(naturalNextNumber);
+
+        if (connectionsManager.isClientDisconnected(next.getUsername())) {
+            return next_rec(next.getPlayerNumber());
+        } else {
+            return next.getPlayerNumber();
+        }
+    }
+
+
+
+    /**
+     * Quits the game and shares the updates status with all the connected players.
+     *
+     * @param username      player invoking this method
+     */
     @Override
     public void quitRequest(String username) throws RemoteException {
         logger.info("quitRequest(username={})", username);
@@ -520,35 +596,20 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
     /**
-     * Determines which player should move next
+     * Sends a message (updating the {@link ChatModel}) and then notifies the designated players
+     * that new messages have been sent, and updates them.
+     *
+     * @param sendingUsername      player invoking this method and sending the message
+     * @param recipient            a {@link MessageRecipient} to specify the destination of this message
      */
-    private synchronized PlayerSession processNextPlayer() {
-        PlayerNumber currentPlayerNumber = gameModel.getCurrentPlayerSession().getPlayerNumber();
-        PlayerNumber next = next_rec(currentPlayerNumber);
-
-        return gameModel.getPlayerSession(next);
-    }
-
-    private synchronized PlayerNumber next_rec(@NotNull PlayerNumber current) {
-        PlayerNumber naturalNextNumber = current.next(gameModel.getGameMode());
-        PlayerSession next = gameModel.getPlayerSession(naturalNextNumber);
-
-        if (connectionsManager.isClientDisconnected(next.getUsername())) {
-            return next_rec(next.getPlayerNumber());
-        } else {
-            return next.getPlayerNumber();
-        }
-    }
-
-
     @Override
     public synchronized void sendTextMessage(String sendingUsername, MessageRecipient recipient, String text) throws RemoteException {
         switch (recipient) {
-            case MessageRecipient.Broadcast broadcast -> {
+            case MessageRecipient.Broadcast ignored -> {
                 // add to model
                 chatModel.addMessage(sendingUsername, recipient, text.trim());
 
-                // dispatch
+                // dispatch a chat update for everybody
                 for (String username : connectionsManager.getUsernames()) {
                     asyncExecutor.async(() -> {
                         router.route(username).onChatModelUpdate(
@@ -573,8 +634,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                 // add to model
                 chatModel.addMessage(sendingUsername, recipient, text.trim());
 
-                // dispatch
-
+                // dispatch new message list for sender and receiver
                 asyncExecutor.async(() -> {
                     router.route(sendingUsername).onChatModelUpdate(
                             chatModel.getMessagesFor(sendingUsername)
@@ -593,9 +653,16 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
     }
 
 
+    /**
+     * invoked by an external thread running a {@link PeriodicConnectionAwareComponent} ({@link PeriodicConnectionAwareComponent})
+     * when a connection status has changed as a result of a prolonged lack of interaction between said client and server.
+     * This function is responsible for making the game go in standby and notifying the active players of connections/disconnections
+     * by other players.
+     */
     @Override
     public synchronized void onConnectionChange() {
         if (connectionsManager.isAnyClientClosed()) {
+            // if nay client is closed we need to finish the game
             serverStatus = GAME_OVER;
             gameModel.onGameEnded();
 
@@ -612,7 +679,7 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
         // no clients are closed, we continue
         if (connectionsManager.isAnyClientDisconnected()) {
             // Server Status Update
-            // there are clients disconnected
+            // there are clients which are disconnected
 
             asyncExecutor.async(() -> {
                 router.broadcastExcluding(
@@ -641,7 +708,6 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
                     boolean hasModelStatusChanged = gameModel.onStandby();
 
                     if (hasModelStatusChanged) {
-
                         asyncExecutor.async(() -> {
                             router.broadcastExcluding(
                                     connectionsManager.getDisconnectedClientUsernames()
@@ -682,6 +748,12 @@ public class ServerController implements ServerService, PeriodicConnectionAwareC
 
 
 
+
+    /**
+     * Empty message for registering interactions with the server
+     *
+     * @param username      player invoking this method
+     */
     @Override
     public void keepAlive(String username) {
         logger.info("keepAlive(username={})", username);
