@@ -36,7 +36,9 @@ public class Wizard {
                 serverTcpPort = selectTcpPort(serverTcpPort);
                 serverRmiPort = selectRmiPort(serverRmiPort);
 
-                return new ExhaustiveLaunchConfiguration(target, "127.0.0.1", serverTcpPort, serverRmiPort, List.of());
+                serverHost = selectServerHost(serverHost);
+
+                return new ExhaustiveLaunchConfiguration(target, serverHost, serverTcpPort, serverRmiPort, List.of());
             }
             case CLIENT -> {
                 modePreselection = selectGameMode(modePreselection);

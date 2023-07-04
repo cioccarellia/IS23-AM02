@@ -29,14 +29,14 @@ public class BoardUtils {
 
         switch (edge) {
             case TOP -> {
-                if (topOutOfBounds <= 0) {
+                if (topOutOfBounds < 0) {
                     return true;
                 }
 
                 shiftedCoordinate = new Coordinate(coordinate.x() - 1, coordinate.y());
             }
             case LEFT -> {
-                if (leftOutOfBounds <= 0) {
+                if (leftOutOfBounds < 0) {
                     return true;
                 }
 

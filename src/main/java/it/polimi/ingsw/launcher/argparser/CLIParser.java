@@ -108,8 +108,10 @@ public class CLIParser {
 
         switch (config) {
             case SERVER -> {
+                String serverHost = ns.get(SERVER_IP);
+
                 // we only need ports to boot the server
-                return true;
+                return serverHost != null && !serverHost.isBlank();
             }
             case CLIENT -> {
                 // we also need client-specific configuration
