@@ -12,12 +12,12 @@ jbin="/Users/${osx_user}/Library/Java/JavaVirtualMachines/openjdk-${osx_jdk_vers
 params="--enable-preview"
 
 # Jar file path
-jarfile="deliveries/jars/myshelfie-all.jar"
+jarfile="artifacts/shelfie.jar"
 
 # Program arguments
 progargs_dfu=""
-progargs_srv="--target SERVER --server-tcp-port 12000 --server-rmi-port 13000"
-progargs_client="--target CLIENT --server-address 127.0.0.1 --client-mode CLI --client-protocol RMI --server-tcp-port 12000 --server-rmi-port 13000"
+progargs_srv="--target SERVER --server-address 127.0.0.1 --server-tcp-port 12000 --server-rmi-port 13000"
+progargs_client="--target CLIENT --server-address 127.0.0.1 --client-mode GUI --client-protocol RMI --server-tcp-port 12000 --server-rmi-port 13000"
 
 # Runs
 echo "------------------------ for default (wizard)"
