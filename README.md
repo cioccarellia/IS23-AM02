@@ -24,7 +24,7 @@
 | CLI            |  🟢   |
 | Multiple games |  🔴   |
 | Persistence    |  🟢   |
-| Resilience     |  🟡   |
+| Resilience     |  🟣   |
 | Chat           |  🟢   |
 
 ## Compilation
