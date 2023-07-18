@@ -7,10 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_2_PLAYERS;
-import static it.polimi.ingsw.model.game.GameMode.GAME_MODE_3_PLAYERS;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static it.polimi.ingsw.model.game.GameMode.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameIsSelectionValidTest implements GameTester {
     @Test
@@ -120,6 +118,44 @@ public class GameIsSelectionValidTest implements GameTester {
         Coordinate c3 = new Coordinate(4, 4);
 
         Set<Coordinate> selection = Set.of(c1, c2, c3);
+
+        assertFalse(game.isSelectionValid(selection));
+    }
+
+    @Test
+    @DisplayName("verify the function isSelectionValid, negatively #3")
+    public void test() {
+        GameModel game = new GameModel(GAME_MODE_4_PLAYERS);
+
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+        game.addPlayer(PLAYER_C);
+        game.addPlayer(PLAYER_D);
+
+        game.onGameStarted();
+
+        Coordinate c1 = new Coordinate(4, 1);
+
+        Set<Coordinate> selection = Set.of(c1);
+
+        assertFalse(game.isSelectionValid(selection));
+    }
+
+    @Test
+    @DisplayName("verify the function isSelectionValid, negatively #3")
+    public void test2() {
+        GameModel game = new GameModel(GAME_MODE_4_PLAYERS);
+
+        game.addPlayer(PLAYER_A);
+        game.addPlayer(PLAYER_B);
+        game.addPlayer(PLAYER_C);
+        game.addPlayer(PLAYER_D);
+
+        game.onGameStarted();
+
+        Coordinate c1 = new Coordinate(1, 4);
+
+        Set<Coordinate> selection = Set.of(c1);
 
         assertFalse(game.isSelectionValid(selection));
     }
